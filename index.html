@@ -4,1536 +4,1270 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIRMAP — Respiratory Intelligence Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <!--
-  AIRMAP v3
-  ─────────────────────────────────────────────────
-  Architecture layer mapping (internal — do not expose in UI):
-    engine.layer_1  → GOLD Classification (Clinical Core Engine)
-    engine.layer_2  → Multimodal Integration
-    engine.layer_3  → Pattern Recognition
-    engine.layer_4  → Risk Profile (Risk Prediction Engine)
-    engine.layer_5  → Treatment Recommendation (Treatment Optimisation)
-    engine.layer_6  → Longitudinal Modelling
-    engine.layer_7  → Disease Trajectory (Longitudinal Analysis Engine)
-  Tab IDs: dashboard · patient · investigations · clinical ·
-           medications · timeline · analysis · results
-  ─────────────────────────────────────────────────
+  AIRMAP v5 — Respiratory Intelligence System
+  Architecture map (internal):
+  engine.layer_1  = GOLD Classification
+  engine.layer_2  = Multimodal Integration
+  engine.layer_3  = Pattern Recognition / Phenotype
+  engine.layer_4  = Risk Prediction
+  engine.layer_5  = Treatment Optimisation
+  engine.layer_6  = Patient Engagement
+  engine.layer_7  = Longitudinal / Disease Trajectory
+  Tabs: dashboard > patient > demographics > investigations >
+        clinical > asthma > environment > medications >
+        longitudinal > analysis > action-plan > results
+  This is an INTELLIGENCE SYSTEM, not an EHR.
+  Every field feeds at least one engine layer.
 -->
 <style>
-:root {
-  --navy:       #0B1F3A;
-  --navy-mid:   #1A3557;
-  --navy-soft:  #2C4F73;
-  --navy-mist:  #EBF1F8;
-  --paper:      #FAFAF8;
-  --surface:    #F4F3F0;
-  --ink:        #111827;
-  --ink-mid:    #374151;
-  --ink-light:  #6B7280;
-  --ink-faint:  #9CA3AF;
-  --border:     #DDE3ED;
-  --border-mid: #B8C4D4;
-  --red:        #B91C1C;
-  --red-soft:   #FEF2F2;
-  --red-border: #FECACA;
-  --amber:      #92400E;
-  --amber-soft: #FFFBEB;
-  --amber-border:#FDE68A;
-  --green:      #065F46;
-  --green-soft: #ECFDF5;
-  --green-border:#A7F3D0;
-  --teal:       #0E7490;
-  --teal-soft:  #F0F9FF;
-  --teal-border:#BAE6FD;
-  --sans:  'IBM Plex Sans', sans-serif;
-  --mono:  'IBM Plex Mono', monospace;
-  --serif: 'IBM Plex Serif', serif;
-  --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
-  --shadow-sm: 0 1px 3px rgba(11,31,58,0.07), 0 1px 2px rgba(11,31,58,0.05);
-  --shadow-md: 0 4px 12px rgba(11,31,58,0.09), 0 2px 4px rgba(11,31,58,0.05);
+:root{
+  --nv:#0B1F3A;--nm:#163352;--ns:#2C4F73;--nmt:#EDF2F9;
+  --paper:#FFFFFF;--surf:#F2F4F8;
+  --ink:#0F172A;--im:#334155;--il:#64748B;--if:#94A3B8;
+  --bdr:#E2E8F0;--bdm:#CBD5E1;
+  --bl:#2563EB;--bls:#EFF6FF;--blb:#BFDBFE;
+  --rd:#DC2626;--rds:#FEF2F2;--rdb:#FECACA;
+  --am:#D97706;--ams:#FFFBEB;--amb:#FDE68A;
+  --gn:#059669;--gns:#ECFDF5;--gnb:#A7F3D0;
+  --tl:#0891B2;--tls:#F0F9FF;--tlb:#BAE6FD;
+  --pu:#7C3AED;--pus:#F5F3FF;--pub:#DDD6FE;
+  --pk:#DB2777;--pks:#FDF2F8;--pkb:#FBCFE8;
+  --sans:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'IBM Plex Serif',serif;
+  --sh1:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.05);
+  --sh2:0 4px 12px rgba(15,23,42,.08),0 2px 4px rgba(15,23,42,.04);
+  --sh3:0 10px 28px rgba(15,23,42,.12),0 4px 8px rgba(15,23,42,.06);
+  --r:8px;--rl:12px;--rxl:16px;--r2:20px;
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:#E4E9F2;color:var(--ink);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+svg{display:block;flex-shrink:0;}
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--sans);
-  background: #E8EDF4;
-  color: var(--ink);
-  min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+/* ECO BAR */
+.eco{background:var(--nv);height:36px;display:flex;align-items:center;padding:0 26px;position:sticky;top:0;z-index:1000;border-bottom:1px solid rgba(255,255,255,.06);}
+.eco-brand{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-right:22px;padding-right:22px;border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;}
+.eco-mods{display:flex;gap:2px;flex:1;overflow-x:auto;}
+.em{padding:0 12px;height:36px;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:background .14s;white-space:nowrap;color:rgba(255,255,255,.3);border-bottom:2px solid transparent;}
+.em.on{color:#fff;border-bottom-color:#60A5FA;background:rgba(255,255,255,.05);}
+.em:hover:not(.on):not(.off){color:rgba(255,255,255,.6);background:rgba(255,255,255,.04);}
+.em.off{opacity:.22;cursor:default;}
+.ep{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7;flex-shrink:0;}
+.em.on .ep{background:#60A5FA;opacity:1;}
+.eco-usr{display:flex;align-items:center;gap:9px;margin-left:auto;padding-left:18px;border-left:1px solid rgba(255,255,255,.08);}
+.eco-role{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--nv);background:#60A5FA;padding:2px 7px;border-radius:3px;}
+.eco-nm{font-size:12px;color:rgba(255,255,255,.4);}
+.eco-av{width:25px;height:25px;border-radius:50%;background:var(--ns);border:1.5px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;}
 
-/* ── LUCIDE ICON HELPER ── */
-.icon { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
-.icon svg { width:100%; height:100%; }
+/* MODE BAR */
+.mbar{background:var(--paper);border-bottom:1px solid var(--bdr);padding:0 26px;height:36px;display:flex;align-items:center;gap:12px;position:sticky;top:36px;z-index:999;}
+.mlbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--if);}
+.mpills{display:flex;gap:4px;}
+.mpill{padding:3px 11px;border-radius:20px;font-size:11.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--bdr);color:var(--il);background:transparent;transition:all .14s;}
+.mpill.on{background:var(--nv);color:#fff;border-color:var(--nv);}
+.mpill:hover:not(.on){border-color:var(--bdm);color:var(--nv);}
+.msep{width:1px;height:18px;background:var(--bdr);}
+.vinfo{font-size:12px;color:var(--il);}
+.vinfo strong{color:var(--im);}
 
-/* ── ECO BAR ── */
-.eco-bar {
-  background: var(--navy);
-  height: 38px;
-  display: flex;
-  align-items: center;
-  padding: 0 28px;
-  position: sticky; top: 0; z-index: 1000;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.eco-brand {
-  font-family: var(--mono);
-  font-size: 10px; font-weight: 500;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  color: rgba(255,255,255,0.38);
-  margin-right: 28px; white-space: nowrap;
-  padding-right: 28px;
-  border-right: 1px solid rgba(255,255,255,0.1);
-}
-.eco-modules { display:flex; gap:2px; flex:1; overflow-x:auto; }
-.eco-module {
-  padding: 0 14px; height: 38px;
-  display: flex; align-items: center; gap: 6px;
-  font-family: var(--mono); font-size: 10px;
-  font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase;
-  cursor: pointer; transition: background 0.15s; white-space: nowrap;
-  color: rgba(255,255,255,0.38);
-  border-bottom: 2px solid transparent;
-}
-.eco-module.active {
-  color: #fff; border-bottom-color: #60A5FA;
-  background: rgba(255,255,255,0.06);
-}
-.eco-module:hover:not(.active):not(.future) {
-  color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.04);
-}
-.eco-module.future { opacity:0.28; cursor:default; }
-.eco-pulse {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #60A5FA; flex-shrink: 0;
-}
-.eco-module.future .eco-pulse { background: rgba(255,255,255,0.3); }
-.eco-user {
-  display:flex; align-items:center; gap:10px;
-  margin-left:auto; padding-left:20px;
-  border-left: 1px solid rgba(255,255,255,0.1);
-}
-.eco-role {
-  font-family: var(--mono); font-size: 9px;
-  font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--navy); background: #60A5FA;
-  padding: 2px 7px; border-radius: 3px;
-}
-.eco-name { font-size: 12px; color: rgba(255,255,255,0.5); }
-.eco-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: var(--navy-soft);
-  border: 1.5px solid rgba(255,255,255,0.18);
-  display:flex; align-items:center; justify-content:center;
-  font-size: 10px; font-weight: 600; color: #fff;
-}
+/* APP HEADER */
+.ahdr{background:var(--paper);border-bottom:1px solid var(--bdr);padding:0 26px;display:flex;align-items:center;gap:14px;height:56px;position:sticky;top:72px;z-index:998;box-shadow:var(--sh1);}
+.lmk{width:30px;height:30px;background:var(--nv);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lmk svg{width:16px;height:16px;}
+.ltx{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--nv);letter-spacing:-.2px;}
+.lsb{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--if);margin-top:1px;}
+.hd{width:1px;height:24px;background:var(--bdr);flex-shrink:0;}
+.ptc{display:flex;align-items:center;gap:8px;padding:5px 11px;background:var(--nmt);border:1.5px solid var(--bdm);border-radius:var(--rl);cursor:pointer;min-width:215px;transition:border-color .15s;}
+.ptc:hover{border-color:var(--ns);}
+.ptci{width:26px;height:26px;background:var(--nv);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ptci svg{width:13px;height:13px;}
+.pid{font-family:var(--mono);font-size:9px;color:var(--ns);text-transform:uppercase;letter-spacing:.8px;}
+.pnm{font-size:13px;font-weight:500;color:var(--ink);}
+.hr{display:flex;align-items:center;gap:7px;margin-left:auto;}
 
-/* ── APP HEADER ── */
-.app-header {
-  background: var(--paper);
-  border-bottom: 1px solid var(--border);
-  padding: 0 28px;
-  display: flex; align-items: center; gap: 20px;
-  height: 60px;
-  position: sticky; top: 38px; z-index: 999;
-  box-shadow: var(--shadow-sm);
-}
-.app-logo { display:flex; align-items:center; gap:11px; }
-.app-logo-mark {
-  width: 34px; height: 34px;
-  background: var(--navy); border-radius: var(--r-md);
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.app-logo-text {
-  font-family: var(--serif); font-size: 19px;
-  font-weight: 600; color: var(--navy); letter-spacing: -0.3px;
-}
-.app-logo-sub {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-faint);
-  margin-top: 1px;
-}
-.hdivider { width:1px; height:28px; background:var(--border); flex-shrink:0; }
+/* NAV */
+.nvs{background:var(--paper);border-bottom:1px solid var(--bdr);padding:0 26px;position:sticky;top:128px;z-index:997;overflow-x:auto;}
+.nvts{display:flex;list-style:none;}
+.nt{padding:0 13px;height:40px;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--il);cursor:pointer;border-bottom:2px solid transparent;transition:all .13s;white-space:nowrap;user-select:none;}
+.nt svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2;}
+.nt:hover{color:var(--nv);background:var(--nmt);}
+.nt.on{color:var(--nv);border-bottom-color:var(--nv);font-weight:600;}
+.nbg{font-family:var(--mono);font-size:8px;font-weight:500;background:var(--bl);color:#fff;padding:1px 5px;border-radius:8px;}
 
-/* Patient chip */
-.patient-chip {
-  display:flex; align-items:center; gap:10px;
-  padding: 7px 13px;
-  background: var(--navy-mist);
-  border: 1.5px solid var(--border-mid);
-  border-radius: var(--r-lg);
-  cursor: pointer; min-width: 240px;
-  transition: border-color 0.18s, box-shadow 0.18s;
-}
-.patient-chip:hover { border-color: var(--navy-soft); box-shadow: var(--shadow-sm); }
-.pc-icon {
-  width: 30px; height: 30px; background: var(--navy);
-  border-radius: var(--r-md);
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.pc-id { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:1px; color:var(--navy-soft); text-transform:uppercase; }
-.pc-name { font-size: 13px; font-weight: 500; color: var(--ink); }
-.pc-chevron { color:var(--ink-faint); margin-left:auto; }
+/* LAYOUT */
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 168px);}
+.sb{background:var(--paper);border-right:1px solid var(--bdr);padding:16px 0;position:sticky;top:168px;height:calc(100vh - 168px);overflow-y:auto;}
+.sbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--if);padding:0 14px;margin-bottom:4px;}
+.si{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12.5px;font-weight:400;color:var(--im);cursor:pointer;transition:all .12s;border-left:2px solid transparent;}
+.si svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2;flex-shrink:0;opacity:.6;}
+.si:hover{background:var(--nmt);color:var(--nv);}
+.si:hover svg,.si.on svg{opacity:1;}
+.si.on{background:var(--nmt);color:var(--nv);font-weight:600;border-left-color:var(--nv);}
+.ssc{margin-bottom:20px;}
+.sdv{height:1px;background:var(--bdr);margin:8px 14px;}
+.dp{display:flex;align-items:center;gap:7px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--il);cursor:pointer;transition:all .12s;border-left:2px solid transparent;}
+.dp:hover{background:var(--nmt);color:var(--nv);}
+.dp.on{color:var(--nv);font-weight:600;border-left-color:var(--nv);background:var(--nmt);}
+.dpd{width:6px;height:6px;border-radius:50%;background:var(--bdm);flex-shrink:0;}
+.dp.on .dpd{background:var(--nv);}
+.pr{display:flex;align-items:center;gap:7px;padding:4px 14px;font-size:11px;color:var(--il);}
+.prl{width:80px;flex-shrink:0;}
+.prt{flex:1;height:3px;background:var(--bdr);border-radius:2px;overflow:hidden;}
+.prf{height:100%;border-radius:2px;transition:width .4s;}
+.pfg{background:var(--gn);}.pfb{background:var(--bl);}.pfa{background:var(--am);}
+.pp{font-family:var(--mono);font-size:9.5px;color:var(--if);width:26px;text-align:right;}
+.main{background:var(--surf);padding:24px 30px;}
 
-/* Header right */
-.header-right { display:flex; align-items:center; gap:8px; margin-left:auto; }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--rl);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .14s;white-space:nowrap;line-height:1;}
+.btn:focus-visible{outline:2px solid var(--bl);outline-offset:2px;}
+.btn svg{width:13px;height:13px;flex-shrink:0;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:2;}
+.bp{background:var(--nv);color:#fff;box-shadow:0 1px 3px rgba(11,31,58,.22);}
+.bp:hover{background:var(--nm);box-shadow:0 4px 10px rgba(11,31,58,.2);transform:translateY(-1px);}
+.bp:active{transform:translateY(0);}
+.bs{background:var(--paper);color:var(--nv);border:1.5px solid var(--bdm);}
+.bs:hover{background:var(--nmt);border-color:var(--ns);}
+.bg{background:transparent;color:var(--im);border:1.5px solid var(--bdr);}
+.bg:hover{background:var(--nmt);color:var(--nv);border-color:var(--bdm);}
+.btn-sm{padding:5px 11px;font-size:12px;}
+.btn-sm svg{width:11px;height:11px;}
+.btn-ico{width:30px;height:30px;padding:0;justify-content:center;border-radius:var(--r);}
+.btn-ico.btn-sm{width:26px;height:26px;}
+.btn-full{width:100%;justify-content:center;}
+.bg-g{gap:8px;display:flex;flex-wrap:wrap;align-items:center;}
 
-/* ── NAV STRIP ── */
-.nav-strip {
-  background: var(--paper); border-bottom: 1px solid var(--border);
-  padding: 0 28px;
-  position: sticky; top: 98px; z-index: 998;
-  overflow-x: auto;
-}
-.nav-tabs { display:flex; list-style:none; }
-.nav-tab {
-  padding: 0 18px; height: 42px;
-  display:flex; align-items:center; gap:7px;
-  font-size: 13px; font-weight: 500;
-  color: var(--ink-light);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s; white-space: nowrap;
-  user-select: none;
-}
-.nav-tab:hover { color: var(--navy); background: var(--navy-mist); }
-.nav-tab.active {
-  color: var(--navy); border-bottom-color: var(--navy);
-  font-weight: 600;
-}
-.nav-tab-ico { width:15px; height:15px; color:currentColor; }
-.nav-badge {
-  font-family:var(--mono); font-size:9px; font-weight:500;
-  background: var(--red); color:#fff;
-  padding: 1px 5px; border-radius: 8px;
-}
+/* CARDS */
+.card{background:var(--paper);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;margin-bottom:14px;box-shadow:var(--sh1);}
+.chd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bdr);}
+.chl{flex:1;min-width:0;}
+.ctt{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--nv);}
+.csb{font-size:11px;color:var(--il);margin-top:2px;}
+.chr{display:flex;align-items:center;gap:7px;flex-shrink:0;}
 
-/* ── LAYOUT ── */
-.app-shell {
-  display: grid; grid-template-columns: 248px 1fr;
-  min-height: calc(100vh - 140px);
-}
-.sidebar {
-  background: var(--paper); border-right: 1px solid var(--border);
-  padding: 20px 0;
-  position: sticky; top: 140px;
-  height: calc(100vh - 140px); overflow-y: auto;
-}
-.sb-label {
-  font-family:var(--mono); font-size:9px; font-weight:500;
-  letter-spacing: 2px; text-transform:uppercase;
-  color: var(--ink-faint); padding: 0 18px; margin-bottom: 6px;
-}
-.sb-item {
-  display:flex; align-items:center; gap:9px;
-  padding: 9px 18px;
-  font-size: 13px; font-weight: 400; color: var(--ink-mid);
-  cursor: pointer; transition: all 0.13s;
-  border-left: 3px solid transparent;
-}
-.sb-item:hover { background: var(--navy-mist); color: var(--navy); }
-.sb-item.active {
-  background: var(--navy-mist); color: var(--navy);
-  font-weight: 600; border-left-color: var(--navy);
-}
-.sb-ico { width:16px; height:16px; flex-shrink:0; color:currentColor; }
-.sb-section { margin-bottom:28px; }
-.sb-divider { height:1px; background:var(--border); margin: 12px 18px; }
+/* METRICS */
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:11px;margin-bottom:16px;}
+.mc{background:var(--paper);border:1px solid var(--bdr);border-radius:var(--rxl);padding:15px;cursor:pointer;transition:all .15s;}
+.mc:hover{border-color:var(--ns);box-shadow:var(--sh2);transform:translateY(-2px);}
+.mclbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--if);margin-bottom:6px;}
+.mcv{font-family:var(--serif);font-size:27px;font-weight:600;color:var(--nv);line-height:1;margin-bottom:4px;}
+.mcv.warn{color:var(--am);}.mcv.danger{color:var(--rd);}.mcv.good{color:var(--gn);}
+.mctr{font-size:11px;color:var(--il);}
+.mcpv{font-family:var(--mono);font-size:9px;color:var(--if);margin-top:2px;}
 
-/* Progress bars */
-.prog-row {
-  display:flex; align-items:center; gap:8px;
-  padding: 5px 18px; font-size:12px; color:var(--ink-mid);
-}
-.prog-label { width:100px; flex-shrink:0; font-size:11px; }
-.prog-track { flex:1; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
-.prog-fill { height:100%; border-radius:2px; transition: width 0.4s; }
-.prog-fill.full    { background: var(--green); }
-.prog-fill.partial { background: #60A5FA; }
-.prog-fill.low     { background: var(--amber); }
-.prog-fill.empty   { background: var(--border-mid); }
-.prog-pct { font-family:var(--mono); font-size:10px; color:var(--ink-faint); width:30px; text-align:right; }
+/* INTELLIGENCE DISPLAY */
+.ir{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr);}
+.ir:last-child{border-bottom:none;}
+.ik{font-size:12px;font-weight:600;color:var(--im);width:155px;flex-shrink:0;}
+.iv{font-size:13px;color:var(--ink);}
+.iv.mn{font-family:var(--mono);}.iv.mt{color:var(--il);}
 
-/* Main content */
-.main-content {
-  background: #F2F4F8;
-  padding: 28px 36px;
-  min-height: calc(100vh - 140px);
-}
+/* FORMS */
+.fsec{margin-bottom:22px;}
+.flbl-sec{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--il);padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid var(--bdr);}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.fg4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+.fg1{display:grid;grid-template-columns:1fr;gap:12px;}
+.fgrp{display:flex;flex-direction:column;gap:4px;}
+.fl{font-size:11.5px;font-weight:600;color:var(--im);}
+.req{color:var(--rd);margin-left:2px;}
+.fi,.fs,.ft{width:100%;padding:8px 11px;background:var(--paper);border:1.5px solid var(--bdr);border-radius:var(--r);font-family:var(--sans);font-size:13px;color:var(--ink);transition:border-color .15s,box-shadow .15s;appearance:none;-webkit-appearance:none;}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--bl);box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.fi::placeholder,.ft::placeholder{color:var(--if);}
+.fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;cursor:pointer;}
+.ft{resize:vertical;min-height:70px;}
+.iw{position:relative;}
+.iu{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--if);pointer-events:none;}
+.iw .fi{padding-right:40px;}
+.fhint{font-size:11px;color:var(--if);margin-top:2px;}
+.ferr{font-size:11px;color:var(--rd);display:none;}
+.fgrp.err .ferr{display:block;}
+.fgrp.err .fi,.fgrp.err .fs{border-color:var(--rd);}
+.fi.mn{font-family:var(--mono);}
 
-/* ── BUTTONS ── */
-.btn {
-  display:inline-flex; align-items:center; gap:7px;
-  padding: 8px 16px; border:none; border-radius: var(--r-lg);
-  font-family:var(--sans); font-size:13px; font-weight:600;
-  cursor:pointer; transition: all 0.16s; white-space:nowrap;
-  line-height:1; text-decoration:none;
-}
-.btn:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
-.btn svg { width:14px; height:14px; flex-shrink:0; }
+/* Score stepper */
+.stw{display:flex;align-items:center;gap:7px;}
+.stb{width:30px;height:30px;border-radius:var(--r);background:var(--nmt);border:1.5px solid var(--bdm);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .13s;font-size:17px;font-weight:300;color:var(--nv);flex-shrink:0;user-select:none;}
+.stb:hover{border-color:var(--nv);}
+.std{flex:1;text-align:center;padding:6px;background:var(--nmt);border:1.5px solid var(--bdm);border-radius:var(--r);font-family:var(--serif);font-size:21px;font-weight:600;color:var(--nv);}
 
-.btn-primary {
-  background: var(--navy); color:#fff;
-  box-shadow: 0 1px 3px rgba(11,31,58,0.28);
-}
-.btn-primary:hover {
-  background: var(--navy-mid);
-  box-shadow: 0 4px 10px rgba(11,31,58,0.22);
-  transform: translateY(-1px);
-}
-.btn-primary:active { transform:translateY(0); }
+/* Radio pills */
+.rg{display:flex;gap:6px;flex-wrap:wrap;}
+.ro{display:flex;align-items:center;gap:6px;padding:6px 11px;background:var(--paper);border:1.5px solid var(--bdr);border-radius:var(--rl);cursor:pointer;transition:all .13s;font-size:12.5px;color:var(--im);user-select:none;}
+.ro:hover{border-color:var(--bdm);background:var(--nmt);}
+.ro.on{background:var(--nv);color:#fff;border-color:var(--nv);}
+.rod{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);}
+.ro.on .rod{background:#fff;}
 
-.btn-secondary {
-  background: var(--paper); color: var(--navy);
-  border: 1.5px solid var(--border-mid);
-}
-.btn-secondary:hover { background: var(--navy-mist); border-color: var(--navy-soft); }
+/* Yes/No */
+.ynw{display:flex;gap:5px;}
+.ynb{padding:6px 14px;border-radius:var(--rl);font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--bdr);color:var(--il);background:var(--paper);transition:all .13s;}
+.ynb.yes.on{background:var(--gn);color:#fff;border-color:var(--gn);}
+.ynb.no.on{background:var(--im);color:#fff;border-color:var(--im);}
 
-.btn-danger {
-  background: var(--red-soft); color: var(--red);
-  border: 1.5px solid var(--red-border);
-}
-.btn-danger:hover { background: var(--red); color:#fff; }
+/* Alerts */
+.alert{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:var(--rl);margin-bottom:12px;font-size:13px;border:1px solid;}
+.alert svg{width:14px;height:14px;flex-shrink:0;fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:2;}
+.ab{flex:1;font-weight:500;}
+.ai{background:var(--tls);border-color:var(--tlb);color:#0C4A6E;}
+.aw{background:var(--ams);border-color:var(--amb);color:#78350F;}
+.ad{background:var(--rds);border-color:var(--rdb);color:#7F1D1D;}
+.ao{background:var(--gns);border-color:var(--gnb);color:#064E3B;}
 
-.btn-ghost {
-  background: transparent; color: var(--ink-mid);
-  border: 1.5px solid var(--border);
-}
-.btn-ghost:hover { background: var(--navy-mist); color:var(--navy); border-color:var(--border-mid); }
+/* Zone */
+.zone{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:var(--rxl);border:1.5px solid;margin-bottom:14px;}
+.zg{background:var(--gns);border-color:var(--gnb);}
+.za{background:var(--ams);border-color:var(--amb);}
+.zr{background:var(--rds);border-color:var(--rdb);}
+.zi{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.zi svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-linecap:round;stroke-width:2.5;}
+.zg .zi{background:var(--gn);}.za .zi{background:var(--am);}.zr .zi{background:var(--rd);}
+.zl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.zg .zl{color:var(--gn);}.za .zl{color:var(--am);}.zr .zl{color:var(--rd);}
+.zd{font-size:12.5px;color:var(--im);}
 
-.btn-sm { padding: 6px 12px; font-size:12px; }
-.btn-sm svg { width:12px; height:12px; }
-.btn-lg { padding:11px 22px; font-size:14px; }
-.btn-lg svg { width:15px; height:15px; }
-.btn-full { width:100%; justify-content:center; }
-.btn-icon { width:34px; height:34px; padding:0; justify-content:center; border-radius:var(--r-md); }
-.btn-icon.btn-sm { width:28px; height:28px; }
+/* Table */
+.tw{overflow-x:auto;border-radius:var(--rxl);border:1px solid var(--bdr);margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead{background:var(--nv);}
+thead th{padding:9px 13px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--bdr);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--nmt);}
+tbody td{padding:9px 13px;color:var(--im);vertical-align:middle;}
 
-/* ── CARDS ── */
-.card {
-  background: var(--paper); border:1px solid var(--border);
-  border-radius: var(--r-xl); padding:22px;
-  margin-bottom:18px; box-shadow:var(--shadow-sm);
-}
-.card-header {
-  display:flex; align-items:flex-start; justify-content:space-between;
-  margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--border);
-  gap:12px;
-}
-.card-header-left { flex:1; min-width:0; }
-.card-title {
-  font-family:var(--serif); font-size:15px; font-weight:600; color:var(--navy);
-}
-.card-subtitle { font-size:12px; color:var(--ink-light); margin-top:2px; }
-.card-header-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+/* Tags */
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;border:1px solid;}
+.tn{background:var(--nmt);color:var(--ns);border-color:var(--bdm);}
+.tg{background:var(--gns);color:var(--gn);border-color:var(--gnb);}
+.ta{background:var(--ams);color:var(--am);border-color:var(--amb);}
+.tr{background:var(--rds);color:var(--rd);border-color:var(--rdb);}
+.tt{background:var(--tls);color:var(--tl);border-color:var(--tlb);}
+.tb{background:var(--bls);color:var(--bl);border-color:var(--blb);}
+.tp{background:var(--pus);color:var(--pu);border-color:var(--pub);}
 
-/* ── METRICS ── */
-.metrics-grid {
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(148px,1fr));
-  gap:14px; margin-bottom:20px;
-}
-.metric-card {
-  background:var(--paper); border:1px solid var(--border);
-  border-radius:var(--r-xl); padding:18px;
-  cursor:pointer; transition: all 0.18s;
-  position:relative; overflow:hidden;
-}
-.metric-card::after {
-  content:''; position:absolute; bottom:0; left:0; right:0;
-  height:2px; background:var(--navy); opacity:0;
-  transition: opacity 0.18s;
-}
-.metric-card:hover { border-color:var(--navy-soft); box-shadow:var(--shadow-md); transform:translateY(-2px); }
-.metric-card:hover::after { opacity:1; }
-.metric-label {
-  font-family:var(--mono); font-size:9px; font-weight:500;
-  letter-spacing:1px; text-transform:uppercase;
-  color:var(--ink-faint); margin-bottom:8px;
-}
-.metric-value {
-  font-family:var(--serif); font-size:30px; font-weight:600;
-  color:var(--navy); line-height:1; margin-bottom:5px;
-}
-.metric-value.warn { color: #D97706; }
-.metric-value.danger { color: var(--red); }
-.metric-value.good { color: var(--green); }
-.metric-trend { font-size:11px; color:var(--ink-light); }
+/* Timeline */
+.tl{position:relative;padding-left:25px;}
+.tl::before{content:'';position:absolute;left:4px;top:6px;bottom:0;width:1px;background:var(--bdr);}
+.tli{position:relative;padding-bottom:17px;}
+.tld{position:absolute;left:-21px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--ns);border:2px solid var(--paper);box-shadow:0 0 0 1px var(--bdm);z-index:1;}
+.tld.r{background:var(--rd);}.tld.a{background:var(--am);}.tld.g{background:var(--gn);}
+.tldt{font-family:var(--mono);font-size:9.5px;color:var(--if);margin-bottom:2px;}
+.tltt{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:1px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tlbd{font-size:12px;color:var(--il);}
 
-/* ── FORMS ── */
-.form-grid   { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-.form-grid-1 { display:grid; grid-template-columns:1fr; gap:14px; }
-.form-group  { display:flex; flex-direction:column; gap:5px; }
-.form-label  { font-size:12px; font-weight:600; color:var(--ink-mid); }
-.req { color:var(--red); margin-left:2px; }
-.form-input, .form-select, .form-textarea {
-  width:100%; padding:8px 11px;
-  background:var(--paper); border:1.5px solid var(--border);
-  border-radius:var(--r-md);
-  font-family:var(--sans); font-size:13px; color:var(--ink);
-  transition: border-color 0.18s, box-shadow 0.18s;
-  appearance:none; -webkit-appearance:none;
-}
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-  outline:none; border-color:var(--navy);
-  box-shadow: 0 0 0 3px rgba(11,31,58,0.07);
-}
-.form-input.error { border-color:var(--red); }
-.form-input::placeholder { color:var(--ink-faint); }
-.form-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 10px center; padding-right:30px;
-}
-.form-textarea { resize:vertical; min-height:76px; }
-.form-hint { font-size:11px; color:var(--ink-faint); }
-.form-error { font-size:11px; color:var(--red); display:none; }
-.form-group.has-error .form-error { display:block; }
-.form-group.has-error .form-input { border-color:var(--red); }
+/* Pseudo panel */
+.pnl{background:var(--nv);border-radius:var(--r2);padding:20px;margin-bottom:14px;}
+.pnl-l{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#60A5FA;margin-bottom:7px;}
+.pnl-id{font-family:var(--mono);font-size:18px;font-weight:500;color:#fff;letter-spacing:1.5px;margin-bottom:2px;}
+.pnl-sb{font-size:12px;color:rgba(255,255,255,.32);}
+.pnl-tags{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;}
+.ptag{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#60A5FA;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);padding:2px 7px;border-radius:4px;}
 
-.fsection { margin-bottom:28px; }
-.fsection-title {
-  font-family:var(--mono); font-size:9px; font-weight:500;
-  letter-spacing:2px; text-transform:uppercase; color:var(--navy);
-  padding-bottom:9px; margin-bottom:14px;
-  border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:10px;
-}
+/* Analysis */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.ac{background:var(--paper);border:1px solid var(--bdr);border-radius:var(--r2);padding:15px;display:flex;flex-direction:column;gap:9px;box-shadow:var(--sh1);}
+.actt{font-size:13.5px;font-weight:600;color:var(--nv);}
+.acsb{font-size:11px;color:var(--il);margin-top:1px;}
+.aref{font-family:var(--mono);font-size:8px;color:var(--if);background:var(--surf);border:1px solid var(--bdr);padding:2px 5px;border-radius:3px;white-space:nowrap;}
+.aout{font-family:var(--mono);font-size:11px;color:var(--im);background:var(--nmt);padding:11px;border-radius:var(--rl);min-height:50px;white-space:pre-wrap;line-height:1.7;flex:1;border:1px solid var(--bdr);}
+.aout.idle{color:var(--if);font-style:italic;}
 
-/* ── ALERTS — trimmed ── */
-.alert {
-  display:flex; align-items:center; gap:12px;
-  padding:11px 14px; border-radius:var(--r-lg);
-  margin-bottom:16px; font-size:13px; border:1px solid;
-}
-.alert-ico { width:16px; height:16px; flex-shrink:0; }
-.alert-body { flex:1; font-weight:500; }
-.alert-sub  { font-weight:400; font-size:12px; color:inherit; opacity:0.8; }
-.alert-info    { background:var(--teal-soft); border-color:var(--teal-border); color:#075985; }
-.alert-warning { background:var(--amber-soft); border-color:var(--amber-border); color:#78350F; }
-.alert-danger  { background:var(--red-soft); border-color:var(--red-border); color:#7F1D1D; }
-.alert-success { background:var(--green-soft); border-color:var(--green-border); color:#064E3B; }
+/* Action plan zones */
+.apz{border-radius:var(--rxl);padding:14px;margin-bottom:12px;border:1.5px solid;}
+.apzg{background:var(--gns);border-color:var(--gnb);}
+.apza{background:var(--ams);border-color:var(--amb);}
+.apzr{background:var(--rds);border-color:var(--rdb);}
+.apzt{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.apzg .apzt{color:var(--gn);}.apza .apzt{color:var(--am);}.apzr .apzt{color:var(--rd);}
+.apst{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.aps{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--im);}
+.aps::before{content:'\2192';flex-shrink:0;color:var(--if);}
 
-/* ── ZONE STATUS ── */
-.zone-card {
-  display:flex; align-items:center; gap:18px;
-  padding:16px 20px; border-radius:var(--r-xl);
-  border:1.5px solid; margin-bottom:18px;
-}
-.zone-green { background:var(--green-soft); border-color:var(--green-border); }
-.zone-amber { background:var(--amber-soft); border-color:var(--amber-border); }
-.zone-red   { background:var(--red-soft);   border-color:var(--red-border);   }
-.zone-dot {
-  width:40px; height:40px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
-}
-.zone-green .zone-dot { background:#10B981; }
-.zone-amber .zone-dot { background:#F59E0B; }
-.zone-red   .zone-dot { background:#EF4444; }
-.zone-dot svg { width:20px; height:20px; stroke:white; stroke-width:2.5; }
-.zone-info { flex:1; }
-.zone-title {
-  font-family:var(--mono); font-size:10px; font-weight:500;
-  letter-spacing:1.5px; text-transform:uppercase; margin-bottom:2px;
-}
-.zone-green .zone-title { color:var(--green); }
-.zone-amber .zone-title { color:var(--amber); }
-.zone-red   .zone-title { color:var(--red);   }
-.zone-desc { font-size:13px; color:var(--ink-mid); }
+/* FEV1 chart */
+.chart{display:flex;align-items:flex-end;gap:12px;height:110px;padding:8px 0;border-bottom:1px solid var(--bdr);}
+.cbw{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.cb{width:100%;background:var(--nmt);border-radius:4px 4px 0 0;border:1px solid var(--bdm);display:flex;align-items:flex-start;justify-content:center;padding-top:4px;}
+.cb span{font-family:var(--mono);font-size:9px;color:var(--ns);}
+.cb.aw{background:#FEF3C7;border-color:var(--amb);}
+.cb.aw span,.cb.ar span{color:var(--im);}
+.cb.ar{background:var(--rds);border-color:var(--rdb);}
+.cbl{font-size:10px;color:var(--if);text-align:center;}
 
-/* ── TABLE ── */
-.table-wrap {
-  overflow-x:auto; border-radius:var(--r-xl);
-  border:1px solid var(--border); margin-bottom:18px;
-}
-table { width:100%; border-collapse:collapse; font-size:13px; }
-thead { background:var(--navy); }
-thead th {
-  padding:10px 14px; text-align:left;
-  font-family:var(--mono); font-size:9px; font-weight:500;
-  letter-spacing:1.5px; text-transform:uppercase;
-  color:rgba(255,255,255,0.65); white-space:nowrap;
-}
-tbody tr { border-bottom:1px solid var(--border); transition:background 0.12s; }
-tbody tr:last-child { border-bottom:none; }
-tbody tr:hover { background:var(--navy-mist); }
-tbody td { padding:10px 14px; color:var(--ink-mid); vertical-align:middle; }
+/* Page head */
+.ph{margin-bottom:17px;}
+.pht{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--nv);letter-spacing:-.2px;}
+.phs{font-size:12.5px;color:var(--il);margin-top:2px;}
 
-/* ── TAGS ── */
-.tag {
-  display:inline-flex; align-items:center; gap:3px;
-  padding:2px 8px; border-radius:4px;
-  font-family:var(--mono); font-size:9px;
-  font-weight:500; letter-spacing:0.5px; text-transform:uppercase;
-  border:1px solid;
-}
-.tag-navy  { background:var(--navy-mist); color:var(--navy-soft); border-color:var(--border-mid); }
-.tag-green { background:var(--green-soft); color:var(--green); border-color:var(--green-border); }
-.tag-amber { background:var(--amber-soft); color:var(--amber); border-color:var(--amber-border); }
-.tag-red   { background:var(--red-soft);   color:var(--red);   border-color:var(--red-border);   }
-.tag-teal  { background:var(--teal-soft);  color:var(--teal);  border-color:var(--teal-border);  }
+/* Tabs */
+.tab-panel{display:none;}
+.tab-panel.on{display:block;animation:fup .2s ease;}
+@keyframes fup{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
 
-/* ── TIMELINE ── */
-.timeline { position:relative; padding-left:32px; }
-.timeline::before {
-  content:''; position:absolute; left:7px; top:6px; bottom:0;
-  width:1px; background:var(--border);
-}
-.tl-item { position:relative; padding-bottom:22px; }
-.tl-dot {
-  position:absolute; left:-25px; top:4px;
-  width:14px; height:14px; border-radius:50%;
-  background:var(--navy-soft); border:2px solid var(--paper);
-  box-shadow:0 0 0 1px var(--border-mid);
-  z-index:1;
-}
-.tl-dot.red   { background:var(--red);   }
-.tl-dot.amber { background:#F59E0B;      }
-.tl-dot.green { background:#10B981;      }
-.tl-date  { font-family:var(--mono); font-size:10px; color:var(--ink-faint); margin-bottom:3px; letter-spacing:0.3px; }
-.tl-title { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.tl-body  { font-size:12px; color:var(--ink-light); }
+/* Notif */
+.nw{position:fixed;top:14px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:6px;pointer-events:none;}
+.notif{display:flex;align-items:center;gap:9px;padding:10px 14px;background:var(--nv);color:#fff;border-radius:var(--rl);box-shadow:var(--sh3);font-size:13px;font-weight:500;min-width:235px;pointer-events:all;animation:nin .2s ease;border-left:3px solid #60A5FA;}
+.notif.ok{border-left-color:#34D399;}
+.notif.warn{border-left-color:#FBBF24;}
+.notif.err{border-left-color:#F87171;}
+.notif svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:2;flex-shrink:0;}
+@keyframes nin{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
 
-/* ── PSEUDO PANEL ── */
-.pseudo-panel {
-  background:var(--navy); border-radius:var(--r-xl); padding:22px;
-  margin-bottom:18px;
-}
-.pseudo-label {
-  font-family:var(--mono); font-size:9px; letter-spacing:2px;
-  text-transform:uppercase; color:#60A5FA; margin-bottom:10px;
-}
-.pseudo-id {
-  font-family:var(--mono); font-size:20px; font-weight:500;
-  color:#fff; letter-spacing:2px; margin-bottom:3px;
-}
-.pseudo-sub { font-size:12px; color:rgba(255,255,255,0.38); }
-.pseudo-tags { display:flex; gap:8px; margin-top:14px; }
-.pseudo-tag {
-  font-family:var(--mono); font-size:9px; letter-spacing:1px;
-  text-transform:uppercase; color:#60A5FA;
-  background:rgba(96,165,250,0.12); border:1px solid rgba(96,165,250,0.25);
-  padding:2px 8px; border-radius:4px;
-}
+/* Utils */
+.flex{display:flex;}.ic{align-items:center;}.jsb{justify-content:space-between;}
+.g6{gap:6px;}.g8{gap:8px;}.g10{gap:10px;}.g12{gap:12px;}
+.mt8{margin-top:8px;}.mt12{margin-top:12px;}.mt16{margin-top:16px;}
+.mb8{margin-bottom:8px;}.mb12{margin-bottom:12px;}
+.fw6{font-weight:600;}.mono{font-family:var(--mono);}.sm{font-size:12px;}.muted{color:var(--il);}
 
-/* ── ANALYSIS CARDS ── */
-.analysis-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;
-}
-.analysis-card {
-  background:var(--paper); border:1px solid var(--border);
-  border-radius:var(--r-xl); padding:18px;
-  box-shadow:var(--shadow-sm);
-  display:flex; flex-direction:column; gap:12px;
-}
-.analysis-card-header {
-  display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-}
-.analysis-title { font-size:14px; font-weight:600; color:var(--navy); }
-.analysis-subtitle { font-size:11px; color:var(--ink-light); margin-top:2px; }
-/* engine tag — shows layer number for developer reference, small and muted */
-.engine-ref {
-  font-family:var(--mono); font-size:9px; color:var(--ink-faint);
-  background:var(--surface); border:1px solid var(--border);
-  padding:2px 6px; border-radius:3px; flex-shrink:0; white-space:nowrap;
-}
-.analysis-output {
-  font-family:var(--mono); font-size:11px; color:var(--ink-mid);
-  background:var(--navy-mist); padding:12px; border-radius:var(--r-md);
-  min-height:56px; white-space:pre-wrap; line-height:1.7; flex:1;
-  border:1px solid var(--border);
-}
-.analysis-output.running { color:var(--ink-faint); font-style:italic; }
-.analysis-output.done { color:var(--ink-mid); }
-
-/* ── INSTR CARDS ── */
-.instr-grid {
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-  gap:14px; margin-bottom:18px;
-}
-.instr-card {
-  background:var(--paper); border:1px solid var(--border);
-  border-left:3px solid var(--navy);
-  border-radius:var(--r-lg); padding:16px;
-}
-.instr-card.teal  { border-left-color:var(--teal); }
-.instr-card.amber { border-left-color:#D97706; }
-.instr-card.green { border-left-color:var(--green); }
-.instr-title {
-  font-family:var(--mono); font-size:9px; letter-spacing:1px;
-  text-transform:uppercase; color:var(--ink-light); margin-bottom:11px;
-}
-
-/* ── PAGE HEADER ── */
-.page-head { margin-bottom:22px; }
-.page-title { font-family:var(--serif); font-size:20px; font-weight:600; color:var(--navy); letter-spacing:-0.2px; }
-.page-sub   { font-size:13px; color:var(--ink-light); margin-top:3px; }
-
-/* ── TAB PANELS ── */
-.tab-panel { display:none; }
-.tab-panel.active { display:block; animation:fadeUp 0.25s ease; }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(6px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-/* ── NOTIFICATION ── */
-.notif-wrap {
-  position:fixed; top:18px; right:22px; z-index:9999;
-  display:flex; flex-direction:column; gap:8px; pointer-events:none;
-}
-.notif {
-  display:flex; align-items:center; gap:11px;
-  padding:12px 16px; background:var(--navy); color:#fff;
-  border-radius:var(--r-lg); box-shadow:var(--shadow-md);
-  font-size:13px; font-weight:500; min-width:260px;
-  pointer-events:all; animation:notifIn 0.25s ease;
-  border-left:3px solid #60A5FA;
-}
-.notif.success { border-left-color:#34D399; }
-.notif.warning { border-left-color:#FBBF24; }
-.notif.danger  { border-left-color:#F87171; }
-.notif svg { width:16px; height:16px; flex-shrink:0; }
-@keyframes notifIn {
-  from { opacity:0; transform:translateX(20px); }
-  to   { opacity:1; transform:translateX(0); }
-}
-
-/* ── UNSAVED INDICATOR ── */
-.unsaved-dot {
-  width:7px; height:7px; border-radius:50%;
-  background:#FBBF24; display:none;
-  position:absolute; top:8px; right:8px;
-}
-.has-unsaved .unsaved-dot { display:block; }
-
-/* ── UTILS ── */
-.flex { display:flex; } .flex-col { flex-direction:column; }
-.items-center { align-items:center; }
-.justify-between { justify-content:space-between; }
-.gap-6  { gap:6px; }  .gap-8 { gap:8px; }
-.gap-12 { gap:12px; } .gap-16 { gap:16px; }
-.mt-8 { margin-top:8px; } .mt-14 { margin-top:14px; }
-.mt-20 { margin-top:20px; } .mb-14 { margin-bottom:14px; }
-.fw-600 { font-weight:600; }
-.text-mono { font-family:var(--mono); }
-.text-sm { font-size:12px; }
-.text-xs { font-size:11px; }
-.text-muted { color:var(--ink-light); }
-.text-navy { color:var(--navy); }
-.text-red { color:var(--red); }
-
-@media (max-width:1024px) {
-  .app-shell { grid-template-columns:1fr; }
-  .sidebar { display:none; }
-  .form-grid   { grid-template-columns:1fr; }
-  .form-grid-3 { grid-template-columns:1fr 1fr; }
-  .analysis-grid { grid-template-columns:1fr; }
-}
-@media (max-width:640px) {
-  .main-content { padding:18px 14px; }
-  .metrics-grid { grid-template-columns:1fr 1fr; }
-  .analysis-grid { grid-template-columns:1fr; }
-  .form-grid-3 { grid-template-columns:1fr; }
-}
+@media(max-width:1024px){.shell{grid-template-columns:1fr;}.sb{display:none;}.fg,.fg3,.fg4,.ag{grid-template-columns:1fr;}}
+@media(max-width:640px){.main{padding:16px 13px;}.mg{grid-template-columns:1fr 1fr;}.ag{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- ══ ECO BAR ══ -->
-<nav class="eco-bar">
+<!-- ECO BAR -->
+<nav class="eco">
   <span class="eco-brand">Respiratory Platform</span>
-  <div class="eco-modules">
-    <div class="eco-module active">
-      <span class="eco-pulse"></span>AIRMAP — Obstructive
-    </div>
-    <div class="eco-module future" title="Phase 2 — PneumoData integration">
-      <span class="eco-pulse"></span>PneumoData — Restrictive
-    </div>
-    <div class="eco-module future" title="Planned">
-      <span class="eco-pulse"></span>Pulmonary Hypertension
-    </div>
-    <div class="eco-module future" title="Planned">
-      <span class="eco-pulse"></span>Sleep &amp; Ventilation
-    </div>
-    <div class="eco-module future">+ Add module</div>
+  <div class="eco-mods">
+    <div class="em on"><span class="ep"></span>AIRMAP — Obstructive</div>
+    <div class="em off" title="Phase 2"><span class="ep"></span>PneumoData — Restrictive</div>
+    <div class="em off"><span class="ep"></span>Pulmonary Hypertension</div>
+    <div class="em off"><span class="ep"></span>Sleep &amp; Ventilation</div>
+    <div class="em off">+ Add module</div>
   </div>
-  <div class="eco-user">
+  <div class="eco-usr">
     <span class="eco-role">Clinician</span>
-    <span class="eco-name">Dr. García</span>
-    <div class="eco-avatar">MG</div>
+    <span class="eco-nm">Dr. García</span>
+    <div class="eco-av">MG</div>
   </div>
 </nav>
 
-<!-- ══ APP HEADER ══ -->
-<header class="app-header">
-  <div class="app-logo">
-    <div class="app-logo-mark">
-      <!-- Lung icon — stroke white, visible on navy -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-           stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 4v6"/>
-        <path d="M6 10c-1.5 1-3 3-3 5 0 2.5 1.5 4 4 4 2 0 3-1 4-3V10"/>
-        <path d="M18 10c1.5 1 3 3 3 5 0 2.5-1.5 4-4 4-2 0-3-1-4-3V10"/>
-      </svg>
-    </div>
-    <div>
-      <div class="app-logo-text">AIRMAP</div>
-      <div class="app-logo-sub">Obstructive Disease Platform</div>
-    </div>
+<!-- MODE BAR -->
+<div class="mbar">
+  <span class="mlbl">Visit mode</span>
+  <div class="mpills">
+    <div class="mpill" id="mode-new" onclick="setMode('new')">New patient</div>
+    <div class="mpill on" id="mode-follow" onclick="setMode('followup')">Follow-up</div>
+    <div class="mpill" id="mode-review" onclick="setMode('review')">Read-only review</div>
   </div>
+  <div class="msep"></div>
+  <div class="vinfo"><strong>AIRMAP-2024-00147</strong> · Visit 4 · COPD · Last visit: 18 Sep 2024</div>
+</div>
 
-  <div class="hdivider"></div>
-
-  <div class="patient-chip" onclick="showNotif('Patient search — Phase 2', 'info')">
-    <div class="pc-icon">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-           stroke="white" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+<!-- APP HEADER -->
+<header class="ahdr">
+  <div class="flex ic g10">
+    <div class="lmk">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v5"/>
+        <path d="M7 11c-2 1.5-3 3.5-3 5 0 2 1.2 3.5 3.5 3.5 1.8 0 2.8-1 3.5-2.5V11"/>
+        <path d="M17 11c2 1.5 3 3.5 3 5 0 2-1.2 3.5-3.5 3.5-1.8 0-2.8-1-3.5-2.5V11"/>
       </svg>
     </div>
-    <div>
-      <div class="pc-id">AIRMAP-2024-00147</div>
-      <div class="pc-name">Anonymous patient</div>
-    </div>
-    <div class="pc-chevron">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
+    <div><div class="ltx">AIRMAP</div><div class="lsb">Obstructive Disease Intelligence</div></div>
   </div>
-
-  <div class="header-right">
-    <button class="btn btn-ghost btn-icon" title="Search"
-            onclick="showNotif('Global search — Phase 2', 'info')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-    </button>
-    <button class="btn btn-ghost btn-icon" title="Notifications"
-            onclick="showNotif('No pending alerts', 'success')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-      </svg>
-    </button>
-    <div class="hdivider"></div>
-    <button class="btn btn-secondary btn-sm"
-            onclick="showNotif('Data exported', 'success')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
-      Export
-    </button>
-    <button class="btn btn-primary btn-sm" onclick="switchTab('analysis')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round">
-        <polygon points="5 3 19 12 5 21 5 3"/>
-      </svg>
-      Run analysis
-    </button>
+  <div class="hd"></div>
+  <div class="ptc" onclick="showN('Patient search — Phase 2','info')">
+    <div class="ptci">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </div>
+    <div><div class="pid">AIRMAP-2024-00147</div><div class="pnm">Anonymous patient</div></div>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" style="margin-left:auto"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  <div class="hr">
+    <button class="btn bg btn-ico" onclick="showN('Search — Phase 2','info')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
+    <button class="btn bg btn-ico" onclick="showN('No new alerts','ok')"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    <div class="hd"></div>
+    <button class="btn bs btn-sm" onclick="showN('Exported','ok')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+    <button class="btn bp btn-sm" onclick="ST('analysis')"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run analysis</button>
   </div>
 </header>
 
-<!-- ══ NAV STRIP ══ -->
-<nav class="nav-strip">
-  <ul class="nav-tabs" id="main-tabs">
-    <li class="nav-tab active" data-tab="dashboard">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-      </svg>
-      Overview
-    </li>
-    <li class="nav-tab" data-tab="patient">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-      </svg>
-      Patient ID
-    </li>
-    <li class="nav-tab" data-tab="investigations">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11"/>
-        <path d="M5 9H2m0 0v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9m-18 0h18"/>
-      </svg>
-      Investigations
-    </li>
-    <li class="nav-tab" data-tab="clinical">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-      </svg>
-      Clinical Scores
-    </li>
-    <li class="nav-tab" data-tab="medications">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M10.5 20H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H20a2 2 0 0 1 2 2v3"/>
-        <circle cx="18" cy="18" r="3"/><path d="M20.5 15.5 17.5 18.5"/>
-      </svg>
-      Medications
-      <span class="nav-badge">New</span>
-    </li>
-    <li class="nav-tab" data-tab="timeline">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/>
-        <line x1="6" y1="20" x2="6" y2="16"/>
-      </svg>
-      Timeline
-    </li>
-    <li class="nav-tab" data-tab="analysis">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-      </svg>
-      Clinical Analysis
-    </li>
-    <li class="nav-tab" data-tab="results">
-      <svg class="nav-tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
-      Results
-    </li>
+<!-- NAV STRIP -->
+<nav class="nvs">
+  <ul class="nvts" id="ntabs">
+    <li class="nt on" data-t="dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>Overview</li>
+    <li class="nt" data-t="patient"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13" y2="15"/></svg>Patient ID</li>
+    <li class="nt" data-t="demographics"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Demographics</li>
+    <li class="nt" data-t="investigations"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Investigations</li>
+    <li class="nt" data-t="clinical"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>Clinical Scores</li>
+    <li class="nt" data-t="asthma"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Asthma &amp; ACO</li>
+    <li class="nt" data-t="environment"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Environment</li>
+    <li class="nt" data-t="medications"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Medications</li>
+    <li class="nt" data-t="longitudinal"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Longitudinal</li>
+    <li class="nt" data-t="analysis"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Clinical Analysis</li>
+    <li class="nt" data-t="action-plan"><svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>Action Plan</li>
+    <li class="nt" data-t="results"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Results</li>
   </ul>
 </nav>
 
-<!-- ══ APP SHELL ══ -->
-<div class="app-shell">
+<div class="shell">
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="ssc">
+    <div class="sbl">Disease focus</div>
+    <div class="dp on"><span class="dpd"></span>COPD</div>
+    <div class="dp"><span class="dpd"></span>Chronic Bronchitis</div>
+    <div class="dp"><span class="dpd"></span>Asthma</div>
+    <div class="dp"><span class="dpd"></span>ACO</div>
+  </div>
+  <div class="sdv"></div>
+  <div class="ssc">
+    <div class="sbl">Completeness</div>
+    <div class="pr"><span class="prl">Patient ID</span><div class="prt"><div class="prf pfg" style="width:100%"></div></div><span class="pp">100%</span></div>
+    <div class="pr"><span class="prl">Demographics</span><div class="prt"><div class="prf pfg" style="width:100%"></div></div><span class="pp">100%</span></div>
+    <div class="pr"><span class="prl">Investigations</span><div class="prt"><div class="prf pfb" style="width:70%"></div></div><span class="pp">70%</span></div>
+    <div class="pr"><span class="prl">Clin. scores</span><div class="prt"><div class="prf pfb" style="width:85%"></div></div><span class="pp">85%</span></div>
+    <div class="pr"><span class="prl">Asthma/ACO</span><div class="prt"><div class="prf pfb" style="width:60%"></div></div><span class="pp">60%</span></div>
+    <div class="pr"><span class="prl">Environment</span><div class="prt"><div class="prf pfa" style="width:45%"></div></div><span class="pp">45%</span></div>
+    <div class="pr"><span class="prl">Medications</span><div class="prt"><div class="prf pfa" style="width:40%"></div></div><span class="pp">40%</span></div>
+    <div class="pr"><span class="prl">Longitudinal</span><div class="prt"><div class="prf pfa" style="width:30%"></div></div><span class="pp">30%</span></div>
+  </div>
+  <div class="sdv"></div>
+  <div class="ssc">
+    <div class="sbl">Quick actions</div>
+    <div class="si" onclick="ST('analysis')"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run full analysis</div>
+    <div class="si" onclick="loadEx()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Load example</div>
+    <div class="si" onclick="showN('Exported','ok')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export all data</div>
+    <div class="si" onclick="showN('Print dialog','info')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print report</div>
+  </div>
+</aside>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-section">
-      <div class="sb-label">Disease focus</div>
-      <div class="sb-item active">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-        COPD
-      </div>
-      <div class="sb-item">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-        Chronic Bronchitis
-      </div>
-      <div class="sb-item">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-        Asthma
-      </div>
-      <div class="sb-item">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-        ACO
+<main class="main">
+
+<!-- OVERVIEW TAB -->
+<div id="tab-dashboard" class="tab-panel on">
+  <div class="ph"><div class="pht">Patient overview</div><div class="phs">AIRMAP-2024-00147 · COPD · Visit 4 · Intelligence output — not an EHR record</div></div>
+
+  <!-- Intelligence output always visible first -->
+  <div class="zone zr">
+    <div class="zi"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div style="flex:1"><div class="zl">Red zone — high risk · GOLD Group D</div><div class="zd">Progressive decline. FEV₁ 48% (−4% in 6m). Immediate treatment review recommended.</div></div>
+    <button class="btn bp btn-sm" onclick="ST('analysis')">View analysis <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+
+  <div class="mg">
+    <div class="mc" onclick="ST('investigations')"><div class="mclbl">FEV₁ % predicted</div><div class="mcv warn">48%</div><div class="mctr">↓ from 52%</div><div class="mcpv">6 months ago</div></div>
+    <div class="mc" onclick="ST('clinical')"><div class="mclbl">CAT score</div><div class="mcv warn">18</div><div class="mctr">↑ from 15</div><div class="mcpv">Last visit</div></div>
+    <div class="mc" onclick="ST('clinical')"><div class="mclbl">Exacerbations (12m)</div><div class="mcv danger">3</div><div class="mctr">1 hospitalisation · 2 OCS</div><div class="mcpv">Updated Nov 2024</div></div>
+    <div class="mc" onclick="ST('analysis')"><div class="mclbl">GOLD stage</div><div class="mcv">III</div><div class="mctr">Severe · Group D</div><div class="mcpv">Unchanged</div></div>
+    <div class="mc" onclick="ST('clinical')"><div class="mclbl">mMRC grade</div><div class="mcv warn">3</div><div class="mctr">Stops after ~100 m</div><div class="mcpv">Unchanged</div></div>
+    <div class="mc" onclick="ST('medications')"><div class="mclbl">Adherence</div><div class="mcv warn">75%</div><div class="mctr">Suboptimal — address</div><div class="mcpv">Self-reported</div></div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Current clinical picture</div><div class="csb">Generated intelligence — run analysis to refresh</div></div><button class="btn bg btn-sm" onclick="ST('analysis')">Refresh <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button></div>
+    <div class="ir"><span class="ik">GOLD classification</span><span class="iv">Stage III — Severe &nbsp;<span class="tag tn">Group D</span></span></div>
+    <div class="ir"><span class="ik">Exacerbation risk</span><span class="iv"><span class="tag tr">High</span> &nbsp;3 past year · 1 hospitalisation · 2 OCS</span></div>
+    <div class="ir"><span class="ik">Current regimen</span><span class="iv"><span class="tag tt">LAMA</span> <span class="tag tn">LABA</span> <span class="tag ta">ICS</span> &nbsp;Triple therapy</span></div>
+    <div class="ir"><span class="ik">Phenotype</span><span class="iv">Borderline eosinophilic · ACO possible</span></div>
+    <div class="ir"><span class="ik">Biologic eligibility</span><span class="iv mt">Eos 280 cells/µL — reassess at next visit (threshold 300)</span></div>
+    <div class="ir"><span class="ik">FEV₁ trajectory</span><span class="iv"><span class="tag tr">Declining</span> &nbsp;−4% / 6 months (accelerated)</span></div>
+    <div class="ir"><span class="ik">Priority action</span><span class="iv">Inhaler technique review · adherence 75%</span></div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Recent events</div><div class="csb">Last 3 months</div></div><button class="btn bg btn-sm" onclick="ST('longitudinal')">Full timeline →</button></div>
+    <div class="tl">
+      <div class="tli"><div class="tld r"></div><div class="tldt">14 Nov 2024 · Admission</div><div class="tltt">Emergency admission <span class="tag tr">ED · 3 days</span></div><div class="tlbd">FEV₁ 38% · IV steroids · antibiotics · O₂</div></div>
+      <div class="tli"><div class="tld a"></div><div class="tldt">02 Oct 2024 · Rx change</div><div class="tltt">LABA added — Formoterol 12 mcg BID <span class="tag ta">Rx</span></div><div class="tlbd">Step-up from LAMA + ICS</div></div>
+      <div class="tli"><div class="tld"></div><div class="tldt">18 Sep 2024 · Clinic</div><div class="tltt">Routine review <span class="tag tn">Clinic</span></div><div class="tlbd">FEV₁ 52% · CAT 15 · stable</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT ID TAB -->
+<div id="tab-patient" class="tab-panel">
+  <div class="ph"><div class="pht">Patient identification</div><div class="phs">Pseudonymised — registered once, intelligence system throughout</div></div>
+  <div class="pnl">
+    <div class="pnl-l">Platform ID — active</div>
+    <div class="pnl-id">AIRMAP-2024-00147</div>
+    <div class="pnl-sb">Name not in clinical data · EHR number retained for reconnection · encrypted mapping table</div>
+    <div class="pnl-tags"><span class="ptag">Pseudonymised</span><span class="ptag">GDPR compliant</span><span class="ptag">Audit logged</span><span class="ptag">Visit 4</span></div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Identity registration</div><div class="csb">Encrypted mapping table only — not in clinical records</div></div><span class="tag tr">Restricted</span></div>
+    <div class="fsec"><div class="flbl-sec">Personal details</div>
+      <div class="fg">
+        <div class="fgrp"><label class="fl">Full name <span class="req">*</span></label><input class="fi" type="text" placeholder="As per hospital records" oninput="dirty('patient')"></div>
+        <div class="fgrp"><label class="fl">Date of birth <span class="req">*</span></label><input class="fi" type="date" oninput="dirty('patient')"></div>
+        <div class="fgrp"><label class="fl">Sex</label><select class="fs" onchange="dirty('patient')"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="fgrp"><label class="fl">Age</label><div class="iw"><input class="fi" type="number" placeholder="Years" oninput="dirty('patient')"><span class="iu">yrs</span></div></div>
       </div>
     </div>
-
-    <div class="sb-divider"></div>
-
-    <div class="sb-section">
-      <div class="sb-label">Data completeness</div>
-      <div class="prog-row">
-        <span class="prog-label">Patient ID</span>
-        <div class="prog-track"><div class="prog-fill full" style="width:100%"></div></div>
-        <span class="prog-pct">100%</span>
-      </div>
-      <div class="prog-row">
-        <span class="prog-label">Investigations</span>
-        <div class="prog-track"><div class="prog-fill partial" style="width:65%"></div></div>
-        <span class="prog-pct">65%</span>
-      </div>
-      <div class="prog-row">
-        <span class="prog-label">Clin. scores</span>
-        <div class="prog-track"><div class="prog-fill partial" style="width:80%"></div></div>
-        <span class="prog-pct">80%</span>
-      </div>
-      <div class="prog-row">
-        <span class="prog-label">Medications</span>
-        <div class="prog-track"><div class="prog-fill low" style="width:40%"></div></div>
-        <span class="prog-pct">40%</span>
-      </div>
-      <div class="prog-row">
-        <span class="prog-label">Timeline</span>
-        <div class="prog-track"><div class="prog-fill low" style="width:20%"></div></div>
-        <span class="prog-pct">20%</span>
+    <div class="fsec"><div class="flbl-sec">EHR bridge — reconnection only</div>
+      <div class="fg">
+        <div class="fgrp"><label class="fl">Hospital EHR number <span class="req">*</span></label><input class="fi mn" type="text" placeholder="e.g. HOS-0048291" oninput="dirty('patient')"><span class="fhint">Only identifier linking platform ID to hospital record</span></div>
+        <div class="fgrp"><label class="fl">Hospital / centre</label><input class="fi" type="text" placeholder="Hospital name" oninput="dirty('patient')"></div>
+        <div class="fgrp"><label class="fl">Responsible clinician <span class="req">*</span></label><input class="fi" type="text" placeholder="Dr. Surname" oninput="dirty('patient')"></div>
+        <div class="fgrp"><label class="fl">Registration date</label><input class="fi" type="date" oninput="dirty('patient')"></div>
       </div>
     </div>
-
-    <div class="sb-divider"></div>
-
-    <div class="sb-section">
-      <div class="sb-label">Actions</div>
-      <div class="sb-item" onclick="switchTab('analysis')">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <polygon points="5 3 19 12 5 21 5 3"/>
-        </svg>
-        Run full analysis
-      </div>
-      <div class="sb-item" onclick="loadExample()">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
-        Load example patient
-      </div>
-      <div class="sb-item" onclick="showNotif('Data exported', 'success')">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Export data
-      </div>
-      <div class="sb-item" onclick="showNotif('Print dialog', 'info')">
-        <svg class="sb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <polyline points="6 9 6 2 18 2 18 9"/>
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-          <rect x="6" y="14" width="12" height="8"/>
-        </svg>
-        Print report
+    <div class="fsec"><div class="flbl-sec">Disease assignment</div>
+      <div class="fg">
+        <div class="fgrp"><label class="fl">Primary diagnosis <span class="req">*</span></label><select class="fs" onchange="dirty('patient')"><option value="">Select</option><option>COPD</option><option>Chronic Bronchitis</option><option>Asthma</option><option>ACO — Asthma-COPD Overlap</option></select></div>
+        <div class="fgrp"><label class="fl">Secondary diagnosis</label><select class="fs" onchange="dirty('patient')"><option value="">None</option><option>Chronic Bronchitis</option><option>Asthma</option><option>Bronchiectasis</option><option>Other</option></select></div>
       </div>
     </div>
-  </aside>
+    <div class="bg-g"><button class="btn bp" onclick="saveF('patient')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Register patient</button><button class="btn bg" onclick="showN('Cleared','info')">Clear</button><button class="btn bg" onclick="showN('Requires Clinical Lead access','warn')">Look up patient</button></div>
+  </div>
+</div>
 
-  <!-- MAIN -->
-  <main class="main-content" id="main-content">
-
-    <!-- ══ OVERVIEW ══ -->
-    <div id="tab-dashboard" class="tab-panel active">
-      <div class="page-head">
-        <div class="page-title">Patient overview</div>
-        <div class="page-sub">AIRMAP-2024-00147 · COPD · Last updated today</div>
-      </div>
-
-      <div class="alert alert-warning">
-        <svg class="alert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <div class="alert-body">
-          Medication record incomplete — treatment analysis may be limited.
-          <button class="btn btn-secondary btn-sm" style="margin-left:10px;"
-                  onclick="switchTab('medications')">Complete now</button>
-        </div>
-      </div>
-
-      <div class="metrics-grid">
-        <div class="metric-card" onclick="switchTab('investigations')">
-          <div class="metric-label">FEV₁ % predicted</div>
-          <div class="metric-value warn">48%</div>
-          <div class="metric-trend">↓ from 52% · 6 months ago</div>
-        </div>
-        <div class="metric-card" onclick="switchTab('clinical')">
-          <div class="metric-label">CAT score</div>
-          <div class="metric-value warn">18</div>
-          <div class="metric-trend">High symptom burden</div>
-        </div>
-        <div class="metric-card" onclick="switchTab('clinical')">
-          <div class="metric-label">Exacerbations (12m)</div>
-          <div class="metric-value danger">3</div>
-          <div class="metric-trend">1 hospitalisation</div>
-        </div>
-        <div class="metric-card" onclick="switchTab('analysis')">
-          <div class="metric-label">GOLD stage</div>
-          <div class="metric-value">III</div>
-          <div class="metric-trend">Severe · Group D</div>
-        </div>
-        <div class="metric-card" onclick="switchTab('clinical')">
-          <div class="metric-label">mMRC grade</div>
-          <div class="metric-value warn">3</div>
-          <div class="metric-trend">Stops after ~100 m</div>
-        </div>
-        <div class="metric-card" onclick="switchTab('timeline')">
-          <div class="metric-label">12-month trend</div>
-          <div class="metric-value danger">↓</div>
-          <div class="metric-trend">Declining trajectory</div>
-        </div>
-      </div>
-
-      <div class="zone-card zone-red">
-        <div class="zone-dot">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        </div>
-        <div class="zone-info">
-          <div class="zone-title">Red zone — high risk</div>
-          <div class="zone-desc">Progressive decline. Immediate treatment review recommended.</div>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="switchTab('analysis')">
-          View analysis
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Recent events</div>
-            <div class="card-subtitle">Last 3 months</div>
-          </div>
-          <div class="card-header-right">
-            <button class="btn btn-ghost btn-sm" onclick="switchTab('timeline')">
-              Full timeline
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot red"></div>
-            <div class="tl-date">14 Nov 2024 · Hospital admission</div>
-            <div class="tl-title">Emergency admission <span class="tag tag-red">ED · 3 days</span></div>
-            <div class="tl-body">FEV₁ 38% · IV steroids · antibiotics · O₂ support</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot amber"></div>
-            <div class="tl-date">02 Oct 2024 · Medication change</div>
-            <div class="tl-title">LABA added <span class="tag tag-amber">Rx change</span></div>
-            <div class="tl-body">Formoterol 12mcg BID — step-up from LAMA + ICS</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">18 Sep 2024 · Clinic visit</div>
-            <div class="tl-title">Routine review <span class="tag tag-navy">Clinic</span></div>
-            <div class="tl-body">FEV₁ 52% · CAT 15 · smoking cessation counselling</div>
-          </div>
-        </div>
+<!-- DEMOGRAPHICS TAB -->
+<div id="tab-demographics" class="tab-panel">
+  <div class="ph"><div class="pht">Demographics &amp; history</div><div class="phs">Stable data — update only when something has changed · feeds engine.layer_1 and engine.layer_4</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Patient background</div></div><button class="btn bp btn-sm" onclick="saveF('demographics')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fsec"><div class="flbl-sec">Basic characteristics</div>
+      <div class="fg4">
+        <div class="fgrp"><label class="fl">Age</label><div class="iw"><input class="fi" type="number" value="64" oninput="dirty('demographics')"><span class="iu">yrs</span></div></div>
+        <div class="fgrp"><label class="fl">Sex</label><select class="fs"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="fgrp"><label class="fl">BMI</label><div class="iw"><input class="fi" type="number" step="0.1" value="26.4" oninput="dirty('demographics')"><span class="iu">kg/m²</span></div></div>
+        <div class="fgrp"><label class="fl">Weight</label><div class="iw"><input class="fi" type="number" value="78" oninput="dirty('demographics')"><span class="iu">kg</span></div></div>
       </div>
     </div>
-
-    <!-- ══ PATIENT ID ══ -->
-    <div id="tab-patient" class="tab-panel">
-      <div class="page-head">
-        <div class="page-title">Patient identification</div>
-        <div class="page-sub">Registered once — pseudonymised throughout the platform</div>
-      </div>
-
-      <div class="pseudo-panel">
-        <div class="pseudo-label">Platform ID — active</div>
-        <div class="pseudo-id">AIRMAP-2024-00147</div>
-        <div class="pseudo-sub">EHR number retained for reconnection · name not stored in clinical records</div>
-        <div class="pseudo-tags">
-          <span class="pseudo-tag">Pseudonymised</span>
-          <span class="pseudo-tag">GDPR compliant</span>
-          <span class="pseudo-tag">Audit logged</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Identity registration</div>
-            <div class="card-subtitle">Stored in encrypted mapping table only</div>
-          </div>
-          <div class="card-header-right">
-            <span class="tag tag-red">Restricted access</span>
-          </div>
-        </div>
-
-        <div class="fsection">
-          <div class="fsection-title">Personal details</div>
-          <div class="form-grid">
-            <div class="form-group" id="fg-name">
-              <label class="form-label">Full name <span class="req">*</span></label>
-              <input class="form-input" id="inp-name" type="text" placeholder="As per hospital records"
-                     oninput="markUnsaved('patient')">
-              <span class="form-error">Required</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Date of birth <span class="req">*</span></label>
-              <input class="form-input" type="date" oninput="markUnsaved('patient')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Sex <span class="req">*</span></label>
-              <select class="form-select" onchange="markUnsaved('patient')">
-                <option value="">Select</option>
-                <option>Male</option><option>Female</option><option>Other / intersex</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Age at registration</label>
-              <input class="form-input" type="number" placeholder="Years" oninput="markUnsaved('patient')">
-            </div>
-          </div>
-        </div>
-
-        <div class="fsection">
-          <div class="fsection-title">EHR bridge</div>
-          <div class="form-grid">
-            <div class="form-group" id="fg-ehr">
-              <label class="form-label">Hospital EHR number <span class="req">*</span></label>
-              <input class="form-input" id="inp-ehr" type="text"
-                     placeholder="e.g. HOS-0048291" style="font-family:var(--mono);"
-                     oninput="markUnsaved('patient')">
-              <span class="form-error">Required for EHR reconnection</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Hospital / centre</label>
-              <input class="form-input" type="text" placeholder="Hospital name" oninput="markUnsaved('patient')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Responsible clinician <span class="req">*</span></label>
-              <input class="form-input" type="text" placeholder="Dr. Surname" oninput="markUnsaved('patient')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Registration date</label>
-              <input class="form-input" type="date" oninput="markUnsaved('patient')">
-            </div>
-          </div>
-        </div>
-
-        <div class="fsection">
-          <div class="fsection-title">Disease assignment</div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Primary diagnosis <span class="req">*</span></label>
-              <select class="form-select" onchange="markUnsaved('patient')">
-                <option value="">Select disease module</option>
-                <option>COPD</option>
-                <option>Chronic Bronchitis</option>
-                <option>Asthma</option>
-                <option>ACO — Asthma-COPD Overlap</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Secondary diagnosis</label>
-              <select class="form-select" onchange="markUnsaved('patient')">
-                <option value="">None</option>
-                <option>Chronic Bronchitis</option><option>Asthma</option>
-                <option>Bronchiectasis</option><option>Other</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex gap-8">
-          <button class="btn btn-primary" onclick="saveForm('patient')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-              <polyline points="17 21 17 13 7 13 7 21"/>
-              <polyline points="7 3 7 8 15 8"/>
-            </svg>
-            Register patient
-          </button>
-          <button class="btn btn-secondary" onclick="showNotif('Form cleared', 'info')">Clear</button>
-          <button class="btn btn-ghost"
-                  onclick="showNotif('Requires Clinical Lead access', 'warning')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-            </svg>
-            Look up existing patient
-          </button>
-        </div>
+    <div class="fsec"><div class="flbl-sec">Smoking history — engine.layer_1 COPD phenotyping</div>
+      <div class="fg4">
+        <div class="fgrp"><label class="fl">Smoking status</label><select class="fs"><option>Ex-smoker</option><option>Current smoker</option><option>Never smoked</option></select></div>
+        <div class="fgrp"><label class="fl">Pack-years</label><div class="iw"><input class="fi" type="number" step="0.1" value="20" oninput="dirty('demographics')"><span class="iu">pk-yr</span></div></div>
+        <div class="fgrp"><label class="fl">Quit date</label><input class="fi" type="date" value="2024-03-15" oninput="dirty('demographics')"></div>
+        <div class="fgrp"><label class="fl">Age at symptom onset</label><div class="iw"><input class="fi" type="number" value="58" oninput="dirty('demographics')"><span class="iu">yrs</span></div></div>
       </div>
     </div>
-
-    <!-- ══ INVESTIGATIONS ══ -->
-    <!-- internal id: tab-investigations → maps to data collection layer -->
-    <div id="tab-investigations" class="tab-panel">
-      <div class="page-head">
-        <div class="page-title">Investigations</div>
-        <div class="page-sub">Lung function · laboratory · imaging · functional tests</div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Spirometry</div>
-            <div class="card-subtitle">Post-bronchodilator values preferred</div>
-          </div>
-          <div class="card-header-right">
-            <button class="btn btn-ghost btn-sm" onclick="loadExample()">Load example</button>
-            <button class="btn btn-primary btn-sm" onclick="saveForm('investigations')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
-              </svg>
-              Save
-            </button>
-          </div>
-        </div>
-        <div class="instr-grid">
-          <div class="instr-card">
-            <div class="instr-title">Volumes</div>
-            <div class="form-group mb-14">
-              <label class="form-label">FEV₁ (L)</label>
-              <input class="form-input" type="number" step="0.01" placeholder="e.g. 1.8" value="1.8"
-                     oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">FVC (L)</label>
-              <input class="form-input" type="number" step="0.01" placeholder="e.g. 3.2" value="3.2"
-                     oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-          <div class="instr-card teal">
-            <div class="instr-title">Predicted values</div>
-            <div class="form-group mb-14">
-              <label class="form-label">FEV₁ % predicted</label>
-              <input class="form-input" type="number" step="0.1" value="48"
-                     oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">FEV₁/FVC ratio (%)</label>
-              <input class="form-input" type="number" step="0.1" value="56"
-                     oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-          <div class="instr-card amber">
-            <div class="instr-title">Flow rates</div>
-            <div class="form-group mb-14">
-              <label class="form-label">PEF (L/s)</label>
-              <input class="form-input" type="number" step="0.1" placeholder="e.g. 4.2"
-                     oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">FEF₂₅₋₇₅% (L/s)</label>
-              <input class="form-input" type="number" step="0.01" placeholder="Small airways"
-                     oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Laboratory &amp; functional</div>
-          </div>
-          <div class="card-header-right">
-            <button class="btn btn-primary btn-sm" onclick="saveForm('investigations')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
-              </svg>
-              Save
-            </button>
-          </div>
-        </div>
-        <div class="instr-grid">
-          <div class="instr-card green">
-            <div class="instr-title">Inflammatory markers</div>
-            <div class="form-group mb-14">
-              <label class="form-label">Eosinophils (cells/µL)</label>
-              <input class="form-input" type="number" placeholder="e.g. 320" oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">FeNO (ppb)</label>
-              <input class="form-input" type="number" placeholder="e.g. 28" oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-          <div class="instr-card">
-            <div class="instr-title">Serology</div>
-            <div class="form-group mb-14">
-              <label class="form-label">CRP (mg/L)</label>
-              <input class="form-input" type="number" step="0.1" placeholder="e.g. 6.4" oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">IgE (IU/mL)</label>
-              <input class="form-input" type="number" placeholder="e.g. 180" oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-          <div class="instr-card teal">
-            <div class="instr-title">6-minute walk test</div>
-            <div class="form-group mb-14">
-              <label class="form-label">Distance (m)</label>
-              <input class="form-input" type="number" placeholder="e.g. 340" oninput="markUnsaved('investigations')">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Lowest SpO₂ (%)</label>
-              <input class="form-input" type="number" placeholder="e.g. 86" oninput="markUnsaved('investigations')">
-            </div>
-          </div>
-        </div>
+    <div class="fsec"><div class="flbl-sec">Comorbidities — engine.layer_4 risk · engine.layer_5 treatment</div>
+      <div class="fg">
+        <div class="fgrp"><label class="fl">Heart failure</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">Ischaemic heart disease</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">Type 2 diabetes</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">OSA</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">Anxiety / depression</label><div class="ynw"><div class="ynb no" onclick="yn(this)">No</div><div class="ynb yes on" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">Osteoporosis</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
       </div>
     </div>
-
-    <!-- ══ CLINICAL SCORES ══ -->
-    <div id="tab-clinical" class="tab-panel">
-      <div class="page-head">
-        <div class="page-title">Clinical scores</div>
-        <div class="page-sub">CAT · mMRC · exacerbation history · asthma control</div>
+    <div class="fsec"><div class="flbl-sec">Vaccinations — engine.layer_5</div>
+      <div class="fg3">
+        <div class="fgrp"><label class="fl">Influenza (last 12m)</label><div class="ynw"><div class="ynb no" onclick="yn(this)">No</div><div class="ynb yes on" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">Pneumococcal</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+        <div class="fgrp"><label class="fl">COVID-19 up to date</label><div class="ynw"><div class="ynb no" onclick="yn(this)">No</div><div class="ynb yes on" onclick="yn(this)">Yes</div></div></div>
       </div>
+    </div>
+  </div>
+</div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">COPD Assessment Test (CAT)</div>
-            <div class="card-subtitle">0–40 · higher = greater impact on daily life</div>
-          </div>
-          <div class="card-header-right">
-            <span class="tag tag-amber">CAT 18 — high</span>
-            <button class="btn btn-primary btn-sm" onclick="saveForm('clinical')">Save</button>
-          </div>
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Cough (0 = never · 5 = always)</label>
-            <select class="form-select" onchange="markUnsaved('clinical')">
-              <option value="2" selected>2</option>
-              <option value="0">0</option><option value="1">1</option>
-              <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phlegm (0 = none · 5 = a great deal)</label>
-            <select class="form-select" onchange="markUnsaved('clinical')">
-              <option value="3" selected>3</option>
-              <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-              <option value="4">4</option><option value="5">5</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Or enter total CAT score (0–40)</label>
-            <input class="form-input" type="number" min="0" max="40" value="18"
-                   oninput="markUnsaved('clinical')">
-          </div>
-        </div>
+<!-- INVESTIGATIONS TAB -->
+<div id="tab-investigations" class="tab-panel">
+  <div class="ph"><div class="pht">Investigations</div><div class="phs">Spirometry · biomarkers · imaging · functional tests — enter today's values alongside previous</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Spirometry</div><div class="csb">Post-bronchodilator · feeds engine.layer_1</div></div><div class="chr"><button class="btn bg btn-sm" onclick="loadEx()">Load example</button><button class="btn bp btn-sm" onclick="saveF('investigations')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div></div>
+    <div class="fsec"><div class="flbl-sec">Today's measurements</div>
+      <div class="fg4">
+        <div class="fgrp"><label class="fl">FEV₁</label><div class="iw"><input class="fi" type="number" step="0.01" value="1.80" oninput="dirty('investigations')"><span class="iu">L</span></div></div>
+        <div class="fgrp"><label class="fl">FVC</label><div class="iw"><input class="fi" type="number" step="0.01" value="3.20" oninput="dirty('investigations')"><span class="iu">L</span></div></div>
+        <div class="fgrp"><label class="fl">FEV₁ % predicted</label><div class="iw"><input class="fi" type="number" step="0.1" value="48" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
+        <div class="fgrp"><label class="fl">FEV₁/FVC ratio</label><div class="iw"><input class="fi" type="number" step="0.1" value="56" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
       </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">mMRC Dyspnoea Scale</div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveForm('clinical')">Save</button>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Dyspnoea grade <span class="req">*</span></label>
-          <select class="form-select" onchange="markUnsaved('clinical')">
-            <option value="0">Grade 0 — Breathless only with strenuous exercise</option>
-            <option value="1">Grade 1 — Short of breath when hurrying on flat ground</option>
-            <option value="2">Grade 2 — Walks slower than contemporaries</option>
-            <option value="3" selected>Grade 3 — Stops after ~100 m on flat ground</option>
-            <option value="4">Grade 4 — Too breathless to leave the house</option>
-          </select>
-        </div>
+    </div>
+    <div class="fsec"><div class="flbl-sec">Previous values — trajectory calculation</div>
+      <div class="fg4">
+        <div class="fgrp"><label class="fl">Previous FEV₁ % predicted</label><div class="iw"><input class="fi" type="number" step="0.1" placeholder="e.g. 52" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
+        <div class="fgrp"><label class="fl">Date of previous test</label><input class="fi" type="date" oninput="dirty('investigations')"></div>
+        <div class="fgrp"><label class="fl">Bronchodilator response</label><select class="fs"><option>Not tested</option><option>Significant (&gt;12% + &gt;200mL)</option><option>Partial</option><option selected>None</option></select></div>
+        <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="dirty('investigations')"></div>
       </div>
+    </div>
+    <div class="fsec"><div class="flbl-sec">Additional flow rates</div>
+      <div class="fg">
+        <div class="fgrp"><label class="fl">PEF</label><div class="iw"><input class="fi" type="number" step="0.1" placeholder="—" oninput="dirty('investigations')"><span class="iu">L/s</span></div></div>
+        <div class="fgrp"><label class="fl">FEF₂₅₋₇₅%</label><div class="iw"><input class="fi" type="number" step="0.01" placeholder="—" oninput="dirty('investigations')"><span class="iu">L/s</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Biomarkers</div><div class="csb">Feeds engine.layer_3 phenotype and engine.layer_5 biologic eligibility</div></div><button class="btn bp btn-sm" onclick="saveF('investigations')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Blood eosinophils</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">c/µL</span></div></div>
+      <div class="fgrp"><label class="fl">FeNO</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">ppb</span></div></div>
+      <div class="fgrp"><label class="fl">CRP</label><div class="iw"><input class="fi" type="number" step="0.1" placeholder="—" oninput="dirty('investigations')"><span class="iu">mg/L</span></div></div>
+      <div class="fgrp"><label class="fl">Total IgE</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">IU/mL</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Functional tests &amp; imaging</div></div><button class="btn bp btn-sm" onclick="saveF('investigations')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">6MWD distance</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">m</span></div></div>
+      <div class="fgrp"><label class="fl">Lowest SpO₂ (6MWT)</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
+      <div class="fgrp"><label class="fl">Resting SpO₂</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
+      <div class="fgrp"><label class="fl">Emphysema % (LAA &lt; −950HU)</label><div class="iw"><input class="fi" type="number" step="0.1" placeholder="—" oninput="dirty('investigations')"><span class="iu">%</span></div></div>
+    </div>
+  </div>
+</div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Exacerbation history</div>
-            <div class="card-subtitle">Past 12 months</div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveForm('clinical')">Save</button>
+<!-- CLINICAL SCORES TAB -->
+<div id="tab-clinical" class="tab-panel">
+  <div class="ph"><div class="pht">Clinical scores</div><div class="phs">CAT · mMRC · exacerbation burden · oral steroid load</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">COPD Assessment Test — CAT</div><div class="csb">0–40 · feeds engine.layer_1 group assignment</div></div><div class="chr"><span class="tag ta" id="cat-tag">CAT 18 — High</span><button class="btn bp btn-sm" onclick="saveF('clinical')">Save</button></div></div>
+    <div class="fg">
+      <div class="fgrp"><label class="fl">Total CAT score (0–40)</label><div class="stw"><div class="stb" onclick="adj('cat',-1)">−</div><div class="std" id="cat-d">18</div><div class="stb" onclick="adj('cat',1)">+</div></div><input type="hidden" id="cat-v" value="18"></div>
+      <div class="fgrp"><label class="fl">Or enter directly</label><input class="fi" type="number" min="0" max="40" value="18" oninput="catIn(this.value);dirty('clinical')"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">mMRC Dyspnoea Scale</div></div><button class="btn bp btn-sm" onclick="saveF('clinical')">Save</button></div>
+    <div class="rg" id="mmrc-g">
+      <div class="ro" data-v="0" onclick="selR('mmrc',0)"><span class="rod"></span>Grade 0 — Strenuous exercise only</div>
+      <div class="ro" data-v="1" onclick="selR('mmrc',1)"><span class="rod"></span>Grade 1 — Hurrying on flat</div>
+      <div class="ro" data-v="2" onclick="selR('mmrc',2)"><span class="rod"></span>Grade 2 — Slower than peers</div>
+      <div class="ro on" data-v="3" onclick="selR('mmrc',3)"><span class="rod"></span>Grade 3 — Stops after ~100 m</div>
+      <div class="ro" data-v="4" onclick="selR('mmrc',4)"><span class="rod"></span>Grade 4 — Too breathless to leave home</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Exacerbation burden</div><div class="csb">Past 12 months · feeds engine.layer_4</div></div><button class="btn bp btn-sm" onclick="saveF('clinical')">Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Total exacerbations</label><div class="stw"><div class="stb" onclick="adj('exac',-1)">−</div><div class="std" id="exac-d" style="font-size:19px">3</div><div class="stb" onclick="adj('exac',1)">+</div></div><input type="hidden" id="exac-v" value="3"></div>
+      <div class="fgrp"><label class="fl">Hospitalisations</label><div class="stw"><div class="stb" onclick="adj('hosp',-1)">−</div><div class="std" id="hosp-d" style="font-size:19px">1</div><div class="stb" onclick="adj('hosp',1)">+</div></div><input type="hidden" id="hosp-v" value="1"></div>
+      <div class="fgrp"><label class="fl">ICU admissions</label><div class="stw"><div class="stb" onclick="adj('icu',-1)">−</div><div class="std" id="icu-d" style="font-size:19px">0</div><div class="stb" onclick="adj('icu',1)">+</div></div><input type="hidden" id="icu-v" value="0"></div>
+      <div class="fgrp"><label class="fl">Oral steroid courses</label><div class="stw"><div class="stb" onclick="adj('ocs',-1)">−</div><div class="std" id="ocs-d" style="font-size:19px">2</div><div class="stb" onclick="adj('ocs',1)">+</div></div><input type="hidden" id="ocs-v" value="2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASTHMA & ACO TAB -->
+<div id="tab-asthma" class="tab-panel">
+  <div class="ph"><div class="pht">Asthma &amp; ACO assessment</div><div class="phs">Control · phenotype · overlap · biologic eligibility — feeds engine.layer_3 and engine.layer_5</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Asthma Control Test — ACT</div><div class="csb">5–25 · lower = poorer control</div></div><div class="chr"><span class="tag tp" id="act-tag">Not assessed</span><button class="btn bp btn-sm" onclick="saveF('asthma')">Save</button></div></div>
+    <div class="fg">
+      <div class="fgrp"><label class="fl">ACT score (5–25)</label><div class="stw"><div class="stb" onclick="adj('act',-1)">−</div><div class="std" id="act-d">—</div><div class="stb" onclick="adj('act',1)">+</div></div><input type="hidden" id="act-v" value="0"><span class="fhint">Well controlled ≥20 · Partial 16–19 · Uncontrolled ≤15</span></div>
+      <div class="fg1">
+        <div class="fgrp"><label class="fl">Rescue inhaler use</label><div class="iw"><input class="fi" type="number" min="0" placeholder="—" oninput="dirty('asthma')"><span class="iu">×/wk</span></div></div>
+        <div class="fgrp"><label class="fl">Nighttime symptoms</label><div class="iw"><input class="fi" type="number" min="0" max="7" placeholder="—" oninput="dirty('asthma')"><span class="iu">nts/wk</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Phenotype assessment</div><div class="csb">Feeds engine.layer_3 — T2-high vs T2-low</div></div><button class="btn bp btn-sm" onclick="saveF('asthma')">Save</button></div>
+    <div class="fg">
+      <div class="fgrp"><label class="fl">Allergic rhinitis</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">Nasal polyps</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">Aspirin sensitivity</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">Exercise-induced symptoms</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">ACO — Asthma-COPD Overlap</div><div class="csb">Feeds engine.layer_1 and engine.layer_5</div></div><button class="btn bp btn-sm" onclick="saveF('asthma')">Save</button></div>
+    <div class="fg">
+      <div class="fgrp"><label class="fl">Age at disease onset</label><div class="iw"><input class="fi" type="number" placeholder="e.g. 45" oninput="dirty('asthma')"><span class="iu">yrs</span></div><span class="fhint">ACO usually onset &gt;40 years</span></div>
+      <div class="fgrp"><label class="fl">FEV₁ variability &gt;12%</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">BD response &gt;200 mL &amp; &gt;12%</label><div class="ynw"><div class="ynb no" onclick="yn(this)">No</div><div class="ynb yes on" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">Personal / family asthma history</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Biologic eligibility</div><div class="csb">Feeds engine.layer_5 treatment recommendation</div></div><button class="btn bp btn-sm" onclick="saveF('asthma')">Save</button></div>
+    <div class="fgrp"><label class="fl">Assessment</label>
+      <select class="fs" onchange="dirty('asthma')">
+        <option value="none">Not assessed</option>
+        <option value="anti_il5">Anti-IL5 eligible (eos &gt;300 cells/µL)</option>
+        <option value="anti_ige">Anti-IgE eligible (IgE 30–700 + skin test positive)</option>
+        <option value="anti_il4r">Anti-IL4R eligible (moderate-severe eosinophilic)</option>
+        <option value="not_eligible">Not eligible</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ENVIRONMENT TAB -->
+<div id="tab-environment" class="tab-panel">
+  <div class="ph"><div class="pht">Environmental &amp; lifestyle factors</div><div class="phs">Feeds engine.layer_2 multimodal integration and engine.layer_6 engagement</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Environmental triggers</div></div><button class="btn bp btn-sm" onclick="saveF('environment')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Air Quality Index (AQI)</label><div class="iw"><input class="fi" type="number" min="0" max="500" placeholder="0–500" oninput="dirty('environment')"><span class="iu">AQI</span></div><span class="fhint">Good &lt;50 · Moderate 51–100 · Unhealthy 101+</span></div>
+      <div class="fgrp"><label class="fl">AQI impact on symptoms</label><select class="fs"><option value="none">No impact</option><option value="mild">Mild worsening</option><option value="moderate">Moderate</option><option value="severe">Severe</option></select></div>
+      <div class="fgrp"><label class="fl">Pollen level</label><select class="fs"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="very_high">Very high</option></select></div>
+      <div class="fgrp"><label class="fl">Humidity</label><div class="iw"><input class="fi" type="number" min="0" max="100" placeholder="—" oninput="dirty('environment')"><span class="iu">%</span></div><span class="fhint">High &gt;70% can worsen symptoms</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Occupational &amp; home environment</div></div><button class="btn bp btn-sm" onclick="saveF('environment')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Occupational exposure</label><select class="fs"><option value="none">None</option><option value="dust">Dust / fumes</option><option value="chemicals">Chemicals</option><option value="smoke">Smoke</option><option value="other">Other</option></select></div>
+      <div class="fgrp"><label class="fl">Home ventilation</label><select class="fs"><option value="good">Good</option><option value="fair">Fair</option><option value="poor">Poor</option></select></div>
+      <div class="fgrp"><label class="fl">Air purifier in use</label><div class="ynw"><div class="ynb no on" onclick="yn(this)">No</div><div class="ynb yes" onclick="yn(this)">Yes</div></div></div>
+      <div class="fgrp"><label class="fl">Pet exposure</label><select class="fs"><option value="none">None</option><option value="dogs">Dogs</option><option value="cats">Cats</option><option value="other">Other</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Lifestyle &amp; behavioural</div><div class="csb">Feeds engine.layer_2 and engine.layer_6</div></div><button class="btn bp btn-sm" onclick="saveF('environment')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Daily steps (avg)</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('environment')"><span class="iu">steps</span></div><span class="fhint">Target ≥3000</span></div>
+      <div class="fgrp"><label class="fl">Sleep (avg)</label><div class="iw"><input class="fi" type="number" step="0.5" placeholder="—" oninput="dirty('environment')"><span class="iu">hrs</span></div></div>
+      <div class="fgrp"><label class="fl">Inhaler technique errors</label><select class="fs"><option value="0">None</option><option value="1">1–2 minor</option><option value="2">3–4 errors</option><option value="3">Major errors</option></select></div>
+      <div class="fgrp"><label class="fl">Medication adherence</label><div class="iw"><input class="fi" type="number" min="0" max="100" placeholder="—" oninput="dirty('environment')"><span class="iu">%</span></div><span class="fhint">Target ≥80%</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Social determinants</div><div class="csb">Feeds engine.layer_4 adherence risk and engine.layer_6</div></div><button class="btn bp btn-sm" onclick="saveF('environment')"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Social support (1–10)</label><input class="fi" type="number" min="1" max="10" placeholder="1–10" oninput="dirty('environment')"></div>
+      <div class="fgrp"><label class="fl">Financial stress (1–10)</label><input class="fi" type="number" min="1" max="10" placeholder="1–10" oninput="dirty('environment')"></div>
+      <div class="fgrp"><label class="fl">Health literacy</label><select class="fs"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
+      <div class="fgrp"><label class="fl">Transportation access</label><select class="fs"><option value="good" selected>Good</option><option value="limited">Limited</option><option value="poor">Poor</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- MEDICATIONS TAB -->
+<div id="tab-medications" class="tab-panel">
+  <div class="ph"><div class="pht">Medications</div><div class="phs">Current regimen · changes over time · adherence · feeds engine.layer_5</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Current regimen</div><div class="csb">Active medications</div></div><button class="btn bp btn-sm" onclick="showN('Add medication form — coming','info')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add medication</button></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Drug</th><th>Class</th><th>Dose</th><th>Frequency</th><th>Route</th><th>Since</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="fw6">Tiotropium</td><td><span class="tag tt">LAMA</span></td><td class="mono">18 mcg</td><td>Once daily</td><td>Inhaled</td><td class="mono sm">Mar 2023</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-ico btn-sm" onclick="showN('Edit','info')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></td></tr>
+          <tr><td class="fw6">Formoterol</td><td><span class="tag tn">LABA</span></td><td class="mono">12 mcg</td><td>Twice daily</td><td>Inhaled</td><td class="mono sm">Oct 2024</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-ico btn-sm" onclick="showN('Edit','info')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></td></tr>
+          <tr><td class="fw6">Budesonide</td><td><span class="tag ta">ICS</span></td><td class="mono">400 mcg</td><td>Twice daily</td><td>Inhaled</td><td class="mono sm">Jun 2022</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-ico btn-sm" onclick="showN('Edit','info')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></td></tr>
+          <tr><td class="fw6">Salbutamol</td><td><span class="tag tb">SABA</span></td><td class="mono">100 mcg</td><td>PRN</td><td>Inhaled</td><td class="mono sm">Jan 2021</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-ico btn-sm" onclick="showN('Edit','info')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Adherence &amp; technique</div></div><button class="btn bp btn-sm" onclick="saveF('medications')">Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Self-reported adherence</label><div class="iw"><input class="fi" type="number" min="0" max="100" value="75" oninput="dirty('medications')"><span class="iu">%</span></div></div>
+      <div class="fgrp"><label class="fl">Inhaler technique</label><select class="fs"><option>Adequate</option><option selected>Suboptimal</option><option>Poor — needs retraining</option></select></div>
+      <div class="fgrp"><label class="fl">Main barrier</label><select class="fs"><option>None</option><option>Forgetfulness</option><option selected>Side effect concern</option><option>Cost</option><option>Complex regimen</option></select></div>
+      <div class="fgrp"><label class="fl">Rescue use increase</label><select class="fs"><option value="no" selected>No change</option><option value="mild">Mild (1–2 more/wk)</option><option value="mod">Moderate (3–4/wk)</option><option value="severe">Severe (&gt;4/wk)</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- LONGITUDINAL TAB -->
+<div id="tab-longitudinal" class="tab-panel">
+  <div class="ph"><div class="pht">Longitudinal analysis</div><div class="phs">FEV₁ progression · exacerbation pattern · early warning — feeds engine.layer_7</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">FEV₁ decline — visual trend</div></div></div>
+    <div class="chart">
+      <div class="cbw"><div class="cb" style="height:96px"><span>64%</span></div><div class="cbl">2yr ago</div></div>
+      <div class="cbw"><div class="cb" style="height:82px"><span>58%</span></div><div class="cbl">18m ago</div></div>
+      <div class="cbw"><div class="cb aw" style="height:72px"><span>52%</span></div><div class="cbl">6m ago</div></div>
+      <div class="cbw"><div class="cb aw" style="height:66px"><span>48%</span></div><div class="cbl">Current</div></div>
+    </div>
+    <div class="alert aw mt8" style="margin-bottom:0"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div class="ab">Decline rate: −4% / 6 months — accelerated. Normal expected &lt;2% / year.</div></div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Historical FEV₁ entry</div><div class="csb">For trajectory calculation in engine.layer_7</div></div><button class="btn bp btn-sm" onclick="saveF('longitudinal')">Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Previous FEV₁ % predicted</label><div class="iw"><input class="fi" type="number" step="0.1" placeholder="e.g. 55" oninput="dirty('longitudinal')"><span class="iu">%</span></div></div>
+      <div class="fgrp"><label class="fl">Date of previous test</label><input class="fi" type="date" oninput="dirty('longitudinal')"></div>
+      <div class="fgrp"><label class="fl">Current FEV₁ % predicted</label><div class="iw"><input class="fi" type="number" step="0.1" value="48" oninput="dirty('longitudinal')"><span class="iu">%</span></div></div>
+      <div class="fgrp"><label class="fl">Date of current test</label><input class="fi" type="date" oninput="dirty('longitudinal')"></div>
+    </div>
+    <button class="btn bs btn-sm mt8" onclick="showN('Decline rate calculated','ok')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Calculate decline rate</button>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Exacerbation pattern</div><div class="csb">Feeds engine.layer_4 and engine.layer_7</div></div><button class="btn bp btn-sm" onclick="saveF('longitudinal')">Save</button></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Exacerbations past 3 months</label><input class="fi" type="number" min="0" placeholder="—" oninput="dirty('longitudinal')"></div>
+      <div class="fgrp"><label class="fl">Exacerbations past 6 months</label><input class="fi" type="number" min="0" placeholder="—" oninput="dirty('longitudinal')"></div>
+      <div class="fgrp"><label class="fl">Seasonal pattern</label><select class="fs"><option value="none">No pattern</option><option value="winter" selected>Winter predominant</option><option value="spring">Spring</option><option value="fall">Autumn</option></select></div>
+      <div class="fgrp"><label class="fl">Mean interval between exacerbations</label><div class="iw"><input class="fi" type="number" placeholder="—" oninput="dirty('longitudinal')"><span class="iu">days</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Early warning system</div><div class="csb">Recent changes — feeds engine.layer_4 real-time risk</div></div><button class="btn bp btn-sm" onclick="saveF('longitudinal')">Save</button></div>
+    <div class="fg">
+      <div class="fgrp"><label class="fl">Recent symptom worsening</label><select class="fs"><option value="no">No change</option><option value="mild">Mild (CAT +2–3 pts)</option><option value="moderate">Moderate (CAT +4–6 pts)</option><option value="severe">Severe (CAT &gt;6 pts)</option></select></div>
+      <div class="fgrp"><label class="fl">Rescue inhaler use increase</label><select class="fs"><option value="no" selected>No change</option><option value="mild">Mild (1–2 more/wk)</option><option value="moderate">Moderate (3–4/wk)</option><option value="severe">Severe (&gt;4/wk)</option></select></div>
+      <div class="fgrp"><label class="fl">Sleep quality change</label><select class="fs"><option value="stable" selected>Stable</option><option value="worse">Worse</option><option value="much_worse">Much worse</option></select></div>
+      <div class="fgrp"><label class="fl">Activity level change</label><select class="fs"><option value="stable" selected>Stable</option><option value="reduced">Reduced</option><option value="much_reduced">Much reduced</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">12-month event log</div></div><div class="chr"><button class="btn bs btn-sm" onclick="showN('Filter','info')"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button><button class="btn bp btn-sm" onclick="showN('Add event form','info')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add event</button></div></div>
+    <div class="tl">
+      <div class="tli"><div class="tld r"></div><div class="tldt">14 Nov 2024 · Admission</div><div class="tltt">Emergency admission <span class="tag tr">ED · 3 days</span></div><div class="tlbd">FEV₁ 38% · IV steroids · antibiotics · O₂ support</div></div>
+      <div class="tli"><div class="tld a"></div><div class="tldt">02 Oct 2024 · Rx change</div><div class="tltt">LABA added — Formoterol 12 mcg BID <span class="tag ta">Rx</span></div><div class="tlbd">Step-up from LAMA + ICS</div></div>
+      <div class="tli"><div class="tld"></div><div class="tldt">18 Sep 2024 · Clinic</div><div class="tltt">Routine review <span class="tag tn">Clinic</span></div><div class="tlbd">FEV₁ 52% · CAT 15 · stable</div></div>
+      <div class="tli"><div class="tld g"></div><div class="tldt">15 Mar 2024 · Lifestyle</div><div class="tltt">Smoking cessation <span class="tag tg">Habit</span></div><div class="tlbd">Quit confirmed · 20 pack-years · NRT prescribed</div></div>
+      <div class="tli"><div class="tld a"></div><div class="tldt">08 Feb 2024 · ED</div><div class="tltt">Exacerbation <span class="tag ta">Same day</span></div><div class="tlbd">Oral steroids + antibiotics · same-day discharge</div></div>
+    </div>
+    <div class="bg-g mt12">
+      <button class="btn bp btn-sm" onclick="showN('Hospital visit form','info')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Hospital visit</button>
+      <button class="btn bs btn-sm" onclick="showN('Medication change form','info')">Medication change</button>
+      <button class="btn bs btn-sm" onclick="showN('Lifestyle event form','info')">Lifestyle event</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLINICAL ANALYSIS TAB
+     engine.layer_1 through engine.layer_7 — all 7 present
+     aref badges visible for developer reference
+-->
+<div id="tab-analysis" class="tab-panel">
+  <div class="ph"><div class="pht">Clinical analysis</div><div class="phs">All 7 intelligence layers — run individually or together</div></div>
+  <div class="alert aw"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div class="ab">Medication record 40% complete — treatment layer may be limited. <button class="btn bs btn-sm" style="margin-left:8px" onclick="ST('medications')">Complete</button></div></div>
+  <div class="ag">
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">GOLD classification</div><div class="acsb">Airflow limitation · severity · group</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_1">L1</span><button class="btn bp btn-sm" onclick="RA(1)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o1">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Multimodal integration</div><div class="acsb">Environmental · behavioural · social</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_2">L2</span><button class="btn bp btn-sm" onclick="RA(2)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o2">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Phenotype recognition</div><div class="acsb">T2-high/low · eosinophilic · ACO</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_3">L3</span><button class="btn bp btn-sm" onclick="RA(3)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o3">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Risk profile</div><div class="acsb">Exacerbation · hospitalisation probability</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_4">L4</span><button class="btn bp btn-sm" onclick="RA(4)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o4">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Treatment recommendation</div><div class="acsb">GOLD 2024 · regimen review · step-up/down</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_5">L5</span><button class="btn bp btn-sm" onclick="RA(5)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o5">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Self-management plan</div><div class="acsb">Patient engagement · education · monitoring</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_6">L6</span><button class="btn bp btn-sm" onclick="RA(6)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o6">Awaiting data…</div></div>
+    <div class="ac"><div class="flex jsb ic g8"><div><div class="actt">Disease trajectory</div><div class="acsb">FEV₁ trend · exacerbation pattern · outlook</div></div><div class="flex ic g6"><span class="aref" title="engine.layer_7">L7</span><button class="btn bp btn-sm" onclick="RA(7)"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run</button></div></div><div class="aout idle" id="o7">Awaiting data…</div></div>
+    <div class="ac" style="background:var(--nmt);border-style:dashed;justify-content:center;align-items:center;text-align:center;">
+      <div style="padding:18px"><div class="actt" style="color:var(--nv);margin-bottom:6px">Run all 7 layers</div><div class="acsb" style="margin-bottom:12px">Complete intelligence output in sequence</div><button class="btn bp btn-sm" onclick="RAall()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run full analysis</button></div>
+    </div>
+  </div>
+  <div class="bg-g"><button class="btn bs" onclick="clearA()">Clear results</button><button class="btn bg" onclick="ST('results')">View report →</button></div>
+</div>
+
+<!-- ACTION PLAN TAB (engine.layer_6) -->
+<div id="tab-action-plan" class="tab-panel">
+  <div class="ph"><div class="pht">Action plan</div><div class="phs">Personalised zone-based self-management · engine.layer_6 output</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Personalised plan generator</div><div class="csb">Set patient baseline — used to define individual zones</div></div><div class="chr"><span class="aref" title="engine.layer_6">L6</span><button class="btn bp btn-sm" onclick="saveF('action-plan')">Save</button></div></div>
+    <div class="fg4">
+      <div class="fgrp"><label class="fl">Patient's usual CAT score</label><input class="fi" type="number" min="0" max="40" placeholder="Baseline" oninput="dirty('action-plan')"></div>
+      <div class="fgrp"><label class="fl">Usual rescue use</label><div class="iw"><input class="fi" type="number" min="0" placeholder="—" oninput="dirty('action-plan')"><span class="iu">×/wk</span></div></div>
+      <div class="fgrp"><label class="fl">Rescue medication available</label><select class="fs"><option value="none">None</option><option value="saba">SABA only</option><option value="oral">Oral steroids</option><option value="both" selected>SABA + oral steroids</option></select></div>
+      <div class="fgrp"><label class="fl">Emergency contact</label><input class="fi" type="text" placeholder="Clinic phone" oninput="dirty('action-plan')"></div>
+    </div>
+    <button class="btn bp mt12" onclick="genPlan()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Generate personalised plan</button>
+  </div>
+  <div id="ap-out" style="display:none">
+    <div class="apz apzg"><div class="apzt">Green zone — well controlled</div><ul class="apst">
+      <li class="aps">Continue current medications as prescribed</li>
+      <li class="aps">Monitor daily symptoms — contact clinic if CAT increases by more than 3 points</li>
+      <li class="aps">Maintain physical activity — aim for 3000+ steps daily</li>
+      <li class="aps">Attend scheduled clinic review</li>
+    </ul></div>
+    <div class="apz apza"><div class="apzt">Amber zone — worsening</div><ul class="apst">
+      <li class="aps">Increase SABA — up to 4 puffs every 4 hours as needed</li>
+      <li class="aps">If not improving within 24 hours — contact clinic</li>
+      <li class="aps">Rest and reduce physical exertion</li>
+      <li class="aps">If prescribed — start oral steroid course (prednisolone 30 mg × 5 days)</li>
+    </ul></div>
+    <div class="apz apzr"><div class="apzt">Red zone — emergency</div><ul class="apst">
+      <li class="aps">Use SABA immediately — 4–8 puffs via spacer</li>
+      <li class="aps">Call clinic or emergency services if no improvement in 20 minutes</li>
+      <li class="aps">Go to emergency department if: severe distress, blue lips, confusion</li>
+      <li class="aps">Do not drive — call for assistance</li>
+    </ul></div>
+    <div class="card mt12">
+      <div class="chd"><div class="chl"><div class="ctt">Monitoring schedule</div></div></div>
+      <div class="ir"><span class="ik">Daily</span><span class="iv">Symptom score · rescue inhaler use</span></div>
+      <div class="ir"><span class="ik">Weekly</span><span class="iv">CAT / ACT self-assessment</span></div>
+      <div class="ir"><span class="ik">Monthly</span><span class="iv">Review with healthcare provider</span></div>
+      <div class="ir"><span class="ik">Quarterly</span><span class="iv">Pulmonary function test</span></div>
+      <div class="ir"><span class="ik">Annual</span><span class="iv">Comprehensive respiratory review · vaccination check</span></div>
+    </div>
+    <div class="card">
+      <div class="chd"><div class="chl"><div class="ctt">Education &amp; support</div></div></div>
+      <div class="fg">
+        <div>
+          <div class="flbl-sec mb8">Self-management</div>
+          <div class="ir"><span class="ik muted">Inhaler technique</span><span class="iv">Video tutorials via clinic portal</span></div>
+          <div class="ir"><span class="ik muted">Breathing exercises</span><span class="iv">Pursed-lip · diaphragmatic</span></div>
+          <div class="ir"><span class="ik muted">Exercise prescription</span><span class="iv">Pulmonary rehabilitation — referral recommended</span></div>
         </div>
-        <div class="form-grid-3">
-          <div class="form-group">
-            <label class="form-label">Total exacerbations</label>
-            <input class="form-input" type="number" min="0" value="3" oninput="markUnsaved('clinical')">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Hospitalisations</label>
-            <input class="form-input" type="number" min="0" value="1" oninput="markUnsaved('clinical')">
-          </div>
-          <div class="form-group">
-            <label class="form-label">ICU admissions</label>
-            <input class="form-input" type="number" min="0" value="0" oninput="markUnsaved('clinical')">
-          </div>
+        <div>
+          <div class="flbl-sec mb8">Support services</div>
+          <div class="ir"><span class="ik muted">Pulmonary rehab</span><span class="iv">Referral recommended — GOLD Stage III</span></div>
+          <div class="ir"><span class="ik muted">Psychology</span><span class="iv">Referral recommended — anxiety/depression noted</span></div>
+          <div class="ir"><span class="ik muted">Support group</span><span class="iv">COPD Foundation — local chapter</span></div>
+          <div class="ir"><span class="ik muted">Financial assistance</span><span class="iv">Medication access programmes available</span></div>
         </div>
       </div>
     </div>
+    <div class="bg-g"><button class="btn bp" onclick="showN('Action plan printed','ok')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print action plan</button><button class="btn bs" onclick="showN('PDF generated','ok')">Export PDF</button></div>
+  </div>
+</div>
 
-    <!-- ══ MEDICATIONS ══ -->
-    <div id="tab-medications" class="tab-panel">
-      <div class="page-head">
-        <div class="page-title">Medications</div>
-        <div class="page-sub">Current regimen · changes over time · adherence</div>
-      </div>
+<!-- RESULTS TAB -->
+<div id="tab-results" class="tab-panel">
+  <div class="ph"><div class="pht">Clinical report</div><div class="phs">Integrated output from all 7 engine layers · intelligence system output · not an EHR record</div></div>
+  <div class="card">
+    <div class="chd"><div class="chl"><div class="ctt">Comprehensive report</div></div><div class="chr">
+      <button class="btn bg btn-sm" onclick="showN('Printing…','info')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="btn bs btn-sm" onclick="showN('JSON exported','ok')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>JSON</button>
+      <button class="btn bp btn-sm" onclick="showN('PDF generated','ok')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</button>
+      <button class="btn bg btn-sm" onclick="showN('EHR export ready','ok')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>For EHR</button>
+    </div></div>
+    <div id="ro" style="font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--im);background:var(--nmt);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;min-height:140px;white-space:pre-wrap;">Run full analysis to generate report.</div>
+  </div>
+</div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Current regimen</div>
-            <div class="card-subtitle">Active medications</div>
-          </div>
-          <div class="card-header-right">
-            <button class="btn btn-primary btn-sm"
-                    onclick="showNotif('Add medication — form coming', 'info')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Add medication
-            </button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Drug</th><th>Class</th><th>Dose</th>
-                <th>Frequency</th><th>Route</th><th>Since</th><th>Status</th><th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="fw-600">Tiotropium</td>
-                <td><span class="tag tag-teal">LAMA</span></td>
-                <td class="text-mono">18 mcg</td><td>Once daily</td><td>Inhaled</td>
-                <td class="text-mono text-sm">Mar 2023</td>
-                <td><span class="tag tag-green">Active</span></td>
-                <td>
-                  <button class="btn btn-ghost btn-icon btn-sm"
-                          onclick="showNotif('Edit medication', 'info')" title="Edit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="fw-600">Formoterol</td>
-                <td><span class="tag tag-navy">LABA</span></td>
-                <td class="text-mono">12 mcg</td><td>Twice daily</td><td>Inhaled</td>
-                <td class="text-mono text-sm">Oct 2024</td>
-                <td><span class="tag tag-green">Active</span></td>
-                <td>
-                  <button class="btn btn-ghost btn-icon btn-sm"
-                          onclick="showNotif('Edit medication', 'info')" title="Edit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="fw-600">Budesonide</td>
-                <td><span class="tag tag-amber">ICS</span></td>
-                <td class="text-mono">400 mcg</td><td>Twice daily</td><td>Inhaled</td>
-                <td class="text-mono text-sm">Jun 2022</td>
-                <td><span class="tag tag-green">Active</span></td>
-                <td>
-                  <button class="btn btn-ghost btn-icon btn-sm"
-                          onclick="showNotif('Edit medication', 'info')" title="Edit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="fw-600">Salbutamol</td>
-                <td><span class="tag tag-navy">SABA</span></td>
-                <td class="text-mono">100 mcg</td><td>PRN</td><td>Inhaled</td>
-                <td class="text-mono text-sm">Jan 2021</td>
-                <td><span class="tag tag-green">Active</span></td>
-                <td>
-                  <button class="btn btn-ghost btn-icon btn-sm"
-                          onclick="showNotif('Edit medication', 'info')" title="Edit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+</main>
+</div>
+<div class="nw" id="nw"></div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">Adherence &amp; technique</div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveForm('medications')">Save</button>
-        </div>
-        <div class="form-grid-3">
-          <div class="form-group">
-            <label class="form-label">Self-reported adherence (%)</label>
-            <input class="form-input" type="number" min="0" max="100" value="75"
-                   oninput="markUnsaved('medications')">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Inhaler technique</label>
-            <select class="form-select" onchange="markUnsaved('medications')">
-              <option>Adequate</option>
-              <option selected>Suboptimal</option>
-              <option>Poor — needs retraining</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Main barrier</label>
-            <select class="form-select" onchange="markUnsaved('medications')">
-              <option>None identified</option><option>Forgetfulness</option>
-              <option selected>Side effect concern</option>
-              <option>Cost</option><option>Complexity of regimen</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
+<script>
+/* ═══════════════════════════════════════════════════════
+   AIRMAP v5 — JavaScript
+   Intelligence system — not an EHR.
+   Principle: every field feeds at least one engine layer.
+   Architecture engine IDs preserved in comments + aref badges.
+   engine.layer_1 = GOLD Classification (Clinical Core)
+   engine.layer_2 = Multimodal Integration
+   engine.layer_3 = Pattern Recognition / Phenotype
+   engine.layer_4 = Risk Prediction
+   engine.layer_5 = Treatment Optimisation
+   engine.layer_6 = Patient Engagement / Self-management
+   engine.layer_7 = Longitudinal / Disease Trajectory
+═══════════════════════════════════════════════════════ */
 
-    <!-- ══ TIMELINE ══ -->
-    <div id="tab-timeline" class="tab-panel">
-      <div class="page-head">
-        <div class="page-title">Patient timeline</div>
-        <div class="page-sub">Hospital visits · medication changes · habits — 12 months aligned</div>
-      </div>
+// ── TAB SWITCHING
+function ST(n){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+  const p=document.getElementById('tab-'+n);
+  if(p) p.classList.add('on');
+  document.querySelectorAll('.nt').forEach(t=>{if(t.dataset.t===n)t.classList.add('on');});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nt').forEach(t=>t.addEventListener('click',()=>{
+  if(warnDirty()) ST(t.dataset.t);
+}));
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-left">
-            <div class="card-title">12-month event log</div>
-          </div>
-          <div class="card-header-right">
-            <button class="btn btn-secondary btn-sm"
-                    onclick="showNotif('Filter options — coming', 'info')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-              </svg>
-              Filter
-            </button>
-            <button class="btn btn-primary btn-sm"
-                    onclick="showNotif('Add event — form coming', 'info')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Add event
-            </button>
-          </div>
-        </div>
+// ── UNSAVED CHANGES PROTECTION
+const dSet=new Set();
+function dirty(tab){dSet.add(tab);}
+function warnDirty(){
+  if(dSet.size>0) return confirm('Unsaved changes — continue without saving?');
+  return true;
+}
+function saveF(tab){dSet.delete(tab);showN('Saved','ok');}
 
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot red"></div>
-            <div class="tl-date">14 Nov 2024 · Hospital visit</div>
-            <div class="tl-title">Emergency admission <span class="tag tag-red">ED · 3 days</span></div>
-            <div class="tl-body">FEV₁ 38% · IV steroids · antibiotics · O₂ support · discharged on enhanced regimen</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot amber"></div>
-            <div class="tl-date">02 Oct 2024 · Medication change</div>
-            <div class="tl-title">LABA added — Formoterol 12 mcg BID <span class="tag tag-amber">Rx</span></div>
-            <div class="tl-body">Step-up from LAMA + ICS following suboptimal control</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">18 Sep 2024 · Clinic visit</div>
-            <div class="tl-title">Routine review <span class="tag tag-navy">Clinic</span></div>
-            <div class="tl-body">FEV₁ 52% · CAT 15 · stable but symptomatic · smoking cessation counselling</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot green"></div>
-            <div clas
+// ── VISIT MODE SWITCHER
+function setMode(m){
+  document.querySelectorAll('.mpill').forEach(p=>p.classList.remove('on'));
+  document.getElementById('mode-'+m).classList.add('on');
+  const labels={new:'New patient — entry mode',followup:'Follow-up — review and update',review:'Read-only review'};
+  showN(labels[m]||m,'info');
+}
+
+// ── YES/NO TOGGLE
+function yn(el){
+  const wrap=el.closest('.ynw');
+  if(!wrap) return;
+  wrap.querySelectorAll('.ynb').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  dirty('_');
+}
+
+// ── SCORE STEPPERS
+const SL={
+  cat:{min:0,max:40},
+  exac:{min:0,max:20},
+  hosp:{min:0,max:10},
+  icu:{min:0,max:5},
+  ocs:{min:0,max:10},
+  act:{min:5,max:25}
+};
+function adj(k,d){
+  const v=document.getElementById(k+'-v');
+  const disp=document.getElementById(k+'-d');
+  if(!v||!disp) return;
+  const lim=SL[k]||{min:0,max:40};
+  let n=parseInt(v.value||'0')+d;
+  n=Math.max(lim.min,Math.min(lim.max,n));
+  v.value=n; disp.textContent=n;
+  if(k==='cat') updCat(n);
+  if(k==='act') updAct(n);
+  dirty('clinical');
+}
+function catIn(v){
+  const n=parseInt(v);
+  if(isNaN(n)) return;
+  const vEl=document.getElementById('cat-v');
+  const dEl=document.getElementById('cat-d');
+  if(vEl) vEl.value=n;
+  if(dEl) dEl.textContent=n;
+  updCat(n);
+}
+function updCat(n){
+  const t=document.getElementById('cat-tag');
+  if(!t) return;
+  if(n<=9){t.textContent='CAT '+n+' — Low';t.className='tag tg';}
+  else if(n<=19){t.textContent='CAT '+n+' — Medium';t.className='tag ta';}
+  else{t.textContent='CAT '+n+' — High';t.className='tag tr';}
+}
+function updAct(n){
+  const t=document.getElementById('act-tag');
+  if(!t) return;
+  if(n>=20){t.textContent='ACT '+n+' — Controlled';t.className='tag tg';}
+  else if(n>=16){t.textContent='ACT '+n+' — Partial';t.className='tag ta';}
+  else if(n>=5){t.textContent='ACT '+n+' — Uncontrolled';t.className='tag tr';}
+}
+
+// ── RADIO GROUPS
+function selR(grpId,val){
+  document.querySelectorAll('#'+grpId+'-g .ro').forEach(o=>{
+    o.classList.toggle('on',parseInt(o.dataset.v)===val);
+  });
+  dirty('clinical');
+}
+
+// ── NOTIFICATIONS
+const NI={
+  ok:'<path d="M20 6L9 17l-5-5"/>',
+  warn:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  err:'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+  info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+};
+function showN(msg,type='info'){
+  const w=document.getElementById('nw');
+  const n=document.createElement('div');
+  n.className='notif '+(type==='success'?'ok':type);
+  n.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">${NI[type]||NI.info}</svg><span>${msg}</span>`;
+  w.appendChild(n);
+  setTimeout(()=>{
+    n.style.opacity='0';n.style.transform='translateX(12px)';
+    n.style.transition='all .2s';
+    setTimeout(()=>n.remove(),210);
+  },2800);
+}
+
+// ── EXAMPLE DATA LOADER
+function loadEx(){showN('Example patient loaded','ok');}
+
+// ── ACTION PLAN GENERATOR
+function genPlan(){
+  document.getElementById('ap-out').style.display='block';
+  showN('Personalised action plan generated','ok');
+  ST('action-plan');
+}
+
+// ── ANALYSIS ENGINE
+// All 7 layers preserved — UI shows clinical names, aref badges show layer number
+const ENG={
+  1:`GOLD CLASSIFICATION  [engine.layer_1]
+────────────────────────────────────
+FEV1 % predicted : 48%
+FEV1/FVC ratio   : 56%  < 0.70 confirmed obstruction
+Pack-years       : 20   ex-smoker (quit Mar 2024)
+GOLD Stage       : III — Severe
+CAT score        : 18   — high symptom burden
+mMRC grade       : 3
+Exacerbations    : 3 past year  1 hospitalisation  2 OCS
+
+GOLD Group       : D
+Triple therapy   : Confirmed appropriate
+Comorbidity flag : Anxiety/depression — action required`,
+
+  2:`MULTIMODAL INTEGRATION  [engine.layer_2]
+──────────────────────────────────────────
+Environmental:
+  AQI impact     : pending entry
+  Home ventilation: fair — flag for review
+  Occupational   : none current
+  Smoking        : cessation Mar 2024 — positive signal
+
+Behavioural:
+  Adherence      : 75% — suboptimal
+  Technique      : suboptimal — training needed
+  Daily steps    : pending entry
+  Sleep quality  : stable
+
+Social determinants:
+  Health literacy : medium
+  Transportation  : good
+  Financial stress: pending
+
+Risk contribution: LOW-MODERATE environmental
+                   MODERATE behavioural`,
+
+  3:`PHENOTYPE RECOGNITION  [engine.layer_3]
+───────────────────────────────────────
+Eosinophils : 280 cells/uL  (below 300 threshold)
+FeNO        : pending — required for T2 classification
+IgE         : pending
+BD response : present — ACO criterion met
+
+Phenotype   : Borderline eosinophilic COPD
+T2 status   : T2-intermediate (indeterminate)
+ACO criteria: 2 of 4 met (age onset, BD response)
+
+Action      : Repeat eosinophils + FeNO at next visit
+              to clarify T2 status before biologic decision`,
+
+  4:`RISK PROFILE  [engine.layer_4]
+───────────────────────────────
+Exacerbation risk (12m) : HIGH
+  3 exacerbations past year
+  1 hospitalisation  2 OCS courses
+  FEV1 below 50%
+  CAT >= 10
+
+Hospitalisation risk    : HIGH
+  Prior admission on record
+  Declining FEV1 (-4% / 6 months)
+  Adherence 75% — suboptimal
+
+Adherence risk          : MODERATE
+  Side effect concern identified
+  Health literacy medium
+  Technique errors present
+
+Early warning           : ACTIVE
+  FEV1 decline accelerated`,
+
+  5:`TREATMENT RECOMMENDATION  [engine.layer_5]
+──────────────────────────────────────────
+Current regimen  : LAMA + LABA + ICS (triple)
+GOLD match       : Appropriate for Group D
+
+Priority actions (in order):
+  1. Inhaler technique review — immediate
+  2. Adherence counselling — side effect concern
+  3. Biologic eligibility: borderline (eos 280)
+     Repeat eos + FeNO before deciding
+  4. Pulmonary rehabilitation — strong indication
+  5. Flu vaccination — overdue
+  6. Pneumococcal vaccination — not given
+
+Comorbidities:
+  Anxiety/depression — psychology referral
+  No beta-blocker conflict identified`,
+
+  6:`SELF-MANAGEMENT PLAN  [engine.layer_6]
+──────────────────────────────────────
+Zone plan        : Generated — see Action Plan tab
+Daily monitoring : CAT score + rescue use
+Rescue available : SABA + oral steroids
+
+Education priorities:
+  Inhaler technique — video resource assigned
+  Written action plan — zone-based generated
+  Exacerbation recognition signs reviewed
+
+Support referrals initiated:
+  Pulmonary rehabilitation programme
+  Psychology (anxiety/depression comorbidity)
+  COPD support group — local chapter`,
+
+  7:`DISEASE TRAJECTORY  [engine.layer_7]
+──────────────────────────────────────
+FEV1 progression:
+  2 years ago : 64%
+  18 months   : 58%
+  6 months    : 52%
+  Current     : 48%
+  Decline rate: -4% / 6 months (accelerated)
+  Normal rate : < 2% / year
+
+Exacerbation pattern:
+  Feb 2024    : ED same day
+  Nov 2024    : Admission 3 days
+  Frequency   : Increasing
+  Seasonal    : Winter predominant
+
+Positive trajectory signals:
+  Smoking cessation Mar 2024
+  LABA added Oct 2024
+  Monitor FEV1 at 3 months post step-up`
+};
+
+const ELBL={
+  1:'GOLD classification',
+  2:'Multimodal integration',
+  3:'Phenotype recognition',
+  4:'Risk profile',
+  5:'Treatment recommendation',
+  6:'Self-management plan',
+  7:'Disease trajectory'
+};
+
+function RA(n){
+  const o=document.getElementById('o'+n);
+  if(!o) return;
+  o.textContent='Running…';
+  o.classList.remove('idle');
+  setTimeout(()=>{
+    o.textContent=ENG[n]||'Complete.';
+    showN(ELBL[n]+' complete','ok');
+  },820);
+}
+
+function clearA(){
+  [1,2,3,4,5,6,7].forEach(n=>{
+    const o=document.getElementById('o'+n);
+    if(o){o.textContent='Awaiting data…';o.className='aout idle';}
+  });
+  const ro=document.getElementById('ro');
+  if(ro) ro.textContent='Run full analysis to generate report.';
+  showN('Results cleared','info');
+}
+
+function RAall(){
+  showN('Running full 7-layer analysis…','info');
+  ST('analysis');
+  [1,2,3,4,5,6,7].forEach((n,i)=>setTimeout(()=>RA(n),i*640));
+  setTimeout(()=>{
+    const ro=document.getElementById('ro');
+    if(!ro) return;
+    ro.textContent=`AIRMAP Intelligence Report
+Platform ID  : AIRMAP-2024-00147
+Generated    : ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
+Clinician    : Dr. Garcia
+Module       : COPD  GOLD Stage III  Group D
+Visit        : 4
+Note         : Intelligence system output  not an EHR record
+==========================================================
+
+L1  GOLD CLASSIFICATION
+  Stage III Severe  Group D
+  FEV1 48% predicted  FEV1/FVC 56%
+  Pack-years 20  Ex-smoker (quit Mar 2024)
+
+L2  MULTIMODAL
+  Environmental risk: low-moderate
+  Behavioural risk: moderate (adherence, technique)
+  Social risk: pending full entry
+
+L3  PHENOTYPE
+  Borderline eosinophilic (eos 280 cells/uL)
+  ACO possible  reassess with FeNO
+
+L4  RISK PROFILE
+  Exacerbation risk : HIGH
+  Hospitalisation   : HIGH (1 prior admission)
+  FEV1 trend        : Declining -4% per 6 months
+
+L5  TREATMENT
+  Triple therapy appropriate
+  Priority: inhaler technique + adherence
+  Biologic eligibility: reassess at next visit
+  Pulmonary rehab: strongly recommended
+
+L6  SELF-MANAGEMENT
+  Zone plan generated  see Action Plan tab
+  Psychology referral: recommended
+  Vaccination: flu overdue  pneumococcal not given
+
+L7  TRAJECTORY
+  FEV1 declining -4% per 6 months (accelerated)
+  Exacerbation frequency increasing
+  Winter seasonal pattern confirmed
+
+==========================================================
+ECOSYSTEM
+  Pseudonymised: AIRMAP-2024-00147
+  EHR reconnection: authorised lookup
+  PneumoData integration: Phase 2 planned`;
+    showN('Full 7-layer report generated','ok');
+  },5200);
+}
+</script>
+</body>
+</html>
