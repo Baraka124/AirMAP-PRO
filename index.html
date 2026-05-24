@@ -27339,7 +27339,6 @@ async function init() {
     loadAppConfig(); // Item 17: load configurable settings
     attachVariantNameValidation(); // Nomenclature validation on entry form
     await loadVariants();
-    initHospital();
     initAppMode();
     // Fix 3: restore sidebar AFTER DOM is ready
     if (localStorage.getItem('_sidebarCollapsed') === '1') {
@@ -27839,8 +27838,12 @@ function drawCanvas() {
         dismiss: dismiss,
         _clearSafety: function() { clearTimeout(safetyTimer); },
         start: function() {
+            dismissed = false;
+            screen.style.display = '';
+            screen.classList.remove('fade-out');
             advance('boot');
             showHospitalGreeting();
+            if (typeof initHospital === 'function') initHospital();
             safetyTimer = setTimeout(function() {
                 if (!dismissed) dismiss();
             }, 12000);
