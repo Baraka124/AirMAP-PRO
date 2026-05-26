@@ -54,6 +54,26 @@
   --shd:-6px 0 32px rgba(10,14,23,.16);
   --rsm:6px;--rmd:10px;--rlg:14px;--rxl:18px;--r2xl:22px;
 }
+@media(prefers-color-scheme:dark){
+  :root{
+    --wh:#111827; --sf:#0F172A; --i7:#F1F5F9; --i5:#94A3B8;
+    --i4:#64748B; --i3:#475569; --i2:#1E293B; --i1:#1E293B; --i0:#0F172A;
+    --n0:#0F1E35; --n1:#1A2F4A; --n2:#243F60;
+    --r0:#2D1515; --r1:#3D1F1F; --a0:#2A1F00; --a1:#3A2C00;
+    --g0:#0D2219; --g1:#1A3326; --t0:#0C1F25; --t1:#1A3040;
+    --p0:#1A1030; --p1:#2A1E48;
+  }
+  .sz-r{background:#2D1515;border-color:#5A2020;}
+  .sz-a{background:#2A1F00;border-color:#5A4000;}
+  .sz-g{background:#0D2219;border-color:#1A5A35;}
+  .ia-w{background:#2A1F00;border-color:#5A4000;color:#FCD34D;}
+  .ia-d{background:#2D1515;border-color:#5A2020;color:#FCA5A5;}
+  .ia-i{background:#0F1E35;border-color:#1A2F4A;color:#93C5FD;}
+  .ia-g{background:#0D2219;border-color:#1A5A35;color:#6EE7B7;}
+  .eco{background:#020817;}
+  thead{background:#0F172A;}
+  .drw,.drw-hd,.drw-foot{background:#111827;}
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{font-size:14px;}
 body{font-family:var(--sans);background:var(--sf);color:var(--i7);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -294,7 +314,7 @@ input,select,textarea{font-family:inherit;}
 .abt-arr{font-size:15px;flex-shrink:0;opacity:.45;}
 
 /* ── COMPLETENESS ── */
-.comp{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
+.comp,.comp-panel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
 .comp-hd{padding:11px 18px;border-bottom:1px solid var(--i1);display:flex;align-items:center;justify-content:space-between;}
 .comp-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);}
 .comp-sc{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--n8);}
@@ -439,6 +459,8 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .notif i{font-size:15px;flex-shrink:0;}
 @keyframes nin{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+.skeleton{background:linear-gradient(90deg,var(--i1) 25%,var(--i0) 50%,var(--i1) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--rsm);}
 
 /* ── UTILS ── */
 .flex{display:flex;}.ic{align-items:center;}.jsb{justify-content:space-between;}
@@ -450,6 +472,20 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .hidden{display:none!important;}
 .animate-in{animation:fadeUp .25s ease;}
 
+@media print {
+  .eco, .ahdr, .visit-bar, .cockpit-aside, .tl-panel,
+  .intel, .mgrid, .lcp, .nct, .drw-ov { display: none !important; }
+  .cockpit { display: block !important; padding: 0; }
+  .cockpit-main { gap: 8px; }
+  .status-zone { border-radius: 8px; padding: 16px; }
+  .drw { position: static !important; transform: none !important;
+         width: 100% !important; box-shadow: none !important;
+         border: none; }
+  .drw-hd, .drw-foot { display: none !important; }
+  .drw-body { padding: 0; overflow: visible; }
+  .apz { break-inside: avoid; }
+  body { font-size: 12px; }
+}
 @media(max-width:1024px){.cockpit{grid-template-columns:1fr;}.cockpit-aside{order:-1;}.mgrid{grid-template-columns:1fr 1fr 1fr;}.drw{width:100%;max-width:520px;}}
 @media(max-width:640px){.cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.eco-mods{display:none;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}}
 </style>
@@ -509,8 +545,13 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <button class="btn bg btn-icon btn-sm" onclick="notify('Search — Phase 2','info')"><i class="ti ti-search"></i></button>
     <button class="btn bg btn-icon btn-sm" onclick="notify('No new alerts','ok')"><i class="ti ti-bell"></i></button>
     <div class="hdv"></div>
+    <!-- GAP 09: Read-only mode toggle -->
+    <button class="btn bg btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode">
+      <i class="ti ti-eye" id="readonly-icon"></i><span id="readonly-label">Review mode</span>
+    </button>
+    <div class="hdv"></div>
     <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i>Export</button>
-    <button class="btn bp btn-sm" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i>Run analysis</button>
+    <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i>Run analysis</button>
   </div>
 </header>
 
@@ -604,7 +645,22 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
-   AIRMAP v8 — 5-Patient Disease Demo
+   AIRMAP v9 — Complete 19-gap resolution · All diseases · Full visit history
+   ─────────────────────────────────────────────────────────────────
+   GAP 19 — REACT COMPONENT SEPARATION (next step before Supabase)
+   This monolith is ready to be split. Each section maps to a React component:
+     StatusZone        → reads: pt.disease, v.cat/act/fev1/exac/eos
+     MetricsGrid       → reads: v.*, buildMetrics(d,pt,v,...)
+     IntelligencePanel → reads: buildIntel(d,pt,v,...), engine layers 1-7
+     VisitBar          → reads: pt.visits[], currentVisit
+     PatientSelector   → reads: DB (all patients cohort)
+     Drawer            → reads: currentDrw, builds content dynamically
+     ActionButtons     → reads: pt.disease (adaptive button set)
+     CompletenessPanel → reads: pt.completeness[]
+     ReferralTracker   → reads: pt.referrals[]
+   Each component receives props from Supabase API response.
+   DB object shape = exact Supabase row + join structure.
+   ─────────────────────────────────────────────────────────────────
    ─────────────────────────────────────────────────────────────────
    PATIENT DATA MODEL
    Every value here = a future Supabase column or row.
@@ -896,6 +952,57 @@ function fev1Class(fev1) {
 /* ═══════════════════════════════════════════════════════════════════
    COCKPIT RENDERER — fully data-driven
 ═══════════════════════════════════════════════════════════════════ */
+/* GAP 09 — Read-only review mode */
+let readOnlyMode = false;
+
+function toggleReadOnly() {
+  readOnlyMode = !readOnlyMode;
+  const icon  = g('readonly-icon');
+  const label = g('readonly-label');
+  const runBtn= g('run-btn');
+  const toggle= g('readonly-toggle');
+  if (readOnlyMode) {
+    if (icon)   icon.className  = 'ti ti-eye-off';
+    if (label)  label.textContent = 'Read-only';
+    if (toggle) { toggle.className = 'btn bp btn-sm'; }
+    if (runBtn) runBtn.style.opacity = '.5';
+    notify('Read-only mode — no edits possible','info');
+  } else {
+    if (icon)   icon.className  = 'ti ti-eye';
+    if (label)  label.textContent = 'Review mode';
+    if (toggle) { toggle.className = 'btn bg btn-sm'; }
+    if (runBtn) runBtn.style.opacity = '1';
+    notify('Edit mode restored','ok');
+  }
+  /* Disable all drawer save buttons and inputs when in read-only mode */
+  const drwFoot = g('drw-foot');
+  if (drwFoot) drwFoot.style.display = readOnlyMode ? 'none' : 'flex';
+}
+
+/* Override openDrw to lock inputs in read-only mode */
+const _origOpenDrw = openDrw;
+function openDrw(type) {
+  _origOpenDrw(type);
+  if (readOnlyMode) {
+    setTimeout(() => {
+      const body = g('drw-body');
+      if (body) {
+        body.querySelectorAll('input, select, textarea').forEach(el => {
+          el.setAttribute('disabled', 'disabled');
+          el.style.background = 'var(--i0)';
+          el.style.cursor = 'not-allowed';
+        });
+        body.querySelectorAll('.sbn, .ynb, .ro').forEach(el => {
+          el.style.pointerEvents = 'none';
+          el.style.opacity = '.5';
+        });
+      }
+      const foot = g('drw-foot');
+      if (foot) foot.style.display = 'none';
+    }, 50);
+  }
+}
+
 function render() {
   const pt = getPt();
   if (!pt) return;
@@ -1143,6 +1250,14 @@ function buildIntel(d, pt, v, grp, stage, ctrl) {
     row('Adherence',         `<span class="tag ${v.adherence>=80?'tg':'ta'}">${v.adherence}%</span> &nbsp;Technique: ${v.technique}`);
     row('Priority action',   `<span class="fw">Inhaler technique · biologic reassessment · pulmonary rehab</span>`);
     row('Vaccinations',      `${pt.vaccinations.flu?'<span class="tag tg">Flu ✓</span>':'<span class="tag tr">Flu overdue</span>'} &nbsp;${pt.vaccinations.pneumo?'<span class="tag tg">Pneumo ✓</span>':'<span class="tag ta">Pneumo pending</span>'}`);
+    /* GAP 18 — comorbidity-aware intelligence */
+    const comorb = [];
+    if (pt.comorbidities.anxiety)    comorb.push('Anxiety/depression — psychology referral · avoid beta-blockers');
+    if (pt.comorbidities.ihd)        comorb.push('IHD — cardiac review due · beta-blocker caution with SABA');
+    if (pt.comorbidities.osteoporosis) comorb.push('Osteoporosis — cumulative ICS/OCS burden: consider bone protection');
+    if (pt.comorbidities.t2dm)       comorb.push('T2DM — oral steroid courses raise blood glucose: monitor');
+    if (pt.comorbidities.osa)        comorb.push('OSA — nocturnal hypoxaemia may worsen COPD trajectory');
+    if (comorb.length) row('Comorbidity flags', `<span class="italic">${comorb.join(' &nbsp;·&nbsp; ')}</span>`);
 
   } else if (d === 'ASTHMA') {
     row('Asthma control',    `<span class="tag ${ctrl.level==='controlled'?'tg':ctrl.level==='partial'?'ta':'tr'}">${ctrl.label}</span> &nbsp;ACT ${v.act} · Step 3 current`);
@@ -1239,6 +1354,10 @@ function buildActionBtns() {
     ['ti-pill',        'Medications',         'Regimen · adherence · conflicts','medications', false],
     ['ti-folder-open', 'Full record',         'All data · all sections',        'full-record', false],
     ['ti-download',    'Export & report',     'PDF · JSON · EHR format',        'export',      false],
+    ['ti-layout-grid', 'Cohort overview',     'All patients · triage view',    'cohort-overview', false],
+    ['ti-user',        'Demographics',         'Age · BMI · smoking · comorbidities','demographics',false],
+    ['ti-leaf',        'Environment',          'AQI · occupation · social',          'environment',  false],
+    ['ti-shield',      'Asthma & ACO',         'Phenotype · biologic criteria',      'asthma-aco',   false],
     ['ti-user-plus',   'Register new patient','ID · pseudonymisation · disease','register',    false]
   ].map(([icon,lbl,desc,drw,primary]) => `
     <button class="abt ${primary?'abt-p':'abt-s'}" onclick="openDrw('${drw}')">
@@ -1258,8 +1377,10 @@ function renderVisitBar(pt, v) {
   if (!btns) return;
 
   btns.innerHTML = pt.visits.map((vv,i) => `
-    <button class="vbtn${i===currentVisit?' on':''}" onclick="switchVisit(${i})">
+    <button class="vbtn${i===currentVisit?' on':''}" onclick="switchVisit(${i})"
+      title="${vv.note||''}" style="position:relative">
       Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}
+      ${vv.note ? `<span style="display:block;font-size:9px;opacity:.6;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vv.note}</span>` : ''}
     </button>`).join('');
 
   if (date) date.textContent = v.date;
@@ -1332,7 +1453,13 @@ function selectPt(id) {
   g('pid-disp').textContent = `AIRMAP-2024-${id}`;
   document.querySelectorAll('.ci').forEach(el => el.classList.remove('on'));
   toggleCohort();
-  render();
+  /* GAP 12 — brief skeleton loading state */
+  const cockpit = g('cockpit');
+  if (cockpit) { cockpit.style.opacity = '0.4'; cockpit.style.transition = 'opacity .15s'; }
+  setTimeout(() => {
+    render();
+    if (cockpit) { cockpit.style.opacity = '1'; }
+  }, 120);
   notify(`Loaded AIRMAP-2024-${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
 }
 
@@ -1408,24 +1535,97 @@ function saveDrw() {
   notify('Saved · cockpit updated', 'ok');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && currentDrw) closeDrw(); });
+document.addEventListener('keydown', e => {
+  /* Escape closes drawer */
+  if (e.key === 'Escape' && currentDrw) { closeDrw(); return; }
+  /* GAP 14 — Arrow keys on score steppers */
+  const active = document.activeElement;
+  if (active && active.closest('.sw')) {
+    const key = active.closest('[id^=sv-]')?.id?.replace('sv-','') ||
+                active.closest('.sbn')?.getAttribute('onclick')?.match(/adj\\'([^']+)\\'/)?.[1];
+    if (e.key === 'ArrowUp'   && key) { e.preventDefault(); adj(key, 1); }
+    if (e.key === 'ArrowDown' && key) { e.preventDefault(); adj(key,-1); }
+  }
+  /* Enter on action buttons in cockpit */
+  if (e.key === 'Enter' && active?.classList?.contains('abt')) { active.click(); }
+  /* Tab trap inside open drawer */
+  if (e.key === 'Tab' && currentDrw) {
+    const drwEl = g('drw');
+    if (!drwEl) return;
+    const focusable = drwEl.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0], last = focusable[focusable.length-1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
 
 /* Stepper */
 function adj(key, delta) {
   const lims = { cat:[0,40],mmrc:[0,4],exac:[0,20],hosp:[0,10],icu:[0,5],ocs:[0,10],act:[5,25] };
   const lim  = lims[key]||[0,40];
-  const vEl  = g(`sv-${key}`);
-  const dEl  = g(`sd-${key}`);
+  const vEl  = g(`sv-${key}`), dEl = g(`sd-${key}`);
   if (!vEl||!dEl) return;
   let n = parseInt(vEl.value||'0') + delta;
   n = Math.max(lim[0],Math.min(lim[1],n));
   vEl.value = n; dEl.textContent = n;
   const fbEl = g(`fb-${key}`);
   if (fbEl) {
-    if (key==='cat')  { fbEl.textContent = n<=9?`CAT ${n} — Low`:n<=19?`CAT ${n} — Medium–high`:`CAT ${n} — High`; fbEl.className = `lfb ${n<=9?'lfb-g':n<=19?'lfb-w':'lfb-d'}`; }
-    if (key==='act')  { fbEl.textContent = n>=20?`ACT ${n} — Controlled`:n>=16?`ACT ${n} — Partially controlled`:`ACT ${n} — Uncontrolled`; fbEl.className = `lfb ${n>=20?'lfb-g':n>=16?'lfb-w':'lfb-d'}`; }
+    if (key==='cat') { fbEl.textContent=n<=9?`CAT ${n} — Low · Group A/B`:n<=19?`CAT ${n} — Medium–high · Group B/D`:`CAT ${n} — High · Group D`; fbEl.className=`lfb ${n<=9?'lfb-g':n<=19?'lfb-w':'lfb-d'}`; }
+    if (key==='act') { fbEl.textContent=n>=20?`ACT ${n} — Well controlled`:n>=16?`ACT ${n} — Partially controlled`:`ACT ${n} — Uncontrolled · step-up indicated`; fbEl.className=`lfb ${n>=20?'lfb-g':n>=16?'lfb-w':'lfb-d'}`; }
+  }
+  /* GAP 01 — update in-memory patient state, refresh live zone */
+  const v = getVisit();
+  if (v) {
+    if (key==='cat')  v.cat  = n;
+    if (key==='act')  v.act  = n;
+    if (key==='exac') v.exac = n;
+    if (key==='hosp') v.hosp = n;
+    if (key==='ocs')  v.ocs  = n;
+    if (key==='mmrc') v.mmrc = n;
+    updateLiveZone();
   }
   markDirty();
+}
+
+/* GAP 01 — lightweight zone refresh without full re-render */
+function updateLiveZone() {
+  const pt = getPt(), v = getVisit();
+  if (!pt||!v) return;
+  const d = pt.disease;
+  let zCls, zLbl, zTt, lcpCls, lcpTxt;
+  if (d==='COPD') {
+    const grp=goldGroup(v), st=goldStage(v.fev1);
+    const hiR=v.exac>=2||v.hosp>=1, hiS=v.cat>=10;
+    zCls  = hiR&&hiS?'sz-r':hiS?'sz-a':'sz-g';
+    lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-d';
+    lcpTxt= `GOLD Group ${grp} · Stage ${st.s} ${st.l}`;
+    zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · GOLD Group ${grp} · Visit ${v.n}`;
+    zTt   = zCls==='sz-r'?'Progressive decline — immediate review':zCls==='sz-a'?'Suboptimal control — treatment review':'Stable — continue current management';
+  } else if (d==='ASTHMA') {
+    const ctrl=asthmaCtrl(v.act);
+    zCls  = ctrl.level==='uncontrolled'?'sz-r':ctrl.level==='partial'?'sz-a':'sz-g';
+    lcpCls= ctrl.level==='controlled'?'lcp-ctrl':ctrl.level==='partial'?'lcp-part':'lcp-unc';
+    lcpTxt= `Asthma ${ctrl.label} · ACT ${v.act}`;
+    zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · ${ctrl.label} · Visit ${v.n}`;
+    zTt   = ctrl.level==='uncontrolled'?'Uncontrolled asthma — urgent step-up':ctrl.level==='partial'?'Partially controlled — optimise step':'Well controlled';
+  } else if (d==='ACO') {
+    const grp=goldGroup(v), ctrl=asthmaCtrl(v.act);
+    zCls='sz-a'; lcpCls='lcp-part';
+    lcpTxt=`GOLD Group ${grp} · Asthma ${ctrl.label}`;
+    zLbl=`Amber zone · GOLD Group ${grp} · ACT ${v.act} · Visit ${v.n}`;
+    zTt='Overlap syndrome — dual pathway assessment';
+  } else {
+    const inf=v.sputum&&v.sputum!=='white';
+    zCls=inf?'sz-a':'sz-g'; lcpCls=inf?'lcp-part':'lcp-ctrl';
+    lcpTxt=`${inf?'Possible infection':'Stable'} · FEV₁ ${v.fev1}%`;
+    zLbl=`${inf?'Amber':'Green'} zone · Chronic Bronchitis · Visit ${v.n}`;
+    zTt=inf?'Purulent sputum — consider antibiotics':'Stable — continue mucus clearance';
+  }
+  const sz=g('status-zone'); if(sz) sz.className=`sz ${zCls} animate-in`;
+  const zlEl=g('z-lbl'); if(zlEl) zlEl.textContent=zLbl;
+  const ztEl=g('z-tt');  if(ztEl) ztEl.textContent=zTt;
+  const lcp=g('lcp');    if(lcp)  lcp.className=`lcp ${lcpCls}`;
+  const lcpT=g('lcp-txt'); if(lcpT) lcpT.textContent=lcpTxt;
 }
 
 function liveEos(val) {
@@ -1473,6 +1673,8 @@ function bVisitUpdate() {
   const isCOPD   = pt.disease==='COPD';
   const isCB     = pt.disease==='CHRONIC_BRONCHITIS';
   return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Visit ${v.n} · ${v.date}</strong> — previous values shown. Update only what changed today.</div></div>
+  ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span style="font-size:11px;color:var(--i4)">Last visit note (${pv.date}):</span><br><em style="color:var(--i5)">${pv.note}</em></div></div>` : ''}
+  ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span class="xs muted">Previous visit note (${pv.date}):</span><br><em>${pv.note}</em></div></div>` : ''}
   ${S('Spirometry','engine.layer_1 · layer_7',`<div class="fg">
     ${F('FEV₁','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'')}
     ${F('FEV₁ % predicted','%','',pv?`Previous: ${pv.fev1}%`:'')}
@@ -1529,6 +1731,19 @@ function bActionPlan() {
   <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="notify('Printed','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="notify('PDF generated','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
 }
 
+function buildMedConflicts(pt) {
+  const conflicts = [];
+  const cls = pt.meds.map(m=>m.cls);
+  const hasBetaBlocker = pt.meds.some(m=>m.drug.toLowerCase().includes('atenolol')||m.drug.toLowerCase().includes('bisoprolol')||m.drug.toLowerCase().includes('metoprolol')||m.drug.toLowerCase().includes('carvedilol'));
+  if (hasBetaBlocker && cls.includes('SABA')) conflicts.push({ sev:'d', icon:'ti-alert-triangle', txt:'<strong>SABA + beta-blocker conflict</strong> — beta-blockers reduce SABA efficacy and may precipitate bronchospasm. Review with cardiology.' });
+  if (cls.includes('ICS') && pt.comorbidities?.osteoporosis) conflicts.push({ sev:'w', icon:'ti-bone', txt:'<strong>High-dose ICS + osteoporosis</strong> — cumulative ICS burden increases fracture risk. Consider bone protection therapy.' });
+  const ocsV = pt.visits.reduce((s,v)=>s+(v.ocs||0),0);
+  if (cls.includes('ICS') && ocsV >= 3) conflicts.push({ sev:'w', icon:'ti-pill', txt:`<strong>ICS + repeated OCS (${ocsV} courses)</strong> — cumulative steroid burden significant. Consider biologic to reduce OCS dependency.` });
+  if (pt.demographics?.smoker==='Current smoker' && cls.includes('ICS')) conflicts.push({ sev:'w', icon:'ti-flame', txt:'<strong>ICS + active smoking</strong> — smoking reduces ICS efficacy by up to 50%. Smoking cessation is the most important therapeutic intervention.' });
+  if (!conflicts.length) return '';
+  return `<div style="margin-top:12px"><div class="flbl-sec">Medication conflict checker<span class="feng">engine.layer_5</span></div>${conflicts.map(c=>`<div class="ia ia-${c.sev}" style="margin-bottom:7px"><i class="ti ${c.icon}"></i><div class="ia-body">${c.txt}</div></div>`).join('')}</div>`;
+}
+
 function bMedications() {
   const pt=getPt(), v=getVisit();
   const hasSABAOveruse = pt.disease==='ASTHMA' && v.rescueWk >= 7;
@@ -1536,7 +1751,8 @@ function bMedications() {
     ${pt.meds.map(m=>`<tr><td class="strong">${m.drug}</td><td><span class="tag ${m.tag}">${m.cls}</span></td><td class="mono sm">${m.dose}</td><td>${m.freq}</td><td class="mono sm">${m.since}</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-sm" onclick="notify('Edit','info')" style="padding:4px 8px"><i class="ti ti-pencil"></i></button></td></tr>`).join('')}
   </tbody></table></div>
   ${hasSABAOveruse?'<div class="ia ia-d" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body"><strong>SABA overuse detected</strong> — daily rescue use indicates uncontrolled asthma. Step-up required before SABA becomes primary treatment.</div></div>':''}
-  <button class="btn bs btn-sm mt2" onclick="notify('Add medication','info')"><i class="ti ti-plus"></i>Add medication</button>`)}
+  <button class="btn bs btn-sm mt2" onclick="notify('Add medication','info')"><i class="ti ti-plus"></i>Add medication</button>
+  ${buildMedConflicts(pt)}`)}
   ${S('Adherence & technique','engine.layer_5',`<div class="fg">
     <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||'—'}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80% — address before step-up</div>':''}</div>
     ${Sel('Technique',['Adequate','Suboptimal','Poor — needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor — needs retraining':'Suboptimal')}
@@ -1611,11 +1827,199 @@ function bFullRecord() {
         <div class="abt-tx"><div class="abt-lbl">${lbl}</div></div>
         <i class="ti ti-arrow-right abt-arr"></i>
       </button>`).join('')}
+  </div>
+  <div style="margin-top:16px">
+    <div class="flbl-sec" style="margin-bottom:10px">Audit log<span class="feng">GDPR required</span></div>
+    ${buildAuditLog()}
   </div>`;
 }
 
+/* GAP 13 — Audit log (illustrative — real data from Supabase audit_log table) */
+function buildAuditLog() {
+  const pt  = getPt();
+  const v   = getVisit();
+  const pv  = prevVisit();
+  const entries = [
+    { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n} — data saved · ${pt.disease.replace('_',' ')}` },
+    { ts:v.date + ' 14:28', user:'Dr. García',  action:'Follow-up drawer opened · visit-update mode' },
+    { ts:v.date + ' 14:10', user:'Dr. García',  action:`FEV₁ recorded: ${v.fev1}% · spirometry saved` },
+    ...(pv ? [{ ts:pv.date + ' 09:15', user:'Dr. García', action:`Visit ${pv.n} saved · CAT ${pv.cat}${v.cat && pv.cat ? ' → '+v.cat : ''}` }] : []),
+    { ts:'System',           user:'AIRMAP',      action:`Pseudonymised ID generated: AIRMAP-2024-${currentPt}` },
+  ];
+  return entries.map(e => `
+    <div style="display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--i1)">
+      <span style="font-family:var(--mono);font-size:9.5px;color:var(--i4);width:130px;flex-shrink:0">${e.ts}</span>
+      <span style="font-size:12px;color:var(--i5);flex:1">${e.action}</span>
+      <span style="font-family:var(--mono);font-size:9.5px;color:var(--n6);flex-shrink:0">${e.user}</span>
+    </div>`).join('') +
+    `<div style="margin-top:8px;font-size:11px;color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
+}
+
+/* GAP 07 — Cohort overview drawer */
+function bCohortOverview() {
+  const entries = Object.entries(DB);
+  const cards = entries.map(([id, pt]) => {
+    const lastV = pt.visits[pt.visits.length - 1];
+    const grp   = (pt.disease==='COPD'||pt.disease==='ACO') ? goldGroup(lastV) : null;
+    const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(lastV.act) : null;
+    const zoneStr = pt.disease==='COPD' ? `GOLD Group ${grp} · FEV₁ ${lastV.fev1}%`
+                  : pt.disease==='ASTHMA' ? `ACT ${lastV.act} · ${ctrl.label}`
+                  : pt.disease==='ACO'    ? `Group ${grp} · ACT ${lastV.act}`
+                  : `FEV₁ ${lastV.fev1}% · sputum ${lastV.sputum||'stable'}`;
+    const topAlert = pt.disease==='ASTHMA' && lastV.act < 16 ? 'Uncontrolled — step-up urgent'
+                   : pt.disease==='COPD' && lastV.exac >= 2 ? `${lastV.exac} exacerbations — high risk`
+                   : pt.disease==='COPD' && lastV.eos >= 250 ? `Eos ${lastV.eos} — biologic threshold`
+                   : pt.disease==='ACO' && !pt.meds.find(m=>m.cls==='LABA') ? 'LABA missing — add to regimen'
+                   : pt.demographics.smoker==='Current smoker' ? 'Still smoking — cessation priority'
+                   : lastV.adherence < 80 ? `Adherence ${lastV.adherence}% — address`
+                   : 'No urgent actions';
+    const alertSev = topAlert.includes('urgent')||topAlert.includes('risk') ? 'r'
+                   : topAlert.includes('priority')||topAlert.includes('missing')||topAlert.includes('threshold') ? 'a'
+                   : 'g';
+    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
+    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'}[pt.disease];
+    const zoneCls  = {r:'sz-r',a:'sz-a',g:'sz-g'}[pt.risk];
+    return `<div style="background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .15s;box-shadow:var(--sh1)" onclick="closeDrw();selectPt('${id}')" onmouseover="this.style.borderColor='var(--n2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform=''">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${pt.risk==='r'?'var(--r5)':pt.risk==='a'?'var(--a5)':'var(--g5)'}"></div>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--i4)">AIRMAP-2024-${id}</span>
+        <span style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
+      </div>
+      <div style="font-family:var(--serif);font-size:15px;font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
+      <div style="font-size:12px;color:var(--i5);margin-bottom:8px">${zoneStr}</div>
+      <div style="font-size:11px;font-weight:500;color:${alertSev==='r'?'var(--r7)':alertSev==='a'?'var(--a7)':'var(--g7)'};background:${alertSev==='r'?'var(--r0)':alertSev==='a'?'var(--a0)':'var(--g0)'};border:1px solid ${alertSev==='r'?'var(--r1)':alertSev==='a'?'var(--a1)':'var(--g1)'};border-radius:4px;padding:4px 8px">${topAlert}</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--i4)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
+    </div>`;
+  }).join('');
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>
+  <div style="margin-top:14px;font-size:12px;color:var(--i4);text-align:center">Click any patient card to open their cockpit</div>`;
+}
+
+/* GAP 04 — Demographics drawer */
+function bDemographics() {
+  const pt = getPt();
+  const d  = pt.demographics;
+  const c  = pt.comorbidities;
+  const v  = pt.vaccinations;
+  return `
+  <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Stable data</strong> — update only when something has genuinely changed. These values feed engine layers 1, 4 and 5.</div></div>
+  ${S('Basic characteristics','engine.layer_1 · layer_4',`<div class="fg">
+    <div class="fgrp"><label class="fl">Age</label><div class="iuw"><input class="fi" type="number" value="${d.age}" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+    ${Sel('Sex',['Male','Female','Other'],d.sex)}
+    <div class="fgrp"><label class="fl">BMI</label><div class="iuw"><input class="fi" type="number" step="0.1" value="${d.bmi}" oninput="markDirty()"><span class="iu">kg/m²</span></div></div>
+    <div class="fgrp"><label class="fl">Age at symptom onset</label><div class="iuw"><input class="fi" type="number" value="${d.onsetAge}" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+  </div>`)}
+  ${S('Smoking history','engine.layer_1',`<div class="fg">
+    ${Sel('Smoking status',['Ex-smoker','Current smoker','Never smoked'],d.smoker)}
+    <div class="fgrp"><label class="fl">Pack-years</label><div class="iuw"><input class="fi" type="number" step="0.1" value="${d.packYears}" oninput="markDirty()"><span class="iu">pk-yr</span></div></div>
+    <div class="fgrp"><label class="fl">Quit date</label><input class="fi" type="text" value="${d.quitDate||''}" placeholder="e.g. Mar 2024" oninput="markDirty()"></div>
+  </div>`)}
+  ${S('Comorbidities','engine.layer_4 · layer_5',`<div class="fg">
+    ${YN('Heart failure',        c.heartFailure)}
+    ${YN('Ischaemic heart disease', c.ihd)}
+    ${YN('Type 2 diabetes',     c.t2dm)}
+    ${YN('OSA',                 c.osa)}
+    ${YN('Anxiety / depression',c.anxiety)}
+    ${YN('Osteoporosis',        c.osteoporosis)}
+  </div>`)}
+  ${S('Vaccinations','engine.layer_5',`<div class="fg">
+    ${YN('Influenza (last 12m)', v.flu)}
+    ${YN('Pneumococcal',         v.pneumo)}
+    ${YN('COVID-19 up to date',  v.covid)}
+  </div>`)}`;
+}
+
+/* GAP 05 — Environment / lifestyle drawer */
+function bEnvironment() {
+  return `
+  ${S('Air quality & environmental triggers','engine.layer_2',`<div class="fg">
+    <div class="fgrp"><label class="fl">Air Quality Index (AQI)</label><div class="iuw"><input class="fi" type="number" min="0" max="500" placeholder="0–500" oninput="markDirty()"><span class="iu">AQI</span></div><div class="fhint">Good &lt;50 · Moderate 51–100 · Unhealthy 101+</div></div>
+    ${Sel('AQI impact on symptoms',['No impact','Mild worsening','Moderate','Severe'],'No impact')}
+    ${Sel('Pollen level',['Low','Medium','High','Very high'],'Low')}
+    <div class="fgrp"><label class="fl">Humidity</label><div class="iuw"><input class="fi" type="number" min="0" max="100" placeholder="—" oninput="markDirty()"><span class="iu">%</span></div><div class="fhint">High &gt;70% can worsen symptoms</div></div>
+  </div>`)}
+  ${S('Occupational & home','engine.layer_2',`<div class="fg">
+    ${Sel('Occupational exposure',['None','Dust / fumes','Chemicals','Smoke / combustion','Other'],'None')}
+    ${Sel('Home ventilation quality',['Good','Fair','Poor'],'Good')}
+    ${YN('Air purifier in use', false)}
+    ${Sel('Pet exposure',['None','Dogs','Cats','Other animals'],'None')}
+  </div>`)}
+  ${S('Lifestyle & behavioural','engine.layer_2 · layer_6',`<div class="fg">
+    <div class="fgrp"><label class="fl">Daily steps (average)</label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">steps</span></div><div class="fhint">Target ≥3000 for COPD</div></div>
+    <div class="fgrp"><label class="fl">Sleep (average)</label><div class="iuw"><input class="fi" type="number" step="0.5" placeholder="—" oninput="markDirty()"><span class="iu">hrs</span></div></div>
+    ${Sel('Inhaler technique errors',['None','1–2 minor errors','3–4 errors','Major errors needing retraining'],'None')}
+  </div>`)}
+  ${S('Social determinants','engine.layer_4 · layer_6',`<div class="fg">
+    <div class="fgrp"><label class="fl">Social support (1–10)</label><input class="fi" type="number" min="1" max="10" placeholder="1–10" oninput="markDirty()"></div>
+    <div class="fgrp"><label class="fl">Financial stress (1–10)</label><input class="fi" type="number" min="1" max="10" placeholder="1–10" oninput="markDirty()"></div>
+    ${Sel('Health literacy',['Low','Medium','High'],'Medium')}
+    ${Sel('Transportation access',['Good','Limited','Poor'],'Good')}
+  </div>`)}`;
+}
+
+/* GAP 06 — Asthma / ACO specific drawer */
+function bAsthmAco() {
+  const pt = getPt();
+  const v  = getVisit();
+  const isACO = pt.disease === 'ACO';
+  return `
+  ${S('Asthma control','engine.layer_1',`<div class="fg">
+    ${Stp('act','ACT score (5–25)',v.act||5,'')}
+    <div class="fgrp"><label class="fl">Rescue inhaler use</label><div class="iuw"><input class="fi" type="number" min="0" placeholder="—" oninput="markDirty()"><span class="iu">×/wk</span></div></div>
+    <div class="fgrp"><label class="fl">Nighttime symptoms</label><div class="iuw"><input class="fi" type="number" min="0" max="7" placeholder="—" oninput="markDirty()"><span class="iu">nts/wk</span></div></div>
+  </div>`)}
+  ${S('T2 phenotype assessment','engine.layer_3',`<div class="fg">
+    ${YN('Allergic rhinitis',       pt.comorbidities?.allerRhinitis||false)}
+    ${YN('Nasal polyps',            pt.comorbidities?.nasalPolyps||false)}
+    ${YN('Aspirin sensitivity',     false)}
+    ${YN('Exercise-induced symptoms',false)}
+    ${YN('Personal / family asthma history',false)}
+  </div>`)}
+  ${isACO ? S('ACO criteria','engine.layer_1 · layer_5',`<div class="fg">
+    <div class="fgrp"><label class="fl">Age at onset</label><div class="iuw"><input class="fi" type="number" value="${pt.demographics?.onsetAge||''}" oninput="markDirty()"><span class="iu">yrs</span></div><div class="fhint">ACO typically onset &gt;40 years with smoking history</div></div>
+    ${YN('FEV₁ variability >12%',  false)}
+    ${YN('BD response >12% + >200 mL', v.bdResp||false)}
+    ${YN('Fixed obstruction post-BD', true)}
+  </div>`) : ''}
+  ${S('Biologic eligibility','engine.layer_5',`
+    <div class="bio-grid">
+      <div class="bio-row ${v.eos>=300?'met':v.eos>=250?'borderline':'unmet'}">
+        <div class="bio-icon"><i class="ti ${v.eos>=300?'ti-check':v.eos>=250?'ti-minus':'ti-x'}"></i></div>
+        <div class="bio-crit">Blood eosinophils ≥ 300 cells/µL</div>
+        <div class="bio-val">${v.eos} c/µL</div>
+      </div>
+      <div class="bio-row ${pt.visits.some(pv=>pv.exac>=2)?'met':'unmet'}">
+        <div class="bio-icon"><i class="ti ${pt.visits.some(pv=>pv.exac>=2)?'ti-check':'ti-x'}"></i></div>
+        <div class="bio-crit">≥2 exacerbations in past year</div>
+        <div class="bio-val">${v.exac} this year</div>
+      </div>
+      <div class="bio-row ${v.eos>=300?'met':'unmet'}">
+        <div class="bio-icon"><i class="ti ${v.eos>=300?'ti-check':'ti-x'}"></i></div>
+        <div class="bio-crit">T2-high phenotype (eos or FeNO)</div>
+        <div class="bio-val">${v.eos>=300?'Confirmed':'FeNO needed'}</div>
+      </div>
+      <div class="bio-row ${v.ocs>=2?'met':'unmet'}">
+        <div class="bio-icon"><i class="ti ${v.ocs>=2?'ti-check':'ti-x'}"></i></div>
+        <div class="bio-crit">OCS dependent or ≥2 courses/year</div>
+        <div class="bio-val">${v.ocs} courses</div>
+      </div>
+    </div>
+    <div class="fg1" style="margin-top:12px">
+      ${Sel('Biologic assessment',['Not assessed','Anti-IL5 eligible (eos ≥300)','Anti-IgE eligible (IgE 30–700)','Anti-IL4R eligible (mod-severe eos)','Not eligible'],'Not assessed')}
+    </div>`)}`;
+}
+
 function bRegister() {
-  return `<div class="pp"><div class="pp-l">Platform ID — generated on save</div><div class="pp-id">AIRMAP-2024-—</div><div class="pp-sb">Name stored only in encrypted mapping table</div><div class="pp-tags"><span class="pp-tag">Pseudonymised</span><span class="pp-tag">GDPR compliant</span><span class="pp-tag">Audit logged</span></div></div>
+  const steps = ['ID & pseudonymisation','Demographics','Spirometry','Clinical scores','Medications'];
+  const stepper = `<div style="display:flex;gap:4px;margin-bottom:18px">${steps.map((s,i)=>`
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;${i===0?'background:var(--n8);color:white':'background:var(--i1);color:var(--i4)'}">
+        ${i+1}
+      </div>
+      <div style="font-size:9px;color:${i===0?'var(--n8)':'var(--i4)'};text-align:center;font-family:var(--mono);letter-spacing:.3px">${s}</div>
+    </div>
+    ${i<steps.length-1?`<div style="flex:1;height:1px;background:var(--i2);margin-top:14px;align-self:flex-start;margin-top:13px"></div>`:''}`).join('')}</div>`;
+  return stepper + `<div class="pp"><div class="pp-l">Platform ID — generated on save</div><div class="pp-id">AIRMAP-2024-—</div><div class="pp-sb">Name stored only in encrypted mapping table</div><div class="pp-tags"><span class="pp-tag">Pseudonymised</span><span class="pp-tag">GDPR compliant</span><span class="pp-tag">Audit logged</span></div></div>
   ${S('Personal details — mapping table only','',`<div class="fg">
     <div class="fgrp"><label class="fl">Full name <span class="req">*</span></label><input class="fi" type="text" placeholder="As per hospital records" oninput="markDirty()"></div>
     <div class="fgrp"><label class="fl">Date of birth <span class="req">*</span></label><input class="fi" type="date" oninput="markDirty()"></div>
@@ -1648,7 +2052,32 @@ function bExport() {
         <div class="abt-ico"><i class="ti ${icon}"></i></div>
         <div class="abt-tx"><div class="abt-lbl">${lbl}</div><div class="abt-desc">${desc}</div></div>
       </button>`).join('')}
+  </div>
+  <div style="margin-top:16px">
+    <div class="flbl-sec" style="margin-bottom:10px">Audit log<span class="feng">GDPR required</span></div>
+    ${buildAuditLog()}
   </div>`;
+}
+
+/* GAP 13 — Audit log (illustrative — real data from Supabase audit_log table) */
+function buildAuditLog() {
+  const pt  = getPt();
+  const v   = getVisit();
+  const pv  = prevVisit();
+  const entries = [
+    { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n} — data saved · ${pt.disease.replace('_',' ')}` },
+    { ts:v.date + ' 14:28', user:'Dr. García',  action:'Follow-up drawer opened · visit-update mode' },
+    { ts:v.date + ' 14:10', user:'Dr. García',  action:`FEV₁ recorded: ${v.fev1}% · spirometry saved` },
+    ...(pv ? [{ ts:pv.date + ' 09:15', user:'Dr. García', action:`Visit ${pv.n} saved · CAT ${pv.cat}${v.cat && pv.cat ? ' → '+v.cat : ''}` }] : []),
+    { ts:'System',           user:'AIRMAP',      action:`Pseudonymised ID generated: AIRMAP-2024-${currentPt}` },
+  ];
+  return entries.map(e => `
+    <div style="display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--i1)">
+      <span style="font-family:var(--mono);font-size:9.5px;color:var(--i4);width:130px;flex-shrink:0">${e.ts}</span>
+      <span style="font-size:12px;color:var(--i5);flex:1">${e.action}</span>
+      <span style="font-family:var(--mono);font-size:9.5px;color:var(--n6);flex-shrink:0">${e.user}</span>
+    </div>`).join('') +
+    `<div style="margin-top:8px;font-size:11px;color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
