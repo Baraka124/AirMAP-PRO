@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIRMAP — Respiratory Intelligence</title>
+<title>AIRMAP: Respiratory Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<!-- v11: Tabler webfont CDN removed — icons are inlined as SVG, see ICON_PATHS below -->
+<!-- v11: Tabler webfont CDN removed: icons are inlined as SVG, see ICON_PATHS below -->
 <!--
-  AIRMAP v8 — 5-Patient Disease Demo
+  AIRMAP v8: 5-Patient Disease Demo
   ══════════════════════════════════════════════════
   5 complete patient profiles · all 4 diseases
   Full visit history per patient
@@ -53,7 +53,7 @@
   --sh3:0 16px 40px rgba(10,14,23,.14),0 4px 8px rgba(10,14,23,.06);
   --shd:-6px 0 32px rgba(10,14,23,.16);
   --rsm:6px;--rmd:10px;--rlg:14px;--rxl:18px;--r2xl:22px;
-  /* v11 — typography scale (replaces 22 ad-hoc sizes) */
+  /* v11: typography scale (replaces 22 ad-hoc sizes) */
   --fs-micro:8px;--fs-3xs:9px;--fs-2xs:10px;--fs-xs:11px;--fs-sm:12px;
   --fs-base:13px;--fs-body:14px;--fs-h3:15px;--fs-h2:17px;--fs-h1:18px;
   --fs-lg:20px;--fs-xl:24px;--fs-2xl:30px;--fs-3xl:32px;
@@ -66,7 +66,7 @@
     --r0:#2D1515; --r1:#3D1F1F; --a0:#2A1F00; --a1:#3A2C00;
     --g0:#0D2219; --g1:#1A3326; --t0:#0C1F25; --t1:#1A3040;
     --p0:#1A1030; --p1:#2A1E48;
-    /* v11 — dedicated dark-mode TEXT colors for the contrast fix below.
+    /* v11: dedicated dark-mode TEXT colors for the contrast fix below.
        --n2/--t1/--p1 above are background/border-accent shades and
        fail contrast (1.2-1.6:1) when reused as text on --n0/--t0/--p0. */
     --tx-n:#93C5FD; --tx-t:#67E8F9; --tx-p:#C4B5FD;
@@ -88,13 +88,13 @@ button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
 /* ── ECO BAR ── */
-/* v11 — header consolidation: .eco / .em / .eco-u family removed.
+/* v11: header consolidation: .eco / .em / .eco-u family removed.
    .ep retained (reused by .platform-menu); .eco-av replaced by .clin-av */
 .ep{width:5px;height:5px;border-radius:50%;background:var(--i3);flex-shrink:0;}
 .clin{display:flex;align-items:center;flex-shrink:0;}
 .clin-av{width:28px;height:28px;border-radius:50%;background:var(--n8);display:flex;align-items:center;justify-content:center;font-size:var(--fs-2xs);font-weight:600;color:#fff;}
 
-/* v11 — platform module switcher (compact dropdown, replaces eco-mods row) */
+/* v11: platform module switcher (compact dropdown, replaces eco-mods row) */
 .platform-menu{position:absolute;top:calc(100% + 6px);left:0;width:225px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);box-shadow:var(--sh3);z-index:300;display:none;overflow:hidden;}
 .platform-menu.open{display:block;}
 .pm-hdr{padding:9px 13px;font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);border-bottom:1px solid var(--i1);}
@@ -105,11 +105,11 @@ input,select,textarea{font-family:inherit;}
 .pm-item.on .ep{background:var(--n7);opacity:1;}
 .pm-item.add{color:var(--i4);justify-content:center;font-style:italic;}
 
-/* v11 — patient chip second line (replaces "Anonymous patient" placeholder) */
+/* v11: patient chip second line (replaces "Anonymous patient" placeholder) */
 .ptc-row1{display:flex;align-items:center;gap:7px;}
 .pctx{font-size:var(--fs-2xs);color:var(--i4);margin-top:2px;}
 
-/* v11 — registration flow: data minimisation, encryption, 3-tier identifiers */
+/* v11: registration flow: data minimisation, encryption, 3-tier identifiers */
 .dm-note{display:flex;align-items:center;gap:8px;font-size:var(--fs-xs);color:var(--i5);background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:8px 12px;margin-bottom:14px;}
 .dm-note i{font-size:var(--fs-body);color:var(--i4);flex-shrink:0;}
 .opt{font-family:var(--mono);font-size:var(--fs-micro);font-weight:400;color:var(--i3);text-transform:uppercase;letter-spacing:1px;margin-left:6px;}
@@ -120,7 +120,7 @@ input,select,textarea{font-family:inherit;}
 .id-tier-val{font-size:var(--fs-base);color:var(--i7);margin-top:3px;}
 .id-tier-note{font-size:var(--fs-2xs);color:var(--i4);margin-top:2px;}
 
-/* v11 — k-anonymity guardrail (item 20) + per-tenant segmentation (item 4) */
+/* v11: k-anonymity guardrail (item 20) + per-tenant segmentation (item 4) */
 .cohort-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
 .kstat{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:9px 11px;text-align:center;}
 .kstat-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--i4);margin-bottom:3px;}
@@ -128,7 +128,94 @@ input,select,textarea{font-family:inherit;}
 .kstat-val.suppressed{color:var(--i4);font-size:var(--fs-base);font-family:var(--sans);}
 .tenant-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);background:var(--i0);border:1px solid var(--i1);padding:3px 9px;border-radius:99px;margin-bottom:10px;}
 
-/* v11 — Identity & Access drawer */
+/* v11: status indicator: dot + label, replaces pastel-pill badges for
+   alerts/reminders (e.g. "Flu overdue"). No fill, no border: reads as
+   an inline status marker rather than a generic SaaS badge. */
+.sind{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:.6px;text-transform:uppercase;}
+.sind-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.sind.r{color:var(--r7);} .sind.r .sind-dot{background:var(--r5);}
+.sind.a{color:var(--a7);} .sind.a .sind-dot{background:var(--a5);}
+.sind.g{color:var(--g7);} .sind.g .sind-dot{background:var(--g5);}
+.sind.n{color:var(--i5);} .sind.n .sind-dot{background:var(--i3);}
+
+/* v11: navigation shell: login / dashboard / cockpit views */
+.login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--sf);padding:24px;}
+.login-card{width:100%;max-width:440px;background:var(--wh);border-radius:var(--rxl);box-shadow:var(--sh3);padding:36px 32px;}
+.login-lmk{width:48px;height:48px;background:var(--n8);border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.login-lmk i{font-size:var(--fs-xl);color:white;}
+.login-title{font-family:var(--serif);font-size:var(--fs-h1);font-weight:600;color:var(--n8);text-align:center;}
+.login-sub{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);text-align:center;margin:2px 0 26px;}
+.login-label{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;display:block;}
+.login-card .role-grid{margin-bottom:18px;}
+
+/* Breadcrumb (cockpit header: replaces patient-chip dropdown) */
+.bcrumb{display:flex;align-items:center;gap:8px;min-width:0;}
+.bcrumb-link{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.6px;text-transform:uppercase;color:var(--i4);cursor:pointer;flex-shrink:0;transition:color .12s;}
+.bcrumb-link:hover{color:var(--n8);}
+.bcrumb-sep{color:var(--i2);flex-shrink:0;}
+.bcrumb-cur{display:flex;align-items:center;gap:8px;min-width:0;}
+.bcrumb-pid{font-family:var(--mono);font-size:var(--fs-xs);color:var(--n6);letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Dashboard view */
+.dash-view{padding:28px 28px 40px;max-width:1100px;margin:0 auto;}
+.dash-title{font-family:var(--serif);font-size:var(--fs-2xl);font-weight:600;color:var(--n8);}
+.dash-sub{font-size:var(--fs-sm);color:var(--i4);margin-top:2px;}
+.dash-search{display:flex;align-items:center;gap:9px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rmd);padding:9px 13px;margin:18px 0 16px;}
+.dash-search input{flex:1;border:none;outline:none;background:transparent;font-family:var(--sans);font-size:var(--fs-body);color:var(--i7);}
+.dash-search i{color:var(--i4);}
+.dash-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+
+/* Header decluttering: review-mode collapses to icon-only everywhere
+   (not just mobile); Run analysis loses its bold weight to sit level
+   with the rest of the action group. */
+#readonly-label{display:none;}
+#run-btn{font-weight:500;}
+
+/* Session dropdown */
+.session-menu{position:absolute;top:calc(100% + 8px);right:0;width:220px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);box-shadow:var(--sh3);z-index:300;display:none;overflow:hidden;}
+.session-menu.open{display:block;}
+.session-hdr{padding:11px 14px 8px;border-bottom:1px solid var(--i1);}
+.session-role{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:1px;text-transform:uppercase;color:var(--i4);margin-bottom:2px;}
+.session-name{font-size:var(--fs-base);font-weight:500;color:var(--i7);}
+.session-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:var(--fs-sm);color:var(--i5);cursor:pointer;transition:background .1s;}
+.session-item:hover{background:var(--i0);color:var(--n8);}
+.session-item i{font-size:var(--fs-base);color:var(--i4);}
+
+/* Dashboard filters */
+.dash-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.dash-filter{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border:1px solid var(--i2);color:var(--i4);background:transparent;transition:all .12s;}
+.dash-filter:hover{border-color:var(--n3);color:var(--n7);}
+.dash-filter.on{background:var(--n8);color:white;border-color:var(--n8);}
+.dash-filter .sind-dot{width:5px;height:5px;}
+
+/* Recently viewed */
+.dash-recent{margin-bottom:20px;}
+.dash-recent-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;}
+.dash-recent-row{display:flex;gap:6px;flex-wrap:wrap;}
+.dash-recent-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .12s;}
+.dash-recent-chip:hover{border-color:var(--n3);background:var(--n0);}
+.dash-recent-chip .pid-sm{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);letter-spacing:.5px;}
+.dash-recent-chip .dis-sm{font-size:var(--fs-3xs);color:var(--i4);}
+
+/* Unsaved indicator in drawer footer (already has drw-uns but needs visibility fix) */
+.drw-uns{font-size:var(--fs-sm);color:var(--a7);display:none;align-items:center;gap:5px;}
+.drw-uns.show{display:flex;}
+
+/* PDF print trigger */
+@media print{
+  .login-view,.dashboard-view{display:none!important;}
+  .ahdr,.visit-bar,.cockpit-aside,.tl-panel,.intel,.mgrid,.lcp,.nct,.drw-ov{display:none!important;}
+  .cockpit{display:block!important;padding:0;}
+  .cockpit-main{gap:8px;}
+  .status-zone{border-radius:8px;padding:16px;}
+  .drw{position:static!important;transform:none!important;width:100%!important;box-shadow:none!important;border:none;}
+  .drw-hd,.drw-foot{display:none!important;}
+  .drw-body{padding:0;overflow:visible;}
+  .apz{break-inside:avoid;}
+  body{font-size:12px;}
+}
+
+/* v11: Identity & Access drawer */
 .role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
 .role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:10px 12px;cursor:pointer;transition:all .14s;}
 .role-card:hover{border-color:var(--n2);}
@@ -185,18 +272,18 @@ input,select,textarea{font-family:inherit;}
 .cz-g{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--rmd);font-family:var(--sans);font-size:var(--fs-base);font-weight:600;cursor:pointer;transition:all .14s;white-space:nowrap;line-height:1;}
-.btn i{font-size:var(--fs-h3);}
-.bp{background:var(--n8);color:white;box-shadow:0 1px 3px rgba(11,31,58,.22);}
-.bp:hover{background:var(--n7);box-shadow:0 4px 10px rgba(11,31,58,.2);transform:translateY(-1px);}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:none;border-radius:99px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .13s;white-space:nowrap;line-height:1;}
+.btn i{font-size:var(--fs-base);flex-shrink:0;}
+.bp{background:var(--n8);color:white;}
+.bp:hover{background:var(--n6);transform:translateY(-1px);}
 .bp:active{transform:translateY(0);}
-.bs{background:var(--wh);color:var(--n8);border:1.5px solid var(--i2);}
-.bs:hover{background:var(--n0);border-color:var(--n2);}
-.bg{background:transparent;color:var(--i5);border:1.5px solid var(--i2);}
-.bg:hover{background:var(--n0);color:var(--n8);border-color:var(--i3);}
-.btn-sm{padding:5px 10px;font-size:var(--fs-sm);}
-.btn-sm i{font-size:var(--fs-base);}
-.btn-icon{width:33px;height:33px;padding:0;justify-content:center;border-radius:var(--rsm);}
+.bs{background:var(--wh);color:var(--n8);border:1px solid var(--i2);}
+.bs:hover{background:var(--n0);border-color:var(--n3);}
+.bg{background:transparent;color:var(--i4);border:1px solid var(--i2);}
+.bg:hover{background:var(--n0);color:var(--n7);border-color:var(--i3);}
+.btn-sm{padding:3px 10px;font-size:var(--fs-3xs);}
+.btn-sm i{font-size:var(--fs-xs);}
+.btn-icon{width:30px;height:30px;padding:0;justify-content:center;border-radius:50%;}
 
 /* ── VISIT SELECTOR ── */
 .visit-bar{background:var(--wh);border-bottom:1px solid var(--i2);padding:0 24px;display:flex;align-items:center;gap:14px;height:42px;position:sticky;top:58px;z-index:198;overflow-x:auto;}
@@ -390,7 +477,7 @@ input,select,textarea{font-family:inherit;}
 .drw-ov{position:fixed;inset:0;background:rgba(10,14,23,.42);z-index:400;opacity:0;pointer-events:none;transition:opacity .24s;backdrop-filter:blur(2px);}
 .drw-ov.open{opacity:1;pointer-events:all;}
 
-/* v11 — command palette */
+/* v11: command palette */
 .cmdk-ov{position:fixed;inset:0;background:rgba(10,14,23,.45);display:none;align-items:flex-start;justify-content:center;z-index:500;padding-top:12vh;}
 .cmdk-ov.open{display:flex;}
 .cmdk{width:100%;max-width:560px;margin:0 16px;background:var(--wh);border-radius:var(--rlg);box-shadow:var(--sh3);overflow:hidden;max-height:70vh;display:flex;flex-direction:column;}
@@ -418,7 +505,6 @@ input,select,textarea{font-family:inherit;}
 .drw-cls i{font-size:var(--fs-h3);color:var(--i5);}
 .drw-body{flex:1;overflow-y:auto;padding:22px;}
 .drw-foot{padding:14px 22px;border-top:1px solid var(--i2);display:flex;align-items:center;gap:9px;flex-shrink:0;}
-.drw-uns{font-size:var(--fs-sm);color:var(--a7);display:flex;align-items:center;gap:5px;margin-left:auto;}
 .drw-uns i{font-size:var(--fs-sm);}
 
 /* ── FORMS ── */
@@ -542,8 +628,8 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .hidden{display:none!important;}
 .animate-in{animation:fadeUp .25s ease;}
 
-/* ═══ v10 — BUTTON DESIGN SYSTEM ═══ */
-/* Category 1 — Intelligence actions: navy filled, prominent, state-aware */
+/* ═══ v10: BUTTON DESIGN SYSTEM ═══ */
+/* Category 1: Intelligence actions: navy filled, prominent, state-aware */
 .abt-cat1{background:var(--n8);border-color:var(--n8);padding:15px 16px;}
 .abt-cat1:hover{background:var(--n7);box-shadow:0 4px 14px rgba(11,31,58,.25);transform:translateY(-1px);}
 .abt-cat1 .abt-ico{width:38px;height:38px;background:rgba(255,255,255,.14);}
@@ -551,7 +637,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .abt-cat1 .abt-lbl{font-size:var(--fs-body);color:white;}
 .abt-cat1 .abt-desc{color:rgba(255,255,255,.5);}
 
-/* Category 2 — Data entry actions: ghost border, medium */
+/* Category 2: Data entry actions: ghost border, medium */
 .abt-cat2{background:var(--wh);border:1.5px solid var(--n1);padding:11px 14px;}
 .abt-cat2:hover{background:var(--n0);border-color:var(--n2);}
 .abt-cat2 .abt-ico{width:30px;height:30px;background:var(--n0);}
@@ -559,7 +645,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .abt-cat2 .abt-lbl{font-size:var(--fs-sm);}
 .abt-cat2 .abt-desc{font-size:var(--fs-2xs);}
 
-/* Category 3 — Navigation / utility: light ghost, smallest */
+/* Category 3: Navigation / utility: light ghost, smallest */
 .abt-cat3{background:transparent;border:1.5px solid var(--i1);padding:8px 12px;}
 .abt-cat3:hover{background:var(--i0);border-color:var(--i2);}
 .abt-cat3 .abt-ico{width:24px;height:24px;background:var(--i0);}
@@ -574,22 +660,22 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 /* State badges */
 .abt-state{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;padding:3px 8px;border-radius:99px;margin-left:auto;flex-shrink:0;white-space:nowrap;}
-.abt-state.st-current{background:rgba(56,161,105,.16);color:#9AE6B4;border:1px solid rgba(56,161,105,.3);}
-.abt-state.st-stale{background:rgba(217,119,6,.16);color:#FCD34D;border:1px solid rgba(217,119,6,.3);}
+.abt-state.st-current{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
+.abt-state.st-stale{background:var(--a0);color:var(--a7);border:1px solid var(--a1);}
 .abt-state-light.st-current{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
 .abt-state-light.st-stale{background:var(--a0);color:var(--a7);border:1px solid var(--a1);}
 .abt-pulse{width:5px;height:5px;border-radius:50%;background:currentColor;animation:abtPulse 1.6s ease-in-out infinite;flex-shrink:0;}
 @keyframes abtPulse{0%,100%{opacity:1;}50%{opacity:.25;}}
 .abt-row{display:flex;align-items:center;width:100%;gap:11px;}
 
-/* ═══ v10 — PII / IDENTITY FIELD STYLING ═══ */
+/* ═══ v10: PII / IDENTITY FIELD STYLING ═══ */
 .pii-wrap{border:1.5px solid var(--r1);background:var(--r0);border-radius:var(--rlg);padding:16px 18px;margin-bottom:14px;}
 .pii-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--r7);background:var(--r1);border:1px solid var(--r2);padding:3px 9px;border-radius:4px;margin-bottom:11px;}
 .pii-wrap .fi,.pii-wrap .fsel{border-color:var(--r2);}
 .pii-wrap .fi:focus,.pii-wrap .fsel:focus{border-color:var(--r5);box-shadow:0 0 0 3px rgba(229,62,62,.09);}
 .pii-wrap .fl{color:var(--r8);}
 
-/* ═══ v10 — FUNCTIONAL REGISTRATION STEPPER ═══ */
+/* ═══ v10: FUNCTIONAL REGISTRATION STEPPER ═══ */
 .reg-stepper{display:flex;align-items:flex-start;gap:0;margin-bottom:22px;}
 .reg-step{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;width:64px;}
 .reg-step.locked,.reg-step.upcoming{cursor:default;}
@@ -604,12 +690,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .reg-step-line{flex:1;height:1px;background:var(--i2);margin-top:14px;min-width:8px;}
 .reg-step-line.done{background:var(--g5);}
 
-/* ═══ v10 — PLATFORM ID INTERSTITIAL ═══ */
+/* ═══ v10: PLATFORM ID INTERSTITIAL ═══ */
 .reg-interstitial{text-align:center;padding:36px 20px;}
 .reg-id-display{font-family:var(--mono);font-size:var(--fs-2xl);font-weight:600;letter-spacing:3px;color:white;background:var(--n8);border-radius:var(--rlg);padding:22px;margin:18px 0;}
 .reg-id-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-xs);color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:5px 11px;border-radius:6px;margin-bottom:16px;}
 
-/* ═══ v10 — BODE / ANTHONISEN GRIDS ═══ */
+/* ═══ v10: BODE / ANTHONISEN GRIDS ═══ */
 .bode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
 .bode-cell{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:10px;text-align:center;}
 .bode-letter{font-family:var(--serif);font-size:var(--fs-lg);font-weight:600;color:var(--n8);}
@@ -624,26 +710,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .anth-row.unmet .anth-icon{background:var(--i3);}
 .anth-icon i{font-size:var(--fs-2xs);color:white;}
 
-@media print {
-  .ahdr, .visit-bar, .cockpit-aside, .tl-panel,
-  .intel, .mgrid, .lcp, .nct, .drw-ov { display: none !important; }
-  .cockpit { display: block !important; padding: 0; }
-  .cockpit-main { gap: 8px; }
-  .status-zone { border-radius: 8px; padding: 16px; }
-  .drw { position: static !important; transform: none !important;
-         width: 100% !important; box-shadow: none !important;
-         border: none; }
-  .drw-hd, .drw-foot { display: none !important; }
-  .drw-body { padding: 0; overflow: visible; }
-  .apz { break-inside: avoid; }
-  body { font-size: 12px; }
-}
 .spiro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 
 @media(max-width:1024px){.cockpit{grid-template-columns:1fr;}.cockpit-aside{order:-1;}.mgrid{grid-template-columns:1fr 1fr 1fr;}.drw{width:100%;max-width:520px;}.platform-menu,.cohort{max-width:calc(100vw - 24px);}}
 @media(max-width:640px){
   .cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}
-  /* v11 — responsive pass (item 20): header, command palette, identity-
+  /* v11: responsive pass (item 20): header, command palette, identity-
      access drawer and spirometry curves on narrow viewports. */
   .ahdr{padding:0 10px;gap:8px;}
   .visit-bar{padding:0 10px;gap:8px;}
@@ -671,7 +743,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   .lmk{width:28px;height:28px;}
 }
 @media(prefers-color-scheme:dark){
-  /* v11 — contrast fix: badge/tag/pill/alert text used dark-navy/red/
+  /* v11: contrast fix: badge/tag/pill/alert text used dark-navy/red/
      green/amber shades meant for LIGHT backgrounds. In dark mode the
      backgrounds (--Xn0/1) flip to near-black tints but this text never
      did, leaving 1.0-2.6:1 contrast across ~36 classes platform-wide.
@@ -688,72 +760,51 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 </head>
 <body>
 
+<!-- LOGIN VIEW -->
+<div id="login-view" class="login-view">
+  <div class="login-card">
+    <div class="login-lmk"><i class="ti ti-lungs"></i></div>
+    <div class="login-title">AIRMAP</div>
+    <div class="login-sub">Obstructive Disease Intelligence</div>
+    <label class="login-label">Sign in as</label>
+    <div class="role-grid" id="login-roles"></div>
+    <button class="btn bp" style="width:100%;justify-content:center" onclick="doLogin()"><i class="ti ti-arrow-right"></i>Continue to dashboard</button>
+  </div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div id="dashboard-view" style="display:none">
+  <div class="dash-view">
+    <div class="dash-row">
+      <div>
+        <div class="dash-title">Today's clinic</div>
+        <div class="dash-sub" id="dash-sub"></div>
+      </div>
+      <button class="btn bg btn-sm" onclick="openDrw('register')"><i class="ti ti-user-plus"></i><span class="btn-label">Register new patient</span></button>
+    </div>
+    <div class="dash-search">
+      <i class="ti ti-search"></i>
+      <input id="dash-search-input" placeholder="Jump to a patient ID or AIRMAP-2024-XXXX" oninput="dashSearch(this.value)" onkeydown="dashSearchKeydown(event)" autocomplete="off">
+    </div>
+    <div id="dash-content"></div>
+  </div>
+</div>
+
 <!-- ECO BAR -->
-<!-- APP HEADER (v11 — single consolidated bar, replaces eco-bar + ahdr) -->
-<header class="ahdr">
+<!-- APP HEADER (v11: single consolidated bar, replaces eco-bar + ahdr) -->
+<header class="ahdr" id="ahdr" style="display:none">
   <div class="flex ic g3">
     <div class="lmk"><i class="ti ti-lungs"></i></div>
     <div><div class="ltx">AIRMAP</div><div class="lsb">Obstructive Disease Intelligence</div></div>
   </div>
 
-  <div style="position:relative">
-    <button class="btn bg btn-icon btn-sm" id="platform-sw" onclick="togglePlatformMenu()" aria-expanded="false" title="Respiratory Platform — switch module">
-      <i class="ti ti-stack-2"></i>
-    </button>
-    <div class="platform-menu" id="platform-menu">
-      <div class="pm-hdr">Respiratory Platform</div>
-      <div class="pm-item on"><span class="ep"></span>AIRMAP — Obstructive</div>
-      <div class="pm-item"><span class="ep"></span>PneumoData — Restrictive</div>
-      <div class="pm-item"><span class="ep"></span>Pulmonary HTN</div>
-      <div class="pm-item"><span class="ep"></span>Sleep &amp; Ventilation</div>
-      <div class="pm-item add">+ Add module</div>
-    </div>
-  </div>
+  <div id="ahdr-context" style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;margin-left:14px"></div>
 
-  <div class="hdv"></div>
-
-  <div style="position:relative">
-    <div class="ptc" id="ptc" onclick="toggleCohort()" role="button" aria-expanded="false">
-      <div class="ptci"><i class="ti ti-fingerprint"></i></div>
-      <div class="ptc-info">
-        <div class="ptc-row1">
-          <span class="pid" id="pid-disp">AIRMAP-2024-00147</span>
-          <span class="db db-copd" id="dis-badge">COPD</span>
-        </div>
-        <div class="pctx" id="pctx-disp">Visit 4 of 4 · 14 Nov 2024</div>
-      </div>
-      <i class="ti ti-chevron-down" id="co-chev" style="margin-left:8px;color:var(--i3);font-size:var(--fs-body);transition:transform .2s"></i>
-    </div>
-
-    <div class="cohort" id="cohort">
-      <div class="co-hdr">
-        Today's clinic
-        <span class="co-count" id="co-count">5 patients</span>
-      </div>
-      <div id="co-list"></div>
-    </div>
-  </div>
-
-  <div class="hdr-r">
-    <button class="btn bg btn-icon btn-sm" onclick="openCmdK()" aria-label="Search" title="Search (Ctrl+K)"><i class="ti ti-search"></i></button>
-    <button class="btn bg btn-icon btn-sm notif-btn" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
-    <div class="hdv"></div>
-    <!-- GAP 09: Read-only mode toggle -->
-    <button class="btn bg btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode">
-      <i class="ti ti-eye" id="readonly-icon"></i><span id="readonly-label" class="btn-label">Review mode</span>
-    </button>
-    <div class="hdv"></div>
-    <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
-    <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
-    <div class="hdv"></div>
-    <div class="clin" title="Dr. García · Clinician">
-      <div class="clin-av">MG</div>
-    </div>
-  </div>
+  <div class="hdr-r" id="hdr-actions"></div>
 </header>
 
 <!-- VISIT BAR -->
-<div class="visit-bar" id="visit-bar">
+<div class="visit-bar" id="visit-bar" style="display:none">
   <span class="visit-lbl">Visit history</span>
   <div class="visits" id="visit-btns"></div>
   <div class="vdelta" id="visit-delta"></div>
@@ -761,7 +812,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 </div>
 
 <!-- COCKPIT -->
-<main class="cockpit" id="cockpit">
+<main class="cockpit" id="cockpit" style="display:none">
   <div class="cockpit-main">
     <div class="sz sz-r" id="status-zone">
       <div class="sz-ico"><i class="ti ti-alert-triangle" id="z-icon"></i></div>
@@ -805,7 +856,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <div class="comp">
       <div class="comp-hd">
         <span class="comp-lbl">Completeness</span>
-        <span class="comp-sc" id="comp-sc">—</span>
+        <span class="comp-sc" id="comp-sc"></span>
       </div>
       <div class="comp-body" id="comp-body"></div>
     </div>
@@ -834,13 +885,13 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   <div class="drw-foot" id="drw-foot">
     <button class="btn bp" onclick="saveDrw()"><i class="ti ti-device-floppy"></i>Save</button>
     <button class="btn bg" onclick="closeDrw()">Cancel</button>
-    <div class="drw-uns" id="drw-uns" style="display:none"><i class="ti ti-alert-circle"></i>Unsaved changes</div>
+    <div class="drw-uns" id="drw-uns"><i class="ti ti-alert-circle"></i>Unsaved changes</div>
   </div>
 </aside>
 
 <div class="nct" id="nct"></div>
 
-<!-- v11 — COMMAND PALETTE -->
+<!-- v11: COMMAND PALETTE -->
 <div class="cmdk-ov" id="cmdk-ov" onclick="if(event.target===this)closeCmdK()">
   <div class="cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
     <div class="cmdk-hdr">
@@ -854,9 +905,9 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
-   AIRMAP v9 — Complete 19-gap resolution · All diseases · Full visit history
+   AIRMAP v9: Complete 19-gap resolution · All diseases · Full visit history
    ─────────────────────────────────────────────────────────────────
-   GAP 19 — REACT COMPONENT SEPARATION (next step before Supabase)
+   GAP 19: REACT COMPONENT SEPARATION (next step before Supabase)
    This monolith is ready to be split. Each section maps to a React component:
      StatusZone        → reads: pt.disease, v.cat/act/fev1/exac/eos
      MetricsGrid       → reads: v.*, buildMetrics(d,pt,v,...)
@@ -892,12 +943,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 ═══════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════════
-   PATIENT DATABASE (hardcoded — every field = future DB column)
+   PATIENT DATABASE (hardcoded: every field = future DB column)
 ═══════════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════════
-   v11 — INLINE ICON SYSTEM
+   v11: INLINE ICON SYSTEM
    Self-contained SVG icon registry (Tabler Icons, MIT licensed,
-   outline set, 67 icons ~10KB). Replaces the CDN webfont — every
+   outline set, 67 icons ~10KB). Replaces the CDN webfont: every
    icon renders identically online or offline, no external request.
 ═══════════════════════════════════════════════════════════════════ */
 const ICON_PATHS = {
@@ -1039,14 +1090,14 @@ const DB = {
     ],
     timeline: [
       { dot:'r', date:'14 Nov 2024 · Admission', ev:'Emergency admission', tag:{cls:'tr',tx:'ED · 3 days'}, detail:'FEV₁ 38% · IV steroids · antibiotics · O₂ support' },
-      { dot:'a', date:'02 Oct 2024 · Rx change',  ev:'LABA added — Formoterol 12 mcg BID', tag:{cls:'ta',tx:'Step-up'}, detail:'Step-up from LAMA + ICS following suboptimal control' },
+      { dot:'a', date:'02 Oct 2024 · Rx change',  ev:'LABA added: Formoterol 12 mcg BID', tag:{cls:'ta',tx:'Step-up'}, detail:'Step-up from LAMA + ICS following suboptimal control' },
       { dot:'',  date:'18 Sep 2024 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Clinic'}, detail:'FEV₁ 52% · CAT 15 · decline noted · LABA planned' },
       { dot:'g', date:'15 Mar 2024 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'20 pack-years · NRT prescribed · sustained to date' },
       { dot:'a', date:'08 Feb 2024 · ED', ev:'Exacerbation', tag:{cls:'ta',tx:'Same-day'}, detail:'Oral steroids + antibiotics · discharged same day' }
     ],
     referrals: [
       { label:'Pulmonary rehabilitation', status:'pending', date:'Referred 14 Nov 2024' },
-      { label:'Psychology — anxiety/depression', status:'pending', date:'Referred 14 Nov 2024' },
+      { label:'Psychology: anxiety/depression', status:'pending', date:'Referred 14 Nov 2024' },
       { label:'Smoking cessation NRT', status:'done', date:'Completed Mar 2024' }
     ],
     completeness: [
@@ -1082,14 +1133,14 @@ const DB = {
       { n:3, date:'12 Nov 2024', label:'Deteriorating', fev1:72, fvc:3.6, ratio:70, cat:null, mmrc:2, exac:2, hosp:0, ocs:1, eos:420, act:14, rescueWk:7, nightWk:4, adherence:60, technique:'poor', note:'New apartment (mould, cats). Rapid deterioration. Step-up urgent.' }
     ],
     timeline: [
-      { dot:'r', date:'Today · Clinic', ev:'ACT 14 — uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
+      { dot:'r', date:'Today · Clinic', ev:'ACT 14: uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
       { dot:'a', date:'12 Nov 2024 · Review', ev:'Deterioration noted', tag:{cls:'ta',tx:'Worsening'}, detail:'Eos 420 · rescue daily · new apartment trigger identified' },
       { dot:'a', date:'Oct 2024 · Exacerbation', ev:'Acute attack', tag:{cls:'ta',tx:'ED'}, detail:'Nebulised salbutamol · oral prednisolone · discharged' },
       { dot:'',  date:'Aug 2024 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Stable'}, detail:'ACT 19 · eos rising to 310 · allergen referral made' },
       { dot:'g', date:'Jan 2022 · Baseline', ev:'Asthma diagnosis', tag:{cls:'tg',tx:'Diagnosis'}, detail:'ACT 23 · well controlled on low-dose ICS' }
     ],
     referrals: [
-      { label:'Biologic therapy — anti-IL5',    status:'pending', date:'Referred today' },
+      { label:'Biologic therapy: anti-IL5',    status:'pending', date:'Referred today' },
       { label:'Allergen / environmental assessment', status:'pending', date:'Referred Aug 2024' },
       { label:'Asthma nurse education',          status:'done',    date:'Completed Jan 2022' }
     ],
@@ -1130,13 +1181,13 @@ const DB = {
     ],
     timeline: [
       { dot:'g', date:'02 Oct 2024 · Clinic', ev:'Best FEV₁ since diagnosis', tag:{cls:'tg',tx:'Improving'}, detail:'FEV₁ 62% · CAT 8 · adherence 92% · stable Group B' },
-      { dot:'g', date:'Mar 2024 · Clinic',    ev:'FEV₁ 61% — trajectory maintained', tag:{cls:'tg',tx:'Stable'}, detail:'No exacerbations 2+ years · good technique' },
+      { dot:'g', date:'Mar 2024 · Clinic',    ev:'FEV₁ 61%: trajectory maintained', tag:{cls:'tg',tx:'Stable'}, detail:'No exacerbations 2+ years · good technique' },
       { dot:'g', date:'Jan 2022 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'35 pack-years · NRT · quit sustained 2+ years' },
       { dot:'a', date:'Dec 2021 · GP',        ev:'COPD diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'FEV₁ 54% · FEV₁/FVC 0.60 · referred to respiratory clinic' }
     ],
     referrals: [
-      { label:'Cardiac review — IHD', status:'pending', date:'Referred Oct 2024' },
-      { label:'Pulmonary rehabilitation — completed', status:'done', date:'Completed Sep 2022' }
+      { label:'Cardiac review: IHD', status:'pending', date:'Referred Oct 2024' },
+      { label:'Pulmonary rehabilitation: completed', status:'done', date:'Completed Sep 2022' }
     ],
     completeness: [
       { label:'Patient ID',   pct:100, cls:'cf-full' },
@@ -1154,7 +1205,7 @@ const DB = {
      Ana L · 52yr · Female · Ex-smoker 12pk-yr · asthma since age 30
      Story: Long-standing asthma. Fixed obstruction confirmed.
      Both COPD and asthma logic active. Eos rising. Biologic eligible.
-     Missing LABA — needs triple.
+     Missing LABA: needs triple.
   ── */
   '00311': {
     disease: 'ACO', risk: 'a',
@@ -1172,7 +1223,7 @@ const DB = {
       { n:2, date:'12 Nov 2024', label:'Current',       fev1:55, fvc:3.0, ratio:64, cat:16, mmrc:2, exac:1, hosp:0, ocs:1, eos:380, act:17, bdResp:true, sixMWD:320, adherence:80, technique:'suboptimal', note:'Eos rising significantly. ACT declining. Biologic referral made. LABA needed.' }
     ],
     timeline: [
-      { dot:'a', date:'12 Nov 2024 · Clinic', ev:'Eos 380 — biologic eligible', tag:{cls:'tp',tx:'ACO'}, detail:'CAT 16 · ACT 17 · biologic referral initiated · LABA to add' },
+      { dot:'a', date:'12 Nov 2024 · Clinic', ev:'Eos 380: biologic eligible', tag:{cls:'tp',tx:'ACO'}, detail:'CAT 16 · ACT 17 · biologic referral initiated · LABA to add' },
       { dot:'a', date:'Oct 2024 · Exacerbation', ev:'First exacerbation post-ACO diagnosis', tag:{cls:'ta',tx:'ED'}, detail:'OCS + antibiotics · 5 days · discharged' },
       { dot:'a', date:'20 Sep 2024 · Clinic',    ev:'ACO confirmed', tag:{cls:'tp',tx:'Diagnosis'}, detail:'FEV₁/FVC 0.66 post-BD · BD response present · eos 240 · ACO criteria met' },
       { dot:'',  date:'Jun 2024 · Clinic',       ev:'Worsening asthma control', tag:{cls:'tn',tx:'Clinic'}, detail:'ACT 20 · new spirometry ordered · LAMA added empirically' }
@@ -1213,12 +1264,12 @@ const DB = {
     visits: [
       { n:1, date:'15 Oct 2021', label:'Baseline',  fev1:74, fvc:3.8, ratio:68, cat:15, mmrc:1, exac:0, hosp:0, ocs:0, eos:120, act:null, sputum:'white', sputumVol:'moderate', adherence:80, technique:'adequate',   note:'Chronic productive cough confirmed. LAMA started. Smoking cessation counselling.' },
       { n:2, date:'22 Apr 2022', label:'Follow-up', fev1:73, fvc:3.7, ratio:68, cat:13, mmrc:1, exac:0, hosp:0, ocs:0, eos:130, act:null, sputum:'white', sputumVol:'moderate', adherence:82, technique:'adequate',   note:'Stable. Mucus clearance physio programme started.' },
-      { n:3, date:'18 Jan 2023', label:'Follow-up', fev1:72, fvc:3.6, ratio:67, cat:12, mmrc:1, exac:1, hosp:0, ocs:0, eos:140, act:null, sputum:'green', sputumVol:'high',     adherence:78, technique:'adequate',   note:'Infective exacerbation — green sputum · antibiotics given (5-day amoxicillin). Resolved.' },
+      { n:3, date:'18 Jan 2023', label:'Follow-up', fev1:72, fvc:3.6, ratio:67, cat:12, mmrc:1, exac:1, hosp:0, ocs:0, eos:140, act:null, sputum:'green', sputumVol:'high',     adherence:78, technique:'adequate',   note:'Infective exacerbation: green sputum · antibiotics given (5-day amoxicillin). Resolved.' },
       { n:4, date:'15 Oct 2023', label:'Follow-up', fev1:70, fvc:3.5, ratio:67, cat:12, mmrc:1, exac:0, hosp:0, ocs:0, eos:145, act:null, sputum:'white', sputumVol:'low',      adherence:85, technique:'adequate',   note:'Stable. Sputum volume reduced since physio. Still smoking.' },
       { n:5, date:'10 Nov 2024', label:'Current',   fev1:68, fvc:3.4, ratio:67, cat:11, mmrc:1, exac:0, hosp:0, ocs:0, eos:150, act:null, sixMWD:400, sputum:'white', sputumVol:'low',      adherence:88, technique:'adequate',   note:'Stable. Slow FEV₁ decline (smoking). Pneumococcal vaccination overdue. Smoking cessation priority.' }
     ],
     timeline: [
-      { dot:'g', date:'10 Nov 2024 · Clinic', ev:'Stable — no exacerbations 12m', tag:{cls:'tg',tx:'Stable'}, detail:'CAT 11 · FEV₁ 68% · sputum white · mucus clearance improved' },
+      { dot:'g', date:'10 Nov 2024 · Clinic', ev:'Stable: no exacerbations 12m', tag:{cls:'tg',tx:'Stable'}, detail:'CAT 11 · FEV₁ 68% · sputum white · mucus clearance improved' },
       { dot:'',  date:'Oct 2023 · Clinic',    ev:'Sputum volume reduced', tag:{cls:'tn',tx:'Improving'}, detail:'ACBT technique maintained · still smoking' },
       { dot:'a', date:'Feb 2023 · GP',        ev:'Infective exacerbation', tag:{cls:'ta',tx:'Antibiotics'}, detail:'Green sputum · amoxicillin 5 days · resolved fully' },
       { dot:'g', date:'Apr 2022 · Physio',    ev:'Mucus clearance programme', tag:{cls:'tg',tx:'Enrolled'}, detail:'ACBT trained · diaphragmatic breathing · symptoms improving' },
@@ -1226,7 +1277,7 @@ const DB = {
     ],
     referrals: [
       { label:'Smoking cessation clinic', status:'pending', date:'Referred 10 Nov 2024' },
-      { label:'Physiotherapy — ACBT',     status:'done',    date:'Completed Apr 2022'   },
+      { label:'Physiotherapy: ACBT',     status:'done',    date:'Completed Apr 2022'   },
       { label:'Diabetologist review',     status:'pending', date:'Referred Nov 2024'    }
     ],
     completeness: [
@@ -1250,9 +1301,11 @@ let currentVisit = 4; // index (0-based) into visits array
 let currentDrw   = null;
 let drwDirty     = false;
 let cohortOpen   = false;
+let appView          = 'login';   // v11: navigation shell: 'login' | 'dashboard' | 'cockpit'
+let loginSelectedRole = 'clinician';
 let cmdkOpen     = false;
 
-/* v11 — Identity & Access: RBAC roles, permission matrix, session state */
+/* v11: Identity & Access: RBAC roles, permission matrix, session state */
 const RBAC_ROLES = {
   clinician:   { label:'Clinician',          desc:'Direct care for assigned patients' },
   admin:       { label:'Admin',              desc:'Platform administration · all patients' },
@@ -1276,7 +1329,7 @@ const getVisit   = () => { const pt = getPt(); if (!pt) return null; const v = p
 
 /* ═══════════════════════════════════════════════════════════════════
    DISEASE CLASSIFICATION ENGINE
-   engine.layer_1 — runs on visit data
+   engine.layer_1: runs on visit data
 ═══════════════════════════════════════════════════════════════════ */
 function goldGroup(v) {
   const hiSx  = v.cat >= 10 || v.mmrc >= 2;
@@ -1302,7 +1355,7 @@ function fev1Class(fev1) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — BODE INDEX (engine.layer_4)
+   v10: BODE INDEX (engine.layer_4)
    B: BMI · O: Obstruction (FEV1%) · D: Dyspnoea (mMRC) · E: Exercise (6MWD)
    Score 0-10. Higher = worse 4-year mortality risk.
 ═══════════════════════════════════════════════════════════════════ */
@@ -1323,8 +1376,8 @@ function calcBODE(pt, v) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — ANTHONISEN CRITERIA (engine.layer_5)
-   Chronic bronchitis exacerbation — antibiotic decision support.
+   v10: ANTHONISEN CRITERIA (engine.layer_5)
+   Chronic bronchitis exacerbation: antibiotic decision support.
    2 of 3 cardinal symptoms = Type 1 (antibiotics indicated)
 ═══════════════════════════════════════════════════════════════════ */
 function anthonisenCriteria(pt, v, pv) {
@@ -1335,19 +1388,19 @@ function anthonisenCriteria(pt, v, pv) {
   const purulent   = !!(v.sputum && v.sputum !== 'white');
   const criteria = [
     { label:'Increased dyspnoea',      met:dyspnoeaUp, detail: pv ? `mMRC ${pv.mmrc} → ${v.mmrc}` : 'No prior visit to compare' },
-    { label:'Increased sputum volume', met:volUp,      detail: pv ? `${pv.sputumVol||'—'} → ${v.sputumVol||'—'}` : 'No prior visit to compare' },
+    { label:'Increased sputum volume', met:volUp,      detail: pv ? `${pv.sputumVol||''} → ${v.sputumVol||''}` : 'No prior visit to compare' },
     { label:'Purulent sputum',         met:purulent,   detail: `Current: ${v.sputum||'white'}` }
   ];
   const metCount = criteria.filter(c=>c.met).length;
   let type, verdict, sev;
   if (metCount >= 2) { type='Type 1'; verdict='Antibiotics indicated'; sev='d'; }
-  else if (metCount === 1) { type='Type 2'; verdict='Antibiotics may be appropriate — clinical judgement'; sev='w'; }
+  else if (metCount === 1) { type='Type 2'; verdict='Antibiotics may be appropriate: clinical judgement'; sev='w'; }
   else { type='Type 3'; verdict='Antibiotics not indicated'; sev='g'; }
   return { criteria, metCount, type, verdict, sev };
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — BIOLOGIC AGENT-SPECIFIC ELIGIBILITY (engine.layer_5)
+   v10: BIOLOGIC AGENT-SPECIFIC ELIGIBILITY (engine.layer_5)
    Differentiates anti-IL5, anti-IgE, anti-IL4R rather than a
    single generic "biologic eligible" flag.
 ═══════════════════════════════════════════════════════════════════ */
@@ -1355,39 +1408,39 @@ function biologicEligibility(pt, v) {
   const allergic = !!pt.comorbidities?.allerRhinitis;
   const results = [];
 
-  // Anti-IL5 / anti-IL5R — mepolizumab, benralizumab
+  // Anti-IL5 / anti-IL5R: mepolizumab, benralizumab
   results.push({
     agent: 'Anti-IL5 / anti-IL5R',
     drugs: 'Mepolizumab · Benralizumab',
     status: v.eos >= 300 ? 'eligible' : v.eos >= 150 ? 'borderline' : 'unmet',
-    detail: v.eos >= 300 ? `Eos ${v.eos} c/µL ≥ 300 — threshold met`
-          : v.eos >= 150 ? `Eos ${v.eos} c/µL — between 150–300, repeat at next visit`
-          : `Eos ${v.eos} c/µL — below 150, unlikely eligible on this axis`
+    detail: v.eos >= 300 ? `Eos ${v.eos} c/µL ≥ 300: threshold met`
+          : v.eos >= 150 ? `Eos ${v.eos} c/µL: between 150–300, repeat at next visit`
+          : `Eos ${v.eos} c/µL: below 150, unlikely eligible on this axis`
   });
 
-  // Anti-IgE — omalizumab
+  // Anti-IgE: omalizumab
   results.push({
     agent: 'Anti-IgE',
     drugs: 'Omalizumab',
     status: allergic ? 'pending' : 'unmet',
-    detail: allergic ? 'Allergic phenotype confirmed — total IgE 30–700 IU/mL required (not yet measured)'
+    detail: allergic ? 'Allergic phenotype confirmed: total IgE 30–700 IU/mL required (not yet measured)'
                       : 'No confirmed allergic / atopic phenotype on record'
   });
 
-  // Anti-IL4R — dupilumab
+  // Anti-IL4R: dupilumab
   results.push({
     agent: 'Anti-IL4R',
     drugs: 'Dupilumab',
     status: v.eos >= 150 ? 'pending' : 'unmet',
-    detail: v.eos >= 150 ? `Eos ${v.eos} c/µL ≥ 150 — FeNO ≥ 25 ppb required (not yet measured)`
-                          : `Eos ${v.eos} c/µL < 150 — eosinophilic criterion not met`
+    detail: v.eos >= 150 ? `Eos ${v.eos} c/µL ≥ 150: FeNO ≥ 25 ppb required (not yet measured)`
+                          : `Eos ${v.eos} c/µL < 150: eosinophilic criterion not met`
   });
 
   return results;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — FORMAL ACO DIAGNOSTIC CRITERIA (engine.layer_1)
+   v10: FORMAL ACO DIAGNOSTIC CRITERIA (engine.layer_1)
    GOLD/GINA: fixed obstruction (FEV1/FVC < 0.70 post-BD)
    PLUS at least one asthma feature (prior dx, atopy, eosinophilia,
    or significant bronchodilator reversibility)
@@ -1411,7 +1464,7 @@ function acoFormalCriteria(pt, v) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — DATA STALENESS HELPER (engine.layer_2)
+   v10: DATA STALENESS HELPER (engine.layer_2)
    "Today" anchored to the most recent date across all patients,
    so the demo reflects realistic staleness without a live clock.
 ═══════════════════════════════════════════════════════════════════ */
@@ -1431,7 +1484,7 @@ function daysSinceLastVisit(pt) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — ANALYSIS STATE TRACKING (drives "Run analysis" button state)
+   v10: ANALYSIS STATE TRACKING (drives "Run analysis" button state)
    Per-patient flag: has the 7-layer analysis been run since the
    last data edit?
 ═══════════════════════════════════════════════════════════════════ */
@@ -1440,7 +1493,7 @@ function isAnalysisCurrent(id) { return !!analysisRunState[id]; }
 function markAnalysisStale(id) { analysisRunState[id] = false; }
 function markAnalysisCurrent(id) { analysisRunState[id] = true; }
 
-/* v10 — Inline summary renderers for intelligence panel rows */
+/* v10: Inline summary renderers for intelligence panel rows */
 function buildBODESummary(bode) {
   const sevCls = bode.quartile <= 1 ? 'tg' : bode.quartile === 2 ? 'tn' : bode.quartile === 3 ? 'ta' : 'tr';
   return `<span class="tag ${sevCls}">BODE ${bode.total}/10</span> &nbsp;<span class="mono xs">B${bode.B} O${bode.O} D${bode.D} E${bode.E}</span> &nbsp;<span class="iv it">Quartile ${bode.quartile} · ${bode.mortality}</span>`;
@@ -1448,7 +1501,7 @@ function buildBODESummary(bode) {
 function buildAnthonisenSummary(anth) {
   const sevCls = anth.sev === 'd' ? 'tr' : anth.sev === 'w' ? 'ta' : 'tg';
   const metLabels = anth.criteria.filter(c=>c.met).map(c=>c.label.toLowerCase()).join(', ');
-  return `<span class="tag ${sevCls}">${anth.type} — ${anth.metCount}/3</span> &nbsp;${anth.verdict}${metLabels?` &nbsp;<span class="iv it">(${metLabels})</span>`:''}`;
+  return `<span class="tag ${sevCls}">${anth.type}: ${anth.metCount}/3</span> &nbsp;${anth.verdict}${metLabels?` &nbsp;<span class="iv it">(${metLabels})</span>`:''}`;
 }
 function buildACOCriteriaSummary(crit) {
   const cls = crit.criteriamet ? 'tg' : 'tr';
@@ -1456,9 +1509,9 @@ function buildACOCriteriaSummary(crit) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   COCKPIT RENDERER — fully data-driven
+   COCKPIT RENDERER: fully data-driven
 ═══════════════════════════════════════════════════════════════════ */
-/* GAP 09 — Read-only review mode */
+/* GAP 09: Read-only review mode */
 let readOnlyMode = false;
 
 function toggleReadOnly() {
@@ -1472,7 +1525,7 @@ function toggleReadOnly() {
     if (label)  label.textContent = 'Read-only';
     if (toggle) { toggle.className = 'btn bp btn-sm'; }
     if (runBtn) runBtn.style.opacity = '.5';
-    notify('Read-only mode — no edits possible','info');
+    notify('Read-only mode: no edits possible','info');
   } else {
     if (icon)   icon.className  = 'ti ti-eye';
     if (label)  label.textContent = 'Review mode';
@@ -1529,10 +1582,10 @@ function render() {
     zCls  = hiRisk && hiSx ? 'sz-r' : hiSx ? 'sz-a' : 'sz-g';
     zIcon = zCls === 'sz-r' ? 'ti-alert-triangle' : zCls === 'sz-a' ? 'ti-alert-circle' : 'ti-circle-check';
     zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · GOLD Group ${grp} · Visit ${v.n}`;
-    zTt   = zCls === 'sz-r' ? 'Progressive decline — immediate review recommended'
-          : zCls === 'sz-a' ? 'Suboptimal control — treatment review needed'
-          : 'Stable — continue current management';
-    zIns  = `FEV₁ <strong>${v.fev1}%</strong> predicted — GOLD Stage ${stage.s} ${stage.l}. ${v.exac} exacerbation${v.exac!==1?'s':''} past year${v.hosp>0?`, ${v.hosp} hospitalisation`:''}. Adherence <strong>${v.adherence}%</strong>.`;
+    zTt   = zCls === 'sz-r' ? 'Progressive decline: immediate review recommended'
+          : zCls === 'sz-a' ? 'Suboptimal control: treatment review needed'
+          : 'Stable: continue current management';
+    zIns  = `FEV₁ <strong>${v.fev1}%</strong> predicted: GOLD Stage ${stage.s} ${stage.l}. ${v.exac} exacerbation${v.exac!==1?'s':''} past year${v.hosp>0?`, ${v.hosp} hospitalisation`:''}. Adherence <strong>${v.adherence}%</strong>.`;
     lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-d';
     lcpTxt= `GOLD Group ${grp} · Stage ${stage.s} ${stage.l}`;
 
@@ -1540,10 +1593,10 @@ function render() {
     zCls  = ctrl.level==='uncontrolled'?'sz-r':ctrl.level==='partial'?'sz-a':'sz-g';
     zIcon = zCls==='sz-r'?'ti-alert-triangle':zCls==='sz-a'?'ti-alert-circle':'ti-circle-check';
     zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · ${ctrl.label} · Visit ${v.n}`;
-    zTt   = ctrl.level==='uncontrolled' ? 'Uncontrolled asthma — urgent step-up required'
-          : ctrl.level==='partial'       ? 'Partially controlled — optimise current step'
-          : 'Well controlled — continue current management';
-    zIns  = `ACT score <strong>${v.act}</strong> — ${ctrl.label.toLowerCase()}. Blood eosinophils <strong>${v.eos} cells/µL</strong>${v.eos>=300?' — T2-high confirmed':''}. Rescue use: ${v.rescueWk>=7?'<strong>daily</strong>':v.rescueWk+'×/week'}. Adherence <strong>${v.adherence}%</strong>.`;
+    zTt   = ctrl.level==='uncontrolled' ? 'Uncontrolled asthma: urgent step-up required'
+          : ctrl.level==='partial'       ? 'Partially controlled: optimise current step'
+          : 'Well controlled: continue current management';
+    zIns  = `ACT score <strong>${v.act}</strong>: ${ctrl.label.toLowerCase()}. Blood eosinophils <strong>${v.eos} cells/µL</strong>${v.eos>=300?': T2-high confirmed':''}. Rescue use: ${v.rescueWk>=7?'<strong>daily</strong>':v.rescueWk+'×/week'}. Adherence <strong>${v.adherence}%</strong>.`;
     lcpCls= `lcp-${ctrl.level.replace('controlled','ctrl').replace('partially controlled','part').replace('uncontrolled','unc').replace('partial','part')}`;
     lcpCls= ctrl.level==='controlled'?'lcp-ctrl':ctrl.level==='partial'?'lcp-part':'lcp-unc';
     lcpTxt= `Asthma ${ctrl.label} · ACT ${v.act}`;
@@ -1552,8 +1605,8 @@ function render() {
     zCls  = (ctrl.level!=='controlled'||grp==='D') ? 'sz-a' : 'sz-g';
     zIcon = 'ti-alert-circle';
     zLbl  = `Amber zone · GOLD Group ${grp} · Asthma ${ctrl.label} · Visit ${v.n}`;
-    zTt   = 'Overlap syndrome — dual pathway assessment';
-    zIns  = `COPD: GOLD Stage ${stage.s} ${stage.l}, Group ${grp}, FEV₁ <strong>${v.fev1}%</strong>. Asthma: ACT <strong>${v.act}</strong> — ${ctrl.label.toLowerCase()}. Eos <strong>${v.eos}</strong> cells/µL${v.eos>=300?' — biologic eligible':''}.`;
+    zTt   = 'Overlap syndrome: dual pathway assessment';
+    zIns  = `COPD: GOLD Stage ${stage.s} ${stage.l}, Group ${grp}, FEV₁ <strong>${v.fev1}%</strong>. Asthma: ACT <strong>${v.act}</strong>: ${ctrl.label.toLowerCase()}. Eos <strong>${v.eos}</strong> cells/µL${v.eos>=300?': biologic eligible':''}.`;
     lcpCls= 'lcp-part';
     lcpTxt= `GOLD Group ${grp} · Asthma ${ctrl.label}`;
 
@@ -1562,8 +1615,8 @@ function render() {
     zCls  = infective ? 'sz-a' : v.exac>=2 ? 'sz-a' : 'sz-g';
     zIcon = zCls==='sz-a' ? 'ti-alert-circle' : 'ti-circle-check';
     zLbl  = `${zCls==='sz-a'?'Amber':'Green'} zone · Chronic Bronchitis · Visit ${v.n}`;
-    zTt   = infective ? 'Purulent sputum — consider antibiotics' : 'Stable — continue mucus clearance';
-    zIns  = `FEV₁ <strong>${v.fev1}%</strong> preserved. Sputum: <strong>${v.sputum||'white'}</strong>${infective?' — possible infection':' — no infection signs'}. ${pt.demographics.smoker==='Current smoker'?'<strong>Still smoking — intervention priority.</strong>':''} Adherence <strong>${v.adherence}%</strong>.`;
+    zTt   = infective ? 'Purulent sputum: consider antibiotics' : 'Stable: continue mucus clearance';
+    zIns  = `FEV₁ <strong>${v.fev1}%</strong> preserved. Sputum: <strong>${v.sputum||'white'}</strong>${infective?': possible infection':': no infection signs'}. ${pt.demographics.smoker==='Current smoker'?'<strong>Still smoking: intervention priority.</strong>':''} Adherence <strong>${v.adherence}%</strong>.`;
     lcpCls= infective ? 'lcp-part' : 'lcp-ctrl';
     lcpTxt= `Stable · FEV₁ ${v.fev1}% · ${v.sputum||'white'} sputum`;
   }
@@ -1580,7 +1633,7 @@ function render() {
     g('lcp-txt').textContent = lcpTxt;
   }
 
-  /* Disease badge — v11: plain text pill inside the patient chip */
+  /* Disease badge: v11: plain text pill inside the patient chip */
   const dbBadge = g('dis-badge');
   if (dbBadge) {
     const dbMap = {
@@ -1593,14 +1646,14 @@ function render() {
     dbBadge.className = `db ${dm.cls}`;
     dbBadge.textContent = dm.txt;
   }
-  /* v11 — patient chip context line: visit position + date, replaces "Anonymous patient" */
+  /* v11: patient chip context line: visit position + date, replaces "Anonymous patient" */
   if (g('pctx-disp')) g('pctx-disp').textContent = `Visit ${v.n} of ${pt.visits.length} · ${v.date}`;
 
   /* Aside */
   if (g('aside-pid')) g('aside-pid').textContent = `AIRMAP-2024-${currentPt}`;
   if (g('aside-vis')) g('aside-vis').textContent = `Visit ${v.n} · ${d.replace('_',' ')} · ${v.n===pt.visits.length?'Current':'Historical'}`;
 
-  /* METRICS — disease adaptive */
+  /* METRICS: disease adaptive */
   const mg = g('metrics-grid');
   if (mg) mg.innerHTML = buildMetrics(d, pt, v, grp, stage, ctrl);
 
@@ -1651,16 +1704,16 @@ function buildMetrics(d, pt, v, grp, stage, ctrl) {
     { lbl:'Exacerbations (12m)',val:v.exac,      vc:v.exac>=2?'danger':v.exac>=1?'warn':'good', int:`${v.hosp} hospitalisation · ${v.ocs} OCS`, prev:prevVal('exac'), stat:'s'+(v.exac>=2?'d':v.exac>=1?'w':'g'), act:'visit-update' }
   ] : d === 'ASTHMA' ? [
     { lbl:'ACT score',          val:v.act,        vc:ctrl.level==='uncontrolled'?'danger':ctrl.level==='partial'?'warn':'good', int:ctrl.label, prev:prevVal('act'), stat:'s'+(ctrl.level==='uncontrolled'?'d':ctrl.level==='partial'?'w':'g'), act:'visit-update' },
-    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high — biologic eligible':v.eos>=150?'Elevated — T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations' },
-    { lbl:'Rescue use',         val:v.rescueWk>=7?'Daily':v.rescueWk+'×/wk', vc:v.rescueWk>=7?'danger':v.rescueWk>=3?'warn':'good', int:v.rescueWk>=7?'Significant — poor control':v.rescueWk>=3?'Increased — monitor':'Acceptable', prev:'Was '+prevVisit()?.rescueWk+'×/wk', stat:'s'+(v.rescueWk>=7?'d':v.rescueWk>=3?'w':'g'), act:'visit-update' }
+    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high: biologic eligible':v.eos>=150?'Elevated: T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations' },
+    { lbl:'Rescue use',         val:v.rescueWk>=7?'Daily':v.rescueWk+'×/wk', vc:v.rescueWk>=7?'danger':v.rescueWk>=3?'warn':'good', int:v.rescueWk>=7?'Significant: poor control':v.rescueWk>=3?'Increased: monitor':'Acceptable', prev:'Was '+prevVisit()?.rescueWk+'×/wk', stat:'s'+(v.rescueWk>=7?'d':v.rescueWk>=3?'w':'g'), act:'visit-update' }
   ] : d === 'ACO' ? [
     { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:`GOLD Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'sw', act:'investigations' },
-    { lbl:'CAT + ACT',          val:`${v.cat}<span style="font-size:var(--fs-h3);opacity:.6"> / </span>${v.act}`, vc:'warn', int:`CAT ${v.cat>=10?'high':'low'} · ACT ${ctrl.label.toLowerCase()}`, prev:`Was ${prevVisit()?.cat||'—'} / ${prevVisit()?.act||'—'}`, stat:'sw', act:'visit-update' },
+    { lbl:'CAT + ACT',          val:`${v.cat}<span style="font-size:var(--fs-h3);opacity:.6"> / </span>${v.act}`, vc:'warn', int:`CAT ${v.cat>=10?'high':'low'} · ACT ${ctrl.label.toLowerCase()}`, prev:`Was ${prevVisit()?.cat||''} / ${prevVisit()?.act||''}`, stat:'sw', act:'visit-update' },
     { lbl:'Eosinophils',        val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':'warn', int:v.eos>=300?'Biologic eligible':'Near threshold', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':'w'), act:'investigations' }
   ] : [ // CHRONIC_BRONCHITIS
     { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:'Airflow limitation', prev:prevVal('fev1','%'), stat:'sn', act:'investigations' },
     { lbl:'CAT score',          val:v.cat,        vc:v.cat>=10?'warn':'good', int:v.cat>=10?'Medium burden':'Low burden', prev:prevVal('cat'), stat:'s'+(v.cat>=10?'w':'g'), act:'visit-update' },
-    { lbl:'Sputum character',   val:v.sputum==='white'?'White':'<span class="danger">'+v.sputum+'</span>', vc:v.sputum!=='white'?'danger':'good', int:v.sputum!=='white'?'Possible infection — review':'No infection signs', prev:prevVisit()?.sputum||'—', stat:'s'+(v.sputum!=='white'?'d':'g'), act:'visit-update' }
+    { lbl:'Sputum character',   val:v.sputum==='white'?'White':'<span class="danger">'+v.sputum+'</span>', vc:v.sputum!=='white'?'danger':'good', int:v.sputum!=='white'?'Possible infection: review':'No infection signs', prev:prevVisit()?.sputum||'', stat:'s'+(v.sputum!=='white'?'d':'g'), act:'visit-update' }
   ];
 
   return cards.map(c => {
@@ -1715,38 +1768,38 @@ function buildAlerts(d, pt, v, grp, stage, ctrl) {
   const push = (type, icon, html) => alerts.push(`<div class="ia ia-${type}"><i class="ti ${icon}"></i><div class="ia-body">${html}</div></div>`);
 
   if (d === 'COPD' || d === 'ACO') {
-    if (v.eos >= 300) push('g','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong> — biologic eligibility threshold met. Anti-IL5 appropriate.`);
-    else if (v.eos >= 250) push('w','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong> — ${300-v.eos} cells below biologic threshold. Repeat at next visit.`);
-    if (v.adherence < 80) push('w','ti-pill', `<strong>Adherence ${v.adherence}%</strong> — address before any step-up. Technique: ${v.technique}.`);
-    if (!pt.vaccinations.flu) push('w','ti-vaccine', `<strong>Flu vaccination overdue</strong> — COPD patients at increased exacerbation risk.`);
-    if (!pt.vaccinations.pneumo) push('w','ti-vaccine', `<strong>Pneumococcal vaccination not recorded</strong> — recommended for all COPD patients.`);
+    if (v.eos >= 300) push('g','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong>: biologic eligibility threshold met. Anti-IL5 appropriate.`);
+    else if (v.eos >= 250) push('w','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong>: ${300-v.eos} cells below biologic threshold. Repeat at next visit.`);
+    if (v.adherence < 80) push('w','ti-pill', `<strong>Adherence ${v.adherence}%</strong>: address before any step-up. Technique: ${v.technique}.`);
+    if (!pt.vaccinations.flu) push('w','ti-vaccine', `<strong>Flu vaccination overdue</strong>: COPD patients at increased exacerbation risk.`);
+    if (!pt.vaccinations.pneumo) push('w','ti-vaccine', `<strong>Pneumococcal vaccination not recorded</strong>: recommended for all COPD patients.`);
   }
 
   if (d === 'ASTHMA') {
-    if (ctrl.level === 'uncontrolled') push('d','ti-alert-triangle', `<strong>Uncontrolled asthma (ACT ${v.act})</strong> — step-up to Step 4 indicated. Review triggers and technique first.`);
-    if (v.eos >= 300) push('g','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong> — T2-high confirmed. Biologic (anti-IL5) eligibility criteria met.`);
-    if (v.rescueWk >= 7) push('d','ti-wind', `<strong>Daily SABA use</strong> — marker of uncontrolled asthma. Step-up and reduce SABA dependence.`);
-    if (v.adherence < 70) push('w','ti-pill', `<strong>Adherence ${v.adherence}%</strong> — poor. Technique: ${v.technique}. Address before step-up.`);
+    if (ctrl.level === 'uncontrolled') push('d','ti-alert-triangle', `<strong>Uncontrolled asthma (ACT ${v.act})</strong>: step-up to Step 4 indicated. Review triggers and technique first.`);
+    if (v.eos >= 300) push('g','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong>: T2-high confirmed. Biologic (anti-IL5) eligibility criteria met.`);
+    if (v.rescueWk >= 7) push('d','ti-wind', `<strong>Daily SABA use</strong>: marker of uncontrolled asthma. Step-up and reduce SABA dependence.`);
+    if (v.adherence < 70) push('w','ti-pill', `<strong>Adherence ${v.adherence}%</strong>: poor. Technique: ${v.technique}. Address before step-up.`);
   }
 
   if (d === 'ACO') {
     const hasICSa  = pt.meds.some(m=>m.cls==='ICS');
     const hasLABAa = pt.meds.some(m=>m.cls==='LABA');
-    push('i','ti-circle-dashed', `<strong>ACO management</strong> — ICS is mandatory (asthma). LABA required for COPD component. Triple therapy target.`);
-    /* v10 — ICS-mandatory enforcement */
-    if (!hasICSa) push('d','ti-alert-triangle', `<strong>ICS missing</strong> — ICS is MANDATORY in ACO because of the asthma component. A regimen without ICS risks severe exacerbation. Add immediately.`);
-    /* v10 — LABA-without-ICS contraindication */
-    if (hasLABAa && !hasICSa) push('d','ti-alert-triangle', `<strong>LABA without ICS</strong> — contraindicated in ACO. LABA monotherapy can worsen the asthma component. Add ICS before continuing LABA.`);
-    if (!hasLABAa) push('w','ti-pill', `<strong>LABA missing</strong> — required for COPD component of ACO. Add to current LAMA + ICS regimen.`);
-    /* v10 — formal ACO diagnostic criteria check */
+    push('i','ti-circle-dashed', `<strong>ACO management</strong>: ICS is mandatory (asthma). LABA required for COPD component. Triple therapy target.`);
+    /* v10: ICS-mandatory enforcement */
+    if (!hasICSa) push('d','ti-alert-triangle', `<strong>ICS missing</strong>: ICS is MANDATORY in ACO because of the asthma component. A regimen without ICS risks severe exacerbation. Add immediately.`);
+    /* v10: LABA-without-ICS contraindication */
+    if (hasLABAa && !hasICSa) push('d','ti-alert-triangle', `<strong>LABA without ICS</strong>: contraindicated in ACO. LABA monotherapy can worsen the asthma component. Add ICS before continuing LABA.`);
+    if (!hasLABAa) push('w','ti-pill', `<strong>LABA missing</strong>: required for COPD component of ACO. Add to current LAMA + ICS regimen.`);
+    /* v10: formal ACO diagnostic criteria check */
     const acoCritA = acoFormalCriteria(pt, v);
-    if (!acoCritA.criteriamet) push('w','ti-help-circle', `<strong>ACO criteria not formally confirmed</strong> — fixed obstruction ${acoCritA.fixedObstruction?'present':'NOT confirmed'} · ${acoCritA.asthmaFeatureCount}/4 asthma features documented. Complete formal assessment.`);
+    if (!acoCritA.criteriamet) push('w','ti-help-circle', `<strong>ACO criteria not formally confirmed</strong>: fixed obstruction ${acoCritA.fixedObstruction?'present':'NOT confirmed'} · ${acoCritA.asthmaFeatureCount}/4 asthma features documented. Complete formal assessment.`);
   }
 
   if (d === 'CHRONIC_BRONCHITIS') {
-    if (pt.demographics.smoker === 'Current smoker') push('d','ti-flame', `<strong>Patient still smoking</strong> — most modifiable risk factor. Smoking cessation intervention priority at this visit.`);
-    if (v.sputum && v.sputum !== 'white') push('w','ti-droplet', `<strong>Purulent sputum (${v.sputum})</strong> — consider antibiotic therapy. Document indication for stewardship purposes.`);
-    if (!pt.vaccinations.pneumo) push('w','ti-vaccine', `<strong>Pneumococcal vaccination not recorded</strong> — recommended.`);
+    if (pt.demographics.smoker === 'Current smoker') push('d','ti-flame', `<strong>Patient still smoking</strong>: most modifiable risk factor. Smoking cessation intervention priority at this visit.`);
+    if (v.sputum && v.sputum !== 'white') push('w','ti-droplet', `<strong>Purulent sputum (${v.sputum})</strong>: consider antibiotic therapy. Document indication for stewardship purposes.`);
+    if (!pt.vaccinations.pneumo) push('w','ti-vaccine', `<strong>Pneumococcal vaccination not recorded</strong>: recommended.`);
   }
 
   return alerts.join('');
@@ -1758,32 +1811,32 @@ function buildIntel(d, pt, v, grp, stage, ctrl) {
   const row  = (key, val, cls='') => rows.push(`<div class="ir"><span class="ik">${key}</span><span class="iv ${cls}">${val}</span></div>`);
 
   if (d === 'COPD') {
-    row('Classification',    `GOLD Stage ${stage.s} — ${stage.l} &nbsp;<span class="tag tn">Group ${grp}</span>`);
-    row('Exacerbation risk', `<span class="tag ${v.exac>=2||v.hosp>=1?'tr':'ta'}">${v.exac>=2||v.hosp>=1?'High':'Moderate'}</span> &nbsp;${v.exac} past year · ${v.hosp} hosp · ${v.ocs} OCS`);
-    row('Phenotype',         `Eosinophilic index ${v.eos} cells/µL &nbsp;<span class="tag ${v.eos>=300?'tg':v.eos>=250?'ta':'ti2'}">${v.eos>=300?'Biologic eligible':v.eos>=250?'Borderline':'Below threshold'}</span>`);
+    row('Classification',    `GOLD Stage ${stage.s}: ${stage.l} &nbsp;<span class="sind n"><span class="sind-dot"></span>Group ${grp}</span>`);
+    row('Exacerbation risk', `<span class="sind ${v.exac>=2||v.hosp>=1?'r':'a'}"><span class="sind-dot"></span>${v.exac>=2||v.hosp>=1?'High':'Moderate'}</span> &nbsp;${v.exac} past year · ${v.hosp} hosp · ${v.ocs} OCS`);
+    row('Phenotype',         `Eosinophilic index ${v.eos} cells/µL &nbsp;<span class="sind ${v.eos>=300?'g':v.eos>=250?'a':'n'}"><span class="sind-dot"></span>${v.eos>=300?'Biologic eligible':v.eos>=250?'Borderline':'Below threshold'}</span>`);
     row('FEV₁ trajectory',   `<span class="tag ${fev1Trend()}">${fev1TrendTxt()}</span> &nbsp;${fev1TrendDetail()}`);
-    /* v10 — BODE index */
+    /* v10: BODE index */
     const bodeC = calcBODE(pt, v);
     if (bodeC) row('BODE index', buildBODESummary(bodeC));
-    else row('BODE index', `<span class="iv it">6MWD not recorded — BODE incomplete</span>`);
-    row('Treatment match',   `<span class="tag tg">Appropriate</span> &nbsp;${pt.meds.map(m=>m.cls).join(' + ')}`);
-    row('Adherence',         `<span class="tag ${v.adherence>=80?'tg':'ta'}">${v.adherence}%</span> &nbsp;Technique: ${v.technique}`);
+    else row('BODE index', `<span class="iv it">6MWD not recorded: BODE incomplete</span>`);
+    row('Treatment match',   `<span class="sind g"><span class="sind-dot"></span>Appropriate</span> &nbsp;${pt.meds.map(m=>m.cls).join(' + ')}`);
+    row('Adherence',         `<span class="sind ${v.adherence>=80?'g':'a'}"><span class="sind-dot"></span>${v.adherence}%</span> &nbsp;Technique: ${v.technique}`);
     row('Priority action',   `<span class="fw">Inhaler technique · biologic reassessment · pulmonary rehab</span>`);
-    row('Vaccinations',      `${pt.vaccinations.flu?'<span class="tag tg">Flu ✓</span>':'<span class="tag tr">Flu overdue</span>'} &nbsp;${pt.vaccinations.pneumo?'<span class="tag tg">Pneumo ✓</span>':'<span class="tag ta">Pneumo pending</span>'}`);
-    /* GAP 18 — comorbidity-aware intelligence */
+    row('Vaccinations',      `${pt.vaccinations.flu?'<span class="sind g"><span class="sind-dot"></span>Flu ✓</span>':'<span class="sind r"><span class="sind-dot"></span>Flu overdue</span>'} &nbsp;${pt.vaccinations.pneumo?'<span class="sind g"><span class="sind-dot"></span>Pneumo ✓</span>':'<span class="sind a"><span class="sind-dot"></span>Pneumo pending</span>'}`);
+    /* GAP 18: comorbidity-aware intelligence */
     const comorb = [];
-    if (pt.comorbidities.anxiety)    comorb.push('Anxiety/depression — psychology referral · avoid beta-blockers');
-    if (pt.comorbidities.ihd)        comorb.push('IHD — cardiac review due · beta-blocker caution with SABA');
-    if (pt.comorbidities.osteoporosis) comorb.push('Osteoporosis — cumulative ICS/OCS burden: consider bone protection');
-    if (pt.comorbidities.t2dm)       comorb.push('T2DM — oral steroid courses raise blood glucose: monitor');
-    if (pt.comorbidities.osa)        comorb.push('OSA — nocturnal hypoxaemia may worsen COPD trajectory');
+    if (pt.comorbidities.anxiety)    comorb.push('Anxiety/depression: psychology referral · avoid beta-blockers');
+    if (pt.comorbidities.ihd)        comorb.push('IHD: cardiac review due · beta-blocker caution with SABA');
+    if (pt.comorbidities.osteoporosis) comorb.push('Osteoporosis: cumulative ICS/OCS burden: consider bone protection');
+    if (pt.comorbidities.t2dm)       comorb.push('T2DM: oral steroid courses raise blood glucose: monitor');
+    if (pt.comorbidities.osa)        comorb.push('OSA: nocturnal hypoxaemia may worsen COPD trajectory');
     if (comorb.length) row('Comorbidity flags', `<span class="italic">${comorb.join(' &nbsp;·&nbsp; ')}</span>`);
 
   } else if (d === 'ASTHMA') {
     row('Asthma control',    `<span class="tag ${ctrl.level==='controlled'?'tg':ctrl.level==='partial'?'ta':'tr'}">${ctrl.label}</span> &nbsp;ACT ${v.act} · Step 3 current`);
     row('Phenotype',         `T2-${v.eos>=300?'high':'intermediate'} eosinophilic · eos ${v.eos} cells/µL &nbsp;<span class="tag ${v.eos>=300?'tg':'ta'}">${v.eos>=300?'Biologic eligible':'Monitor'}</span>`);
     row('Step therapy',      buildStepIndicator(v.act));
-    row('Rescue pattern',    `<span class="tag ${v.rescueWk>=7?'tr':v.rescueWk>=3?'ta':'tg'}">${v.rescueWk>=7?'Daily':''+v.rescueWk+'×/wk'}</span> &nbsp;${v.rescueWk>=7?'Major concern — poor control marker':'Acceptable range'}`);
+    row('Rescue pattern',    `<span class="tag ${v.rescueWk>=7?'tr':v.rescueWk>=3?'ta':'tg'}">${v.rescueWk>=7?'Daily':''+v.rescueWk+'×/wk'}</span> &nbsp;${v.rescueWk>=7?'Major concern: poor control marker':'Acceptable range'}`);
     row('Triggers identified', pt.comorbidities?.allerRhinitis ? 'Allergic rhinitis confirmed · house dust mite · pets' : 'Pending allergen assessment');
     row('Adherence',         `<span class="tag ${v.adherence>=80?'tg':'tr'}">${v.adherence}%</span> &nbsp;Technique: ${v.technique}`);
     row('Priority action',   `<span class="fw">Step-up to Step 4 · biologic referral · allergen removal</span>`);
@@ -1791,18 +1844,18 @@ function buildIntel(d, pt, v, grp, stage, ctrl) {
   } else if (d === 'ACO') {
     row('COPD component',    `GOLD Stage ${stage.s} ${stage.l} · Group ${grp}`);
     row('Asthma component',  `ACT ${v.act} · ${ctrl.label} · T2-${v.eos>=300?'high':'intermediate'}`);
-    /* v10 — formal ACO diagnostic criteria (fixed obstruction + asthma feature) */
+    /* v10: formal ACO diagnostic criteria (fixed obstruction + asthma feature) */
     const acoCrit = acoFormalCriteria(pt, v);
     row('ACO diagnostic criteria', buildACOCriteriaSummary(acoCrit));
-    /* v10 — BODE index */
+    /* v10: BODE index */
     const bodeAco = calcBODE(pt, v);
     if (bodeAco) row('BODE index', buildBODESummary(bodeAco));
     row('Biologic eligibility', `<span class="tag ${v.eos>=300?'tg':'ta'}">${v.eos>=300?'Eligible':'Borderline'}</span> &nbsp;Eos ${v.eos} · Anti-IL5 or anti-IL4R`);
-    /* v10 — hardened ICS-mandatory / LABA-without-ICS status */
+    /* v10: hardened ICS-mandatory / LABA-without-ICS status */
     const hasICS  = pt.meds.some(m=>m.cls==='ICS');
     const hasLABA = pt.meds.some(m=>m.cls==='LABA');
-    row('ICS mandatory',     hasICS ? '<span class="tag tg">Present — required, never remove</span>' : '<span class="tag tr">MISSING — mandatory for ACO asthma component</span>');
-    row('LABA status',       hasLABA ? (hasICS ? '<span class="tag tg">Present (with ICS)</span>' : '<span class="tag tr">Present WITHOUT ICS — contraindicated in ACO</span>') : '<span class="tag tr">Missing — add to regimen</span>');
+    row('ICS mandatory',     hasICS ? '<span class="sind g"><span class="sind-dot"></span>Present: required, never remove</span>' : '<span class="sind r"><span class="sind-dot"></span>MISSING: mandatory for ACO asthma component</span>');
+    row('LABA status',       hasLABA ? (hasICS ? '<span class="sind g"><span class="sind-dot"></span>Present (with ICS)</span>' : '<span class="sind r"><span class="sind-dot"></span>Present WITHOUT ICS: contraindicated in ACO</span>') : '<span class="sind r"><span class="sind-dot"></span>Missing: add to regimen</span>');
     row('Priority action',   `<span class="fw">${!hasLABA?'Add LABA · ':''}biologic referral · allergen assessment</span>`);
 
   } else {
@@ -1810,20 +1863,20 @@ function buildIntel(d, pt, v, grp, stage, ctrl) {
     row('Sputum pattern',    `${v.sputum||'white'} · volume ${v.sputumVol||'low'} · ${v.sputum!=='white'?'possible infection':'no infection signs'}`);
     row('Smoking status',    `<span class="tag ${pt.demographics.smoker==='Current smoker'?'tr':'tg'}">${pt.demographics.smoker}</span> &nbsp;${pt.demographics.packYears} pack-years`);
     row('FEV₁ trajectory',   `<span class="tag ${fev1Trend()}">${fev1TrendTxt()}</span> &nbsp;${fev1TrendDetail()}`);
-    /* v10 — BODE index */
+    /* v10: BODE index */
     const bodeCB = calcBODE(pt, v);
     if (bodeCB) row('BODE index', buildBODESummary(bodeCB));
-    /* v10 — Anthonisen criteria for antibiotic decision support */
+    /* v10: Anthonisen criteria for antibiotic decision support */
     const anth = anthonisenCriteria(pt, v, prevVisit());
     if (anth) row('Anthonisen criteria', buildAnthonisenSummary(anth));
-    row('Mucus clearance',   'ACBT programme — check adherence at this visit');
-    row('Priority action',   `<span class="fw">${pt.demographics.smoker==='Current smoker'?'Smoking cessation — urgent · ':''}${anth&&anth.metCount>=2?'Consider antibiotics (Anthonisen 2/3) · ':''}Pneumococcal vaccination · ACBT review</span>`);
+    row('Mucus clearance',   'ACBT programme: check adherence at this visit');
+    row('Priority action',   `<span class="fw">${pt.demographics.smoker==='Current smoker'?'Smoking cessation: urgent · ':''}${anth&&anth.metCount>=2?'Consider antibiotics (Anthonisen 2/3) · ':''}Pneumococcal vaccination · ACBT review</span>`);
   }
 
   return rows.join('');
 }
 
-/* Asthma step ladder — v10: explicit medication per step */
+/* Asthma step ladder: v10: explicit medication per step */
 const STEP_MEDS = {
   1: 'SABA PRN',
   2: 'Low-dose ICS',
@@ -1868,7 +1921,7 @@ function fev1TrendTxt() {
 function fev1TrendDetail() {
   const v = getVisit();
   const pv = prevVisit();
-  if (!pv || !v) return 'First visit — no comparison available';
+  if (!pv || !v) return 'First visit: no comparison available';
   const diff = getVisit().fev1 - pv.fev1;
   return `${Math.abs(diff)}% ${diff>=0?'gain':'decline'} since ${pv.date}`;
 }
@@ -1889,7 +1942,7 @@ function buildTimeline(pt) {
     </div>`).join('');
 }
 
-/* v10 — Action buttons: 3-category system with state awareness */
+/* v10: Action buttons: 3-category system with state awareness */
 function buildActionBtns() {
   const pt   = getPt();
   const days = daysSinceLastVisit(pt);
@@ -1903,7 +1956,7 @@ function buildActionBtns() {
       <i class="ti ti-arrow-right abt-arr"></i>
     </button>`;
 
-  /* Category 1 — Intelligence actions */
+  /* Category 1: Intelligence actions */
   const analysisBadge = analysisCurrent
     ? '<span class="abt-state st-current"><i class="ti ti-circle-check" style="font-size:var(--fs-xs)"></i>Analysis current</span>'
     : '<span class="abt-state st-stale"><span class="abt-pulse"></span>Refresh needed</span>';
@@ -1912,7 +1965,7 @@ function buildActionBtns() {
     ['ti-target',      'Action plan',  'Zone-based self-management',  'action-plan', '']
   ];
 
-  /* Category 2 — Data entry actions */
+  /* Category 2: Data entry actions */
   let dataBadge = '';
   if (days !== null) {
     dataBadge = days > 90
@@ -1925,7 +1978,7 @@ function buildActionBtns() {
     ['ti-user-plus', 'Register new patient','ID · pseudonymisation · disease', 'register',     '']
   ];
 
-  /* Category 3 — Navigation / utility */
+  /* Category 3: Navigation / utility */
   const cat3 = [
     ['ti-folder-open', 'Full record',     'All data · all sections',            'full-record'],
     ['ti-download',    'Export & report', 'PDF · JSON · EHR format',            'export'],
@@ -2029,10 +2082,12 @@ function toggleCohort() {
 function selectPt(id) {
   currentPt    = id;
   currentVisit = Math.max(0, DB[id].visits.length - 1);
+  trackRecentPt(id);
+  logIdentityEvent({ action:'patient_record_opened', patient:id, purpose:'clinical_access', path:'direct', mfa:'n/a', breakGlass:false });
+  if (appView !== 'cockpit') showView('cockpit');
   g('pid-disp').textContent = `AIRMAP-2024-${id}`;
   document.querySelectorAll('.ci').forEach(el => el.classList.remove('on'));
-  toggleCohort();
-  /* GAP 12 — brief skeleton loading state */
+  /* GAP 12: brief skeleton loading state */
   const cockpit = g('cockpit');
   if (cockpit) { cockpit.style.opacity = '0.4'; cockpit.style.transition = 'opacity .15s'; }
   setTimeout(() => {
@@ -2042,7 +2097,7 @@ function selectPt(id) {
   notify(`Loaded AIRMAP-2024-${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
 }
 
-/* v11 — command palette: build, filter, render, navigate */
+/* v11: command palette: build, filter, render, navigate */
 function buildCommandList() {
   const cmds = [];
   Object.entries(DB).forEach(([id,p]) => {
@@ -2068,6 +2123,7 @@ function buildCommandList() {
     ['register','Register new patient','ti-user-plus']
   ];
   drawers.forEach(([type,label,icon]) => cmds.push({ cat:'Open', icon, label, sub:'Open drawer', action:`closeCmdK();openDrw('${type}')` }));
+  cmds.push({ cat:'Actions', icon:'ti-layout-grid', label:'Dashboard', sub:'Return to patient list', action:`closeCmdK();goToDashboard()` });
   cmds.push({ cat:'Actions', icon:'ti-eye', label:'Toggle review mode', sub:readOnlyMode?'Currently read-only · switch to editable':'Currently editable · switch to read-only', action:`closeCmdK();toggleReadOnly()` });
   return cmds;
 }
@@ -2119,6 +2175,196 @@ function cmdkKeydown(e) {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   NAVIGATION SHELL: login / dashboard / cockpit (v11)
+═══════════════════════════════════════════════════════════════════ */
+function buildPlatformSwitcherHTML() {
+  return `<div style="position:relative">
+    <button class="btn bg btn-icon btn-sm" id="platform-sw" onclick="togglePlatformMenu()" aria-expanded="false" title="Respiratory Platform: switch module">
+      <i class="ti ti-stack-2"></i>
+    </button>
+    <div class="platform-menu" id="platform-menu">
+      <div class="pm-hdr">Respiratory Platform</div>
+      <div class="pm-item on"><span class="ep"></span>AIRMAP: Obstructive</div>
+      <div class="pm-item"><span class="ep"></span>PneumoData: Restrictive</div>
+      <div class="pm-item"><span class="ep"></span>Pulmonary HTN</div>
+      <div class="pm-item"><span class="ep"></span>Sleep &amp; Ventilation</div>
+      <div class="pm-item add">+ Add module</div>
+    </div>
+  </div>`;
+}
+
+function buildHeaderContext(view) {
+  const platform = buildPlatformSwitcherHTML();
+  if (view === 'cockpit') {
+    return `${platform}<div class="hdv"></div>
+      <div class="bcrumb">
+        <span class="bcrumb-link" onclick="goToDashboard()"><i class="ti ti-layout-grid"></i>Dashboard</span>
+        <span class="bcrumb-sep">/</span>
+        <div class="bcrumb-cur">
+          <span class="bcrumb-pid" id="pid-disp">AIRMAP-2024-${currentPt}</span>
+          <span class="db" id="dis-badge"></span>
+        </div>
+      </div>`;
+  }
+  return platform;
+}
+
+function buildHeaderActions(view) {
+  const search = `<button class="btn bg btn-icon btn-sm" onclick="openCmdK()" aria-label="Search" title="Search (Ctrl+K)"><i class="ti ti-search"></i></button>`;
+  const avatar = `<div style="position:relative">
+    <div class="clin" title="Dr. Garcia · ${RBAC_ROLES[currentUserRole].label}" onclick="toggleSessionMenu()" style="cursor:pointer">
+      <div class="clin-av">MG</div>
+    </div>
+    <div class="session-menu" id="session-menu">
+      <div class="session-hdr">
+        <div class="session-role">${RBAC_ROLES[currentUserRole].label}</div>
+        <div class="session-name">Dr. Garcia</div>
+      </div>
+      <div class="session-item" onclick="openDrw('identity-access');toggleSessionMenu()"><i class="ti ti-key"></i>Identity access</div>
+      <div class="session-item" onclick="showView('login');buildLoginRoles();recentPts=[];"><i class="ti ti-arrow-left"></i>Sign out</div>
+    </div>
+  </div>`;
+  if (view === 'cockpit') {
+    return `${search}
+      <button class="btn bg btn-icon btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode"><i class="ti ti-eye" id="readonly-icon"></i></button>
+      <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
+      <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
+      <div class="hdv"></div>
+      ${avatar}`;
+  }
+  return `${search}
+    <button class="btn bg btn-icon btn-sm notif-btn" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+    <div class="hdv"></div>
+    ${avatar}`;
+}
+
+function showView(view) {
+  appView = view;
+  g('login-view').style.display     = view === 'login'     ? 'flex'  : 'none';
+  g('dashboard-view').style.display = view === 'dashboard' ? 'block' : 'none';
+  g('ahdr').style.display           = view === 'login'     ? 'none'  : 'flex';
+  g('visit-bar').style.display      = view === 'cockpit'   ? 'flex'  : 'none';
+  g('cockpit').style.display        = view === 'cockpit'   ? 'grid'  : 'none';
+
+  if (view !== 'login') {
+    g('ahdr-context').innerHTML = buildHeaderContext(view);
+    g('hdr-actions').innerHTML  = buildHeaderActions(view);
+  }
+  if (view === 'dashboard') renderDashboard();
+  if (view === 'cockpit')   render();
+}
+
+function goToDashboard() {
+  closeDrw();
+  showView('dashboard');
+}
+
+/* Login */
+function buildLoginRoles() {
+  const el = g('login-roles');
+  if (!el) return;
+  el.innerHTML = Object.entries(RBAC_ROLES).map(([key,r]) =>
+    `<div class="role-card${loginSelectedRole===key?' on':''}" onclick="selectLoginRole('${key}')"><div class="role-lbl">${r.label}</div><div class="role-desc">${r.desc}</div></div>`
+  ).join('');
+}
+function selectLoginRole(key) {
+  loginSelectedRole = key;
+  buildLoginRoles();
+}
+function doLogin() {
+  currentUserRole = loginSelectedRole;
+  showView('dashboard');
+  notify(`Signed in as ${RBAC_ROLES[currentUserRole].label}`, 'ok');
+}
+
+/* Dashboard */
+function renderDashboard() {
+  const sub = g('dash-sub');
+  const entries = Object.entries(DB);
+  const needsReview = entries.filter(([,pt]) => pt.risk === 'r').length;
+  if (sub) sub.textContent = `${entries.length} patients · ${needsReview} need review · signed in as ${RBAC_ROLES[currentUserRole].label}`;
+
+  const filterBar = `<div class="dash-filters">
+    <span class="dash-filter${dashFilters.disease==='all'?' on':''}" onclick="setDashFilter('disease','all')">All diseases</span>
+    <span class="dash-filter${dashFilters.disease==='COPD'?' on':''}" onclick="setDashFilter('disease','COPD')"><span class="sind-dot" style="background:var(--n5)"></span>COPD</span>
+    <span class="dash-filter${dashFilters.disease==='ASTHMA'?' on':''}" onclick="setDashFilter('disease','ASTHMA')"><span class="sind-dot" style="background:var(--t5)"></span>Asthma</span>
+    <span class="dash-filter${dashFilters.disease==='ACO'?' on':''}" onclick="setDashFilter('disease','ACO')"><span class="sind-dot" style="background:var(--p5)"></span>ACO</span>
+    <span class="dash-filter${dashFilters.disease==='CHRONIC_BRONCHITIS'?' on':''}" onclick="setDashFilter('disease','CHRONIC_BRONCHITIS')"><span class="sind-dot" style="background:var(--a5)"></span>Chr. Bronchitis</span>
+    <div class="hdv" style="height:18px"></div>
+    <span class="dash-filter${dashFilters.zone==='r'?' on':''}" onclick="setDashFilter('zone','r')"><span class="sind-dot" style="background:var(--r5)"></span>Red zone</span>
+    <span class="dash-filter${dashFilters.zone==='a'?' on':''}" onclick="setDashFilter('zone','a')"><span class="sind-dot" style="background:var(--a5)"></span>Amber</span>
+    <span class="dash-filter${dashFilters.zone==='g'?' on':''}" onclick="setDashFilter('zone','g')"><span class="sind-dot" style="background:var(--g5)"></span>Green</span>
+  </div>`;
+
+  const recentHTML = recentPts.length ? `<div class="dash-recent">
+    <div class="dash-recent-lbl">Recently viewed</div>
+    <div class="dash-recent-row">${recentPts.map(id => {
+      const pt = DB[id];
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
+      return `<div class="dash-recent-chip" onclick="selectPt('${id}')">
+        <div class="crisk cr-${pt.risk}" style="width:7px;height:7px;border-radius:50%;flex-shrink:0"></div>
+        <span class="pid-sm">AIRMAP-2024-${id}</span>
+        <span class="dis-sm">${disLabel}</span>
+      </div>`;
+    }).join('')}</div>
+  </div>` : '';
+
+  const content = g('dash-content');
+  if (content) content.innerHTML = recentHTML + filterBar + buildFilteredCohort();
+}
+
+function buildFilteredCohort() {
+  const entries = Object.entries(DB).filter(([,pt]) => {
+    if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
+    if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
+    return true;
+  });
+  if (!entries.length) return `<div style="text-align:center;padding:40px;font-size:var(--fs-sm);color:var(--i4)">No patients match the current filters.</div>`;
+  return bCohortOverviewCards(entries);
+}
+function dashSearch(q) { /* live narrowing handled on Enter via dashSearchKeydown */ }
+function dashSearchKeydown(e) {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim().toUpperCase().replace('AIRMAP-2024-', '');
+  const match = Object.keys(DB).find(id => id === q || getDisplayAlias(id).toUpperCase() === q);
+  if (match) { selectPt(match); e.target.value = ''; }
+  else notify(`No patient found for "${e.target.value}"`, 'warn');
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SESSION DROPDOWN
+═══════════════════════════════════════════════════════════════════ */
+let sessionMenuOpen = false;
+function toggleSessionMenu() {
+  sessionMenuOpen = !sessionMenuOpen;
+  const menu = g('session-menu');
+  if (menu) menu.classList.toggle('open', sessionMenuOpen);
+}
+function doLogout() {
+  sessionMenuOpen = false;
+  showView('login');
+  buildLoginRoles();
+  recentPts = [];
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RECENTLY VIEWED
+═══════════════════════════════════════════════════════════════════ */
+let recentPts = [];
+function trackRecentPt(id) {
+  recentPts = [id, ...recentPts.filter(r => r !== id)].slice(0, 4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DASHBOARD FILTERS
+═══════════════════════════════════════════════════════════════════ */
+let dashFilters = { disease:'all', zone:'all' };
+function setDashFilter(type, val) {
+  dashFilters[type] = dashFilters[type] === val ? 'all' : val;
+  renderDashboard();
+}
+
 function togglePlatformMenu() {
   const menu = g('platform-menu');
   const btn  = g('platform-sw');
@@ -2128,6 +2374,11 @@ function togglePlatformMenu() {
 }
 
 document.addEventListener('click', e => {
+  if (sessionMenuOpen && !e.target.closest('#session-menu') && !e.target.closest('.clin')) {
+    sessionMenuOpen = false;
+    const sm = g('session-menu');
+    if (sm) sm.classList.remove('open');
+  }
   if (cohortOpen && !e.target.closest('#cohort') && !e.target.closest('#ptc')) {
     cohortOpen = false;
     const panel = g('cohort');
@@ -2137,7 +2388,7 @@ document.addEventListener('click', e => {
     if (btn)   btn.setAttribute('aria-expanded','false');
     if (chev)  chev.style.transform = '';
   }
-  /* v11 — platform module switcher click-outside */
+  /* v11: platform module switcher click-outside */
   const pmenu = g('platform-menu');
   if (pmenu && pmenu.classList.contains('open') && !e.target.closest('#platform-menu') && !e.target.closest('#platform-sw')) {
     pmenu.classList.remove('open');
@@ -2177,7 +2428,7 @@ function _baseOpenDrw(type) {
   g('drw-tt').textContent = cfg.tt;
   g('drw-sb').textContent = cfg.sb;
   g('drw-foot').style.display = cfg.save ? 'flex' : 'none';
-  g('drw-uns').style.display  = 'none';
+  const unsEl=g('drw-uns');if(unsEl){unsEl.classList.remove('show');unsEl.style.display='';}
 
   const body = g('drw-body');
   body.innerHTML = buildDrwContent(type);
@@ -2193,14 +2444,14 @@ function _baseOpenDrw(type) {
 
 function markDirty() {
   drwDirty = true;
-  g('drw-uns').style.display = 'flex';
-  /* v10 — editing data invalidates the "analysis current" state */
+  const uns = g('drw-uns');
+  if (uns) { uns.classList.add('show'); uns.style.display = ''; }
   markAnalysisStale(currentPt);
   if (g('action-btns')) g('action-btns').innerHTML = buildActionBtns();
 }
 
 function closeDrw() {
-  if (drwDirty && !confirm('Unsaved changes — close without saving?')) return;
+  if (drwDirty && !confirm('Unsaved changes: close without saving?')) return;
   g('drw-ov').classList.remove('open');
   g('drw').classList.remove('open');
   currentDrw = null;
@@ -2209,18 +2460,18 @@ function closeDrw() {
 
 function saveDrw() {
   drwDirty = false;
-  g('drw-uns').style.display = 'none';
+  const unsEl2=g('drw-uns');if(unsEl2){unsEl2.classList.remove('show');unsEl2.style.display='';}
   render();
   notify('Saved · cockpit updated', 'ok');
 }
 
 document.addEventListener('keydown', e => {
-  /* v11 — Ctrl/Cmd+K opens the command palette */
+  /* v11: Ctrl/Cmd+K opens the command palette */
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmdkOpen ? closeCmdK() : openCmdK(); return; }
   if (e.key === 'Escape' && cmdkOpen) { closeCmdK(); return; }
   /* Escape closes drawer */
   if (e.key === 'Escape' && currentDrw) { closeDrw(); return; }
-  /* GAP 14 — Arrow keys on score steppers */
+  /* GAP 14: Arrow keys on score steppers */
   const active = document.activeElement;
   if (active && active.closest('.sw')) {
     const key = active.closest('[id^=sv-]')?.id?.replace('sv-','') ||
@@ -2252,10 +2503,10 @@ function adj(key, delta) {
   vEl.value = n; dEl.textContent = n;
   const fbEl = g(`fb-${key}`);
   if (fbEl) {
-    if (key==='cat') { fbEl.textContent=n<=9?`CAT ${n} — Low · Group A/B`:n<=19?`CAT ${n} — Medium–high · Group B/D`:`CAT ${n} — High · Group D`; fbEl.className=`lfb ${n<=9?'lfb-g':n<=19?'lfb-w':'lfb-d'}`; }
-    if (key==='act') { fbEl.textContent=n>=20?`ACT ${n} — Well controlled`:n>=16?`ACT ${n} — Partially controlled`:`ACT ${n} — Uncontrolled · step-up indicated`; fbEl.className=`lfb ${n>=20?'lfb-g':n>=16?'lfb-w':'lfb-d'}`; }
+    if (key==='cat') { fbEl.textContent=n<=9?`CAT ${n}: Low · Group A/B`:n<=19?`CAT ${n}: Medium–high · Group B/D`:`CAT ${n}: High · Group D`; fbEl.className=`lfb ${n<=9?'lfb-g':n<=19?'lfb-w':'lfb-d'}`; }
+    if (key==='act') { fbEl.textContent=n>=20?`ACT ${n}: Well controlled`:n>=16?`ACT ${n}: Partially controlled`:`ACT ${n}: Uncontrolled · step-up indicated`; fbEl.className=`lfb ${n>=20?'lfb-g':n>=16?'lfb-w':'lfb-d'}`; }
   }
-  /* GAP 01 — update in-memory patient state, refresh live zone */
+  /* GAP 01: update in-memory patient state, refresh live zone */
   const v = getVisit();
   if (v) {
     if (key==='cat')  v.cat  = n;
@@ -2269,7 +2520,7 @@ function adj(key, delta) {
   markDirty();
 }
 
-/* GAP 01 — lightweight zone refresh without full re-render */
+/* GAP 01: lightweight zone refresh without full re-render */
 function updateLiveZone() {
   const pt = getPt(), v = getVisit();
   if (!pt||!v) return;
@@ -2282,26 +2533,26 @@ function updateLiveZone() {
     lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-d';
     lcpTxt= `GOLD Group ${grp} · Stage ${st.s} ${st.l}`;
     zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · GOLD Group ${grp} · Visit ${v.n}`;
-    zTt   = zCls==='sz-r'?'Progressive decline — immediate review':zCls==='sz-a'?'Suboptimal control — treatment review':'Stable — continue current management';
+    zTt   = zCls==='sz-r'?'Progressive decline: immediate review':zCls==='sz-a'?'Suboptimal control: treatment review':'Stable: continue current management';
   } else if (d==='ASTHMA') {
     const ctrl=asthmaCtrl(v.act);
     zCls  = ctrl.level==='uncontrolled'?'sz-r':ctrl.level==='partial'?'sz-a':'sz-g';
     lcpCls= ctrl.level==='controlled'?'lcp-ctrl':ctrl.level==='partial'?'lcp-part':'lcp-unc';
     lcpTxt= `Asthma ${ctrl.label} · ACT ${v.act}`;
     zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · ${ctrl.label} · Visit ${v.n}`;
-    zTt   = ctrl.level==='uncontrolled'?'Uncontrolled asthma — urgent step-up':ctrl.level==='partial'?'Partially controlled — optimise step':'Well controlled';
+    zTt   = ctrl.level==='uncontrolled'?'Uncontrolled asthma: urgent step-up':ctrl.level==='partial'?'Partially controlled: optimise step':'Well controlled';
   } else if (d==='ACO') {
     const grp=goldGroup(v), ctrl=asthmaCtrl(v.act);
     zCls='sz-a'; lcpCls='lcp-part';
     lcpTxt=`GOLD Group ${grp} · Asthma ${ctrl.label}`;
     zLbl=`Amber zone · GOLD Group ${grp} · ACT ${v.act} · Visit ${v.n}`;
-    zTt='Overlap syndrome — dual pathway assessment';
+    zTt='Overlap syndrome: dual pathway assessment';
   } else {
     const inf=v.sputum&&v.sputum!=='white';
     zCls=inf?'sz-a':'sz-g'; lcpCls=inf?'lcp-part':'lcp-ctrl';
     lcpTxt=`${inf?'Possible infection':'Stable'} · FEV₁ ${v.fev1}%`;
     zLbl=`${inf?'Amber':'Green'} zone · Chronic Bronchitis · Visit ${v.n}`;
-    zTt=inf?'Purulent sputum — consider antibiotics':'Stable — continue mucus clearance';
+    zTt=inf?'Purulent sputum: consider antibiotics':'Stable: continue mucus clearance';
   }
   const sz=g('status-zone'); if(sz) sz.className=`sz ${zCls} animate-in`;
   const zlEl=g('z-lbl'); if(zlEl) zlEl.textContent=zLbl;
@@ -2314,9 +2565,9 @@ function liveEos(val) {
   const n  = parseInt(val);
   const el = g('fb-eos');
   if (!el||isNaN(n)) return;
-  if (n>=300)  { el.textContent=`${n} c/µL — above threshold · biologic eligible`; el.className='lfb lfb-g'; }
-  else if(n>=250){el.textContent=`${n} c/µL — ${300-n} below threshold · repeat next visit`; el.className='lfb lfb-w'; }
-  else if(n>0) { el.textContent=`${n} c/µL — below T2-high threshold`; el.className='lfb lfb-i'; }
+  if (n>=300)  { el.textContent=`${n} c/µL: above threshold · biologic eligible`; el.className='lfb lfb-g'; }
+  else if(n>=250){el.textContent=`${n} c/µL: ${300-n} below threshold · repeat next visit`; el.className='lfb lfb-w'; }
+  else if(n>0) { el.textContent=`${n} c/µL: below T2-high threshold`; el.className='lfb lfb-i'; }
   markDirty();
 }
 
@@ -2348,13 +2599,13 @@ function buildDrwContent(type) {
 
 /* Helpers */
 const S = (lbl,eng,content) => `<div class="fsec"><div class="flbl-sec">${lbl}${eng?`<span class="feng">${eng}</span>`:''}</div>${content}</div>`;
-const F = (lbl,unit,ph,prev,id,cb) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="iuw"><input class="${id?'fi live':'fi'}" type="number" placeholder="${ph||'—'}"${id?` id="${id}" oninput="${cb}(this.value);markDirty()"`:' oninput="markDirty()"'}><span class="iu">${unit}</span></div>${id?`<div class="lfb lfb-i" id="fb-${id.replace('-input','')}">Enter value</div>`:''}</div>`;
+const F = (lbl,unit,ph,prev,id,cb) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="iuw"><input class="${id?'fi live':'fi'}" type="number" placeholder="${ph||''}"${id?` id="${id}" oninput="${cb}(this.value);markDirty()"`:' oninput="markDirty()"'}><span class="iu">${unit}</span></div>${id?`<div class="lfb lfb-i" id="fb-${id.replace('-input','')}">Enter value</div>`:''}</div>`;
 const Sel = (lbl,opts,sel,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><select class="fsel" onchange="markDirty()">${opts.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('')}</select></div>`;
 const YN  = (lbl,yes,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="ynw"><div class="ynb no${yes?'':' on'}" onclick="togYN(this)">No</div><div class="ynb yes${yes?' on':''}" onclick="togYN(this)">Yes</div></div></div>`;
 const Stp = (key,lbl,val,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="sw"><div class="sbn" onclick="adj('${key}',-1)">−</div><div class="sdisp" id="sd-${key}">${val}</div><div class="sbn" onclick="adj('${key}',1)">+</div></div><input type="hidden" id="sv-${key}" value="${val}"><div class="lfb lfb-i" id="fb-${key}">Adjust to see live classification</div></div>`;
-/* v11 — Identity & Access: extra UI helpers */
+/* v11: Identity & Access: extra UI helpers */
 const YN2 = (lbl,yes,fn) => `<div class="fgrp"><label class="fl">${lbl}</label><div class="ynw"><div class="ynb no${yes?'':' on'}" onclick="${fn}">No</div><div class="ynb yes${yes?' on':''}" onclick="${fn}">Yes</div></div></div>`;
-const permRow = (lbl,val,isText) => `<div class="perm-row"><span>${lbl}</span>${isText?`<span class="mono" style="font-size:var(--fs-xs)">${val}</span>`:(val?'<span class="tag tg">Yes</span>':'<span class="tag ti2">No</span>')}</div>`;
+const permRow = (lbl,val,isText) => `<div class="perm-row"><span>${lbl}</span>${isText?`<span class="mono" style="font-size:var(--fs-xs)">${val}</span>`:(val?'<span class="sind g"><span class="sind-dot"></span>Yes</span>':'<span class="sind n"><span class="sind-dot"></span>No</span>')}</div>`;
 
 function buildResolutionWorkflow(perms, abac) {
   const rs = resolutionState;
@@ -2363,7 +2614,7 @@ function buildResolutionWorkflow(perms, abac) {
   }
   let html = `<div class="fgrp"><label class="fl">Purpose of access <span class="req">*</span></label>
     <select class="fsel" onchange="setResolutionPurpose(this.value)">
-      <option value="">— Select —</option>
+      <option value="">Select</option>
       <option value="clinical_followup"${rs.purpose==='clinical_followup'?' selected':''}>Clinical follow-up</option>
       <option value="referral"${rs.purpose==='referral'?' selected':''}>Referral to specialist</option>
       <option value="ehr_export"${rs.purpose==='ehr_export'?' selected':''}>EHR export</option>
@@ -2379,12 +2630,12 @@ function buildResolutionWorkflow(perms, abac) {
   if (!rs.path) return html;
 
   if (rs.path === 'clinical') {
-    html += `<div class="ia ${abac.pass?'ia-g':'ia-d'}" style="margin-top:10px"><i class="ti ti-${abac.pass?'circle-check':'circle-x'}"></i><div class="ia-body"><strong>ABAC check —</strong> ${abac.reason}</div></div>`;
+    html += `<div class="ia ${abac.pass?'ia-g':'ia-d'}" style="margin-top:10px"><i class="ti ti-${abac.pass?'circle-check':'circle-x'}"></i><div class="ia-body"><strong>ABAC check:</strong> ${abac.reason}</div></div>`;
     if (!abac.pass && perms.breakGlass) {
       html += `<div class="fgrp" style="margin-top:8px"><label class="fl" style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" ${rs.breakGlass?'checked':''} onchange="toggleBreakGlass()" style="width:auto"> Break-glass emergency access<span class="opt">Triggers mandatory review</span></label></div>`;
     }
   } else {
-    html += `<div class="ia ia-g" style="margin-top:10px"><i class="ti ti-server-2"></i><div class="ia-body"><strong>Service authentication —</strong> integration-service identity verified, no MFA required for system export.</div></div>`;
+    html += `<div class="ia ia-g" style="margin-top:10px"><i class="ti ti-server-2"></i><div class="ia-body"><strong>Service authentication:</strong> integration-service identity verified, no MFA required for system export.</div></div>`;
   }
 
   const blocked = rs.path==='clinical' && !abac.pass && !rs.breakGlass;
@@ -2394,7 +2645,7 @@ function buildResolutionWorkflow(perms, abac) {
   if (needsMfa && !rs.mfaVerified) {
     html += `<div class="mfa-box" style="margin-top:10px">
       <div class="mfa-hdr"><i class="ti ti-device-mobile"></i>Step-up verification required</div>
-      <div style="font-size:var(--fs-xs);color:var(--i4);margin:4px 0 8px">High-risk action — enter the 6-digit code from your authenticator app.</div>
+      <div style="font-size:var(--fs-xs);color:var(--i4);margin:4px 0 8px">High-risk action: enter the 6-digit code from your authenticator app.</div>
       <div style="display:flex;gap:8px"><input class="fi mono" maxlength="6" placeholder="000000" style="width:100px;flex:none"><button class="btn bp btn-sm" onclick="submitMFA()"><i class="ti ti-shield-check"></i>Verify</button></div>
     </div>`;
     return html;
@@ -2419,10 +2670,10 @@ function buildIdentityAuditTable(perms) {
   return `<div style="display:flex;flex-direction:column;border:1px solid var(--i1);border-radius:var(--rmd);overflow:hidden">
     ${events.slice(0,12).map(e => `<div style="display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-bottom:1px solid var(--i1);font-size:var(--fs-2xs)">
       <span class="mono" style="color:var(--i4);width:90px;flex-shrink:0">${e.ts}</span>
-      <span style="flex:1">${e.action.replace(/_/g,' ')} · AIRMAP-2024-${getDisplayAlias(e.patient)}${e.detail?` — ${e.detail}`:''}${e.purpose?` · ${e.purpose.replace(/_/g,' ')}`:''}</span>
+      <span style="flex:1">${e.action.replace(/_/g,' ')} · AIRMAP-2024-${getDisplayAlias(e.patient)}${e.detail?`: ${e.detail}`:''}${e.purpose?` · ${e.purpose.replace(/_/g,' ')}`:''}</span>
       <span class="mono" style="color:var(--i4)">${RBAC_ROLES[e.actor].label}</span>
       <span class="mono" style="color:var(--i4)">${e.mfa}</span>
-      ${e.breakGlass?'<span class="tag tr">break-glass</span>':''}
+      ${e.breakGlass?'<span class="sind r"><span class="sind-dot"></span>break-glass</span>':''}
     </div>`).join('')}
   </div>
   <div style="font-size:var(--fs-2xs);color:var(--i4);margin-top:6px">Showing ${Math.min(events.length,12)} of ${events.length} · immutable, append-only in a production system.</div>`;
@@ -2434,7 +2685,7 @@ function bVisitUpdate() {
   const isACO    = pt.disease==='ACO';
   const isCOPD   = pt.disease==='COPD';
   const isCB     = pt.disease==='CHRONIC_BRONCHITIS';
-  return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Visit ${v.n} · ${v.date}</strong> — previous values shown. Update only what changed today.</div></div>
+  return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Visit ${v.n} · ${v.date}</strong>: previous values shown. Update only what changed today.</div></div>
   ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span style="font-size:var(--fs-xs);color:var(--i4)">Last visit note (${pv.date}):</span><br><em style="color:var(--i5)">${pv.note}</em></div></div>` : ''}
   ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span class="xs muted">Previous visit note (${pv.date}):</span><br><em>${pv.note}</em></div></div>` : ''}
   ${S('Spirometry','engine.layer_1 · layer_7',`<div class="fg">
@@ -2448,7 +2699,7 @@ function bVisitUpdate() {
     <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: Grade ${pv.mmrc}</span></div>`:''}<label class="fl">mMRC grade</label><div class="rg">${[0,1,2,3,4].map(n=>`<div class="ro${n===v.mmrc?' sel':''}" data-rg="mmrc" data-rv="${n}" onclick="selR('mmrc',${n})" role="radio"><div class="rdot"></div>${n}</div>`).join('')}</div><div class="xs muted" style="margin-top:4px">0 = strenuous only · 4 = housebound</div></div>
   </div>`):''}
   ${(isAsthma||isACO)?S('ACT score','engine.layer_1',`<div class="fg">
-    ${Stp('act','ACT score (5–25)',v.act||5,pv?`Previous: ${pv.act||'—'}`:'')}
+    ${Stp('act','ACT score (5–25)',v.act||5,pv?`Previous: ${pv.act||''}`:'')}
     ${F('Rescue use','×/wk','',pv?`Previous: ${pv.rescueWk}×/wk`:'')}
     ${F('Nighttime symptoms','nts/wk','',pv?`Previous: ${pv.nightWk||0}/wk`:'')}
   </div>`):''}
@@ -2457,20 +2708,20 @@ function bVisitUpdate() {
     ${Sel('Volume estimate',['Low','Moderate','High'],v.sputumVol||'low',`Previous: ${pv?.sputumVol||'low'}`)}
     ${Sel('Purulence',['None','Mild','Moderate','Severe'],'None')}
   </div>`):''}
-  ${S('Exacerbation burden — 12m','engine.layer_4',`<div class="fg">
+  ${S('Exacerbation burden: 12m','engine.layer_4',`<div class="fg">
     ${Stp('exac','Total exacerbations',v.exac,pv?`Previous: ${pv.exac}`:'')}
     ${Stp('hosp','Hospitalisations',v.hosp,pv?`Previous: ${pv.hosp}`:'')}
     ${Stp('ocs','Oral steroid courses',v.ocs,pv?`Previous: ${pv.ocs}`:'')}
     ${Stp('icu','ICU admissions',0,'Previous: 0')}
   </div>`)}
   ${S('Biomarkers','engine.layer_3 · layer_5',`<div class="fg">
-    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.eos} c/µL</span></div>`:''}<label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="—" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
+    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.eos} c/µL</span></div>`:''}<label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
     ${F('FeNO','ppb','',pv?'Previous: not measured':'')}
     ${F('CRP','mg/L','')}
   </div>`)}
   ${S('Adherence & technique','engine.layer_5',`<div class="fg">
-    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.adherence}%</span></div>`:''}<label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80% — address before step-up</div>':''}</div>
-    ${Sel('Inhaler technique',['Adequate','Suboptimal','Poor — needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor — needs retraining':'Suboptimal',pv?`Previous: ${pv.technique}`:'')}
+    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.adherence}%</span></div>`:''}<label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div>
+    ${Sel('Inhaler technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal',pv?`Previous: ${pv.technique}`:'')}
   </div>`)}
   ${S('Log new event','',`<div class="fg">
     ${Sel('Event type',['None','Hospital visit','Medication change','Exacerbation','Lifestyle change','Clinic visit'],'None')}
@@ -2486,22 +2737,22 @@ function bActionPlan() {
   const steps = items => items.map(s=>`<li class="apz-s"><span class="apz-arr">→</span>${s}</li>`).join('');
   const trigger = isAsthma ? 'ACT drops below 16' : 'CAT increases by more than 3 points';
   return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · AIRMAP-2024-${currentPt} · ${pt.disease.replace('_',' ')} · engine.layer_6</div>
-  <div class="apz apz-g"><div class="apz-tt">Green zone — well controlled</div><ul class="apz-steps">${steps(['Continue current medications as prescribed',`Monitor daily — contact clinic if ${trigger}`,'Aim for 3000+ steps daily','Attend scheduled clinic review'])}</ul></div>
-  <div class="apz apz-a"><div class="apz-tt">Amber zone — worsening</div><ul class="apz-steps">${steps([hasSABA?'Increase SABA — up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours — contact clinic','Rest and reduce exertion','Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma?'Double ICS dose if instructed':''])}</ul></div>
-  <div class="apz apz-r"><div class="apz-tt">Red zone — emergency</div><ul class="apz-steps">${steps([hasSABA?'Use SABA immediately — 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive — call for assistance'])}</ul></div>
+  <div class="apz apz-g"><div class="apz-tt">Green zone: well controlled</div><ul class="apz-steps">${steps(['Continue current medications as prescribed',`Monitor daily: contact clinic if ${trigger}`,'Aim for 3000+ steps daily','Attend scheduled clinic review'])}</ul></div>
+  <div class="apz apz-a"><div class="apz-tt">Amber zone: worsening</div><ul class="apz-steps">${steps([hasSABA?'Increase SABA: up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours: contact clinic','Rest and reduce exertion','Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma?'Double ICS dose if instructed':''])}</ul></div>
+  <div class="apz apz-r"><div class="apz-tt">Red zone: emergency</div><ul class="apz-steps">${steps([hasSABA?'Use SABA immediately: 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive: call for assistance'])}</ul></div>
   <div style="margin-top:14px">${[['Daily','Symptom score · rescue use'],['Weekly',isAsthma?'ACT self-assessment':'CAT self-assessment'],['Monthly','Review with healthcare provider'],['Quarterly','Pulmonary function test'],['Annual','Comprehensive review · vaccinations']].map(([k,v])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:var(--fs-base);color:var(--i7)">${v}</span></div>`).join('')}</div>
-  <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="notify('Printed','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="notify('PDF generated','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
+  <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="window.print();notify('Print dialog opened','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
 }
 
 function buildMedConflicts(pt) {
   const conflicts = [];
   const cls = pt.meds.map(m=>m.cls);
   const hasBetaBlocker = pt.meds.some(m=>m.drug.toLowerCase().includes('atenolol')||m.drug.toLowerCase().includes('bisoprolol')||m.drug.toLowerCase().includes('metoprolol')||m.drug.toLowerCase().includes('carvedilol'));
-  if (hasBetaBlocker && cls.includes('SABA')) conflicts.push({ sev:'d', icon:'ti-alert-triangle', txt:'<strong>SABA + beta-blocker conflict</strong> — beta-blockers reduce SABA efficacy and may precipitate bronchospasm. Review with cardiology.' });
-  if (cls.includes('ICS') && pt.comorbidities?.osteoporosis) conflicts.push({ sev:'w', icon:'ti-bone', txt:'<strong>High-dose ICS + osteoporosis</strong> — cumulative ICS burden increases fracture risk. Consider bone protection therapy.' });
+  if (hasBetaBlocker && cls.includes('SABA')) conflicts.push({ sev:'d', icon:'ti-alert-triangle', txt:'<strong>SABA + beta-blocker conflict</strong>: beta-blockers reduce SABA efficacy and may precipitate bronchospasm. Review with cardiology.' });
+  if (cls.includes('ICS') && pt.comorbidities?.osteoporosis) conflicts.push({ sev:'w', icon:'ti-bone', txt:'<strong>High-dose ICS + osteoporosis</strong>: cumulative ICS burden increases fracture risk. Consider bone protection therapy.' });
   const ocsV = pt.visits.reduce((s,v)=>s+(v.ocs||0),0);
-  if (cls.includes('ICS') && ocsV >= 3) conflicts.push({ sev:'w', icon:'ti-pill', txt:`<strong>ICS + repeated OCS (${ocsV} courses)</strong> — cumulative steroid burden significant. Consider biologic to reduce OCS dependency.` });
-  if (pt.demographics?.smoker==='Current smoker' && cls.includes('ICS')) conflicts.push({ sev:'w', icon:'ti-flame', txt:'<strong>ICS + active smoking</strong> — smoking reduces ICS efficacy by up to 50%. Smoking cessation is the most important therapeutic intervention.' });
+  if (cls.includes('ICS') && ocsV >= 3) conflicts.push({ sev:'w', icon:'ti-pill', txt:`<strong>ICS + repeated OCS (${ocsV} courses)</strong>: cumulative steroid burden significant. Consider biologic to reduce OCS dependency.` });
+  if (pt.demographics?.smoker==='Current smoker' && cls.includes('ICS')) conflicts.push({ sev:'w', icon:'ti-flame', txt:'<strong>ICS + active smoking</strong>: smoking reduces ICS efficacy by up to 50%. Smoking cessation is the most important therapeutic intervention.' });
   if (!conflicts.length) return '';
   return `<div style="margin-top:12px"><div class="flbl-sec">Medication conflict checker<span class="feng">engine.layer_5</span></div>${conflicts.map(c=>`<div class="ia ia-${c.sev}" style="margin-bottom:7px"><i class="ti ${c.icon}"></i><div class="ia-body">${c.txt}</div></div>`).join('')}</div>`;
 }
@@ -2510,20 +2761,20 @@ function bMedications() {
   const pt=getPt(), v=getVisit();
   const hasSABAOveruse = pt.disease==='ASTHMA' && v.rescueWk >= 7;
   return `${S('Current regimen','engine.layer_5',`<div class="tw"><table><thead><tr><th>Drug</th><th>Class</th><th>Dose</th><th>Frequency</th><th>Since</th><th>Status</th><th></th></tr></thead><tbody>
-    ${pt.meds.map(m=>`<tr><td class="strong">${m.drug}</td><td><span class="tag ${m.tag}">${m.cls}</span></td><td class="mono sm">${m.dose}</td><td>${m.freq}</td><td class="mono sm">${m.since}</td><td><span class="tag tg">Active</span></td><td><button class="btn bg btn-sm" onclick="notify('Edit','info')" style="padding:4px 8px"><i class="ti ti-pencil"></i></button></td></tr>`).join('')}
+    ${pt.meds.map(m=>`<tr><td class="strong">${m.drug}</td><td><span class="tag ${m.tag}">${m.cls}</span></td><td class="mono sm">${m.dose}</td><td>${m.freq}</td><td class="mono sm">${m.since}</td><td><span class="sind g"><span class="sind-dot"></span>Active</span></td><td><button class="btn bg btn-sm" onclick="notify('Edit','info')" style="padding:4px 8px"><i class="ti ti-pencil"></i></button></td></tr>`).join('')}
   </tbody></table></div>
-  ${hasSABAOveruse?'<div class="ia ia-d" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body"><strong>SABA overuse detected</strong> — daily rescue use indicates uncontrolled asthma. Step-up required before SABA becomes primary treatment.</div></div>':''}
+  ${hasSABAOveruse?'<div class="ia ia-d" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body"><strong>SABA overuse detected</strong>: daily rescue use indicates uncontrolled asthma. Step-up required before SABA becomes primary treatment.</div></div>':''}
   <button class="btn bs btn-sm mt2" onclick="notify('Add medication','info')"><i class="ti ti-plus"></i>Add medication</button>
   ${buildMedConflicts(pt)}`)}
   ${S('Adherence & technique','engine.layer_5',`<div class="fg">
-    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||'—'}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80% — address before step-up</div>':''}</div>
-    ${Sel('Technique',['Adequate','Suboptimal','Poor — needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor — needs retraining':'Suboptimal')}
+    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||''}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div>
+    ${Sel('Technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal')}
     ${Sel('Main barrier',['None','Forgetfulness','Side effect concern','Cost','Complex regimen'],'None')}
   </div>`)}`;
 }
 
-/* v11 — flow-volume loop & volume-time curve generation (item 5).
-   Curves are parametrised from FVC (L) and FEV1/FVC ratio (%) — the
+/* v11: flow-volume loop & volume-time curve generation (item 5).
+   Curves are parametrised from FVC (L) and FEV1/FVC ratio (%): the
    only spirometry values already in the patient record. A faint
    reference trace (ratio 80%, same FVC) gives shape context. */
 function _fvLoopPoints(fvc, ratio) {
@@ -2605,7 +2856,7 @@ function buildSpirometryCurves(v) {
 function bInvestigations() {
   const v=getVisit(), pv=prevVisit();
   return `
-  ${S('Spirometry — post-bronchodilator','engine.layer_1',`<div class="fg">
+  ${S('Spirometry: post-bronchodilator','engine.layer_1',`<div class="fg">
     ${F('FEV₁','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'')}
     ${F('FVC','L','',pv?`Previous: ${(pv.fvc||3.2).toFixed(2)} L`:'')}
     ${F('FEV₁ % predicted','%','',pv?`Previous: ${pv.fev1}%`:'')}
@@ -2616,7 +2867,7 @@ function bInvestigations() {
   </div>`)}
   ${S('Flow-volume & volume-time curves','engine.layer_1', buildSpirometryCurves(v))}
   ${S('Biomarkers','engine.layer_3 · layer_5',`<div class="fg">
-    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous: ${v.eos} c/µL</span></div><label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="—" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
+    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous: ${v.eos} c/µL</span></div><label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
     ${F('FeNO','ppb','')} ${F('CRP','mg/L','')} ${F('Total IgE','IU/mL','')}
   </div>`)}
   ${S('Functional & imaging','',`<div class="fg">
@@ -2664,7 +2915,7 @@ function bLongitudinal() {
 function bFullRecord() {
   return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">All data sections for AIRMAP-2024-${currentPt}.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
-    ${[['ti-id-badge','Patient ID & pseudonymisation','register'],['ti-user','Demographics & history','register'],['ti-stethoscope','Spirometry & investigations','investigations'],['ti-clipboard-list','Clinical scores','visit-update'],['ti-shield','Disease-specific assessment','visit-update'],['ti-leaf','Environmental & lifestyle','visit-update'],['ti-pill','Medications & adherence','medications'],['ti-chart-line','Longitudinal progression','longitudinal'],['ti-brain','Clinical analysis — all 7 layers','analysis'],['ti-target','Action plan','action-plan']].map(([icon,lbl,drw])=>`
+    ${[['ti-id-badge','Patient ID & pseudonymisation','register'],['ti-user','Demographics & history','register'],['ti-stethoscope','Spirometry & investigations','investigations'],['ti-clipboard-list','Clinical scores','visit-update'],['ti-shield','Disease-specific assessment','visit-update'],['ti-leaf','Environmental & lifestyle','visit-update'],['ti-pill','Medications & adherence','medications'],['ti-chart-line','Longitudinal progression','longitudinal'],['ti-brain','Clinical analysis: all 7 layers','analysis'],['ti-target','Action plan','action-plan']].map(([icon,lbl,drw])=>`
       <button class="abt abt-s" onclick="closeDrw();setTimeout(()=>openDrw('${drw}'),100)">
         <div class="abt-ico"><i class="ti ${icon}"></i></div>
         <div class="abt-tx"><div class="abt-lbl">${lbl}</div></div>
@@ -2677,13 +2928,13 @@ function bFullRecord() {
   </div>`;
 }
 
-/* GAP 13 — Audit log (illustrative — real data from Supabase audit_log table) */
+/* GAP 13: Audit log (illustrative: real data from Supabase audit_log table) */
 function buildAuditLog() {
   const pt  = getPt();
   const v   = getVisit();
   const pv  = prevVisit();
   const entries = [
-    { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n} — data saved · ${pt.disease.replace('_',' ')}` },
+    { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n}: data saved · ${pt.disease.replace('_',' ')}` },
     { ts:v.date + ' 14:28', user:'Dr. García',  action:'Follow-up drawer opened · visit-update mode' },
     { ts:v.date + ' 14:10', user:'Dr. García',  action:`FEV₁ recorded: ${v.fev1}% · spirometry saved` },
     ...(pv ? [{ ts:pv.date + ' 09:15', user:'Dr. García', action:`Visit ${pv.n} saved · CAT ${pv.cat}${v.cat && pv.cat ? ' → '+v.cat : ''}` }] : []),
@@ -2698,14 +2949,51 @@ function buildAuditLog() {
     `<div style="margin-top:8px;font-size:var(--fs-xs);color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
 }
 
-/* GAP 07 — Cohort overview drawer */
+/* GAP 07: Cohort overview drawer */
+function bCohortOverviewCards(entries) {
+  const cards = entries.map(([id, pt]) => {
+    const lastV = pt.visits[pt.visits.length - 1];
+    const grp   = (pt.disease==='COPD'||pt.disease==='ACO') ? goldGroup(lastV) : null;
+    const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(lastV.act) : null;
+    const zoneStr = pt.disease==='COPD' ? `GOLD Group ${grp} · FEV₁ ${lastV.fev1}%`
+                  : pt.disease==='ASTHMA' ? `ACT ${lastV.act} · ${ctrl.label}`
+                  : pt.disease==='ACO'    ? `Group ${grp} · ACT ${lastV.act}`
+                  : `FEV₁ ${lastV.fev1}% · sputum ${lastV.sputum||'stable'}`;
+    const topAlert = pt.disease==='ASTHMA' && lastV.act < 16 ? 'Uncontrolled: step-up urgent'
+                   : pt.disease==='COPD' && lastV.exac >= 2 ? `${lastV.exac} exacerbations: high risk`
+                   : pt.disease==='COPD' && lastV.eos >= 250 ? `Eos ${lastV.eos}: biologic threshold`
+                   : pt.disease==='ACO' && !pt.meds.find(m=>m.cls==='LABA') ? 'LABA missing: add to regimen'
+                   : pt.demographics.smoker==='Current smoker' ? 'Still smoking: cessation priority'
+                   : lastV.adherence < 80 ? `Adherence ${lastV.adherence}%: address`
+                   : 'No urgent actions';
+    const alertSev = topAlert.includes('urgent')||topAlert.includes('risk') ? 'r'
+                   : topAlert.includes('priority')||topAlert.includes('missing')||topAlert.includes('threshold') ? 'a'
+                   : 'g';
+    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
+    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'}[pt.disease];
+    const clickFn = appView === 'cockpit' ? `closeDrw();selectPt('${id}')` : `selectPt('${id}')`;
+    return `<div style="background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .15s;" onclick="${clickFn}" onmouseover="this.style.borderColor='var(--n3)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform=''">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div class="sind-dot" style="width:7px;height:7px;background:${alertSev==='r'?'var(--r5)':alertSev==='a'?'var(--a5)':'var(--g5)'}"></div>
+        <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4)">AIRMAP-2024-${id}</span>
+        <span style="font-family:var(--mono);font-size:var(--fs-3xs);text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
+      </div>
+      <div style="font-family:var(--serif);font-size:var(--fs-h3);font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
+      <div style="font-size:var(--fs-sm);color:var(--i5);margin-bottom:10px">${zoneStr}</div>
+      <div class="sind ${alertSev}"><span class="sind-dot"></span>${topAlert}</div>
+      <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i3)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
+    </div>`;
+  }).join('');
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>`;
+}
+
 function bCohortOverview() {
   const entries = Object.entries(DB);
   const K_ANON = 5;
   const zoneCounts = {r:0,a:0,g:0};
   entries.forEach(([,pt]) => { zoneCounts[pt.risk] = (zoneCounts[pt.risk]||0)+1; });
   const kStat = (n, label) => n < K_ANON
-    ? `<div class="kstat"><div class="kstat-lbl">${label}</div><div class="kstat-val suppressed" title="Suppressed — group size below k-anonymity threshold (k=${K_ANON})"><i class="ti ti-eye-off" style="font-size:var(--fs-sm)"></i> &lt;${K_ANON}</div></div>`
+    ? `<div class="kstat"><div class="kstat-lbl">${label}</div><div class="kstat-val suppressed" title="Suppressed: group size below k-anonymity threshold (k=${K_ANON})"><i class="ti ti-eye-off" style="font-size:var(--fs-sm)"></i> &lt;${K_ANON}</div></div>`
     : `<div class="kstat"><div class="kstat-lbl">${label}</div><div class="kstat-val">${n}</div></div>`;
   const statsHTML = `
     <span class="tenant-badge"><i class="ti ti-building-hospital"></i>Tenant: General Hospital A · pseudonym keyspace tenant_001</span>
@@ -2715,52 +3003,19 @@ function bCohortOverview() {
       ${kStat(zoneCounts.a||0,'Amber zone')}
       ${kStat(zoneCounts.g||0,'Green zone')}
     </div>
-    <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>k-anonymity guardrail —</strong> any aggregate subgroup below ${K_ANON} patients is suppressed here to reduce re-identification risk. Individual patient cards below remain visible to authorised clinicians for direct care.</div></div>`;
-  const cards = entries.map(([id, pt]) => {
-    const lastV = pt.visits[pt.visits.length - 1];
-    const grp   = (pt.disease==='COPD'||pt.disease==='ACO') ? goldGroup(lastV) : null;
-    const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(lastV.act) : null;
-    const zoneStr = pt.disease==='COPD' ? `GOLD Group ${grp} · FEV₁ ${lastV.fev1}%`
-                  : pt.disease==='ASTHMA' ? `ACT ${lastV.act} · ${ctrl.label}`
-                  : pt.disease==='ACO'    ? `Group ${grp} · ACT ${lastV.act}`
-                  : `FEV₁ ${lastV.fev1}% · sputum ${lastV.sputum||'stable'}`;
-    const topAlert = pt.disease==='ASTHMA' && lastV.act < 16 ? 'Uncontrolled — step-up urgent'
-                   : pt.disease==='COPD' && lastV.exac >= 2 ? `${lastV.exac} exacerbations — high risk`
-                   : pt.disease==='COPD' && lastV.eos >= 250 ? `Eos ${lastV.eos} — biologic threshold`
-                   : pt.disease==='ACO' && !pt.meds.find(m=>m.cls==='LABA') ? 'LABA missing — add to regimen'
-                   : pt.demographics.smoker==='Current smoker' ? 'Still smoking — cessation priority'
-                   : lastV.adherence < 80 ? `Adherence ${lastV.adherence}% — address`
-                   : 'No urgent actions';
-    const alertSev = topAlert.includes('urgent')||topAlert.includes('risk') ? 'r'
-                   : topAlert.includes('priority')||topAlert.includes('missing')||topAlert.includes('threshold') ? 'a'
-                   : 'g';
-    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
-    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'}[pt.disease];
-    const zoneCls  = {r:'sz-r',a:'sz-a',g:'sz-g'}[pt.risk];
-    return `<div style="background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .15s;box-shadow:var(--sh1)" onclick="closeDrw();selectPt('${id}')" onmouseover="this.style.borderColor='var(--n2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform=''">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <div style="width:8px;height:8px;border-radius:50%;background:${pt.risk==='r'?'var(--r5)':pt.risk==='a'?'var(--a5)':'var(--g5)'}"></div>
-        <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4)">AIRMAP-2024-${id}</span>
-        <span style="font-family:var(--mono);font-size:var(--fs-3xs);text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
-      </div>
-      <div style="font-family:var(--serif);font-size:var(--fs-h3);font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
-      <div style="font-size:var(--fs-sm);color:var(--i5);margin-bottom:8px">${zoneStr}</div>
-      <div style="font-size:var(--fs-xs);font-weight:500;color:${alertSev==='r'?'var(--r7)':alertSev==='a'?'var(--a7)':'var(--g7)'};background:${alertSev==='r'?'var(--r0)':alertSev==='a'?'var(--a0)':'var(--g0)'};border:1px solid ${alertSev==='r'?'var(--r1)':alertSev==='a'?'var(--a1)':'var(--g1)'};border-radius:4px;padding:4px 8px">${topAlert}</div>
-      <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i4)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
-    </div>`;
-  }).join('');
-  return `${statsHTML}<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>
-  <div style="margin-top:14px;font-size:var(--fs-sm);color:var(--i4);text-align:center">Click any patient card to open their cockpit</div>`;
+    <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>k-anonymity guardrail:</strong> any aggregate subgroup below ${K_ANON} patients is suppressed here to reduce re-identification risk. Individual patient cards below remain visible to authorised clinicians for direct care.</div></div>`;
+  return `${statsHTML}${bCohortOverviewCards(entries)}
+  <div style="margin-top:14px;font-size:var(--fs-sm);color:var(--i4);text-align:center">Select any patient card to open their cockpit</div>`;
 }
 
-/* GAP 04 — Demographics drawer */
+/* GAP 04: Demographics drawer */
 function bDemographics() {
   const pt = getPt();
   const d  = pt.demographics;
   const c  = pt.comorbidities;
   const v  = pt.vaccinations;
   return `
-  <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Stable data</strong> — update only when something has genuinely changed. These values feed engine layers 1, 4 and 5.</div></div>
+  <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Stable data</strong>: update only when something has genuinely changed. These values feed engine layers 1, 4 and 5.</div></div>
   ${S('Basic characteristics','engine.layer_1 · layer_4',`<div class="fg">
     <div class="fgrp"><label class="fl">Age</label><div class="iuw"><input class="fi" type="number" value="${d.age}" oninput="markDirty()"><span class="iu">yrs</span></div></div>
     ${Sel('Sex',['Male','Female','Other'],d.sex)}
@@ -2787,14 +3042,14 @@ function bDemographics() {
   </div>`)}`;
 }
 
-/* GAP 05 — Environment / lifestyle drawer */
+/* GAP 05: Environment / lifestyle drawer */
 function bEnvironment() {
   return `
   ${S('Air quality & environmental triggers','engine.layer_2',`<div class="fg">
     <div class="fgrp"><label class="fl">Air Quality Index (AQI)</label><div class="iuw"><input class="fi" type="number" min="0" max="500" placeholder="0–500" oninput="markDirty()"><span class="iu">AQI</span></div><div class="fhint">Good &lt;50 · Moderate 51–100 · Unhealthy 101+</div></div>
     ${Sel('AQI impact on symptoms',['No impact','Mild worsening','Moderate','Severe'],'No impact')}
     ${Sel('Pollen level',['Low','Medium','High','Very high'],'Low')}
-    <div class="fgrp"><label class="fl">Humidity</label><div class="iuw"><input class="fi" type="number" min="0" max="100" placeholder="—" oninput="markDirty()"><span class="iu">%</span></div><div class="fhint">High &gt;70% can worsen symptoms</div></div>
+    <div class="fgrp"><label class="fl">Humidity</label><div class="iuw"><input class="fi" type="number" min="0" max="100" placeholder="" oninput="markDirty()"><span class="iu">%</span></div><div class="fhint">High &gt;70% can worsen symptoms</div></div>
   </div>`)}
   ${S('Occupational & home','engine.layer_2',`<div class="fg">
     ${Sel('Occupational exposure',['None','Dust / fumes','Chemicals','Smoke / combustion','Other'],'None')}
@@ -2803,8 +3058,8 @@ function bEnvironment() {
     ${Sel('Pet exposure',['None','Dogs','Cats','Other animals'],'None')}
   </div>`)}
   ${S('Lifestyle & behavioural','engine.layer_2 · layer_6',`<div class="fg">
-    <div class="fgrp"><label class="fl">Daily steps (average)</label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">steps</span></div><div class="fhint">Target ≥3000 for COPD</div></div>
-    <div class="fgrp"><label class="fl">Sleep (average)</label><div class="iuw"><input class="fi" type="number" step="0.5" placeholder="—" oninput="markDirty()"><span class="iu">hrs</span></div></div>
+    <div class="fgrp"><label class="fl">Daily steps (average)</label><div class="iuw"><input class="fi" type="number" placeholder="" oninput="markDirty()"><span class="iu">steps</span></div><div class="fhint">Target ≥3000 for COPD</div></div>
+    <div class="fgrp"><label class="fl">Sleep (average)</label><div class="iuw"><input class="fi" type="number" step="0.5" placeholder="" oninput="markDirty()"><span class="iu">hrs</span></div></div>
     ${Sel('Inhaler technique errors',['None','1–2 minor errors','3–4 errors','Major errors needing retraining'],'None')}
   </div>`)}
   ${S('Social determinants','engine.layer_4 · layer_6',`<div class="fg">
@@ -2815,7 +3070,7 @@ function bEnvironment() {
   </div>`)}`;
 }
 
-/* v11 — Identity & Access drawer: RBAC, ABAC, resolution workflow,
+/* v11: Identity & Access drawer: RBAC, ABAC, resolution workflow,
    token rotation, audit log, data-subject rights, consent */
 function bIdentityAccess() {
   resolutionState = { purpose:'', path:'', breakGlass:false, mfaVerified:false, result:null };
@@ -2837,8 +3092,8 @@ function bIdentityAccessBody() {
       ${permRow('ABAC care-team check applies', perms.abac)}
       ${permRow('Rotate platform ID', perms.rotate)}
       ${permRow('Break-glass override available', perms.breakGlass)}
-      ${permRow('Data export — Art. 15', perms.export)}
-      ${permRow('Erasure requests — Art. 17', perms.erasure)}
+      ${permRow('Data export: Art. 15', perms.export)}
+      ${permRow('Erasure requests: Art. 17', perms.erasure)}
       ${permRow('Audit log scope', perms.audit==='all'?'Platform-wide':'Own actions only', true)}
     </div>`);
 
@@ -2873,19 +3128,19 @@ function bIdentityAccessBody() {
   return roleSection + idSection + resolutionSection + auditSection + rightsSection + consentSection;
 }
 
-/* GAP 06 / v10 — Asthma / ACO specific drawer with formal scoring */
+/* GAP 06 / v10: Asthma / ACO specific drawer with formal scoring */
 function bAsthmAco() {
   const pt = getPt();
   const v  = getVisit();
   const isACO = pt.disease === 'ACO';
 
-  /* v10 — formal ACO diagnostic criteria checklist */
+  /* v10: formal ACO diagnostic criteria checklist */
   let acoCritBlock = '';
   if (isACO) {
     const acoCrit = acoFormalCriteria(pt, v);
     const rows = [`<div class="bio-row ${acoCrit.fixedObstruction?'met':'unmet'}">
         <div class="bio-icon"><i class="ti ${acoCrit.fixedObstruction?'ti-check':'ti-x'}"></i></div>
-        <div class="bio-crit">Fixed obstruction — FEV₁/FVC &lt; 70% post-BD</div>
+        <div class="bio-crit">Fixed obstruction: FEV₁/FVC &lt; 70% post-BD</div>
         <div class="bio-val">${acoCrit.ratio}%</div>
       </div>`]
       .concat(acoCrit.asthmaFeatures.map(f=>`<div class="bio-row ${f.met?'met':'unmet'}">
@@ -2898,11 +3153,11 @@ function bAsthmAco() {
       <div class="bio-grid">${rows}</div>
       <div class="ia ia-${acoCrit.criteriamet?'g':'w'}" style="margin-top:10px">
         <i class="ti ${acoCrit.criteriamet?'ti-circle-check':'ti-alert-circle'}"></i>
-        <div class="ia-body"><strong>${acoCrit.criteriamet?'ACO criteria formally met':'ACO criteria not formally confirmed'}</strong> — fixed obstruction ${acoCrit.fixedObstruction?'present':'absent'}, ${acoCrit.asthmaFeatureCount} of 4 asthma features present (≥1 required).</div>
+        <div class="ia-body"><strong>${acoCrit.criteriamet?'ACO criteria formally met':'ACO criteria not formally confirmed'}</strong>: fixed obstruction ${acoCrit.fixedObstruction?'present':'absent'}, ${acoCrit.asthmaFeatureCount} of 4 asthma features present (≥1 required).</div>
       </div>`);
   }
 
-  /* v10 — agent-specific biologic eligibility */
+  /* v10: agent-specific biologic eligibility */
   const bioElig = biologicEligibility(pt, v);
   const bioRows = bioElig.map(b => {
     const cls  = b.status==='eligible' ? 'met' : b.status==='borderline' ? 'borderline' : b.status==='pending' ? 'pending' : 'unmet';
@@ -2918,8 +3173,8 @@ function bAsthmAco() {
   return `
   ${S('Asthma control','engine.layer_1',`<div class="fg">
     ${Stp('act','ACT score (5–25)',v.act||5,'')}
-    <div class="fgrp"><label class="fl">Rescue inhaler use</label><div class="iuw"><input class="fi" type="number" min="0" placeholder="—" oninput="markDirty()"><span class="iu">×/wk</span></div></div>
-    <div class="fgrp"><label class="fl">Nighttime symptoms</label><div class="iuw"><input class="fi" type="number" min="0" max="7" placeholder="—" oninput="markDirty()"><span class="iu">nts/wk</span></div></div>
+    <div class="fgrp"><label class="fl">Rescue inhaler use</label><div class="iuw"><input class="fi" type="number" min="0" placeholder="" oninput="markDirty()"><span class="iu">×/wk</span></div></div>
+    <div class="fgrp"><label class="fl">Nighttime symptoms</label><div class="iuw"><input class="fi" type="number" min="0" max="7" placeholder="" oninput="markDirty()"><span class="iu">nts/wk</span></div></div>
   </div>`)}
   ${S('T2 phenotype assessment','engine.layer_3',`<div class="fg">
     ${YN('Allergic rhinitis',       pt.comorbidities?.allerRhinitis||false)}
@@ -2929,17 +3184,17 @@ function bAsthmAco() {
     ${YN('Personal / family asthma history',false)}
   </div>`)}
   ${acoCritBlock}
-  ${S('Biologic eligibility — by agent class','engine.layer_5',`
+  ${S('Biologic eligibility: by agent class','engine.layer_5',`
     <div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-info-circle"></i><div class="ia-body">Each biologic class targets a different pathway. Eligibility is assessed separately rather than as one generic flag.</div></div>
     <div class="bio-grid">${bioRows}</div>
     <div class="fg1" style="margin-top:12px">
-      ${Sel('Clinician decision',['Not assessed','Refer — anti-IL5/IL5R','Refer — anti-IgE (pending IgE)','Refer — anti-IL4R (pending FeNO)','Defer — repeat eos next visit','Not eligible'],'Not assessed')}
+      ${Sel('Clinician decision',['Not assessed','Refer: anti-IL5/IL5R','Refer: anti-IgE (pending IgE)','Refer: anti-IL4R (pending FeNO)','Defer: repeat eos next visit','Not eligible'],'Not assessed')}
     </div>`)}`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   v10 — REGISTRATION / PSEUDONYMISATION FLOW
-   Step 1 is the ONLY step that touches PII — writes to the encrypted
+   v10: REGISTRATION / PSEUDONYMISATION FLOW
+   Step 1 is the ONLY step that touches PII: writes to the encrypted
    identity mapping table. Step 2 is an interstitial confirming the
    platform ID generation and the pseudonymisation write. Steps 3-5
    are clinical data, free navigation, header shows platform ID only.
@@ -2947,9 +3202,9 @@ function bAsthmAco() {
 ═══════════════════════════════════════════════════════════════════ */
 let regState = { step:1, maxStep:1, generatedId:null };
 
-/* v11 — CSPRNG pseudonym generation (was Math.random() 5-digit ID).
+/* v11: CSPRNG pseudonym generation (was Math.random() 5-digit ID).
    8 symbols from a 32-character unambiguous alphabet (no 0/O/1/I/L) =
-   40 bits of entropy, drawn from crypto.getRandomValues — grouped
+   40 bits of entropy, drawn from crypto.getRandomValues: grouped
    as XXXX-XXXX for readability. */
 const PSEUDO_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 function genPlatformId() {
@@ -2960,7 +3215,7 @@ function genPlatformId() {
   return token.slice(0,4) + '-' + token.slice(4);
 }
 
-/* v11 — internal reference (UUIDv4-style). Never displayed to clinicians;
+/* v11: internal reference (UUIDv4-style). Never displayed to clinicians;
    shown here only to illustrate the 3-tier identifier model. */
 function genInternalRef() {
   const hex = () => Math.floor(Math.random()*16).toString(16);
@@ -2968,7 +3223,7 @@ function genInternalRef() {
   return `${seg(8)}-${seg(4)}-4${seg(3)}-${seg(4)}-${seg(12)}`;
 }
 
-/* v11 — Identity & Access: core helper functions */
+/* v11: Identity & Access: core helper functions */
 function getDisplayAlias(id) {
   const r = tokenRotations[id];
   return (r && r.length) ? r[r.length-1].newAlias : id;
@@ -2977,10 +3232,10 @@ function abacCheck(id) {
   const perms = RBAC_PERMS[currentUserRole];
   if (!perms.abac) {
     const reason = currentUserRole === 'admin'
-      ? 'Admin role — scoped to all patients, ABAC check bypassed'
+      ? 'Admin role: scoped to all patients, ABAC check bypassed'
       : currentUserRole === 'integration'
-      ? 'Integration service — scoped per pre-approved system agreement'
-      : 'Auditor — read-only, resolution not permitted';
+      ? 'Integration service: scoped per pre-approved system agreement'
+      : 'Auditor: read-only, resolution not permitted';
     return { pass:true, reason };
   }
   const pt = DB[id];
@@ -2989,7 +3244,7 @@ function abacCheck(id) {
     pass,
     reason: pass
       ? `Dr. García is the responsible clinician for AIRMAP-2024-${getDisplayAlias(id)}`
-      : `Not the responsible clinician for AIRMAP-2024-${getDisplayAlias(id)} — assigned to ${pt.identity.responsibleClinician}`
+      : `Not the responsible clinician for AIRMAP-2024-${getDisplayAlias(id)}: assigned to ${pt.identity.responsibleClinician}`
   };
 }
 function getConsent(id) {
@@ -3035,7 +3290,7 @@ function submitResolutionRequest() {
     mfa: perms.mfa ? (resolutionState.mfaVerified ? 'TOTP verified' : 'not completed') : 'service auth',
     breakGlass: breakGlassUsed
   });
-  notify(allowed ? 'Resolution request logged and approved' : 'Resolution request denied — logged', allowed?'ok':'warn');
+  notify(allowed ? 'Resolution request logged and approved' : 'Resolution request denied: logged', allowed?'ok':'warn');
   refreshIdentityDrawer();
 }
 function rotatePlatformId() {
@@ -3045,7 +3300,7 @@ function rotatePlatformId() {
   const newAlias = genPlatformId();
   tokenRotations[currentPt].push({ oldAlias, newAlias, date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) });
   logIdentityEvent({ action:'token_rotated', patient:currentPt, detail:`${oldAlias} → ${newAlias}`, purpose:'', path:'', mfa:'n/a', breakGlass:false });
-  notify('Platform ID rotated — internal reference unchanged','ok');
+  notify('Platform ID rotated: internal reference unchanged','ok');
   refreshIdentityDrawer();
 }
 function requestDataExport() {
@@ -3058,7 +3313,7 @@ function requestDataExport() {
 function requestErasure() {
   const perms = RBAC_PERMS[currentUserRole];
   if (!perms.erasure) { notify('Erasure requests require the Admin role','warn'); return; }
-  logIdentityEvent({ action:'erasure_request_submitted', patient:currentPt, detail:'Article 17 — pending clinical-retention review', purpose:'data_subject_erasure', path:'', mfa:'TOTP verified', breakGlass:false });
+  logIdentityEvent({ action:'erasure_request_submitted', patient:currentPt, detail:'Article 17: pending clinical-retention review', purpose:'data_subject_erasure', path:'', mfa:'TOTP verified', breakGlass:false });
   notify('Erasure request submitted for review','info');
   refreshIdentityDrawer();
 }
@@ -3101,7 +3356,7 @@ function buildRegStepperHTML() {
 
 function regGoToStep(n) {
   if (n > regState.maxStep) return;
-  if (n === 1 && regState.step > 1) { notify('Step 1 is locked — identity already sealed','warn'); return; }
+  if (n === 1 && regState.step > 1) { notify('Step 1 is locked: identity already sealed','warn'); return; }
   regState.step = n;
   renderRegStep();
 }
@@ -3138,25 +3393,25 @@ function regNext() {
 
 function regBack() {
   if (regState.step > 2) regGoToStep(regState.step-1);
-  else if (regState.step === 2) notify('Step 1 is locked — identity already sealed','info');
+  else if (regState.step === 2) notify('Step 1 is locked: identity already sealed','info');
 }
 
-/* Step 1 — Identity capture (PII). The ONLY step touching PII. */
+/* Step 1: Identity capture (PII). The ONLY step touching PII. */
 function regStep1() {
   return `
-  <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-shield-lock"></i><div class="ia-body"><strong>This is the only step that touches personal identifying information.</strong> Everything entered here is written to the encrypted identity mapping table — a store separate from the clinical database. Once you continue, this step is sealed and cannot be reopened.</div></div>
-  <div class="dm-note"><i class="ti ti-filter"></i>Data minimisation: fields marked <span class="req">*</span> are required for the linkage record. Everything else is optional — leave blank if not available.</div>
+  <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-shield-lock"></i><div class="ia-body"><strong>This is the only step that touches personal identifying information.</strong> Everything entered here is written to the encrypted identity mapping table: a store separate from the clinical database. Once you continue, this step is sealed and cannot be reopened.</div></div>
+  <div class="dm-note"><i class="ti ti-filter"></i>Data minimisation: fields marked <span class="req">*</span> are required for the linkage record. Everything else is optional: leave blank if not available.</div>
   <div class="pii-wrap">
-    <div class="pii-badge"><i class="ti ti-id-badge"></i>PII — identity mapping table only</div>
+    <div class="pii-badge"><i class="ti ti-id-badge"></i>PII: identity mapping table only</div>
     <div class="fg">
       <div class="fgrp"><label class="fl">Full name <span class="req">*</span></label><input class="fi" type="text" placeholder="As per hospital records" oninput="markDirty()"></div>
       <div class="fgrp"><label class="fl">Date of birth <span class="req">*</span></label><input class="fi" type="date" oninput="markDirty()"></div>
       ${Sel('Sex',['','Male','Female','Other'],'')}
-      <div class="fgrp"><label class="fl">Age<span class="opt">Optional</span></label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+      <div class="fgrp"><label class="fl">Age<span class="opt">Optional</span></label><div class="iuw"><input class="fi" type="number" placeholder="" oninput="markDirty()"><span class="iu">yrs</span></div></div>
     </div>
   </div>
   <div class="pii-wrap">
-    <div class="pii-badge"><i class="ti ti-link"></i>Identity mapping table — reconnection bridge</div>
+    <div class="pii-badge"><i class="ti ti-link"></i>Identity mapping table: reconnection bridge</div>
     <div class="fg">
       <div class="fgrp"><label class="fl">Hospital EHR / MRN number <span class="req">*</span></label><input class="fi mono" type="text" placeholder="e.g. HOS-0048291" oninput="markDirty()"><div class="xs muted" style="margin-top:3px">Only link between platform ID and hospital record</div></div>
       <div class="fgrp"><label class="fl">Hospital<span class="opt">Optional</span></label><input class="fi" type="text" oninput="markDirty()"></div>
@@ -3167,7 +3422,7 @@ function regStep1() {
   ${regNavButtons(false, 'Seal identity & generate platform ID')}`;
 }
 
-/* Step 2 — Platform ID interstitial. Confirms pseudonymisation writes. */
+/* Step 2: Platform ID interstitial. Confirms pseudonymisation writes. */
 function regStep2() {
   if (!regState.internalRef) regState.internalRef = genInternalRef();
   return `
@@ -3182,45 +3437,45 @@ function regStep2() {
     </div>
     <div class="id-tiers">
       <div class="id-tier">
-        <div class="id-tier-lbl">Display alias — shown in this UI</div>
+        <div class="id-tier-lbl">Display alias: shown in this UI</div>
         <div class="id-tier-val mono">AIRMAP-2024-${regState.generatedId}</div>
         <div class="id-tier-note">Used throughout the clinical cockpit · can be rotated without breaking links below</div>
       </div>
       <div class="id-tier">
-        <div class="id-tier-lbl">Internal reference — database key</div>
+        <div class="id-tier-lbl">Internal reference: database key</div>
         <div class="id-tier-val mono">${regState.internalRef}</div>
         <div class="id-tier-note">Never shown to clinicians · stable even if the display alias rotates</div>
       </div>
       <div class="id-tier">
-        <div class="id-tier-lbl">Linkage record — hospital bridge</div>
+        <div class="id-tier-lbl">Linkage record: hospital bridge</div>
         <div class="id-tier-val mono">●●●●-●●●●●●●●</div>
         <div class="id-tier-note">MRN ↔ internal reference recorded in the linkage table only</div>
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;text-align:left;max-width:420px;margin:0 auto">
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Patients vault</strong> — name and date of birth sealed, encrypted, no direct application access.</div></div>
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Pseudonym / linkage table</strong> — display alias, internal reference and MRN bridge recorded together.</div></div>
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Audit log</strong> — registration event timestamped and attributed to the registering clinician.</div></div>
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Patients vault</strong>: name and date of birth sealed, encrypted, no direct application access.</div></div>
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Pseudonym / linkage table</strong>: display alias, internal reference and MRN bridge recorded together.</div></div>
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Audit log</strong>: registration event timestamped and attributed to the registering clinician.</div></div>
       <div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">From this point on, only the platform ID is shown. No name or date of birth will appear again in this interface.</div></div>
     </div>
   </div>
   ${regNavButtons(false, 'Continue to clinical data')}`;
 }
 
-/* Step 3 — Disease & demographics (non-PII, free navigation) */
+/* Step 3: Disease & demographics (non-PII, free navigation) */
 function regStep3() {
   return `
   ${regIdBadge()}
   ${S('Disease assignment','engine.layer_1',`<div class="fg">
-    <div class="fgrp"><label class="fl">Primary diagnosis <span class="req">*</span></label><select class="fsel" onchange="markDirty()"><option value="">Select</option><option>COPD</option><option>Chronic Bronchitis</option><option>Asthma</option><option>ACO — Asthma-COPD Overlap</option></select></div>
+    <div class="fgrp"><label class="fl">Primary diagnosis <span class="req">*</span></label><select class="fsel" onchange="markDirty()"><option value="">Select</option><option>COPD</option><option>Chronic Bronchitis</option><option>Asthma</option><option>ACO: Asthma-COPD Overlap</option></select></div>
     ${Sel('Secondary diagnosis',['None','Chronic Bronchitis','Asthma','Bronchiectasis','Other'],'None')}
   </div>`)}
   ${S('Basic demographics','engine.layer_1 · layer_4',`<div class="fg">
-    <div class="fgrp"><label class="fl">Age</label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">yrs</span></div></div>
-    <div class="fgrp"><label class="fl">BMI</label><div class="iuw"><input class="fi" type="number" step="0.1" placeholder="—" oninput="markDirty()"><span class="iu">kg/m²</span></div></div>
+    <div class="fgrp"><label class="fl">Age</label><div class="iuw"><input class="fi" type="number" placeholder="" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+    <div class="fgrp"><label class="fl">BMI</label><div class="iuw"><input class="fi" type="number" step="0.1" placeholder="" oninput="markDirty()"><span class="iu">kg/m²</span></div></div>
     ${Sel('Smoking status',['','Ex-smoker','Current smoker','Never smoked'],'')}
-    <div class="fgrp"><label class="fl">Pack-years</label><div class="iuw"><input class="fi" type="number" step="0.1" placeholder="—" oninput="markDirty()"><span class="iu">pk-yr</span></div></div>
-    <div class="fgrp"><label class="fl">Age at symptom onset</label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+    <div class="fgrp"><label class="fl">Pack-years</label><div class="iuw"><input class="fi" type="number" step="0.1" placeholder="" oninput="markDirty()"><span class="iu">pk-yr</span></div></div>
+    <div class="fgrp"><label class="fl">Age at symptom onset</label><div class="iuw"><input class="fi" type="number" placeholder="" oninput="markDirty()"><span class="iu">yrs</span></div></div>
   </div>`)}
   ${S('Comorbidities','engine.layer_4 · layer_5',`<div class="fg">
     ${YN('Heart failure', false)}
@@ -3234,7 +3489,7 @@ function regStep3() {
   ${regNavButtons(true, 'Next: Spirometry & scores')}`;
 }
 
-/* Step 4 — Spirometry & clinical scores (non-PII, free navigation) */
+/* Step 4: Spirometry & clinical scores (non-PII, free navigation) */
 function regStep4() {
   return `
   ${regIdBadge()}
@@ -3249,7 +3504,7 @@ function regStep4() {
     ${F('mMRC grade','/4','')}
     ${F('ACT score (if asthma/ACO)','/25','')}
   </div>`)}
-  ${S('Exacerbation history — 12m','engine.layer_4',`<div class="fg">
+  ${S('Exacerbation history: 12m','engine.layer_4',`<div class="fg">
     ${F('Exacerbations','count','')}
     ${F('Hospitalisations','count','')}
     ${F('OCS courses','count','')}
@@ -3262,7 +3517,7 @@ function regStep4() {
   ${regNavButtons(true, 'Next: Medications')}`;
 }
 
-/* Step 5 — Medications & finish (non-PII, free navigation) */
+/* Step 5: Medications & finish (non-PII, free navigation) */
 function regStep5() {
   return `
   ${regIdBadge()}
@@ -3294,7 +3549,7 @@ function bRegister() {
 }
 
 function bExport() {
-  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Intelligence output — not an EHR record. Export supplements the hospital record.</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Intelligence output: not an EHR record. Export supplements the hospital record.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
     ${[['ti-file-type-pdf','Clinical report (PDF)','Full intelligence output · all 7 layers',true],['ti-target','Action plan (PDF)','Zone-based plan for the patient',false],['ti-download','Raw data (JSON)','All fields · engine layers · research',false],['ti-building-hospital','For EHR (summary)','Intelligence summary in note format',false]].map(([icon,lbl,desc,primary])=>`
       <button class="abt ${primary?'abt-p':'abt-s'}" onclick="notify('${lbl} exported','ok')">
@@ -3308,9 +3563,9 @@ function bExport() {
   </div>`;
 }
 
-/* GAP 13 — Audit log (illustrative — real data from Supabase audit_log table) */
+/* GAP 13: Audit log (illustrative: real data from Supabase audit_log table) */
 /* ═══════════════════════════════════════════════════════════════════
-   ANALYSIS ENGINE — disease-adaptive outputs
+   ANALYSIS ENGINE: disease-adaptive outputs
 ═══════════════════════════════════════════════════════════════════ */
 const LNAME = {1:'Classification',2:'Multimodal',3:'Phenotype',4:'Risk',5:'Treatment',6:'Self-mgmt',7:'Trajectory'};
 
@@ -3320,14 +3575,14 @@ function ENG_OUTPUT(n, pt, v) {
   const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(v.act) : null;
   const map = {
     1: () => pt.disease==='ASTHMA'
-      ? `ASTHMA  [layer_1]\nACT   : ${v.act} — ${ctrl.label}\nEos   : ${v.eos} c/µL\nStep  : 3 current → 4 indicated`
+      ? `ASTHMA  [layer_1]\nACT   : ${v.act}: ${ctrl.label}\nEos   : ${v.eos} c/µL\nStep  : 3 current → 4 indicated`
       : pt.disease==='CHRONIC_BRONCHITIS'
-      ? `CHRONIC BRONCHITIS  [layer_1]\nFEV₁  : ${v.fev1}%\nSputum: ${v.sputum||'white'} — ${v.sputum!=='white'?'possible infection':'stable'}\nStatus: ${v.exac>=2?'Deteriorating':'Stable'}`
-      : `GOLD CLASSIFICATION  [layer_1]\nStage : ${stage.s} — ${stage.l}\nGroup : ${grp}\nCAT   : ${v.cat}  mMRC: ${v.mmrc}\nExac  : ${v.exac} · ${v.hosp} hosp · ${v.ocs} OCS`,
+      ? `CHRONIC BRONCHITIS  [layer_1]\nFEV₁  : ${v.fev1}%\nSputum: ${v.sputum||'white'}: ${v.sputum!=='white'?'possible infection':'stable'}\nStatus: ${v.exac>=2?'Deteriorating':'Stable'}`
+      : `GOLD CLASSIFICATION  [layer_1]\nStage : ${stage.s}: ${stage.l}\nGroup : ${grp}\nCAT   : ${v.cat}  mMRC: ${v.mmrc}\nExac  : ${v.exac} · ${v.hosp} hosp · ${v.ocs} OCS`,
     2: () => `MULTIMODAL  [layer_2]\nAdherence : ${v.adherence}%\nTechnique : ${v.technique}\nSmoking   : ${pt.demographics.smoker}\nVaccinations: Flu ${pt.vaccinations.flu?'✓':'overdue'} · Pneumo ${pt.vaccinations.pneumo?'✓':'pending'}`,
-    3: () => `PHENOTYPE  [layer_3]\nEos     : ${v.eos} c/µL — ${v.eos>=300?'T2-HIGH':'T2-intermediate'}\nBiologic: ${v.eos>=300?'Eligible':'Borderline — repeat eos + FeNO'}\nACO     : ${pt.disease==='ACO'?'Confirmed':'Not applicable'}`,
+    3: () => `PHENOTYPE  [layer_3]\nEos     : ${v.eos} c/µL: ${v.eos>=300?'T2-HIGH':'T2-intermediate'}\nBiologic: ${v.eos>=300?'Eligible':'Borderline: repeat eos + FeNO'}\nACO     : ${pt.disease==='ACO'?'Confirmed':'Not applicable'}`,
     4: () => `RISK PROFILE  [layer_4]\nExac risk : ${v.exac>=2||v.hosp>=1?'HIGH':'MODERATE'}\n${v.exac} exacerbations · ${v.hosp} hosp · ${v.ocs} OCS\nAdherence : ${v.adherence}%\nFEV₁ trend: ${fev1TrendTxt()}`,
-    5: () => `TREATMENT  [layer_5]\nCurrent : ${pt.meds.map(m=>m.cls).join(' + ')}\nMatch   : ${pt.disease==='ASTHMA'&&ctrl.level!=='controlled'?'Step-up indicated':'Appropriate'}\nBiologic: ${v.eos>=300?'Refer — eligible':'Repeat eos next visit'}\nVaccine : Flu ${pt.vaccinations.flu?'✓':'overdue'}`,
+    5: () => `TREATMENT  [layer_5]\nCurrent : ${pt.meds.map(m=>m.cls).join(' + ')}\nMatch   : ${pt.disease==='ASTHMA'&&ctrl.level!=='controlled'?'Step-up indicated':'Appropriate'}\nBiologic: ${v.eos>=300?'Refer: eligible':'Repeat eos next visit'}\nVaccine : Flu ${pt.vaccinations.flu?'✓':'overdue'}`,
     6: () => `SELF-MANAGEMENT  [layer_6]\nZone plan : Generated\nMonitoring: Daily ${pt.disease==='ASTHMA'?'ACT':'CAT'} + rescue use\nReferrals : ${(pt.referrals||[]).filter(r=>r.status==='pending').map(r=>r.label).join(', ')||'None pending'}`,
     7: () => {
       const allFev1 = pt.visits.map(v=>`${v.label||'V'+v.n}: ${v.fev1}%`).join('\n  ');
@@ -3356,10 +3611,10 @@ function runAll() {
     const ro = g('rep-out');
     if (!ro) return;
     const pt = getPt(), v = getVisit();
-    ro.textContent = `AIRMAP Report · AIRMAP-2024-${currentPt}\nGenerated: ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}\nDisease: ${pt.disease.replace('_',' ')} · Visit ${v.n} of ${pt.visits.length}\nNote: Intelligence output — not an EHR record\n${'═'.repeat(48)}\n\n`
+    ro.textContent = `AIRMAP Report · AIRMAP-2024-${currentPt}\nGenerated: ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}\nDisease: ${pt.disease.replace('_',' ')} · Visit ${v.n} of ${pt.visits.length}\nNote: Intelligence output: not an EHR record\n${'═'.repeat(48)}\n\n`
       + [1,2,3,4,5,6,7].map(n=>ENG_OUTPUT(n,pt,v)).join('\n\n');
     notify('7-layer report generated', 'ok');
-    /* v10 — analysis is now current for this patient */
+    /* v10: analysis is now current for this patient */
     markAnalysisCurrent(currentPt);
     if (g('action-btns')) g('action-btns').innerHTML = buildActionBtns();
   }, 5200);
@@ -3372,7 +3627,7 @@ function bAnalysis() {
   return `<div class="flex ic jsb" style="margin-bottom:12px"><div class="ao-layers">${badges}</div><button class="btn bp btn-sm" onclick="runAll()"><i class="ti ti-player-play"></i>Run all 7</button></div>
   <div class="ao"><div class="ao-hd"><div class="ao-tt">7-layer engine · ${getPt().disease.replace('_',' ')} · Visit ${getVisit().n}</div></div><div class="ao-grid">${cells}</div></div>
   <div style="margin-top:14px"><div class="xs muted mono" style="margin-bottom:7px;letter-spacing:1px">GENERATED REPORT</div><div class="rep" id="rep-out">Run full analysis to generate report.</div></div>
-  <div class="flex g2" style="margin-top:12px;flex-wrap:wrap"><button class="btn bs btn-sm" onclick="notify('PDF generated','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button><button class="btn bs btn-sm" onclick="notify('JSON exported','ok')"><i class="ti ti-download"></i>JSON</button><button class="btn bs btn-sm" onclick="notify('EHR export ready','ok')"><i class="ti ti-building-hospital"></i>For EHR</button></div>`;
+  <div class="flex g2" style="margin-top:12px;flex-wrap:wrap"><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button><button class="btn bs btn-sm" onclick="notify('JSON exported','ok')"><i class="ti ti-download"></i>JSON</button><button class="btn bs btn-sm" onclick="notify('EHR export ready','ok')"><i class="ti ti-building-hospital"></i>For EHR</button></div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -3394,9 +3649,10 @@ const g = id => document.getElementById(id);
 /* ═══════════════════════════════════════════════════════════════════
    BOOT
 ═══════════════════════════════════════════════════════════════════ */
-render();
+showView('login');
+buildLoginRoles();
 hydrateIcons(document.body);
 startIconObserver();
 </script>
 </body>
-</html>
+</html>   
