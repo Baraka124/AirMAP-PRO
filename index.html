@@ -66,6 +66,10 @@
     --r0:#2D1515; --r1:#3D1F1F; --a0:#2A1F00; --a1:#3A2C00;
     --g0:#0D2219; --g1:#1A3326; --t0:#0C1F25; --t1:#1A3040;
     --p0:#1A1030; --p1:#2A1E48;
+    /* v11 — dedicated dark-mode TEXT colors for the contrast fix below.
+       --n2/--t1/--p1 above are background/border-accent shades and
+       fail contrast (1.2-1.6:1) when reused as text on --n0/--t0/--p0. */
+    --tx-n:#93C5FD; --tx-t:#67E8F9; --tx-p:#C4B5FD;
   }
   .sz-r{background:#2D1515;border-color:#5A2020;}
   .sz-a{background:#2A1F00;border-color:#5A4000;}
@@ -131,7 +135,7 @@ input,select,textarea{font-family:inherit;}
 .rot-row{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:var(--fs-2xs);}
 .mfa-box{border:1px solid var(--a1);background:var(--a0);border-radius:var(--rmd);padding:10px 12px;}
 .mfa-hdr{display:flex;align-items:center;gap:7px;font-size:var(--fs-base);font-weight:500;color:var(--a8);}
-.mfa-hdr i{font-size:16px;}
+.mfa-hdr i{font-size:var(--fs-h2);}
 
 /* ── HEADER ── */
 .ahdr{height:58px;background:var(--wh);border-bottom:1px solid var(--i2);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:199;box-shadow:var(--sh1);}
@@ -377,6 +381,24 @@ input,select,textarea{font-family:inherit;}
 /* ── DRAWER ── */
 .drw-ov{position:fixed;inset:0;background:rgba(10,14,23,.42);z-index:400;opacity:0;pointer-events:none;transition:opacity .24s;backdrop-filter:blur(2px);}
 .drw-ov.open{opacity:1;pointer-events:all;}
+
+/* v11 — command palette */
+.cmdk-ov{position:fixed;inset:0;background:rgba(10,14,23,.45);display:none;align-items:flex-start;justify-content:center;z-index:500;padding-top:12vh;}
+.cmdk-ov.open{display:flex;}
+.cmdk{width:100%;max-width:560px;margin:0 16px;background:var(--wh);border-radius:var(--rlg);box-shadow:var(--sh3);overflow:hidden;max-height:70vh;display:flex;flex-direction:column;}
+.cmdk-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--i1);flex-shrink:0;}
+.cmdk-hdr>i{font-size:var(--fs-h1);color:var(--i4);}
+.cmdk-input{flex:1;border:none;outline:none;background:transparent;font-size:var(--fs-body);color:var(--i7);font-family:var(--sans);}
+.cmdk-hint{font-size:var(--fs-xs);color:var(--i3);display:flex;align-items:center;}
+.cmdk-results{overflow-y:auto;padding:6px;}
+.cmdk-cat{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);padding:8px 10px 4px;}
+.cmdk-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rmd);cursor:pointer;}
+.cmdk-item i{font-size:var(--fs-h2);color:var(--i4);flex-shrink:0;}
+.cmdk-item.sel,.cmdk-item:hover{background:var(--n0);}
+.cmdk-item.sel{background:var(--n0);}
+.cmdk-lbl{font-size:var(--fs-sm);color:var(--i7);}
+.cmdk-sub{font-size:var(--fs-2xs);color:var(--i4);}
+.cmdk-empty{padding:24px;text-align:center;font-size:var(--fs-sm);color:var(--i4);}
 .drw{position:fixed;top:0;right:0;bottom:0;width:520px;background:var(--wh);z-index:401;transform:translateX(100%);transition:transform .27s cubic-bezier(.4,0,.2,1);box-shadow:var(--shd);display:flex;flex-direction:column;overflow:hidden;}
 .drw.open{transform:translateX(0);}
 .drw-hd{padding:18px 22px;border-bottom:1px solid var(--i2);display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-shrink:0;}
@@ -617,12 +639,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
      did, leaving 1.0-2.6:1 contrast across ~36 classes platform-wide.
      This block (placed after all base rules, so it wins on source
      order at equal specificity) restores >=4.5:1 everywhere. */
-  .tn,.db-copd,.ia-i,.lfb-i,.reg-id-badge,.enc-badge,.pm-item.on{color:var(--n2);}
+  .tn,.db-copd,.ia-i,.lfb-i,.reg-id-badge,.enc-badge,.pm-item.on{color:var(--tx-n);}
   .tr,.lcp-d,.lcp-unc,.vdp.w,.cz-r,.ia-d,.lfb-d,.pii-badge{color:var(--r2);}
   .ta,.lcp-b,.lcp-part,.db-cb,.cz-a,.abt-state-light.st-stale,.ia-w,.lfb-w{color:var(--a2);}
   .tg,.lcp-a,.lcp-ctrl,.ia-g,.lfb-g,.vdp.b,.cz-g,.abt-state-light.st-current{color:var(--g2);}
-  .tt,.db-asthma{color:var(--t1);}
-  .tp,.db-aco{color:var(--p1);}
+  .tt,.db-asthma{color:var(--tx-t);}
+  .tp,.db-aco{color:var(--tx-p);}
 }
 </style>
 </head>
@@ -675,7 +697,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   </div>
 
   <div class="hdr-r">
-    <button class="btn bg btn-icon btn-sm" onclick="notify('Search — Phase 2','info')" aria-label="Search"><i class="ti ti-search"></i></button>
+    <button class="btn bg btn-icon btn-sm" onclick="openCmdK()" aria-label="Search" title="Search (Ctrl+K)"><i class="ti ti-search"></i></button>
     <button class="btn bg btn-icon btn-sm" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
     <div class="hdv"></div>
     <!-- GAP 09: Read-only mode toggle -->
@@ -779,6 +801,18 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 </aside>
 
 <div class="nct" id="nct"></div>
+
+<!-- v11 — COMMAND PALETTE -->
+<div class="cmdk-ov" id="cmdk-ov" onclick="if(event.target===this)closeCmdK()">
+  <div class="cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmdk-hdr">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input id="cmdk-input" class="cmdk-input" placeholder="Search patients, sections, actions…" oninput="cmdkInput(this.value)" onkeydown="cmdkKeydown(event)" autocomplete="off" aria-label="Search">
+      <span class="cmdk-hint"><i class="ti ti-corner-down-left" aria-hidden="true"></i></span>
+    </div>
+    <div class="cmdk-results" id="cmdk-results"></div>
+  </div>
+</div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
@@ -1178,6 +1212,7 @@ let currentVisit = 4; // index (0-based) into visits array
 let currentDrw   = null;
 let drwDirty     = false;
 let cohortOpen   = false;
+let cmdkOpen     = false;
 
 /* v11 — Identity & Access: RBAC roles, permission matrix, session state */
 const RBAC_ROLES = {
@@ -1969,6 +2004,83 @@ function selectPt(id) {
   notify(`Loaded AIRMAP-2024-${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
 }
 
+/* v11 — command palette: build, filter, render, navigate */
+function buildCommandList() {
+  const cmds = [];
+  Object.entries(DB).forEach(([id,p]) => {
+    cmds.push({ cat:'Patients', icon:'ti-fingerprint',
+      label:`AIRMAP-2024-${getDisplayAlias(id)}`,
+      sub:`${p.disease.replace('_',' ')} · ${p.demographics.age}yr ${p.demographics.sex}`,
+      action:`closeCmdK();selectPt('${id}')` });
+  });
+  const drawers = [
+    ['full-record',"Full record",'ti-folder-open'],
+    ['visit-update',"Update today's data",'ti-pencil'],
+    ['investigations','Investigations','ti-flask'],
+    ['medications','Medications','ti-pill'],
+    ['action-plan','Action plan','ti-clipboard-list'],
+    ['longitudinal','Longitudinal · timeline','ti-chart-line'],
+    ['demographics','Demographics','ti-user'],
+    ['environment','Environment','ti-leaf'],
+    ['asthma-aco','Asthma & ACO','ti-shield'],
+    ['cohort-overview','Cohort overview','ti-layout-grid'],
+    ['identity-access','Identity & access','ti-users'],
+    ['export','Export & report','ti-download'],
+    ['analysis','Run clinical analysis','ti-player-play'],
+    ['register','Register new patient','ti-user-plus']
+  ];
+  drawers.forEach(([type,label,icon]) => cmds.push({ cat:'Open', icon, label, sub:'Open drawer', action:`closeCmdK();openDrw('${type}')` }));
+  cmds.push({ cat:'Actions', icon:'ti-eye', label:'Toggle review mode', sub:readOnlyMode?'Currently read-only · switch to editable':'Currently editable · switch to read-only', action:`closeCmdK();toggleReadOnly()` });
+  return cmds;
+}
+function filterCommands(query) {
+  const cmds = buildCommandList();
+  if (!query) return cmds;
+  const q = query.toLowerCase();
+  return cmds.filter(c => c.label.toLowerCase().includes(q) || c.sub.toLowerCase().includes(q) || c.cat.toLowerCase().includes(q));
+}
+function renderCmdkResults(query) {
+  const results = filterCommands(query).slice(0,30);
+  if (!results.length) return `<div class="cmdk-empty">No results for "${query}"</div>`;
+  let lastCat = null, html = '';
+  results.forEach((c,i) => {
+    if (c.cat !== lastCat) { html += `<div class="cmdk-cat">${c.cat}</div>`; lastCat = c.cat; }
+    html += `<div class="cmdk-item${i===0?' sel':''}" onclick="${c.action}"><i class="ti ${c.icon}"></i><div><div class="cmdk-lbl">${c.label}</div><div class="cmdk-sub">${c.sub}</div></div></div>`;
+  });
+  return html;
+}
+function openCmdK() {
+  cmdkOpen = true;
+  g('cmdk-ov').classList.add('open');
+  const input = g('cmdk-input');
+  input.value = '';
+  g('cmdk-results').innerHTML = renderCmdkResults('');
+  setTimeout(() => input.focus(), 50);
+}
+function closeCmdK() {
+  cmdkOpen = false;
+  g('cmdk-ov').classList.remove('open');
+}
+function cmdkInput(val) {
+  g('cmdk-results').innerHTML = renderCmdkResults(val);
+}
+function cmdkKeydown(e) {
+  const items = [...document.querySelectorAll('.cmdk-item')];
+  const idx = items.findIndex(i => i.classList.contains('sel'));
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (idx < items.length-1) { items[idx]?.classList.remove('sel'); items[idx+1].classList.add('sel'); items[idx+1].scrollIntoView?.({block:'nearest'}); }
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (idx > 0) { items[idx].classList.remove('sel'); items[idx-1].classList.add('sel'); items[idx-1].scrollIntoView?.({block:'nearest'}); }
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    items[idx]?.click();
+  } else if (e.key === 'Escape') {
+    closeCmdK();
+  }
+}
+
 function togglePlatformMenu() {
   const menu = g('platform-menu');
   const btn  = g('platform-sw');
@@ -2065,6 +2177,9 @@ function saveDrw() {
 }
 
 document.addEventListener('keydown', e => {
+  /* v11 — Ctrl/Cmd+K opens the command palette */
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmdkOpen ? closeCmdK() : openCmdK(); return; }
+  if (e.key === 'Escape' && cmdkOpen) { closeCmdK(); return; }
   /* Escape closes drawer */
   if (e.key === 'Escape' && currentDrw) { closeDrw(); return; }
   /* GAP 14 — Arrow keys on score steppers */
@@ -2683,7 +2798,7 @@ function bIdentityAccessBody() {
       <div class="id-tier"><div class="id-tier-lbl">Responsible clinician</div><div class="id-tier-val">${pt.identity.responsibleClinician}</div><div class="id-tier-note">Drives the ABAC check below</div></div>
     </div>
     <button class="btn bg btn-sm" onclick="rotatePlatformId()"${!perms.rotate?' disabled title="Requires Admin role"':''}><i class="ti ti-rotate"></i>Rotate platform ID</button>
-    ${rotations.length ? `<div class="rot-history">${rotations.map(r=>`<div class="rot-row"><span class="mono" style="color:var(--i5)">${r.oldAlias}</span><i class="ti ti-arrow-right" style="font-size:11px;color:var(--i3)"></i><span class="mono" style="color:var(--i7)">${r.newAlias}</span><span style="margin-left:auto;color:var(--i4)">${r.date}</span></div>`).join('')}</div>` : ''}`);
+    ${rotations.length ? `<div class="rot-history">${rotations.map(r=>`<div class="rot-row"><span class="mono" style="color:var(--i5)">${r.oldAlias}</span><i class="ti ti-arrow-right" style="font-size:var(--fs-xs);color:var(--i3)"></i><span class="mono" style="color:var(--i7)">${r.newAlias}</span><span style="margin-left:auto;color:var(--i4)">${r.date}</span></div>`).join('')}</div>` : ''}`);
 
   const resolutionSection = S('Request identity resolution', 'RBAC · ABAC · MFA · audit', buildResolutionWorkflow(perms, abac));
 
