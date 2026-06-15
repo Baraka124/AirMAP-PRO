@@ -120,6 +120,14 @@ input,select,textarea{font-family:inherit;}
 .id-tier-val{font-size:var(--fs-base);color:var(--i7);margin-top:3px;}
 .id-tier-note{font-size:var(--fs-2xs);color:var(--i4);margin-top:2px;}
 
+/* v11 — k-anonymity guardrail (item 20) + per-tenant segmentation (item 4) */
+.cohort-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.kstat{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:9px 11px;text-align:center;}
+.kstat-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--i4);margin-bottom:3px;}
+.kstat-val{font-size:var(--fs-h2);font-weight:600;color:var(--i7);font-family:var(--serif);}
+.kstat-val.suppressed{color:var(--i4);font-size:var(--fs-base);font-family:var(--sans);}
+.tenant-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);background:var(--i0);border:1px solid var(--i1);padding:3px 9px;border-radius:99px;margin-bottom:10px;}
+
 /* v11 — Identity & Access drawer */
 .role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
 .role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:10px 12px;cursor:pointer;transition:all .14s;}
@@ -630,8 +638,38 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   .apz { break-inside: avoid; }
   body { font-size: 12px; }
 }
-@media(max-width:1024px){.cockpit{grid-template-columns:1fr;}.cockpit-aside{order:-1;}.mgrid{grid-template-columns:1fr 1fr 1fr;}.drw{width:100%;max-width:520px;}}
-@media(max-width:640px){.cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}}
+.spiro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+@media(max-width:1024px){.cockpit{grid-template-columns:1fr;}.cockpit-aside{order:-1;}.mgrid{grid-template-columns:1fr 1fr 1fr;}.drw{width:100%;max-width:520px;}.platform-menu,.cohort{max-width:calc(100vw - 24px);}}
+@media(max-width:640px){
+  .cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}
+  /* v11 — responsive pass (item 20): header, command palette, identity-
+     access drawer and spirometry curves on narrow viewports. */
+  .ahdr{padding:0 10px;gap:8px;}
+  .visit-bar{padding:0 10px;gap:8px;}
+  .lsb{display:none;}
+  .ptc{min-width:0;flex:1;}
+  .pctx{display:none;}
+  .ptc-row1{min-width:0;}
+  .pid{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .btn-label{display:none;}
+  .notif-btn{display:none;}
+  .cmdk-hint{display:none;}
+  .cmdk-ov{padding-top:6vh;}
+  .cmdk{margin:0 10px;max-height:80vh;}
+  .role-grid{grid-template-columns:1fr;}
+  .perm-row{flex-wrap:wrap;row-gap:4px;}
+  .spiro-grid{grid-template-columns:1fr;}
+  .id-tiers{max-width:none;}
+  .cohort-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:480px){
+  .ahdr{gap:6px;}
+  .hdr-r .hdv{display:none;}
+  .visit-lbl{display:none;}
+  .vdate{display:none;}
+  .lmk{width:28px;height:28px;}
+}
 @media(prefers-color-scheme:dark){
   /* v11 — contrast fix: badge/tag/pill/alert text used dark-navy/red/
      green/amber shades meant for LIGHT backgrounds. In dark mode the
@@ -698,15 +736,15 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
   <div class="hdr-r">
     <button class="btn bg btn-icon btn-sm" onclick="openCmdK()" aria-label="Search" title="Search (Ctrl+K)"><i class="ti ti-search"></i></button>
-    <button class="btn bg btn-icon btn-sm" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+    <button class="btn bg btn-icon btn-sm notif-btn" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
     <div class="hdv"></div>
     <!-- GAP 09: Read-only mode toggle -->
     <button class="btn bg btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode">
-      <i class="ti ti-eye" id="readonly-icon"></i><span id="readonly-label">Review mode</span>
+      <i class="ti ti-eye" id="readonly-icon"></i><span id="readonly-label" class="btn-label">Review mode</span>
     </button>
     <div class="hdv"></div>
-    <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i>Export</button>
-    <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i>Run analysis</button>
+    <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
+    <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
     <div class="hdv"></div>
     <div class="clin" title="Dr. García · Clinician">
       <div class="clin-av">MG</div>
@@ -2531,7 +2569,7 @@ function buildSpirometryCurves(v) {
   const fvc = v.fvc || 3.2, ratio = v.ratio || 70;
   const refRatio = 80; // reference "normal pattern" trace, same FVC
   const fevPt = _vtFev1Point(fvc, ratio);
-  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  return `<div class="spiro-grid">
     <div>
       <svg viewBox="0 0 320 175" style="width:100%;height:auto">
         <line x1="35" y1="95" x2="305" y2="95" stroke="var(--i2)" stroke-width="1"/>
@@ -2663,6 +2701,21 @@ function buildAuditLog() {
 /* GAP 07 — Cohort overview drawer */
 function bCohortOverview() {
   const entries = Object.entries(DB);
+  const K_ANON = 5;
+  const zoneCounts = {r:0,a:0,g:0};
+  entries.forEach(([,pt]) => { zoneCounts[pt.risk] = (zoneCounts[pt.risk]||0)+1; });
+  const kStat = (n, label) => n < K_ANON
+    ? `<div class="kstat"><div class="kstat-lbl">${label}</div><div class="kstat-val suppressed" title="Suppressed — group size below k-anonymity threshold (k=${K_ANON})"><i class="ti ti-eye-off" style="font-size:var(--fs-sm)"></i> &lt;${K_ANON}</div></div>`
+    : `<div class="kstat"><div class="kstat-lbl">${label}</div><div class="kstat-val">${n}</div></div>`;
+  const statsHTML = `
+    <span class="tenant-badge"><i class="ti ti-building-hospital"></i>Tenant: General Hospital A · pseudonym keyspace tenant_001</span>
+    <div class="cohort-stats">
+      <div class="kstat"><div class="kstat-lbl">Total enrolled</div><div class="kstat-val">${entries.length}</div></div>
+      ${kStat(zoneCounts.r||0,'Red zone')}
+      ${kStat(zoneCounts.a||0,'Amber zone')}
+      ${kStat(zoneCounts.g||0,'Green zone')}
+    </div>
+    <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>k-anonymity guardrail —</strong> any aggregate subgroup below ${K_ANON} patients is suppressed here to reduce re-identification risk. Individual patient cards below remain visible to authorised clinicians for direct care.</div></div>`;
   const cards = entries.map(([id, pt]) => {
     const lastV = pt.visits[pt.visits.length - 1];
     const grp   = (pt.disease==='COPD'||pt.disease==='ACO') ? goldGroup(lastV) : null;
@@ -2696,7 +2749,7 @@ function bCohortOverview() {
       <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i4)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
     </div>`;
   }).join('');
-  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>
+  return `${statsHTML}<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>
   <div style="margin-top:14px;font-size:var(--fs-sm);color:var(--i4);text-align:center">Click any patient card to open their cockpit</div>`;
 }
 
@@ -2792,6 +2845,7 @@ function bIdentityAccessBody() {
   const alias     = getDisplayAlias(currentPt);
   const rotations = tokenRotations[currentPt] || [];
   const idSection = S('This patient&rsquo;s identifiers', 'pseudonym / linkage table', `
+    <span class="tenant-badge"><i class="ti ti-building-hospital"></i>Tenant: General Hospital A · pseudonym keyspace tenant_001</span>
     <div class="id-tiers" style="margin:0 0 10px">
       <div class="id-tier"><div class="id-tier-lbl">Display alias</div><div class="id-tier-val mono">AIRMAP-2024-${alias}</div><div class="id-tier-note">${rotations.length} rotation${rotations.length!==1?'s':''} this session</div></div>
       <div class="id-tier"><div class="id-tier-lbl">Internal reference</div><div class="id-tier-val mono">${pt.identity.internalRef}</div><div class="id-tier-note">Stable across rotations · never shown to clinicians</div></div>
