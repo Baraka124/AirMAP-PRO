@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIRMAP — Respiratory Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<!-- v11: Tabler webfont CDN removed — icons are inlined as SVG, see ICON_PATHS below -->
 <!--
   AIRMAP v8 — 5-Patient Disease Demo
   ══════════════════════════════════════════════════
@@ -53,6 +53,10 @@
   --sh3:0 16px 40px rgba(10,14,23,.14),0 4px 8px rgba(10,14,23,.06);
   --shd:-6px 0 32px rgba(10,14,23,.16);
   --rsm:6px;--rmd:10px;--rlg:14px;--rxl:18px;--r2xl:22px;
+  /* v11 — typography scale (replaces 22 ad-hoc sizes) */
+  --fs-micro:8px;--fs-3xs:9px;--fs-2xs:10px;--fs-xs:11px;--fs-sm:12px;
+  --fs-base:13px;--fs-body:14px;--fs-h3:15px;--fs-h2:17px;--fs-h1:18px;
+  --fs-lg:20px;--fs-xl:24px;--fs-2xl:30px;--fs-3xl:32px;
 }
 @media(prefers-color-scheme:dark){
   :root{
@@ -70,44 +74,78 @@
   .ia-d{background:#2D1515;border-color:#5A2020;color:#FCA5A5;}
   .ia-i{background:#0F1E35;border-color:#1A2F4A;color:#93C5FD;}
   .ia-g{background:#0D2219;border-color:#1A5A35;color:#6EE7B7;}
-  .eco{background:#020817;}
   thead{background:#0F172A;}
   .drw,.drw-hd,.drw-foot{background:#111827;}
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{font-size:14px;}
+html{font-size:var(--fs-body);}
 body{font-family:var(--sans);background:var(--sf);color:var(--i7);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;}
 button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
 /* ── ECO BAR ── */
-.eco{height:36px;background:var(--n9);display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:200;}
-.eco-brand{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.28);padding-right:18px;margin-right:18px;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;flex-shrink:0;}
-.eco-mods{display:flex;gap:1px;flex:1;overflow:hidden;}
-.em{display:flex;align-items:center;gap:6px;padding:0 13px;height:36px;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.28);cursor:pointer;border-bottom:2px solid transparent;transition:all .14s;white-space:nowrap;}
-.em.on{color:#fff;border-bottom-color:#60A5FA;background:rgba(255,255,255,.04);}
-.em.off{opacity:.2;cursor:default;pointer-events:none;}
-.ep{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7;flex-shrink:0;}
-.em.on .ep{background:#60A5FA;opacity:1;}
-.eco-u{display:flex;align-items:center;gap:9px;margin-left:auto;padding-left:18px;border-left:1px solid rgba(255,255,255,.07);flex-shrink:0;}
-.eco-role{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--n8);background:#60A5FA;padding:2px 7px;border-radius:3px;}
-.eco-nm{font-size:12px;color:rgba(255,255,255,.35);}
-.eco-av{width:26px;height:26px;border-radius:50%;background:var(--n6);border:1.5px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;}
+/* v11 — header consolidation: .eco / .em / .eco-u family removed.
+   .ep retained (reused by .platform-menu); .eco-av replaced by .clin-av */
+.ep{width:5px;height:5px;border-radius:50%;background:var(--i3);flex-shrink:0;}
+.clin{display:flex;align-items:center;flex-shrink:0;}
+.clin-av{width:28px;height:28px;border-radius:50%;background:var(--n8);display:flex;align-items:center;justify-content:center;font-size:var(--fs-2xs);font-weight:600;color:#fff;}
+
+/* v11 — platform module switcher (compact dropdown, replaces eco-mods row) */
+.platform-menu{position:absolute;top:calc(100% + 6px);left:0;width:225px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);box-shadow:var(--sh3);z-index:300;display:none;overflow:hidden;}
+.platform-menu.open{display:block;}
+.pm-hdr{padding:9px 13px;font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);border-bottom:1px solid var(--i1);}
+.pm-item{display:flex;align-items:center;gap:8px;padding:9px 13px;font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.5px;color:var(--i5);cursor:pointer;border-bottom:1px solid var(--i1);transition:background .12s;}
+.pm-item:last-child{border-bottom:none;}
+.pm-item:hover{background:var(--i0);}
+.pm-item.on{color:var(--n8);font-weight:500;background:var(--n0);}
+.pm-item.on .ep{background:var(--n7);opacity:1;}
+.pm-item.add{color:var(--i4);justify-content:center;font-style:italic;}
+
+/* v11 — patient chip second line (replaces "Anonymous patient" placeholder) */
+.ptc-row1{display:flex;align-items:center;gap:7px;}
+.pctx{font-size:var(--fs-2xs);color:var(--i4);margin-top:2px;}
+
+/* v11 — registration flow: data minimisation, encryption, 3-tier identifiers */
+.dm-note{display:flex;align-items:center;gap:8px;font-size:var(--fs-xs);color:var(--i5);background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:8px 12px;margin-bottom:14px;}
+.dm-note i{font-size:var(--fs-body);color:var(--i4);flex-shrink:0;}
+.opt{font-family:var(--mono);font-size:var(--fs-micro);font-weight:400;color:var(--i3);text-transform:uppercase;letter-spacing:1px;margin-left:6px;}
+.enc-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:3px 9px;border-radius:99px;}
+.id-tiers{display:flex;flex-direction:column;gap:8px;max-width:420px;margin:0 auto 16px;text-align:left;}
+.id-tier{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:9px 12px;}
+.id-tier-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);}
+.id-tier-val{font-size:var(--fs-base);color:var(--i7);margin-top:3px;}
+.id-tier-note{font-size:var(--fs-2xs);color:var(--i4);margin-top:2px;}
+
+/* v11 — Identity & Access drawer */
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
+.role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:10px 12px;cursor:pointer;transition:all .14s;}
+.role-card:hover{border-color:var(--n2);}
+.role-card.on{border-color:var(--n8);background:var(--n0);}
+.role-lbl{font-size:var(--fs-base);font-weight:500;color:var(--i7);}
+.role-desc{font-size:var(--fs-xs);color:var(--i4);margin-top:2px;}
+.perm-grid{display:flex;flex-direction:column;border:1px solid var(--i1);border-radius:var(--rmd);overflow:hidden;}
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;font-size:var(--fs-sm);border-bottom:1px solid var(--i1);color:var(--i5);}
+.perm-row:last-child{border-bottom:none;}
+.perm-row:nth-child(even){background:var(--i0);}
+.rot-history{display:flex;flex-direction:column;gap:4px;margin-top:8px;}
+.rot-row{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:var(--fs-2xs);}
+.mfa-box{border:1px solid var(--a1);background:var(--a0);border-radius:var(--rmd);padding:10px 12px;}
+.mfa-hdr{display:flex;align-items:center;gap:7px;font-size:var(--fs-base);font-weight:500;color:var(--a8);}
+.mfa-hdr i{font-size:16px;}
 
 /* ── HEADER ── */
-.ahdr{height:58px;background:var(--wh);border-bottom:1px solid var(--i2);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:36px;z-index:199;box-shadow:var(--sh1);}
+.ahdr{height:58px;background:var(--wh);border-bottom:1px solid var(--i2);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:199;box-shadow:var(--sh1);}
 .lmk{width:32px;height:32px;background:var(--n8);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.lmk i{font-size:16px;color:white;}
-.ltx{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--n8);letter-spacing:-.2px;}
-.lsb{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-top:1px;}
+.lmk i{font-size:var(--fs-h3);color:white;}
+.ltx{font-family:var(--serif);font-size:var(--fs-h1);font-weight:600;color:var(--n8);letter-spacing:-.2px;}
+.lsb{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-top:1px;}
 .hdv{width:1px;height:26px;background:var(--i2);flex-shrink:0;}
-.ptc{display:flex;align-items:center;gap:9px;padding:5px 11px;background:var(--n0);border:1.5px solid var(--n1);border-radius:var(--rmd);cursor:pointer;transition:border-color .14s;min-width:220px;}
+.ptc{display:flex;align-items:center;gap:9px;padding:6px 12px;background:var(--n0);border:1.5px solid var(--n1);border-radius:var(--rmd);cursor:pointer;transition:border-color .14s;min-width:250px;}
 .ptc:hover{border-color:var(--n2);}
 .ptci{width:27px;height:27px;background:var(--n8);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ptci i{font-size:13px;color:white;}
-.pid{font-family:var(--mono);font-size:9px;color:var(--n6);text-transform:uppercase;letter-spacing:.8px;}
-.pnm{font-size:13px;font-weight:500;color:var(--i7);}
-.db{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:var(--rsm);font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;border:1px solid;flex-shrink:0;transition:all .25s;}
+.ptci i{font-size:var(--fs-base);color:white;}
+.pid{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);text-transform:uppercase;letter-spacing:.8px;}
+.db{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:var(--rsm);font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1px;text-transform:uppercase;border:1px solid;flex-shrink:0;transition:all .25s;}
 .db-copd{background:var(--n0);color:var(--n7);border-color:var(--n1);}
 .db-asthma{background:var(--t0);color:var(--t7);border-color:var(--t1);}
 .db-cb{background:var(--a0);color:var(--a7);border-color:var(--a1);}
@@ -117,26 +155,26 @@ input,select,textarea{font-family:inherit;}
 /* ── COHORT PANEL ── */
 .cohort{position:absolute;top:calc(100% + 6px);left:0;width:330px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);box-shadow:var(--sh3);z-index:300;display:none;overflow:hidden;}
 .cohort.open{display:block;}
-.co-hdr{padding:10px 15px;border-bottom:1px solid var(--i1);font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);display:flex;align-items:center;justify-content:space-between;}
-.co-count{background:var(--n0);border:1px solid var(--n1);color:var(--n7);padding:1px 6px;border-radius:3px;font-size:9px;}
+.co-hdr{padding:10px 15px;border-bottom:1px solid var(--i1);font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);display:flex;align-items:center;justify-content:space-between;}
+.co-count{background:var(--n0);border:1px solid var(--n1);color:var(--n7);padding:1px 6px;border-radius:3px;font-size:var(--fs-3xs);}
 .ci{display:flex;align-items:center;gap:11px;padding:10px 15px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--i1);}
 .ci:last-child{border-bottom:none;}
 .ci:hover,.ci.on{background:var(--n0);}
 .crisk{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .cr-r{background:var(--r5);} .cr-a{background:var(--a5);} .cr-g{background:var(--g5);}
 .ci-main{flex:1;min-width:0;}
-.ci-id{font-family:var(--mono);font-size:9px;color:var(--i4);}
-.ci-name{font-size:12.5px;font-weight:500;color:var(--i7);margin-top:1px;}
-.ci-detail{font-size:11px;color:var(--i5);margin-top:1px;}
-.ci-dis{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
-.ci-zone{font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 6px;border-radius:3px;flex-shrink:0;}
+.ci-id{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);}
+.ci-name{font-size:var(--fs-sm);font-weight:500;color:var(--i7);margin-top:1px;}
+.ci-detail{font-size:var(--fs-xs);color:var(--i5);margin-top:1px;}
+.ci-dis{font-family:var(--mono);font-size:var(--fs-micro);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+.ci-zone{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;padding:2px 6px;border-radius:3px;flex-shrink:0;}
 .cz-r{background:var(--r0);color:var(--r7);border:1px solid var(--r1);}
 .cz-a{background:var(--a0);color:var(--a7);border:1px solid var(--a1);}
 .cz-g{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--rmd);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .14s;white-space:nowrap;line-height:1;}
-.btn i{font-size:15px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--rmd);font-family:var(--sans);font-size:var(--fs-base);font-weight:600;cursor:pointer;transition:all .14s;white-space:nowrap;line-height:1;}
+.btn i{font-size:var(--fs-h3);}
 .bp{background:var(--n8);color:white;box-shadow:0 1px 3px rgba(11,31,58,.22);}
 .bp:hover{background:var(--n7);box-shadow:0 4px 10px rgba(11,31,58,.2);transform:translateY(-1px);}
 .bp:active{transform:translateY(0);}
@@ -144,20 +182,20 @@ input,select,textarea{font-family:inherit;}
 .bs:hover{background:var(--n0);border-color:var(--n2);}
 .bg{background:transparent;color:var(--i5);border:1.5px solid var(--i2);}
 .bg:hover{background:var(--n0);color:var(--n8);border-color:var(--i3);}
-.btn-sm{padding:5px 10px;font-size:12px;}
-.btn-sm i{font-size:13px;}
+.btn-sm{padding:5px 10px;font-size:var(--fs-sm);}
+.btn-sm i{font-size:var(--fs-base);}
 .btn-icon{width:33px;height:33px;padding:0;justify-content:center;border-radius:var(--rsm);}
 
 /* ── VISIT SELECTOR ── */
-.visit-bar{background:var(--wh);border-bottom:1px solid var(--i2);padding:0 24px;display:flex;align-items:center;gap:14px;height:42px;position:sticky;top:94px;z-index:198;overflow-x:auto;}
-.visit-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);flex-shrink:0;}
+.visit-bar{background:var(--wh);border-bottom:1px solid var(--i2);padding:0 24px;display:flex;align-items:center;gap:14px;height:42px;position:sticky;top:58px;z-index:198;overflow-x:auto;}
+.visit-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);flex-shrink:0;}
 .visits{display:flex;gap:4px;}
-.vbtn{padding:4px 12px;border-radius:var(--r2xl);font-family:var(--mono);font-size:10px;font-weight:500;cursor:pointer;border:1.5px solid var(--i2);color:var(--i4);background:transparent;transition:all .14s;white-space:nowrap;}
+.vbtn{padding:4px 12px;border-radius:var(--r2xl);font-family:var(--mono);font-size:var(--fs-2xs);font-weight:500;cursor:pointer;border:1.5px solid var(--i2);color:var(--i4);background:transparent;transition:all .14s;white-space:nowrap;}
 .vbtn.on{background:var(--n8);color:white;border-color:var(--n8);}
 .vbtn:hover:not(.on){border-color:var(--n2);color:var(--n8);}
-.vdate{font-size:11px;color:var(--i4);margin-left:auto;flex-shrink:0;}
+.vdate{font-size:var(--fs-xs);color:var(--i4);margin-left:auto;flex-shrink:0;}
 .vdelta{display:flex;align-items:center;gap:6px;}
-.vdp{font-family:var(--mono);font-size:9.5px;padding:2px 7px;border-radius:3px;border:1px solid;}
+.vdp{font-family:var(--mono);font-size:var(--fs-3xs);padding:2px 7px;border-radius:3px;border:1px solid;}
 .vdp.w{background:var(--r0);color:var(--r7);border-color:var(--r1);}
 .vdp.b{background:var(--g0);color:var(--g7);border-color:var(--g1);}
 .vdp.n{background:var(--i1);color:var(--i5);border-color:var(--i2);}
@@ -179,12 +217,12 @@ input,select,textarea{font-family:inherit;}
 .sz-a .sz-ico{background:var(--a5);}
 .sz-g .sz-ico{background:var(--g5);}
 .sz-t .sz-ico{background:var(--t5);}
-.sz-ico i{font-size:24px;color:white;}
-.sz-lbl{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.75;}
-.sz-tt{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--i7);margin-bottom:6px;line-height:1.3;}
-.sz-ins{font-size:13.5px;color:var(--i5);line-height:1.65;}
+.sz-ico i{font-size:var(--fs-xl);color:white;}
+.sz-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.75;}
+.sz-tt{font-family:var(--serif);font-size:var(--fs-lg);font-weight:600;color:var(--i7);margin-bottom:6px;line-height:1.3;}
+.sz-ins{font-size:var(--fs-base);color:var(--i5);line-height:1.65;}
 .sz-ins strong{color:var(--i7);font-weight:600;}
-.lcp{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;font-family:var(--mono);font-size:11px;font-weight:500;border:1.5px solid;margin-top:10px;transition:all .25s;}
+.lcp{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;border:1.5px solid;margin-top:10px;transition:all .25s;}
 .lcp-d{background:var(--r0);color:var(--r7);border-color:var(--r2);}
 .lcp-b{background:var(--a0);color:var(--a7);border-color:var(--a2);}
 .lcp-a{background:var(--g0);color:var(--g7);border-color:var(--g2);}
@@ -200,11 +238,11 @@ input,select,textarea{font-family:inherit;}
 .mc:hover{border-color:var(--n2);box-shadow:var(--sh2);transform:translateY(-2px);}
 .mc:hover::after{opacity:1;}
 .mc.sd::after{background:var(--r5);} .mc.sw::after{background:var(--a5);} .mc.sg::after{background:var(--g5);} .mc.sn::after{background:var(--n4);}
-.mc-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--i4);margin-bottom:7px;}
-.mc-val{font-family:var(--serif);font-size:32px;font-weight:600;line-height:1;margin-bottom:4px;color:var(--n8);}
+.mc-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--i4);margin-bottom:7px;}
+.mc-val{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:600;line-height:1;margin-bottom:4px;color:var(--n8);}
 .mc-val.warn{color:var(--a7);} .mc-val.danger{color:var(--r7);} .mc-val.good{color:var(--g7);} .mc-val.teal{color:var(--t7);}
-.mc-int{font-size:12px;color:var(--i5);line-height:1.4;}
-.mc-prev{font-family:var(--mono);font-size:9.5px;color:var(--i3);margin-top:3px;}
+.mc-int{font-size:var(--fs-sm);color:var(--i5);line-height:1.4;}
+.mc-prev{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i3);margin-top:3px;}
 
 /* ── TREND SPARK ── */
 .spark{display:flex;align-items:flex-end;gap:3px;height:28px;margin-top:8px;}
@@ -212,11 +250,11 @@ input,select,textarea{font-family:inherit;}
 .spark-bar.good{background:var(--g5);opacity:.7;}
 .spark-bar.warn{background:var(--a5);opacity:.7;}
 .spark-bar.danger{background:var(--r5);opacity:.7;}
-.spark-lbl{font-family:var(--mono);font-size:8px;color:var(--i4);margin-top:3px;display:flex;justify-content:space-between;}
+.spark-lbl{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i4);margin-top:3px;display:flex;justify-content:space-between;}
 
 /* ── INLINE ALERTS ── */
-.ia{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:var(--rmd);font-size:12.5px;border:1px solid;margin-bottom:8px;}
-.ia i{font-size:14px;flex-shrink:0;margin-top:1px;}
+.ia{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:var(--rmd);font-size:var(--fs-sm);border:1px solid;margin-bottom:8px;}
+.ia i{font-size:var(--fs-body);flex-shrink:0;margin-top:1px;}
 .ia-w{background:var(--a0);border-color:var(--a1);color:var(--a8);}
 .ia-d{background:var(--r0);border-color:var(--r1);color:var(--r8);}
 .ia-i{background:var(--n0);border-color:var(--n1);color:var(--n7);}
@@ -228,26 +266,26 @@ input,select,textarea{font-family:inherit;}
 .intel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
 .intel-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--i1);background:var(--i0);}
 .intel-ico{width:27px;height:27px;background:var(--n8);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;}
-.intel-ico i{font-size:13px;color:white;}
-.intel-tt{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--n8);}
-.intel-sb{font-size:11px;color:var(--i4);margin-top:1px;}
+.intel-ico i{font-size:var(--fs-base);color:white;}
+.intel-tt{font-family:var(--serif);font-size:var(--fs-body);font-weight:600;color:var(--n8);}
+.intel-sb{font-size:var(--fs-xs);color:var(--i4);margin-top:1px;}
 .ir{display:flex;align-items:flex-start;padding:10px 18px;border-bottom:1px solid var(--i1);transition:background .12s;}
 .ir:last-child{border-bottom:none;}
 .ir:hover{background:var(--n0);}
-.ik{font-size:12px;font-weight:600;color:var(--i4);width:160px;flex-shrink:0;padding-top:1px;}
-.iv{font-size:13px;color:var(--i7);flex:1;display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap;line-height:1.5;}
+.ik{font-size:var(--fs-sm);font-weight:600;color:var(--i4);width:160px;flex-shrink:0;padding-top:1px;}
+.iv{font-size:var(--fs-base);color:var(--i7);flex:1;display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap;line-height:1.5;}
 .iv.it{font-style:italic;color:var(--i5);}
 .iv.fw{font-weight:600;}
 
 /* ── STEP LADDER (Asthma) ── */
 .step-ladder{display:flex;gap:3px;margin-top:6px;align-items:flex-end;}
-.step-rung{flex:1;border-radius:3px 3px 0 0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:500;color:white;transition:all .3s;position:relative;}
+.step-rung{flex:1;border-radius:3px 3px 0 0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;color:white;transition:all .3s;position:relative;}
 .step-rung.past{background:var(--i2);color:var(--i5);}
 .step-rung.current{background:var(--a5);}
 .step-rung.target{background:var(--n8);animation:stepPulse 2s ease-in-out infinite;}
 .step-rung.future{background:var(--i1);color:var(--i4);}
 @keyframes stepPulse{0%,100%{opacity:1;}50%{opacity:.75;}}
-.step-lbl{font-family:var(--mono);font-size:8px;color:var(--i4);text-align:center;margin-top:3px;}
+.step-lbl{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i4);text-align:center;margin-top:3px;}
 
 /* ── BIOLOGIC CHECKER ── */
 .bio-grid{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
@@ -261,12 +299,12 @@ input,select,textarea{font-family:inherit;}
 .bio-row.unmet .bio-icon{background:var(--i3);}
 .bio-row.borderline .bio-icon{background:var(--a5);}
 .bio-row.pending .bio-icon{background:var(--n4);}
-.bio-icon i{font-size:10px;color:white;}
-.bio-crit{font-size:12px;flex:1;color:var(--i7);}
-.bio-val{font-family:var(--mono);font-size:11px;color:var(--i5);}
+.bio-icon i{font-size:var(--fs-2xs);color:white;}
+.bio-crit{font-size:var(--fs-sm);flex:1;color:var(--i7);}
+.bio-val{font-family:var(--mono);font-size:var(--fs-xs);color:var(--i5);}
 
 /* ── TAGS ── */
-.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;border:1px solid;white-space:nowrap;}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:.4px;text-transform:uppercase;border:1px solid;white-space:nowrap;}
 .tn{background:var(--n0);color:var(--n7);border-color:var(--n1);}
 .tr{background:var(--r0);color:var(--r7);border-color:var(--r1);}
 .ta{background:var(--a0);color:var(--a7);border-color:var(--a1);}
@@ -278,7 +316,7 @@ input,select,textarea{font-family:inherit;}
 /* ── TIMELINE ── */
 .tl-panel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
 .tl-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--i1);}
-.tl-tt{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--n8);}
+.tl-tt{font-family:var(--serif);font-size:var(--fs-body);font-weight:600;color:var(--n8);}
 .tli{display:flex;gap:13px;padding:10px 18px;border-bottom:1px solid var(--i1);transition:background .12s;}
 .tli:last-child{border-bottom:none;}
 .tli:hover{background:var(--n0);}
@@ -287,16 +325,16 @@ input,select,textarea{font-family:inherit;}
 .tl-dot.r{background:var(--r5);} .tl-dot.a{background:var(--a5);} .tl-dot.g{background:var(--g5);}
 .tl-line{width:1px;flex:1;min-height:14px;background:var(--i2);}
 .tl-ct{flex:1;min-width:0;}
-.tl-dt{font-family:var(--mono);font-size:9.5px;color:var(--i4);margin-bottom:2px;}
-.tl-ev{font-size:13px;font-weight:500;color:var(--i7);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.tl-bd{font-size:12px;color:var(--i5);margin-top:2px;}
+.tl-dt{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);margin-bottom:2px;}
+.tl-ev{font-size:var(--fs-base);font-weight:500;color:var(--i7);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tl-bd{font-size:var(--fs-sm);color:var(--i5);margin-top:2px;}
 
 /* ── ACTION PANEL ── */
 .act-panel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
 .act-hd{padding:14px 18px;background:var(--n8);}
-.act-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:2px;}
-.act-pt{font-family:var(--mono);font-size:14px;color:white;letter-spacing:1px;}
-.act-vis{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;}
+.act-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:2px;}
+.act-pt{font-family:var(--mono);font-size:var(--fs-body);color:white;letter-spacing:1px;}
+.act-vis{font-size:var(--fs-xs);color:rgba(255,255,255,.4);margin-top:2px;}
 .act-btns{padding:14px;display:flex;flex-direction:column;gap:9px;}
 .abt{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:var(--rmd);cursor:pointer;transition:all .14s;border:1.5px solid;background:transparent;font-family:var(--sans);text-align:left;width:100%;}
 .abt-p{background:var(--n8);border-color:var(--n8);}
@@ -306,35 +344,35 @@ input,select,textarea{font-family:inherit;}
 .abt-ico{width:34px;height:34px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .abt-p .abt-ico{background:rgba(255,255,255,.14);}
 .abt-s .abt-ico{background:var(--n0);}
-.abt-ico i{font-size:17px;}
+.abt-ico i{font-size:var(--fs-h2);}
 .abt-p .abt-ico i{color:white;} .abt-s .abt-ico i{color:var(--n8);}
 .abt-tx{flex:1;}
-.abt-lbl{font-size:13px;font-weight:600;margin-bottom:2px;}
+.abt-lbl{font-size:var(--fs-base);font-weight:600;margin-bottom:2px;}
 .abt-p .abt-lbl{color:white;} .abt-s .abt-lbl{color:var(--i7);}
-.abt-desc{font-size:11px;}
+.abt-desc{font-size:var(--fs-xs);}
 .abt-p .abt-desc{color:rgba(255,255,255,.5);} .abt-s .abt-desc{color:var(--i4);}
-.abt-arr{font-size:15px;flex-shrink:0;opacity:.45;}
+.abt-arr{font-size:var(--fs-h3);flex-shrink:0;opacity:.45;}
 
 /* ── COMPLETENESS ── */
 .comp,.comp-panel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;box-shadow:var(--sh1);}
 .comp-hd{padding:11px 18px;border-bottom:1px solid var(--i1);display:flex;align-items:center;justify-content:space-between;}
-.comp-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);}
-.comp-sc{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--n8);}
+.comp-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);}
+.comp-sc{font-family:var(--mono);font-size:var(--fs-base);font-weight:500;color:var(--n8);}
 .comp-body{padding:11px 18px;display:flex;flex-direction:column;gap:7px;}
 .crow{display:flex;align-items:center;gap:9px;}
-.crl{font-size:11px;color:var(--i5);width:96px;flex-shrink:0;}
+.crl{font-size:var(--fs-xs);color:var(--i5);width:96px;flex-shrink:0;}
 .ctrk{flex:1;height:3px;background:var(--i1);border-radius:2px;overflow:hidden;}
 .cfill{height:100%;border-radius:2px;transition:width .4s;}
 .cf-full{background:var(--g5);} .cf-part{background:var(--n4);} .cf-low{background:var(--a5);}
-.cpct{font-family:var(--mono);font-size:9.5px;color:var(--i4);width:30px;text-align:right;flex-shrink:0;}
+.cpct{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);width:30px;text-align:right;flex-shrink:0;}
 
 /* ── REFERRALS ── */
 .ref-item{display:flex;align-items:center;gap:9px;padding:8px 14px;border-radius:var(--rsm);border:1px solid var(--i2);margin-bottom:6px;}
 .ref-item:hover{background:var(--n0);}
 .ref-s{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .ref-p{background:var(--a5);} .ref-d{background:var(--g5);}
-.ref-lbl{flex:1;font-size:13px;color:var(--i7);}
-.ref-dt{font-family:var(--mono);font-size:10px;color:var(--i4);}
+.ref-lbl{flex:1;font-size:var(--fs-base);color:var(--i7);}
+.ref-dt{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i4);}
 
 /* ── DRAWER ── */
 .drw-ov{position:fixed;inset:0;background:rgba(10,14,23,.42);z-index:400;opacity:0;pointer-events:none;transition:opacity .24s;backdrop-filter:blur(2px);}
@@ -342,56 +380,56 @@ input,select,textarea{font-family:inherit;}
 .drw{position:fixed;top:0;right:0;bottom:0;width:520px;background:var(--wh);z-index:401;transform:translateX(100%);transition:transform .27s cubic-bezier(.4,0,.2,1);box-shadow:var(--shd);display:flex;flex-direction:column;overflow:hidden;}
 .drw.open{transform:translateX(0);}
 .drw-hd{padding:18px 22px;border-bottom:1px solid var(--i2);display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-shrink:0;}
-.drw-ey{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);margin-bottom:4px;}
-.drw-tt{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--n8);}
-.drw-sb{font-size:12px;color:var(--i4);margin-top:3px;}
+.drw-ey{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);margin-bottom:4px;}
+.drw-tt{font-family:var(--serif);font-size:var(--fs-h2);font-weight:600;color:var(--n8);}
+.drw-sb{font-size:var(--fs-sm);color:var(--i4);margin-top:3px;}
 .drw-cls{width:30px;height:30px;border-radius:var(--rsm);background:var(--i1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s;flex-shrink:0;}
 .drw-cls:hover{background:var(--i2);}
-.drw-cls i{font-size:15px;color:var(--i5);}
+.drw-cls i{font-size:var(--fs-h3);color:var(--i5);}
 .drw-body{flex:1;overflow-y:auto;padding:22px;}
 .drw-foot{padding:14px 22px;border-top:1px solid var(--i2);display:flex;align-items:center;gap:9px;flex-shrink:0;}
-.drw-uns{font-size:12px;color:var(--a7);display:flex;align-items:center;gap:5px;margin-left:auto;}
-.drw-uns i{font-size:12px;}
+.drw-uns{font-size:var(--fs-sm);color:var(--a7);display:flex;align-items:center;gap:5px;margin-left:auto;}
+.drw-uns i{font-size:var(--fs-sm);}
 
 /* ── FORMS ── */
 .fsec{margin-bottom:24px;}
-.flbl-sec{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid var(--i1);display:flex;align-items:center;justify-content:space-between;}
-.feng{font-family:var(--mono);font-size:8px;color:var(--i3);background:var(--i0);border:1px solid var(--i1);padding:2px 6px;border-radius:3px;}
+.flbl-sec{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i4);padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid var(--i1);display:flex;align-items:center;justify-content:space-between;}
+.feng{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i3);background:var(--i0);border:1px solid var(--i1);padding:2px 6px;border-radius:3px;}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .fg1{display:grid;grid-template-columns:1fr;gap:12px;}
 .fgrp{display:flex;flex-direction:column;gap:4px;}
-.fl{font-size:11.5px;font-weight:600;color:var(--i5);}
+.fl{font-size:var(--fs-xs);font-weight:600;color:var(--i5);}
 .req{color:var(--r5);margin-left:2px;}
-.fprev{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--i3);margin-bottom:2px;}
-.fprev i{font-size:11px;}
-.fi,.fsel,.ft{width:100%;padding:8px 10px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rsm);font-family:var(--sans);font-size:13px;color:var(--i7);transition:border-color .15s,box-shadow .15s;appearance:none;}
+.fprev{display:flex;align-items:center;gap:5px;font-size:var(--fs-xs);color:var(--i3);margin-bottom:2px;}
+.fprev i{font-size:var(--fs-xs);}
+.fi,.fsel,.ft{width:100%;padding:8px 10px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rsm);font-family:var(--sans);font-size:var(--fs-base);color:var(--i7);transition:border-color .15s,box-shadow .15s;appearance:none;}
 .fi:focus,.fsel:focus,.ft:focus{outline:none;border-color:var(--n4);box-shadow:0 0 0 3px rgba(44,82,130,.09);}
 .fi::placeholder{color:var(--i3);}
 .fi.live{border-color:var(--t5);box-shadow:0 0 0 2px rgba(8,145,178,.1);}
 .fsel{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A0AEC0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:28px;cursor:pointer;}
 .ft{resize:vertical;min-height:70px;}
 .iuw{position:relative;}
-.iu{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--i3);pointer-events:none;}
+.iu{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i3);pointer-events:none;}
 .iuw .fi{padding-right:36px;}
-.fhint{font-size:11px;color:var(--i4);margin-top:2px;}
-.lfb{font-family:var(--mono);font-size:11px;margin-top:4px;padding:4px 8px;border-radius:4px;transition:all .25s;}
+.fhint{font-size:var(--fs-xs);color:var(--i4);margin-top:2px;}
+.lfb{font-family:var(--mono);font-size:var(--fs-xs);margin-top:4px;padding:4px 8px;border-radius:4px;transition:all .25s;}
 .lfb-w{background:var(--a0);color:var(--a8);border:1px solid var(--a1);}
 .lfb-d{background:var(--r0);color:var(--r8);border:1px solid var(--r1);}
 .lfb-g{background:var(--g0);color:var(--g8);border:1px solid var(--g1);}
 .lfb-i{background:var(--n0);color:var(--n7);border:1px solid var(--n1);}
 .sw{display:flex;align-items:center;gap:7px;}
-.sbn{width:30px;height:30px;border-radius:var(--rsm);background:var(--n0);border:1.5px solid var(--i2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s;font-size:17px;font-weight:300;color:var(--n8);flex-shrink:0;user-select:none;}
+.sbn{width:30px;height:30px;border-radius:var(--rsm);background:var(--n0);border:1.5px solid var(--i2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s;font-size:var(--fs-h2);font-weight:300;color:var(--n8);flex-shrink:0;user-select:none;}
 .sbn:hover{border-color:var(--n4);}
-.sdisp{flex:1;text-align:center;padding:6px;background:var(--n0);border:1.5px solid var(--i2);border-radius:var(--rsm);font-family:var(--serif);font-size:21px;font-weight:600;color:var(--n8);line-height:1;}
+.sdisp{flex:1;text-align:center;padding:6px;background:var(--n0);border:1.5px solid var(--i2);border-radius:var(--rsm);font-family:var(--serif);font-size:var(--fs-lg);font-weight:600;color:var(--n8);line-height:1;}
 .rg{display:flex;gap:5px;flex-wrap:wrap;}
-.ro{display:flex;align-items:center;gap:5px;padding:6px 11px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .12s;font-size:12.5px;color:var(--i5);user-select:none;}
+.ro{display:flex;align-items:center;gap:5px;padding:6px 11px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .12s;font-size:var(--fs-sm);color:var(--i5);user-select:none;}
 .ro:hover{border-color:var(--n2);background:var(--n0);}
 .ro.sel{background:var(--n8);color:white;border-color:var(--n8);}
 .rdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0;}
 .ro.sel .rdot{background:white;}
 .ynw{display:flex;gap:4px;}
-.ynb{padding:6px 13px;border-radius:var(--rmd);font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--i2);color:var(--i4);background:var(--wh);transition:all .12s;}
+.ynb{padding:6px 13px;border-radius:var(--rmd);font-size:var(--fs-sm);font-weight:500;cursor:pointer;border:1.5px solid var(--i2);color:var(--i4);background:var(--wh);transition:all .12s;}
 .ynb.yes.on{background:var(--g5);color:white;border-color:var(--g5);}
 .ynb.no.on{background:var(--i7);color:white;border-color:var(--i7);}
 
@@ -400,34 +438,34 @@ input,select,textarea{font-family:inherit;}
 .apz-g{background:var(--g0);border-color:var(--g1);}
 .apz-a{background:var(--a0);border-color:var(--a1);}
 .apz-r{background:var(--r0);border-color:var(--r1);}
-.apz-tt{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;}
+.apz-tt{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;}
 .apz-g .apz-tt{color:var(--g7);} .apz-a .apz-tt{color:var(--a7);} .apz-r .apz-tt{color:var(--r7);}
 .apz-steps{list-style:none;display:flex;flex-direction:column;gap:5px;}
-.apz-s{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--i7);line-height:1.5;}
-.apz-arr{color:var(--i4);flex-shrink:0;margin-top:2px;font-size:11px;}
+.apz-s{display:flex;align-items:flex-start;gap:7px;font-size:var(--fs-base);color:var(--i7);line-height:1.5;}
+.apz-arr{color:var(--i4);flex-shrink:0;margin-top:2px;font-size:var(--fs-xs);}
 
 /* ── FEV1 CHART ── */
 .fev1-chart{display:flex;align-items:flex-end;gap:8px;padding:8px 0 0;border-bottom:1px solid var(--i2);margin-bottom:6px;}
 .fbw{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
 .fb{width:100%;border-radius:4px 4px 0 0;border:1px solid;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;}
-.fb span{font-family:var(--mono);font-size:9px;color:var(--i5);}
+.fb span{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i5);}
 .fb.good{background:var(--g0);border-color:var(--g5);} .fb.warn{background:var(--a0);border-color:var(--a5);} .fb.danger{background:var(--r0);border-color:var(--r5);}
-.fbl{font-size:10px;color:var(--i4);text-align:center;}
+.fbl{font-size:var(--fs-2xs);color:var(--i4);text-align:center;}
 
 /* ── PP (pseudo panel) ── */
 .pp{background:var(--n8);border-radius:var(--rlg);padding:17px 18px;margin-bottom:18px;}
-.pp-l{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#60A5FA;margin-bottom:6px;}
-.pp-id{font-family:var(--mono);font-size:17px;font-weight:500;color:white;letter-spacing:1.5px;margin-bottom:3px;}
-.pp-sb{font-size:12px;color:rgba(255,255,255,.32);}
+.pp-l{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:2px;text-transform:uppercase;color:#60A5FA;margin-bottom:6px;}
+.pp-id{font-family:var(--mono);font-size:var(--fs-h2);font-weight:500;color:white;letter-spacing:1.5px;margin-bottom:3px;}
+.pp-sb{font-size:var(--fs-sm);color:rgba(255,255,255,.32);}
 .pp-tags{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;}
-.pp-tag{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#60A5FA;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);padding:2px 7px;border-radius:4px;}
+.pp-tag{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:1px;text-transform:uppercase;color:#60A5FA;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);padding:2px 7px;border-radius:4px;}
 
 /* ── ANALYSIS ── */
 .ao{background:var(--wh);border:1px solid var(--i2);border-radius:var(--rxl);overflow:hidden;}
 .ao-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--i1);background:var(--i0);}
-.ao-tt{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--n8);}
+.ao-tt{font-family:var(--serif);font-size:var(--fs-body);font-weight:600;color:var(--n8);}
 .ao-layers{display:flex;gap:4px;flex-wrap:wrap;}
-.ao-b{font-family:var(--mono);font-size:8px;color:var(--i4);background:var(--i1);border:1px solid var(--i2);padding:2px 5px;border-radius:3px;cursor:pointer;transition:all .12s;}
+.ao-b{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i4);background:var(--i1);border:1px solid var(--i2);padding:2px 5px;border-radius:3px;cursor:pointer;transition:all .12s;}
 .ao-b:hover{background:var(--n0);color:var(--n8);}
 .ao-b.done{background:var(--g0);color:var(--g7);border-color:var(--g1);}
 .ao-b.run{background:var(--a0);color:var(--a7);border-color:var(--a1);}
@@ -437,17 +475,17 @@ input,select,textarea{font-family:inherit;}
 .ao-cell:nth-last-child(-n+2){border-bottom:none;}
 .ao-cell:last-child:nth-child(odd){border-right:none;grid-column:1/-1;}
 .ao-cell:hover{background:var(--n0);}
-.ao-ct{font-size:12px;font-weight:600;color:var(--n8);}
-.ao-ref{font-family:var(--mono);font-size:8px;color:var(--i3);background:var(--i0);border:1px solid var(--i1);padding:1px 5px;border-radius:3px;}
-.ao-out{font-family:var(--mono);font-size:10.5px;color:var(--i5);line-height:1.7;white-space:pre-wrap;min-height:40px;margin-top:7px;}
+.ao-ct{font-size:var(--fs-sm);font-weight:600;color:var(--n8);}
+.ao-ref{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i3);background:var(--i0);border:1px solid var(--i1);padding:1px 5px;border-radius:3px;}
+.ao-out{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i5);line-height:1.7;white-space:pre-wrap;min-height:40px;margin-top:7px;}
 .ao-out.idle{color:var(--i3);font-style:italic;}
-.rep{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--i5);background:var(--n0);border:1px solid var(--i2);border-radius:var(--rmd);padding:14px;white-space:pre-wrap;min-height:80px;}
+.rep{font-family:var(--mono);font-size:var(--fs-xs);line-height:1.8;color:var(--i5);background:var(--n0);border:1px solid var(--i2);border-radius:var(--rmd);padding:14px;white-space:pre-wrap;min-height:80px;}
 
 /* ── TABLE ── */
 .tw{overflow-x:auto;border-radius:var(--rmd);border:1px solid var(--i2);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
+table{width:100%;border-collapse:collapse;font-size:var(--fs-base);}
 thead{background:var(--n8);}
-thead th{padding:8px 13px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;}
+thead th{padding:8px 13px;text-align:left;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;}
 tbody tr{border-bottom:1px solid var(--i1);transition:background .12s;}
 tbody tr:last-child{border-bottom:none;}
 tbody tr:hover{background:var(--n0);}
@@ -456,9 +494,9 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 /* ── NOTIF ── */
 .nct{position:fixed;top:14px;right:18px;z-index:500;display:flex;flex-direction:column;gap:7px;pointer-events:none;}
-.notif{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--n8);color:white;border-radius:var(--rmd);box-shadow:var(--sh3);font-size:13px;font-weight:500;min-width:250px;pointer-events:all;animation:nin .2s ease;border-left:3px solid #60A5FA;}
+.notif{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--n8);color:white;border-radius:var(--rmd);box-shadow:var(--sh3);font-size:var(--fs-base);font-weight:500;min-width:250px;pointer-events:all;animation:nin .2s ease;border-left:3px solid #60A5FA;}
 .notif.ok{border-left-color:#68D391;} .notif.warn{border-left-color:#F6AD55;} .notif.err{border-left-color:#FC8181;}
-.notif i{font-size:15px;flex-shrink:0;}
+.notif i{font-size:var(--fs-h3);flex-shrink:0;}
 @keyframes nin{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
@@ -470,7 +508,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .mt2{margin-top:8px;}.mt3{margin-top:12px;}.mt4{margin-top:16px;}
 .mb2{margin-bottom:8px;}.mb3{margin-bottom:12px;}
 .fw6{font-weight:600;}.mono{font-family:var(--mono);}
-.sm{font-size:12px;}.xs{font-size:11px;}.muted{color:var(--i4);}
+.sm{font-size:var(--fs-sm);}.xs{font-size:var(--fs-xs);}.muted{color:var(--i4);}
 .hidden{display:none!important;}
 .animate-in{animation:fadeUp .25s ease;}
 
@@ -479,33 +517,33 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .abt-cat1{background:var(--n8);border-color:var(--n8);padding:15px 16px;}
 .abt-cat1:hover{background:var(--n7);box-shadow:0 4px 14px rgba(11,31,58,.25);transform:translateY(-1px);}
 .abt-cat1 .abt-ico{width:38px;height:38px;background:rgba(255,255,255,.14);}
-.abt-cat1 .abt-ico i{font-size:18px;color:white;}
-.abt-cat1 .abt-lbl{font-size:14px;color:white;}
+.abt-cat1 .abt-ico i{font-size:var(--fs-h1);color:white;}
+.abt-cat1 .abt-lbl{font-size:var(--fs-body);color:white;}
 .abt-cat1 .abt-desc{color:rgba(255,255,255,.5);}
 
 /* Category 2 — Data entry actions: ghost border, medium */
 .abt-cat2{background:var(--wh);border:1.5px solid var(--n1);padding:11px 14px;}
 .abt-cat2:hover{background:var(--n0);border-color:var(--n2);}
 .abt-cat2 .abt-ico{width:30px;height:30px;background:var(--n0);}
-.abt-cat2 .abt-ico i{font-size:15px;color:var(--n8);}
-.abt-cat2 .abt-lbl{font-size:12.5px;}
-.abt-cat2 .abt-desc{font-size:10.5px;}
+.abt-cat2 .abt-ico i{font-size:var(--fs-h3);color:var(--n8);}
+.abt-cat2 .abt-lbl{font-size:var(--fs-sm);}
+.abt-cat2 .abt-desc{font-size:var(--fs-2xs);}
 
 /* Category 3 — Navigation / utility: light ghost, smallest */
 .abt-cat3{background:transparent;border:1.5px solid var(--i1);padding:8px 12px;}
 .abt-cat3:hover{background:var(--i0);border-color:var(--i2);}
 .abt-cat3 .abt-ico{width:24px;height:24px;background:var(--i0);}
-.abt-cat3 .abt-ico i{font-size:12px;color:var(--i5);}
-.abt-cat3 .abt-lbl{font-size:11.5px;color:var(--i6);font-weight:500;margin-bottom:0;}
+.abt-cat3 .abt-ico i{font-size:var(--fs-sm);color:var(--i5);}
+.abt-cat3 .abt-lbl{font-size:var(--fs-xs);color:var(--i6);font-weight:500;margin-bottom:0;}
 .abt-cat3 .abt-desc{display:none;}
-.abt-cat3 .abt-arr{font-size:12px;}
+.abt-cat3 .abt-arr{font-size:var(--fs-sm);}
 
 /* Category section dividers */
-.abt-cat-lbl{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i3);padding:4px 2px 2px;margin-top:4px;}
+.abt-cat-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--i3);padding:4px 2px 2px;margin-top:4px;}
 .abt-cat-lbl:first-child{margin-top:0;padding-top:0;}
 
 /* State badges */
-.abt-state{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 8px;border-radius:99px;margin-left:auto;flex-shrink:0;white-space:nowrap;}
+.abt-state{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;padding:3px 8px;border-radius:99px;margin-left:auto;flex-shrink:0;white-space:nowrap;}
 .abt-state.st-current{background:rgba(56,161,105,.16);color:#9AE6B4;border:1px solid rgba(56,161,105,.3);}
 .abt-state.st-stale{background:rgba(217,119,6,.16);color:#FCD34D;border:1px solid rgba(217,119,6,.3);}
 .abt-state-light.st-current{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
@@ -516,7 +554,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 /* ═══ v10 — PII / IDENTITY FIELD STYLING ═══ */
 .pii-wrap{border:1.5px solid var(--r1);background:var(--r0);border-radius:var(--rlg);padding:16px 18px;margin-bottom:14px;}
-.pii-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--r7);background:var(--r1);border:1px solid var(--r2);padding:3px 9px;border-radius:4px;margin-bottom:11px;}
+.pii-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--r7);background:var(--r1);border:1px solid var(--r2);padding:3px 9px;border-radius:4px;margin-bottom:11px;}
 .pii-wrap .fi,.pii-wrap .fsel{border-color:var(--r2);}
 .pii-wrap .fi:focus,.pii-wrap .fsel:focus{border-color:var(--r5);box-shadow:0 0 0 3px rgba(229,62,62,.09);}
 .pii-wrap .fl{color:var(--r8);}
@@ -525,12 +563,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .reg-stepper{display:flex;align-items:flex-start;gap:0;margin-bottom:22px;}
 .reg-step{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;width:64px;}
 .reg-step.locked,.reg-step.upcoming{cursor:default;}
-.reg-step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;transition:all .2s;}
+.reg-step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:var(--fs-xs);font-weight:600;transition:all .2s;}
 .reg-step-circle.done{background:var(--g5);color:white;}
 .reg-step-circle.current{background:var(--n8);color:white;box-shadow:0 0 0 4px var(--n0);}
 .reg-step-circle.upcoming{background:var(--i1);color:var(--i4);}
 .reg-step-circle.locked{background:var(--i1);color:var(--i3);}
-.reg-step-lbl{font-size:8.5px;font-family:var(--mono);letter-spacing:.2px;text-align:center;color:var(--i4);line-height:1.3;}
+.reg-step-lbl{font-size:var(--fs-micro);font-family:var(--mono);letter-spacing:.2px;text-align:center;color:var(--i4);line-height:1.3;}
 .reg-step.current .reg-step-lbl{color:var(--n8);font-weight:600;}
 .reg-step.done .reg-step-lbl{color:var(--g7);}
 .reg-step-line{flex:1;height:1px;background:var(--i2);margin-top:14px;min-width:8px;}
@@ -538,15 +576,15 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 /* ═══ v10 — PLATFORM ID INTERSTITIAL ═══ */
 .reg-interstitial{text-align:center;padding:36px 20px;}
-.reg-id-display{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:3px;color:white;background:var(--n8);border-radius:var(--rlg);padding:22px;margin:18px 0;}
-.reg-id-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:5px 11px;border-radius:6px;margin-bottom:16px;}
+.reg-id-display{font-family:var(--mono);font-size:var(--fs-2xl);font-weight:600;letter-spacing:3px;color:white;background:var(--n8);border-radius:var(--rlg);padding:22px;margin:18px 0;}
+.reg-id-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-xs);color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:5px 11px;border-radius:6px;margin-bottom:16px;}
 
 /* ═══ v10 — BODE / ANTHONISEN GRIDS ═══ */
 .bode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
 .bode-cell{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:10px;text-align:center;}
-.bode-letter{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--n8);}
-.bode-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--i4);margin-top:2px;}
-.bode-pts{font-family:var(--mono);font-size:11px;color:var(--i5);margin-top:4px;}
+.bode-letter{font-family:var(--serif);font-size:var(--fs-lg);font-weight:600;color:var(--n8);}
+.bode-lbl{font-family:var(--mono);font-size:var(--fs-micro);text-transform:uppercase;letter-spacing:1px;color:var(--i4);margin-top:2px;}
+.bode-pts{font-family:var(--mono);font-size:var(--fs-xs);color:var(--i5);margin-top:4px;}
 .anth-grid{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
 .anth-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--rsm);border:1px solid;}
 .anth-row.met{background:var(--a0);border-color:var(--a1);}
@@ -554,10 +592,10 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .anth-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .anth-row.met .anth-icon{background:var(--a5);}
 .anth-row.unmet .anth-icon{background:var(--i3);}
-.anth-icon i{font-size:10px;color:white;}
+.anth-icon i{font-size:var(--fs-2xs);color:white;}
 
 @media print {
-  .eco, .ahdr, .visit-bar, .cockpit-aside, .tl-panel,
+  .ahdr, .visit-bar, .cockpit-aside, .tl-panel,
   .intel, .mgrid, .lcp, .nct, .drw-ov { display: none !important; }
   .cockpit { display: block !important; padding: 0; }
   .cockpit-main { gap: 8px; }
@@ -571,44 +609,60 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   body { font-size: 12px; }
 }
 @media(max-width:1024px){.cockpit{grid-template-columns:1fr;}.cockpit-aside{order:-1;}.mgrid{grid-template-columns:1fr 1fr 1fr;}.drw{width:100%;max-width:520px;}}
-@media(max-width:640px){.cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.eco-mods{display:none;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}}
+@media(max-width:640px){.cockpit{padding:13px;gap:12px;}.mgrid{grid-template-columns:1fr 1fr;}.ao-grid{grid-template-columns:1fr;}.fg,.fg3{grid-template-columns:1fr;}}
+@media(prefers-color-scheme:dark){
+  /* v11 — contrast fix: badge/tag/pill/alert text used dark-navy/red/
+     green/amber shades meant for LIGHT backgrounds. In dark mode the
+     backgrounds (--Xn0/1) flip to near-black tints but this text never
+     did, leaving 1.0-2.6:1 contrast across ~36 classes platform-wide.
+     This block (placed after all base rules, so it wins on source
+     order at equal specificity) restores >=4.5:1 everywhere. */
+  .tn,.db-copd,.ia-i,.lfb-i,.reg-id-badge,.enc-badge,.pm-item.on{color:var(--n2);}
+  .tr,.lcp-d,.lcp-unc,.vdp.w,.cz-r,.ia-d,.lfb-d,.pii-badge{color:var(--r2);}
+  .ta,.lcp-b,.lcp-part,.db-cb,.cz-a,.abt-state-light.st-stale,.ia-w,.lfb-w{color:var(--a2);}
+  .tg,.lcp-a,.lcp-ctrl,.ia-g,.lfb-g,.vdp.b,.cz-g,.abt-state-light.st-current{color:var(--g2);}
+  .tt,.db-asthma{color:var(--t1);}
+  .tp,.db-aco{color:var(--p1);}
+}
 </style>
 </head>
 <body>
 
 <!-- ECO BAR -->
-<nav class="eco">
-  <span class="eco-brand">Respiratory Platform</span>
-  <div class="eco-mods">
-    <div class="em on"><span class="ep"></span>AIRMAP — Obstructive</div>
-    <div class="em off"><span class="ep"></span>PneumoData — Restrictive</div>
-    <div class="em off"><span class="ep"></span>Pulmonary HTN</div>
-    <div class="em off"><span class="ep"></span>Sleep &amp; Ventilation</div>
-    <div class="em off">+ Add module</div>
-  </div>
-  <div class="eco-u">
-    <span class="eco-role">Clinician</span>
-    <span class="eco-nm">Dr. García</span>
-    <div class="eco-av">MG</div>
-  </div>
-</nav>
-
-<!-- APP HEADER -->
+<!-- APP HEADER (v11 — single consolidated bar, replaces eco-bar + ahdr) -->
 <header class="ahdr">
   <div class="flex ic g3">
     <div class="lmk"><i class="ti ti-lungs"></i></div>
     <div><div class="ltx">AIRMAP</div><div class="lsb">Obstructive Disease Intelligence</div></div>
   </div>
+
+  <div style="position:relative">
+    <button class="btn bg btn-icon btn-sm" id="platform-sw" onclick="togglePlatformMenu()" aria-expanded="false" title="Respiratory Platform — switch module">
+      <i class="ti ti-stack-2"></i>
+    </button>
+    <div class="platform-menu" id="platform-menu">
+      <div class="pm-hdr">Respiratory Platform</div>
+      <div class="pm-item on"><span class="ep"></span>AIRMAP — Obstructive</div>
+      <div class="pm-item"><span class="ep"></span>PneumoData — Restrictive</div>
+      <div class="pm-item"><span class="ep"></span>Pulmonary HTN</div>
+      <div class="pm-item"><span class="ep"></span>Sleep &amp; Ventilation</div>
+      <div class="pm-item add">+ Add module</div>
+    </div>
+  </div>
+
   <div class="hdv"></div>
 
   <div style="position:relative">
     <div class="ptc" id="ptc" onclick="toggleCohort()" role="button" aria-expanded="false">
-      <div class="ptci"><i class="ti ti-user"></i></div>
-      <div>
-        <div class="pid" id="pid-disp">AIRMAP-2024-00147</div>
-        <div class="pnm" id="pnm-disp">Anonymous patient</div>
+      <div class="ptci"><i class="ti ti-fingerprint"></i></div>
+      <div class="ptc-info">
+        <div class="ptc-row1">
+          <span class="pid" id="pid-disp">AIRMAP-2024-00147</span>
+          <span class="db db-copd" id="dis-badge">COPD</span>
+        </div>
+        <div class="pctx" id="pctx-disp">Visit 4 of 4 · 14 Nov 2024</div>
       </div>
-      <i class="ti ti-chevron-down" id="co-chev" style="margin-left:8px;color:var(--i3);font-size:14px;transition:transform .2s"></i>
+      <i class="ti ti-chevron-down" id="co-chev" style="margin-left:8px;color:var(--i3);font-size:var(--fs-body);transition:transform .2s"></i>
     </div>
 
     <div class="cohort" id="cohort">
@@ -620,14 +674,9 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     </div>
   </div>
 
-  <div class="db db-copd" id="dis-badge">
-    <i class="ti ti-lungs"></i>
-    <span id="dis-badge-txt">COPD</span>
-  </div>
-
   <div class="hdr-r">
-    <button class="btn bg btn-icon btn-sm" onclick="notify('Search — Phase 2','info')"><i class="ti ti-search"></i></button>
-    <button class="btn bg btn-icon btn-sm" onclick="notify('No new alerts','ok')"><i class="ti ti-bell"></i></button>
+    <button class="btn bg btn-icon btn-sm" onclick="notify('Search — Phase 2','info')" aria-label="Search"><i class="ti ti-search"></i></button>
+    <button class="btn bg btn-icon btn-sm" onclick="notify('No new alerts','ok')" aria-label="Notifications"><i class="ti ti-bell"></i></button>
     <div class="hdv"></div>
     <!-- GAP 09: Read-only mode toggle -->
     <button class="btn bg btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode">
@@ -636,6 +685,10 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <div class="hdv"></div>
     <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i>Export</button>
     <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i>Run analysis</button>
+    <div class="hdv"></div>
+    <div class="clin" title="Dr. García · Clinician">
+      <div class="clin-av">MG</div>
+    </div>
   </div>
 </header>
 
@@ -699,7 +752,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <div class="comp" id="ref-panel">
       <div class="comp-hd">
         <span class="comp-lbl">Referral tracking</span>
-        <button class="btn bg btn-sm" onclick="notify('Add referral','info')" style="padding:3px 8px;font-size:11px"><i class="ti ti-plus"></i>Add</button>
+        <button class="btn bg btn-sm" onclick="notify('Add referral','info')" style="padding:3px 8px;font-size:var(--fs-xs)"><i class="ti ti-plus"></i>Add</button>
       </div>
       <div class="comp-body" id="ref-body"></div>
     </div>
@@ -769,6 +822,124 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 /* ═══════════════════════════════════════════════════════════════════
    PATIENT DATABASE (hardcoded — every field = future DB column)
 ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   v11 — INLINE ICON SYSTEM
+   Self-contained SVG icon registry (Tabler Icons, MIT licensed,
+   outline set, 67 icons ~10KB). Replaces the CDN webfont — every
+   icon renders identically online or offline, no external request.
+═══════════════════════════════════════════════════════════════════ */
+const ICON_PATHS = {
+  'activity': '<path d="M3 12h4l3 8l4 -16l3 8h4" />',
+  'alert-circle': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 8v4" /> <path d="M12 16h.01" />',
+  'alert-octagon': '<path d="M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0" /> <path d="M12 8v4" /> <path d="M12 16h.01" />',
+  'alert-triangle': '<path d="M12 9v4" /> <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" /> <path d="M12 16h.01" />',
+  'arrow-left': '<path d="M5 12l14 0" /> <path d="M5 12l6 6" /> <path d="M5 12l6 -6" />',
+  'arrow-right': '<path d="M5 12l14 0" /> <path d="M13 18l6 -6" /> <path d="M13 6l6 6" />',
+  'arrow-up-right': '<path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" />',
+  'bell': '<path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /> <path d="M9 17v1a3 3 0 0 0 6 0v-1" />',
+  'bone': '<path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122l-.005 -.005" />',
+  'brain': '<path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" /> <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" /> <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5" /> <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0" /> <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5" /> <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" />',
+  'building-hospital': '<path d="M3 21l18 0" /> <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /> <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /> <path d="M10 9l4 0" /> <path d="M12 7l0 4" />',
+  'chart-line': '<path d="M4 19l16 0" /> <path d="M4 15l4 -6l4 2l4 -5l4 4" />',
+  'check': '<path d="M5 12l5 5l10 -10" />',
+  'chevron-down': '<path d="M6 9l6 6l6 -6" />',
+  'chevron-right': '<path d="M9 6l6 6l-6 6" />',
+  'circle-check': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /> <path d="M9 12l2 2l4 -4" />',
+  'circle-dashed': '<path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95" /> <path d="M3.69 8.56a9 9 0 0 0 -.69 3.44" /> <path d="M3.69 15.44a9 9 0 0 0 1.95 2.92" /> <path d="M8.56 20.31a9 9 0 0 0 3.44 .69" /> <path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95" /> <path d="M20.31 15.44a9 9 0 0 0 .69 -3.44" /> <path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92" /> <path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69" />',
+  'circle-x': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /> <path d="M10 10l4 4m0 -4l-4 4" />',
+  'clipboard-check': '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /> <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /> <path d="M9 14l2 2l4 -4" />',
+  'clipboard-list': '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /> <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /> <path d="M9 12l.01 0" /> <path d="M13 12l2 0" /> <path d="M9 16l.01 0" /> <path d="M13 16l2 0" />',
+  'clock': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 7v5l3 3" />',
+  'command': '<path d="M7 9a2 2 0 1 1 2 -2v10a2 2 0 1 1 -2 -2h10a2 2 0 1 1 -2 2v-10a2 2 0 1 1 2 2h-10" />',
+  'corner-down-left': '<path d="M18 6v6a3 3 0 0 1 -3 3h-10l4 -4m0 8l-4 -4" />',
+  'device-floppy': '<path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /> <path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M14 4l0 4l-6 0l0 -4" />',
+  'device-mobile': '<path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14" /> <path d="M11 4h2" /> <path d="M12 17v.01" />',
+  'dots': '<path d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M18 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />',
+  'download': '<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /> <path d="M7 11l5 5l5 -5" /> <path d="M12 4l0 12" />',
+  'droplet': '<path d="M7.502 19.423c2.602 2.105 6.395 2.105 8.996 0c2.602 -2.105 3.262 -5.708 1.566 -8.546l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546" />',
+  'eye': '<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />',
+  'eye-off': '<path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /> <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /> <path d="M3 3l18 18" />',
+  'file-export': '<path d="M14 3v4a1 1 0 0 0 1 1h4" /> <path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" />',
+  'file-type-pdf': '<path d="M14 3v4a1 1 0 0 0 1 1h4" /> <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /> <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" /> <path d="M17 18h2" /> <path d="M20 15h-3v6" /> <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1" />',
+  'filter': '<path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227" />',
+  'fingerprint': '<path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3" /> <path d="M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6" /> <path d="M12 11v2a14 14 0 0 0 2.5 8" /> <path d="M8 15a18 18 0 0 0 1.8 6" /> <path d="M4.9 19a22 22 0 0 1 -.9 -7v-1a8 8 0 0 1 12 -6.95" />',
+  'flame': '<path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.294 -2.333 5.588c0 3.704 3.134 6.706 7 6.706c3.866 0 7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235" />',
+  'flask': '<path d="M9 3l6 0" /> <path d="M10 9l4 0" /> <path d="M10 3v6l-4 11a.7 .7 0 0 0 .5 1h11a.7 .7 0 0 0 .5 -1l-4 -11v-6" />',
+  'folder-open': '<path d="M5 19l2.757 -7.351a1 1 0 0 1 .936 -.649h12.307a1 1 0 0 1 .986 1.164l-.996 5.211a2 2 0 0 1 -1.964 1.625h-14.026a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v2" />',
+  'help-circle': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 16v.01" /> <path d="M12 13a2 2 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" />',
+  'history': '<path d="M12 8l0 4l2 2" /> <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />',
+  'id-badge': '<path d="M5 6a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3l0 -12" /> <path d="M10 13a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M10 6h4" /> <path d="M9 18h6" />',
+  'info-circle': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 9h.01" /> <path d="M11 12h1v4h1" />',
+  'key': '<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0" /> <path d="M15 9h.01" />',
+  'keyboard': '<path d="M2 8a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2l0 -8" /> <path d="M6 10l0 .01" /> <path d="M10 10l0 .01" /> <path d="M14 10l0 .01" /> <path d="M18 10l0 .01" /> <path d="M6 14l0 .01" /> <path d="M18 14l0 .01" /> <path d="M10 14l4 .01" />',
+  'layout-grid': '<path d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" /> <path d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" /> <path d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" /> <path d="M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />',
+  'leaf': '<path d="M5 21c.5 -4.5 2.5 -8 7 -10" /> <path d="M9 18c6.218 0 10.5 -3.288 11 -12v-2h-4.014c-9 0 -11.986 4 -12 9c0 1 0 3 2 5h3l.014 0" />',
+  'link': '<path d="M9 15l6 -6" /> <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /> <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />',
+  'list-details': '<path d="M13 5h8" /> <path d="M13 9h5" /> <path d="M13 15h8" /> <path d="M13 19h5" /> <path d="M3 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" /> <path d="M3 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />',
+  'lock': '<path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" /> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /> <path d="M8 11v-4a4 4 0 1 1 8 0v4" />',
+  'lungs': '<path d="M6.081 20c1.612 0 2.919 -1.335 2.919 -2.98v-9.763c0 -.694 -.552 -1.257 -1.232 -1.257c-.205 0 -.405 .052 -.584 .15l-.13 .083c-1.46 1.059 -2.432 2.647 -3.404 5.824c-.42 1.37 -.636 2.962 -.648 4.775c-.012 1.675 1.261 3.054 2.877 3.161l.203 .007" /> <path d="M17.92 20c-1.613 0 -2.92 -1.335 -2.92 -2.98v-9.763c0 -.694 .552 -1.257 1.233 -1.257c.204 0 .405 .052 .584 .15l.13 .083c1.46 1.059 2.432 2.647 3.405 5.824c.42 1.37 .636 2.962 .648 4.775c.012 1.675 -1.261 3.054 -2.878 3.161l-.202 .007" /> <path d="M9 12a3 3 0 0 0 3 -3a3 3 0 0 0 3 3" /> <path d="M12 4v5" />',
+  'minus': '<path d="M5 12l14 0" />',
+  'moon': '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008" />',
+  'notes': '<path d="M5 5a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2l0 -14" /> <path d="M9 7l6 0" /> <path d="M9 11l6 0" /> <path d="M9 15l4 0" />',
+  'pencil': '<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /> <path d="M13.5 6.5l4 4" />',
+  'pill': '<path d="M4.5 12.5l8 -8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1 -7 -7" /> <path d="M8.5 8.5l7 7" />',
+  'player-play': '<path d="M7 4v16l13 -8l-13 -8" />',
+  'plus': '<path d="M12 5l0 14" /> <path d="M5 12l14 0" />',
+  'printer': '<path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /> <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /> <path d="M7 15a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2l0 -4" />',
+  'refresh': '<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />',
+  'rotate': '<path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" />',
+  'route': '<path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4" /> <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />',
+  'search': '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" />',
+  'server-2': '<path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-2" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /> <path d="M11 8h6" /> <path d="M11 16h6" />',
+  'settings': '<path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /> <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />',
+  'shield': '<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />',
+  'shield-check': '<path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06" /> <path d="M15 19l2 2l4 -4" />',
+  'shield-lock': '<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" /> <path d="M11 11a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M12 12l0 2.5" />',
+  'stack-2': '<path d="M12 4l-8 4l8 4l8 -4l-8 -4" /> <path d="M4 12l8 4l8 -4" /> <path d="M4 16l8 4l8 -4" />',
+  'stethoscope': '<path d="M6 4h-1a2 2 0 0 0 -2 2v3.5a5.5 5.5 0 0 0 11 0v-3.5a2 2 0 0 0 -2 -2h-1" /> <path d="M8 15a6 6 0 1 0 12 0v-3" /> <path d="M11 3v2" /> <path d="M6 3v2" /> <path d="M18 10a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />',
+  'sun': '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />',
+  'target': '<path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M7 12a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /> <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />',
+  'trash': '<path d="M4 7l16 0" /> <path d="M10 11l0 6" /> <path d="M14 11l0 6" /> <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /> <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />',
+  'trending-down': '<path d="M3 7l6 6l4 -4l8 8" /> <path d="M21 10l0 7l-7 0" />',
+  'trending-up': '<path d="M3 17l6 -6l4 4l8 -8" /> <path d="M14 7l7 0l0 7" />',
+  'user': '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />',
+  'user-plus': '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M16 19h6" /> <path d="M19 16v6" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />',
+  'users': '<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /> <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />',
+  'vaccine': '<path d="M17 3l4 4" /> <path d="M19 5l-4.5 4.5" /> <path d="M11.5 6.5l6 6" /> <path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5" /> <path d="M7.5 12.5l1.5 1.5" /> <path d="M10.5 9.5l1.5 1.5" /> <path d="M3 21l3 -3" />',
+  'wind': '<path d="M5 8h8.5a2.5 2.5 0 1 0 -2.34 -3.24" /> <path d="M3 12h15.5a2.5 2.5 0 1 1 -2.34 3.24" /> <path d="M4 16h5.5a2.5 2.5 0 1 1 -2.34 3.24" />',
+  'x': '<path d="M18 6l-12 12" /> <path d="M6 6l12 12" />',
+};
+function svgIcon(name) {
+  const inner = ICON_PATHS[name];
+  if (!inner) return '';
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1em;height:1em;display:inline-block;vertical-align:-0.125em;flex-shrink:0">${inner}</svg>`;
+}
+function hydrateIcon(el) {
+  if (el.dataset.svgIcon) return;
+  let name = null;
+  for (const c of el.classList) { if (c !== 'ti' && c.indexOf('ti-') === 0) { name = c.slice(3); break; } }
+  if (!name) return;
+  const svg = svgIcon(name);
+  if (svg) { el.innerHTML = svg; el.dataset.svgIcon = '1'; }
+}
+function hydrateIcons(root) {
+  if (!root || !root.querySelectorAll) return;
+  root.querySelectorAll('i.ti').forEach(hydrateIcon);
+}
+let _iconObserver = null;
+function startIconObserver() {
+  if (_iconObserver) return;
+  _iconObserver = new MutationObserver(muts => {
+    for (const m of muts) {
+      for (const n of m.addedNodes) {
+        if (n.nodeType !== 1) continue;
+        if (n.matches && n.matches('i.ti')) hydrateIcon(n);
+        hydrateIcons(n);
+      }
+    }
+  });
+  _iconObserver.observe(document.body, {childList:true, subtree:true});
+}
 const DB = {
 
   /* ── P1 · COPD · DECLINING ─────────────────────────────────────
@@ -778,6 +949,7 @@ const DB = {
   ── */
   '00147': {
     disease: 'COPD', risk: 'r',
+    identity: { internalRef:'a1f2e8b4-7c3d-4e91-9a2f-118f3c0d5e6b', responsibleClinician:'Dr. García' },
     demographics: { age:64, sex:'Male', bmi:26.4, smoker:'Ex-smoker', packYears:20, quitDate:'Mar 2024', onsetAge:58 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:true, osteoporosis:false },
     vaccinations: { flu:false, pneumo:false, covid:true },
@@ -824,6 +996,7 @@ const DB = {
   ── */
   '00203': {
     disease: 'ASTHMA', risk: 'r',
+    identity: { internalRef:'c4d8a213-5f6b-4a02-8e7d-9b1c2f4a3e80', responsibleClinician:'Dr. García' },
     demographics: { age:28, sex:'Female', bmi:22.1, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:14 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
@@ -867,6 +1040,7 @@ const DB = {
   ── */
   '00089': {
     disease: 'COPD', risk: 'g',
+    identity: { internalRef:'7e29b6f0-3a14-4c5d-bf02-6d8e1a9c4f37', responsibleClinician:'Dr. Patel' },
     demographics: { age:71, sex:'Male', bmi:24.8, smoker:'Ex-smoker', packYears:35, quitDate:'Jan 2022', onsetAge:62 },
     comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:false, osteoporosis:false },
     vaccinations: { flu:true, pneumo:true, covid:true },
@@ -912,6 +1086,7 @@ const DB = {
   ── */
   '00311': {
     disease: 'ACO', risk: 'a',
+    identity: { internalRef:'f08c1d7e-9b4a-4f63-a205-3e7c6b2d8f91', responsibleClinician:'Dr. García' },
     demographics: { age:52, sex:'Female', bmi:23.6, smoker:'Ex-smoker', packYears:12, quitDate:'Jun 2020', onsetAge:30 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
@@ -954,6 +1129,7 @@ const DB = {
   ── */
   '00418': {
     disease: 'CHRONIC_BRONCHITIS', risk: 'g',
+    identity: { internalRef:'2b6f4e91-c8a3-4d70-95e1-4a8b3f6c2d10', responsibleClinician:'Dr. García' },
     demographics: { age:58, sex:'Male', bmi:28.2, smoker:'Current smoker', packYears:25, quitDate:null, onsetAge:52 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:false, anxiety:false, osteoporosis:false },
     vaccinations: { flu:true, pneumo:false, covid:false },
@@ -1002,6 +1178,25 @@ let currentVisit = 4; // index (0-based) into visits array
 let currentDrw   = null;
 let drwDirty     = false;
 let cohortOpen   = false;
+
+/* v11 — Identity & Access: RBAC roles, permission matrix, session state */
+const RBAC_ROLES = {
+  clinician:   { label:'Clinician',          desc:'Direct care for assigned patients' },
+  admin:       { label:'Admin',              desc:'Platform administration · all patients' },
+  integration: { label:'Integration service', desc:'Automated EHR sync · service authentication' },
+  auditor:     { label:'Auditor',            desc:'Read-only compliance review' }
+};
+const RBAC_PERMS = {
+  clinician:   { resolve:true,  mfa:true,  abac:true,  rotate:false, audit:'own', erasure:false, export:false, breakGlass:true  },
+  admin:       { resolve:true,  mfa:true,  abac:false, rotate:true,  audit:'all', erasure:true,  export:true,  breakGlass:true  },
+  integration: { resolve:true,  mfa:false, abac:false, rotate:false, audit:'own', erasure:false, export:true,  breakGlass:false },
+  auditor:     { resolve:false, mfa:false, abac:false, rotate:false, audit:'all', erasure:false, export:false, breakGlass:false }
+};
+let currentUserRole    = 'clinician';
+let identityAuditEvents = [];   // platform-wide, in-memory for this session
+let tokenRotations     = {};    // { [patientId]: [{oldAlias,newAlias,date}] }
+let consentRecords     = {};    // { [patientId]: {version,date,dataSharing,researchUse} }
+let resolutionState    = { purpose:'', path:'', breakGlass:false, mfaVerified:false, result:null };
 
 const getPt      = () => DB[currentPt];
 const getVisit   = () => { const pt = getPt(); if (!pt) return null; const v = pt.visits[Math.min(currentVisit, pt.visits.length - 1)]; return v || pt.visits[pt.visits.length - 1]; };
@@ -1217,10 +1412,9 @@ function toggleReadOnly() {
   if (drwFoot) drwFoot.style.display = readOnlyMode ? 'none' : 'flex';
 }
 
-/* Override openDrw to lock inputs in read-only mode */
-const _origOpenDrw = openDrw;
+/* Wraps _baseOpenDrw (defined below) to lock inputs in read-only mode */
 function openDrw(type) {
-  _origOpenDrw(type);
+  _baseOpenDrw(type);
   if (readOnlyMode) {
     setTimeout(() => {
       const body = g('drw-body');
@@ -1313,19 +1507,21 @@ function render() {
     g('lcp-txt').textContent = lcpTxt;
   }
 
-  /* Disease badge */
+  /* Disease badge — v11: plain text pill inside the patient chip */
   const dbBadge = g('dis-badge');
   if (dbBadge) {
     const dbMap = {
-      COPD:               {cls:'db-copd',   icon:'ti-lungs',         txt:'COPD'},
-      ASTHMA:             {cls:'db-asthma', icon:'ti-wind',          txt:'Asthma'},
-      CHRONIC_BRONCHITIS: {cls:'db-cb',     icon:'ti-activity',      txt:'Chronic Bronchitis'},
-      ACO:                {cls:'db-aco',    icon:'ti-circle-dashed', txt:'ACO'}
+      COPD:               {cls:'db-copd',   txt:'COPD'},
+      ASTHMA:             {cls:'db-asthma', txt:'Asthma'},
+      CHRONIC_BRONCHITIS: {cls:'db-cb',     txt:'Chronic Bronchitis'},
+      ACO:                {cls:'db-aco',    txt:'ACO'}
     };
     const dm = dbMap[d];
     dbBadge.className = `db ${dm.cls}`;
-    dbBadge.innerHTML = `<i class="ti ${dm.icon}"></i><span id="dis-badge-txt">${dm.txt}</span>`;
+    dbBadge.textContent = dm.txt;
   }
+  /* v11 — patient chip context line: visit position + date, replaces "Anonymous patient" */
+  if (g('pctx-disp')) g('pctx-disp').textContent = `Visit ${v.n} of ${pt.visits.length} · ${v.date}`;
 
   /* Aside */
   if (g('aside-pid')) g('aside-pid').textContent = `AIRMAP-2024-${currentPt}`;
@@ -1382,12 +1578,12 @@ function buildMetrics(d, pt, v, grp, stage, ctrl) {
     { lbl:'Exacerbations (12m)',val:v.exac,      vc:v.exac>=2?'danger':v.exac>=1?'warn':'good', int:`${v.hosp} hospitalisation · ${v.ocs} OCS`, prev:prevVal('exac'), stat:'s'+(v.exac>=2?'d':v.exac>=1?'w':'g'), act:'visit-update' }
   ] : d === 'ASTHMA' ? [
     { lbl:'ACT score',          val:v.act,        vc:ctrl.level==='uncontrolled'?'danger':ctrl.level==='partial'?'warn':'good', int:ctrl.label, prev:prevVal('act'), stat:'s'+(ctrl.level==='uncontrolled'?'d':ctrl.level==='partial'?'w':'g'), act:'visit-update' },
-    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:14px;font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high — biologic eligible':v.eos>=150?'Elevated — T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations' },
+    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high — biologic eligible':v.eos>=150?'Elevated — T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations' },
     { lbl:'Rescue use',         val:v.rescueWk>=7?'Daily':v.rescueWk+'×/wk', vc:v.rescueWk>=7?'danger':v.rescueWk>=3?'warn':'good', int:v.rescueWk>=7?'Significant — poor control':v.rescueWk>=3?'Increased — monitor':'Acceptable', prev:'Was '+prevVisit()?.rescueWk+'×/wk', stat:'s'+(v.rescueWk>=7?'d':v.rescueWk>=3?'w':'g'), act:'visit-update' }
   ] : d === 'ACO' ? [
     { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:`GOLD Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'sw', act:'investigations' },
-    { lbl:'CAT + ACT',          val:`${v.cat}<span style="font-size:16px;opacity:.6"> / </span>${v.act}`, vc:'warn', int:`CAT ${v.cat>=10?'high':'low'} · ACT ${ctrl.label.toLowerCase()}`, prev:`Was ${prevVisit()?.cat||'—'} / ${prevVisit()?.act||'—'}`, stat:'sw', act:'visit-update' },
-    { lbl:'Eosinophils',        val:v.eos+'<span style="font-size:14px;font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':'warn', int:v.eos>=300?'Biologic eligible':'Near threshold', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':'w'), act:'investigations' }
+    { lbl:'CAT + ACT',          val:`${v.cat}<span style="font-size:var(--fs-h3);opacity:.6"> / </span>${v.act}`, vc:'warn', int:`CAT ${v.cat>=10?'high':'low'} · ACT ${ctrl.label.toLowerCase()}`, prev:`Was ${prevVisit()?.cat||'—'} / ${prevVisit()?.act||'—'}`, stat:'sw', act:'visit-update' },
+    { lbl:'Eosinophils',        val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':'warn', int:v.eos>=300?'Biologic eligible':'Near threshold', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':'w'), act:'investigations' }
   ] : [ // CHRONIC_BRONCHITIS
     { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:'Airflow limitation', prev:prevVal('fev1','%'), stat:'sn', act:'investigations' },
     { lbl:'CAT score',          val:v.cat,        vc:v.cat>=10?'warn':'good', int:v.cat>=10?'Medium burden':'Low burden', prev:prevVal('cat'), stat:'s'+(v.cat>=10?'w':'g'), act:'visit-update' },
@@ -1571,13 +1767,13 @@ function buildStepIndicator(act) {
     const cls = s < current ? 'past' : s === current ? 'current' : s === target ? 'target' : 'future';
     return `<div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:3px">
       <div class="step-rung ${cls}" style="height:${heights[i]}px;width:100%">
-        <span style="font-size:9px;padding:2px">${s}</span>
-        ${s===target?'<div style="position:absolute;top:-14px;font-size:8px;color:var(--n8);white-space:nowrap">▲ Target</div>':''}
+        <span style="font-size:var(--fs-3xs);padding:2px">${s}</span>
+        ${s===target?'<div style="position:absolute;top:-14px;font-size:var(--fs-micro);color:var(--n8);white-space:nowrap">▲ Target</div>':''}
       </div>
       <div class="step-lbl">${s===current?'Current':s===target?'Target':'Step '+s}</div>
     </div>`;
   }).join('');
-  const meds = steps.map(s => `<div style="flex:1;text-align:center;font-size:8px;line-height:1.3;color:${s===current?'var(--a7)':s===target?'var(--n8)':'var(--i4)'};font-weight:${(s===current||s===target)?'600':'400'}">${STEP_MEDS[s]}</div>`).join('');
+  const meds = steps.map(s => `<div style="flex:1;text-align:center;font-size:var(--fs-micro);line-height:1.3;color:${s===current?'var(--a7)':s===target?'var(--n8)':'var(--i4)'};font-weight:${(s===current||s===target)?'600':'400'}">${STEP_MEDS[s]}</div>`).join('');
   return `<div style="position:relative;flex:1">
     <div class="step-ladder" style="height:60px">${ladder}</div>
     <div style="display:flex;gap:3px;margin-top:7px">${meds}</div>
@@ -1636,7 +1832,7 @@ function buildActionBtns() {
 
   /* Category 1 — Intelligence actions */
   const analysisBadge = analysisCurrent
-    ? '<span class="abt-state st-current"><i class="ti ti-circle-check" style="font-size:11px"></i>Analysis current</span>'
+    ? '<span class="abt-state st-current"><i class="ti ti-circle-check" style="font-size:var(--fs-xs)"></i>Analysis current</span>'
     : '<span class="abt-state st-stale"><span class="abt-pulse"></span>Refresh needed</span>';
   const cat1 = [
     ['ti-player-play', 'Run analysis', 'All 7 intelligence layers',   'analysis',    analysisBadge],
@@ -1648,7 +1844,7 @@ function buildActionBtns() {
   if (days !== null) {
     dataBadge = days > 90
       ? `<span class="abt-state-light abt-state st-stale"><span class="abt-pulse"></span>${days} days ago</span>`
-      : `<span class="xs muted mono" style="margin-left:auto;font-size:10px">${days}d ago</span>`;
+      : `<span class="xs muted mono" style="margin-left:auto;font-size:var(--fs-2xs)">${days}d ago</span>`;
   }
   const cat2 = [
     ['ti-pencil',    "Update today's data", 'Spirometry · scores · events',    'visit-update', dataBadge],
@@ -1663,7 +1859,8 @@ function buildActionBtns() {
     ['ti-layout-grid', 'Cohort overview', 'All patients · triage view',         'cohort-overview'],
     ['ti-user',        'Demographics',    'Age · BMI · smoking · comorbidities','demographics'],
     ['ti-leaf',        'Environment',     'AQI · occupation · social',          'environment'],
-    ['ti-shield',      'Asthma & ACO',    'Phenotype · biologic criteria',      'asthma-aco']
+    ['ti-shield',      'Asthma & ACO',    'Phenotype · biologic criteria',      'asthma-aco'],
+    ['ti-users',       'Identity & access','RBAC · audit · consent',            'identity-access']
   ];
 
   let html = '<div class="abt-cat-lbl">Intelligence</div>';
@@ -1689,7 +1886,7 @@ function renderVisitBar(pt, v) {
     <button class="vbtn${i===currentVisit?' on':''}" onclick="switchVisit(${i})"
       title="${vv.note||''}" style="position:relative">
       Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}
-      ${vv.note ? `<span style="display:block;font-size:9px;opacity:.6;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vv.note}</span>` : ''}
+      ${vv.note ? `<span style="display:block;font-size:var(--fs-3xs);opacity:.6;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vv.note}</span>` : ''}
     </button>`).join('');
 
   if (date) date.textContent = v.date;
@@ -1772,6 +1969,14 @@ function selectPt(id) {
   notify(`Loaded AIRMAP-2024-${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
 }
 
+function togglePlatformMenu() {
+  const menu = g('platform-menu');
+  const btn  = g('platform-sw');
+  if (!menu) return;
+  const isOpen = menu.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
 document.addEventListener('click', e => {
   if (cohortOpen && !e.target.closest('#cohort') && !e.target.closest('#ptc')) {
     cohortOpen = false;
@@ -1782,12 +1987,19 @@ document.addEventListener('click', e => {
     if (btn)   btn.setAttribute('aria-expanded','false');
     if (chev)  chev.style.transform = '';
   }
+  /* v11 — platform module switcher click-outside */
+  const pmenu = g('platform-menu');
+  if (pmenu && pmenu.classList.contains('open') && !e.target.closest('#platform-menu') && !e.target.closest('#platform-sw')) {
+    pmenu.classList.remove('open');
+    const psw = g('platform-sw');
+    if (psw) psw.setAttribute('aria-expanded','false');
+  }
 });
 
 /* ═══════════════════════════════════════════════════════════════════
    DRAWER SYSTEM
 ═══════════════════════════════════════════════════════════════════ */
-function openDrw(type) {
+function _baseOpenDrw(type) {
   currentDrw = type;
   drwDirty   = false;
   const pt   = getPt();
@@ -1802,7 +2014,12 @@ function openDrw(type) {
     'register':    { ey:'New patient',           tt:'Patient registration',   sb:'Identity · pseudonymisation · disease assignment', save:false },
     'export':      { ey:'Export',                tt:'Export & report',        sb:'PDF · JSON · EHR format', save:false },
     'investigations':{ey:'Investigations',       tt:'Lung function & biomarkers', sb:'Previous values shown · update what changed', save:true },
-    'longitudinal':{ ey:'Longitudinal',          tt:'Timeline & progression', sb:'FEV₁ trend · events · referrals', save:true }
+    'longitudinal':{ ey:'Longitudinal',          tt:'Timeline & progression', sb:'FEV₁ trend · events · referrals', save:true },
+    'asthma-aco':  { ey:'Asthma & ACO',          tt:'Phenotype & biologic eligibility', sb:'T2 phenotype · ACO criteria · agent-specific eligibility', save:true },
+    'demographics':{ ey:'Demographics',          tt:'Demographics & comorbidities', sb:'Age · BMI · smoking · comorbidities', save:true },
+    'environment': { ey:'Environment',           tt:'Environment & lifestyle', sb:'Air quality · occupation · social factors', save:true },
+    'cohort-overview':{ ey:'Cohort',             tt:'Cohort overview',        sb:'All patients · triage view', save:false },
+    'identity-access':{ ey:'Identity & access',  tt:'Identity & access',      sb:'RBAC · ABAC · resolution requests · audit · consent', save:false }
   };
 
   const cfg = cfgs[type] || { ey:'AIRMAP', tt:type, sb:'', save:true };
@@ -1966,7 +2183,12 @@ function buildDrwContent(type) {
     'longitudinal':bLongitudinal,
     'full-record': bFullRecord,
     'register':    bRegister,
-    'export':      bExport
+    'export':      bExport,
+    'asthma-aco':    bAsthmAco,
+    'demographics':  bDemographics,
+    'environment':   bEnvironment,
+    'cohort-overview':bCohortOverview,
+    'identity-access':bIdentityAccess
   };
   return (B[type]||(() => '<p class="muted" style="padding:20px 0">Coming soon.</p>'))();
 }
@@ -1977,6 +2199,81 @@ const F = (lbl,unit,ph,prev,id,cb) => `<div class="fgrp">${prev?`<div class="fpr
 const Sel = (lbl,opts,sel,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><select class="fsel" onchange="markDirty()">${opts.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('')}</select></div>`;
 const YN  = (lbl,yes,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="ynw"><div class="ynb no${yes?'':' on'}" onclick="togYN(this)">No</div><div class="ynb yes${yes?' on':''}" onclick="togYN(this)">Yes</div></div></div>`;
 const Stp = (key,lbl,val,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="sw"><div class="sbn" onclick="adj('${key}',-1)">−</div><div class="sdisp" id="sd-${key}">${val}</div><div class="sbn" onclick="adj('${key}',1)">+</div></div><input type="hidden" id="sv-${key}" value="${val}"><div class="lfb lfb-i" id="fb-${key}">Adjust to see live classification</div></div>`;
+/* v11 — Identity & Access: extra UI helpers */
+const YN2 = (lbl,yes,fn) => `<div class="fgrp"><label class="fl">${lbl}</label><div class="ynw"><div class="ynb no${yes?'':' on'}" onclick="${fn}">No</div><div class="ynb yes${yes?' on':''}" onclick="${fn}">Yes</div></div></div>`;
+const permRow = (lbl,val,isText) => `<div class="perm-row"><span>${lbl}</span>${isText?`<span class="mono" style="font-size:var(--fs-xs)">${val}</span>`:(val?'<span class="tag tg">Yes</span>':'<span class="tag ti2">No</span>')}</div>`;
+
+function buildResolutionWorkflow(perms, abac) {
+  const rs = resolutionState;
+  if (!perms.resolve) {
+    return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">${RBAC_ROLES[currentUserRole].label} is read-only for identity resolution. Switch role above to try this workflow.</div></div>`;
+  }
+  let html = `<div class="fgrp"><label class="fl">Purpose of access <span class="req">*</span></label>
+    <select class="fsel" onchange="setResolutionPurpose(this.value)">
+      <option value="">— Select —</option>
+      <option value="clinical_followup"${rs.purpose==='clinical_followup'?' selected':''}>Clinical follow-up</option>
+      <option value="referral"${rs.purpose==='referral'?' selected':''}>Referral to specialist</option>
+      <option value="ehr_export"${rs.purpose==='ehr_export'?' selected':''}>EHR export</option>
+      <option value="audit"${rs.purpose==='audit'?' selected':''}>Compliance audit</option>
+    </select></div>`;
+  if (!rs.purpose) return html;
+
+  html += `<div class="fgrp" style="margin-top:10px"><label class="fl">Access path</label>
+    <div class="ynw">
+      <div class="ynb${rs.path==='clinical'?' on':''}" onclick="setResolutionPath('clinical')">Clinical access</div>
+      <div class="ynb${rs.path==='system'?' on':''}" onclick="setResolutionPath('system')">System export</div>
+    </div></div>`;
+  if (!rs.path) return html;
+
+  if (rs.path === 'clinical') {
+    html += `<div class="ia ${abac.pass?'ia-g':'ia-d'}" style="margin-top:10px"><i class="ti ti-${abac.pass?'circle-check':'circle-x'}"></i><div class="ia-body"><strong>ABAC check —</strong> ${abac.reason}</div></div>`;
+    if (!abac.pass && perms.breakGlass) {
+      html += `<div class="fgrp" style="margin-top:8px"><label class="fl" style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" ${rs.breakGlass?'checked':''} onchange="toggleBreakGlass()" style="width:auto"> Break-glass emergency access<span class="opt">Triggers mandatory review</span></label></div>`;
+    }
+  } else {
+    html += `<div class="ia ia-g" style="margin-top:10px"><i class="ti ti-server-2"></i><div class="ia-body"><strong>Service authentication —</strong> integration-service identity verified, no MFA required for system export.</div></div>`;
+  }
+
+  const blocked = rs.path==='clinical' && !abac.pass && !rs.breakGlass;
+  if (blocked) return html;
+
+  const needsMfa = perms.mfa && rs.path==='clinical';
+  if (needsMfa && !rs.mfaVerified) {
+    html += `<div class="mfa-box" style="margin-top:10px">
+      <div class="mfa-hdr"><i class="ti ti-device-mobile"></i>Step-up verification required</div>
+      <div style="font-size:var(--fs-xs);color:var(--i4);margin:4px 0 8px">High-risk action — enter the 6-digit code from your authenticator app.</div>
+      <div style="display:flex;gap:8px"><input class="fi mono" maxlength="6" placeholder="000000" style="width:100px;flex:none"><button class="btn bp btn-sm" onclick="submitMFA()"><i class="ti ti-shield-check"></i>Verify</button></div>
+    </div>`;
+    return html;
+  }
+
+  html += `<button class="btn bp btn-sm" style="margin-top:10px" onclick="submitResolutionRequest()"><i class="ti ti-route"></i>Submit resolution request</button>`;
+  if (rs.result) {
+    const r = rs.result;
+    html += `<div class="ia ${r.allowed?'ia-g':'ia-d'}" style="margin-top:10px"><i class="ti ti-${r.allowed?'shield-check':'shield-lock'}"></i><div class="ia-body">${r.allowed
+      ? `<strong>Request logged and approved.</strong> In a production system the Identity Vault Service would now resolve AIRMAP-2024-${getDisplayAlias(currentPt)} to its linked record.${r.breakGlass?' Flagged for mandatory break-glass review.':''}`
+      : '<strong>Request denied.</strong> ABAC check failed and no break-glass override was applied.'}</div></div>`;
+  }
+  return html;
+}
+
+function buildIdentityAuditTable(perms) {
+  let events = identityAuditEvents;
+  if (perms.audit !== 'all') events = events.filter(e => e.actor === currentUserRole);
+  if (!events.length) {
+    return `<div style="font-size:var(--fs-xs);color:var(--i4);padding:8px 0">No identity-layer events yet this session. Resolution requests, rotations and consent changes will appear here.</div>`;
+  }
+  return `<div style="display:flex;flex-direction:column;border:1px solid var(--i1);border-radius:var(--rmd);overflow:hidden">
+    ${events.slice(0,12).map(e => `<div style="display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-bottom:1px solid var(--i1);font-size:var(--fs-2xs)">
+      <span class="mono" style="color:var(--i4);width:90px;flex-shrink:0">${e.ts}</span>
+      <span style="flex:1">${e.action.replace(/_/g,' ')} · AIRMAP-2024-${getDisplayAlias(e.patient)}${e.detail?` — ${e.detail}`:''}${e.purpose?` · ${e.purpose.replace(/_/g,' ')}`:''}</span>
+      <span class="mono" style="color:var(--i4)">${RBAC_ROLES[e.actor].label}</span>
+      <span class="mono" style="color:var(--i4)">${e.mfa}</span>
+      ${e.breakGlass?'<span class="tag tr">break-glass</span>':''}
+    </div>`).join('')}
+  </div>
+  <div style="font-size:var(--fs-2xs);color:var(--i4);margin-top:6px">Showing ${Math.min(events.length,12)} of ${events.length} · immutable, append-only in a production system.</div>`;
+}
 
 function bVisitUpdate() {
   const pt=getPt(), v=getVisit(), pv=prevVisit();
@@ -1985,7 +2282,7 @@ function bVisitUpdate() {
   const isCOPD   = pt.disease==='COPD';
   const isCB     = pt.disease==='CHRONIC_BRONCHITIS';
   return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>Visit ${v.n} · ${v.date}</strong> — previous values shown. Update only what changed today.</div></div>
-  ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span style="font-size:11px;color:var(--i4)">Last visit note (${pv.date}):</span><br><em style="color:var(--i5)">${pv.note}</em></div></div>` : ''}
+  ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span style="font-size:var(--fs-xs);color:var(--i4)">Last visit note (${pv.date}):</span><br><em style="color:var(--i5)">${pv.note}</em></div></div>` : ''}
   ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span class="xs muted">Previous visit note (${pv.date}):</span><br><em>${pv.note}</em></div></div>` : ''}
   ${S('Spirometry','engine.layer_1 · layer_7',`<div class="fg">
     ${F('FEV₁','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'')}
@@ -2035,11 +2332,11 @@ function bActionPlan() {
   const hasSABA  = pt.meds.some(m=>m.cls==='SABA');
   const steps = items => items.map(s=>`<li class="apz-s"><span class="apz-arr">→</span>${s}</li>`).join('');
   const trigger = isAsthma ? 'ACT drops below 16' : 'CAT increases by more than 3 points';
-  return `<div style="font-size:13px;color:var(--i5);margin-bottom:14px">Personalised zone plan · AIRMAP-2024-${currentPt} · ${pt.disease.replace('_',' ')} · engine.layer_6</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · AIRMAP-2024-${currentPt} · ${pt.disease.replace('_',' ')} · engine.layer_6</div>
   <div class="apz apz-g"><div class="apz-tt">Green zone — well controlled</div><ul class="apz-steps">${steps(['Continue current medications as prescribed',`Monitor daily — contact clinic if ${trigger}`,'Aim for 3000+ steps daily','Attend scheduled clinic review'])}</ul></div>
   <div class="apz apz-a"><div class="apz-tt">Amber zone — worsening</div><ul class="apz-steps">${steps([hasSABA?'Increase SABA — up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours — contact clinic','Rest and reduce exertion','Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma?'Double ICS dose if instructed':''])}</ul></div>
   <div class="apz apz-r"><div class="apz-tt">Red zone — emergency</div><ul class="apz-steps">${steps([hasSABA?'Use SABA immediately — 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive — call for assistance'])}</ul></div>
-  <div style="margin-top:14px">${[['Daily','Symptom score · rescue use'],['Weekly',isAsthma?'ACT self-assessment':'CAT self-assessment'],['Monthly','Review with healthcare provider'],['Quarterly','Pulmonary function test'],['Annual','Comprehensive review · vaccinations']].map(([k,v])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:13px;color:var(--i7)">${v}</span></div>`).join('')}</div>
+  <div style="margin-top:14px">${[['Daily','Symptom score · rescue use'],['Weekly',isAsthma?'ACT self-assessment':'CAT self-assessment'],['Monthly','Review with healthcare provider'],['Quarterly','Pulmonary function test'],['Annual','Comprehensive review · vaccinations']].map(([k,v])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:var(--fs-base);color:var(--i7)">${v}</span></div>`).join('')}</div>
   <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="notify('Printed','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="notify('PDF generated','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
 }
 
@@ -2072,6 +2369,86 @@ function bMedications() {
   </div>`)}`;
 }
 
+/* v11 — flow-volume loop & volume-time curve generation (item 5).
+   Curves are parametrised from FVC (L) and FEV1/FVC ratio (%) — the
+   only spirometry values already in the patient record. A faint
+   reference trace (ratio 80%, same FVC) gives shape context. */
+function _fvLoopPoints(fvc, ratio) {
+  const fev1L = fvc * ratio/100;
+  const pef   = fev1L * 2.0;
+  const pif   = pef * 0.75;
+  const p     = Math.max(0.8, Math.min(4, 1 + (70-ratio)/15));
+  const x0=35, x1=305, y0=95, expH=70, inspH=50;
+  const pts = [];
+  for (let i=0;i<=30;i++) {
+    const f = i/30;
+    const flow = f<=0.08 ? pef*Math.sin((f/0.08)*Math.PI/2) : pef*Math.pow((1-(f-0.08)/0.92), p);
+    pts.push([x0+f*(x1-x0), y0-(flow/8)*expH]);
+  }
+  for (let i=20;i>=0;i--) {
+    const f = i/20;
+    const flow = pif*Math.sin(Math.PI*(1-f));
+    pts.push([x0+f*(x1-x0), y0+(flow/8)*inspH]);
+  }
+  return pts;
+}
+function _fvPathD(fvc, ratio) {
+  const pts = _fvLoopPoints(fvc, ratio);
+  return 'M' + pts.map(p=>`${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L') + ' Z';
+}
+function _vtPathD(fvc, ratio, tmax=6) {
+  const k = -Math.log(1-ratio/100);
+  const x0=35, x1=305, y0=150, yScale=130/(fvc*1.15);
+  const pts = [];
+  for (let i=0;i<=40;i++) {
+    const t = (i/40)*tmax;
+    const V = fvc*(1-Math.exp(-k*t));
+    pts.push([x0+(t/tmax)*(x1-x0), y0-V*yScale]);
+  }
+  return 'M' + pts.map(p=>`${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L');
+}
+function _vtFev1Point(fvc, ratio, tmax=6) {
+  const fev1L = fvc*ratio/100;
+  const x0=35, x1=305, y0=150, yScale=130/(fvc*1.15);
+  return [x0+(1/tmax)*(x1-x0), y0-fev1L*yScale, fev1L];
+}
+function buildSpirometryCurves(v) {
+  const fvc = v.fvc || 3.2, ratio = v.ratio || 70;
+  const refRatio = 80; // reference "normal pattern" trace, same FVC
+  const fevPt = _vtFev1Point(fvc, ratio);
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <svg viewBox="0 0 320 175" style="width:100%;height:auto">
+        <line x1="35" y1="95" x2="305" y2="95" stroke="var(--i2)" stroke-width="1"/>
+        <line x1="35" y1="20" x2="35" y2="150" stroke="var(--i2)" stroke-width="1"/>
+        <path d="${_fvPathD(fvc, refRatio)}" fill="none" stroke="var(--i3)" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <path d="${_fvPathD(fvc, ratio)}" fill="none" stroke="var(--n7)" stroke-width="2"/>
+        <text x="170" y="170" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)">Volume (L) →</text>
+        <text x="14" y="90" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)" transform="rotate(-90,14,90)">Flow (L/s)</text>
+      </svg>
+      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Flow-volume loop</div>
+    </div>
+    <div>
+      <svg viewBox="0 0 320 175" style="width:100%;height:auto">
+        <line x1="35" y1="150" x2="305" y2="150" stroke="var(--i2)" stroke-width="1"/>
+        <line x1="35" y1="20" x2="35" y2="150" stroke="var(--i2)" stroke-width="1"/>
+        <path d="${_vtPathD(fvc, 80)}" fill="none" stroke="var(--i3)" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <path d="${_vtPathD(fvc, ratio)}" fill="none" stroke="var(--n7)" stroke-width="2"/>
+        <line x1="${fevPt[0].toFixed(1)}" y1="150" x2="${fevPt[0].toFixed(1)}" y2="${fevPt[1].toFixed(1)}" stroke="var(--n4)" stroke-width="1" stroke-dasharray="2,2"/>
+        <circle cx="${fevPt[0].toFixed(1)}" cy="${fevPt[1].toFixed(1)}" r="2.5" fill="var(--n7)"/>
+        <text x="${fevPt[0].toFixed(1)}" y="12" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--n6)">FEV₁ ${fevPt[2].toFixed(2)}L</text>
+        <text x="170" y="170" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)">Time (s) →</text>
+        <text x="14" y="90" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)" transform="rotate(-90,14,90)">Volume (L)</text>
+      </svg>
+      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Volume-time curve</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:14px;justify-content:center;margin-top:8px;font-size:var(--fs-2xs);color:var(--i4)">
+    <span><svg width="14" height="2" style="vertical-align:middle"><line x1="0" y1="1" x2="14" y2="1" stroke="var(--n7)" stroke-width="2"/></svg> This visit</span>
+    <span><svg width="14" height="2" style="vertical-align:middle"><line x1="0" y1="1" x2="14" y2="1" stroke="var(--i3)" stroke-width="1.5" stroke-dasharray="3,3"/></svg> Reference pattern (ratio 80%)</span>
+  </div>`;
+}
+
 function bInvestigations() {
   const v=getVisit(), pv=prevVisit();
   return `
@@ -2084,6 +2461,7 @@ function bInvestigations() {
     ${Sel('Bronchodilator response',['Not tested','Significant','Partial','None'],'None')}
     <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="markDirty()"></div>
   </div>`)}
+  ${S('Flow-volume & volume-time curves','engine.layer_1', buildSpirometryCurves(v))}
   ${S('Biomarkers','engine.layer_3 · layer_5',`<div class="fg">
     <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous: ${v.eos} c/µL</span></div><label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="—" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
     ${F('FeNO','ppb','')} ${F('CRP','mg/L','')} ${F('Total IgE','IU/mL','')}
@@ -2131,7 +2509,7 @@ function bLongitudinal() {
 }
 
 function bFullRecord() {
-  return `<div style="font-size:13px;color:var(--i5);margin-bottom:14px">All data sections for AIRMAP-2024-${currentPt}.</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">All data sections for AIRMAP-2024-${currentPt}.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
     ${[['ti-id-badge','Patient ID & pseudonymisation','register'],['ti-user','Demographics & history','register'],['ti-stethoscope','Spirometry & investigations','investigations'],['ti-clipboard-list','Clinical scores','visit-update'],['ti-shield','Disease-specific assessment','visit-update'],['ti-leaf','Environmental & lifestyle','visit-update'],['ti-pill','Medications & adherence','medications'],['ti-chart-line','Longitudinal progression','longitudinal'],['ti-brain','Clinical analysis — all 7 layers','analysis'],['ti-target','Action plan','action-plan']].map(([icon,lbl,drw])=>`
       <button class="abt abt-s" onclick="closeDrw();setTimeout(()=>openDrw('${drw}'),100)">
@@ -2160,11 +2538,11 @@ function buildAuditLog() {
   ];
   return entries.map(e => `
     <div style="display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--i1)">
-      <span style="font-family:var(--mono);font-size:9.5px;color:var(--i4);width:130px;flex-shrink:0">${e.ts}</span>
-      <span style="font-size:12px;color:var(--i5);flex:1">${e.action}</span>
-      <span style="font-family:var(--mono);font-size:9.5px;color:var(--n6);flex-shrink:0">${e.user}</span>
+      <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);width:130px;flex-shrink:0">${e.ts}</span>
+      <span style="font-size:var(--fs-sm);color:var(--i5);flex:1">${e.action}</span>
+      <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);flex-shrink:0">${e.user}</span>
     </div>`).join('') +
-    `<div style="margin-top:8px;font-size:11px;color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
+    `<div style="margin-top:8px;font-size:var(--fs-xs);color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
 }
 
 /* GAP 07 — Cohort overview drawer */
@@ -2194,17 +2572,17 @@ function bCohortOverview() {
     return `<div style="background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .15s;box-shadow:var(--sh1)" onclick="closeDrw();selectPt('${id}')" onmouseover="this.style.borderColor='var(--n2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform=''">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
         <div style="width:8px;height:8px;border-radius:50%;background:${pt.risk==='r'?'var(--r5)':pt.risk==='a'?'var(--a5)':'var(--g5)'}"></div>
-        <span style="font-family:var(--mono);font-size:9px;color:var(--i4)">AIRMAP-2024-${id}</span>
-        <span style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
+        <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4)">AIRMAP-2024-${id}</span>
+        <span style="font-family:var(--mono);font-size:var(--fs-3xs);text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
       </div>
-      <div style="font-family:var(--serif);font-size:15px;font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
-      <div style="font-size:12px;color:var(--i5);margin-bottom:8px">${zoneStr}</div>
-      <div style="font-size:11px;font-weight:500;color:${alertSev==='r'?'var(--r7)':alertSev==='a'?'var(--a7)':'var(--g7)'};background:${alertSev==='r'?'var(--r0)':alertSev==='a'?'var(--a0)':'var(--g0)'};border:1px solid ${alertSev==='r'?'var(--r1)':alertSev==='a'?'var(--a1)':'var(--g1)'};border-radius:4px;padding:4px 8px">${topAlert}</div>
-      <div style="margin-top:10px;font-size:11px;color:var(--i4)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
+      <div style="font-family:var(--serif);font-size:var(--fs-h3);font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
+      <div style="font-size:var(--fs-sm);color:var(--i5);margin-bottom:8px">${zoneStr}</div>
+      <div style="font-size:var(--fs-xs);font-weight:500;color:${alertSev==='r'?'var(--r7)':alertSev==='a'?'var(--a7)':'var(--g7)'};background:${alertSev==='r'?'var(--r0)':alertSev==='a'?'var(--a0)':'var(--g0)'};border:1px solid ${alertSev==='r'?'var(--r1)':alertSev==='a'?'var(--a1)':'var(--g1)'};border-radius:4px;padding:4px 8px">${topAlert}</div>
+      <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i4)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
     </div>`;
   }).join('');
   return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${cards}</div>
-  <div style="margin-top:14px;font-size:12px;color:var(--i4);text-align:center">Click any patient card to open their cockpit</div>`;
+  <div style="margin-top:14px;font-size:var(--fs-sm);color:var(--i4);text-align:center">Click any patient card to open their cockpit</div>`;
 }
 
 /* GAP 04 — Demographics drawer */
@@ -2269,6 +2647,63 @@ function bEnvironment() {
   </div>`)}`;
 }
 
+/* v11 — Identity & Access drawer: RBAC, ABAC, resolution workflow,
+   token rotation, audit log, data-subject rights, consent */
+function bIdentityAccess() {
+  resolutionState = { purpose:'', path:'', breakGlass:false, mfaVerified:false, result:null };
+  return `<div id="ia-drawer-body">${bIdentityAccessBody()}</div>`;
+}
+
+function bIdentityAccessBody() {
+  const pt    = getPt();
+  const perms = RBAC_PERMS[currentUserRole];
+  const abac  = abacCheck(currentPt);
+
+  const roleSection = S('Your role', 'access control', `
+    <div class="role-grid">
+      ${Object.entries(RBAC_ROLES).map(([key,r]) => `<div class="role-card${currentUserRole===key?' on':''}" onclick="setUserRole('${key}')"><div class="role-lbl">${r.label}</div><div class="role-desc">${r.desc}</div></div>`).join('')}
+    </div>
+    <div class="perm-grid">
+      ${permRow('Request identity resolution', perms.resolve)}
+      ${permRow('Step-up MFA required', perms.mfa)}
+      ${permRow('ABAC care-team check applies', perms.abac)}
+      ${permRow('Rotate platform ID', perms.rotate)}
+      ${permRow('Break-glass override available', perms.breakGlass)}
+      ${permRow('Data export — Art. 15', perms.export)}
+      ${permRow('Erasure requests — Art. 17', perms.erasure)}
+      ${permRow('Audit log scope', perms.audit==='all'?'Platform-wide':'Own actions only', true)}
+    </div>`);
+
+  const alias     = getDisplayAlias(currentPt);
+  const rotations = tokenRotations[currentPt] || [];
+  const idSection = S('This patient&rsquo;s identifiers', 'pseudonym / linkage table', `
+    <div class="id-tiers" style="margin:0 0 10px">
+      <div class="id-tier"><div class="id-tier-lbl">Display alias</div><div class="id-tier-val mono">AIRMAP-2024-${alias}</div><div class="id-tier-note">${rotations.length} rotation${rotations.length!==1?'s':''} this session</div></div>
+      <div class="id-tier"><div class="id-tier-lbl">Internal reference</div><div class="id-tier-val mono">${pt.identity.internalRef}</div><div class="id-tier-note">Stable across rotations · never shown to clinicians</div></div>
+      <div class="id-tier"><div class="id-tier-lbl">Responsible clinician</div><div class="id-tier-val">${pt.identity.responsibleClinician}</div><div class="id-tier-note">Drives the ABAC check below</div></div>
+    </div>
+    <button class="btn bg btn-sm" onclick="rotatePlatformId()"${!perms.rotate?' disabled title="Requires Admin role"':''}><i class="ti ti-rotate"></i>Rotate platform ID</button>
+    ${rotations.length ? `<div class="rot-history">${rotations.map(r=>`<div class="rot-row"><span class="mono" style="color:var(--i5)">${r.oldAlias}</span><i class="ti ti-arrow-right" style="font-size:11px;color:var(--i3)"></i><span class="mono" style="color:var(--i7)">${r.newAlias}</span><span style="margin-left:auto;color:var(--i4)">${r.date}</span></div>`).join('')}</div>` : ''}`);
+
+  const resolutionSection = S('Request identity resolution', 'RBAC · ABAC · MFA · audit', buildResolutionWorkflow(perms, abac));
+
+  const auditSection = S('Identity audit log', perms.audit==='all'?'platform-wide':'your actions only', buildIdentityAuditTable(perms));
+
+  const rightsSection = S('Data subject rights', 'GDPR Art. 15 / 17', `
+    <div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-info-circle"></i><div class="ia-body">These actions operate via the vault mapping without exposing identity in this interface.</div></div>
+    <div class="flex g2" style="flex-wrap:wrap">
+      <button class="btn bg btn-sm" onclick="requestDataExport()"${!perms.export?' disabled title="Requires Admin or Integration role"':''}><i class="ti ti-file-export"></i>Request data export (Art. 15)</button>
+      <button class="btn bg btn-sm" onclick="requestErasure()"${!perms.erasure?' disabled title="Requires Admin role"':''}><i class="ti ti-trash"></i>Request erasure (Art. 17)</button>
+    </div>`);
+
+  const consent = getConsent(currentPt);
+  const consentSection = S('Consent record', `v${consent.version} · ${consent.date}`, `
+    ${YN2('Data sharing for clinical care', consent.dataSharing, "toggleConsent('dataSharing')")}
+    ${YN2('Research use', consent.researchUse, "toggleConsent('researchUse')")}`);
+
+  return roleSection + idSection + resolutionSection + auditSection + rightsSection + consentSection;
+}
+
 /* GAP 06 / v10 — Asthma / ACO specific drawer with formal scoring */
 function bAsthmAco() {
   const pt = getPt();
@@ -2306,7 +2741,7 @@ function bAsthmAco() {
     const statusLbl = b.status==='eligible' ? 'Eligible' : b.status==='borderline' ? 'Borderline' : b.status==='pending' ? 'Pending data' : 'Not met';
     return `<div class="bio-row ${cls}">
       <div class="bio-icon"><i class="ti ${icon}"></i></div>
-      <div class="bio-crit"><strong>${b.agent}</strong> <span style="color:var(--i4)">· ${b.drugs}</span><br><span style="font-size:11px;color:var(--i5)">${b.detail}</span></div>
+      <div class="bio-crit"><strong>${b.agent}</strong> <span style="color:var(--i4)">· ${b.drugs}</span><br><span style="font-size:var(--fs-xs);color:var(--i5)">${b.detail}</span></div>
       <div class="bio-val">${statusLbl}</div>
     </div>`;
   }).join('');
@@ -2343,7 +2778,129 @@ function bAsthmAco() {
 ═══════════════════════════════════════════════════════════════════ */
 let regState = { step:1, maxStep:1, generatedId:null };
 
-function genPlatformId() { return String(Math.floor(10000 + Math.random()*89999)); }
+/* v11 — CSPRNG pseudonym generation (was Math.random() 5-digit ID).
+   8 symbols from a 32-character unambiguous alphabet (no 0/O/1/I/L) =
+   40 bits of entropy, drawn from crypto.getRandomValues — grouped
+   as XXXX-XXXX for readability. */
+const PSEUDO_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function genPlatformId() {
+  const bytes = new Uint8Array(8);
+  (window.crypto || window.msCrypto).getRandomValues(bytes);
+  let token = '';
+  for (let i = 0; i < 8; i++) token += PSEUDO_ALPHABET[bytes[i] % PSEUDO_ALPHABET.length];
+  return token.slice(0,4) + '-' + token.slice(4);
+}
+
+/* v11 — internal reference (UUIDv4-style). Never displayed to clinicians;
+   shown here only to illustrate the 3-tier identifier model. */
+function genInternalRef() {
+  const hex = () => Math.floor(Math.random()*16).toString(16);
+  const seg = n => Array.from({length:n}, hex).join('');
+  return `${seg(8)}-${seg(4)}-4${seg(3)}-${seg(4)}-${seg(12)}`;
+}
+
+/* v11 — Identity & Access: core helper functions */
+function getDisplayAlias(id) {
+  const r = tokenRotations[id];
+  return (r && r.length) ? r[r.length-1].newAlias : id;
+}
+function abacCheck(id) {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.abac) {
+    const reason = currentUserRole === 'admin'
+      ? 'Admin role — scoped to all patients, ABAC check bypassed'
+      : currentUserRole === 'integration'
+      ? 'Integration service — scoped per pre-approved system agreement'
+      : 'Auditor — read-only, resolution not permitted';
+    return { pass:true, reason };
+  }
+  const pt = DB[id];
+  const pass = pt.identity.responsibleClinician === 'Dr. García';
+  return {
+    pass,
+    reason: pass
+      ? `Dr. García is the responsible clinician for AIRMAP-2024-${getDisplayAlias(id)}`
+      : `Not the responsible clinician for AIRMAP-2024-${getDisplayAlias(id)} — assigned to ${pt.identity.responsibleClinician}`
+  };
+}
+function getConsent(id) {
+  if (!consentRecords[id]) {
+    consentRecords[id] = { version:1, date:DB[id].visits[0].date, dataSharing:true, researchUse:false };
+  }
+  return consentRecords[id];
+}
+function logIdentityEvent(evt) {
+  const ts = new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  identityAuditEvents.unshift({ ts, actor:currentUserRole, ...evt });
+}
+function refreshIdentityDrawer() {
+  const el = g('ia-drawer-body');
+  if (!el) return;
+  el.innerHTML = bIdentityAccessBody();
+  el.querySelectorAll('input,select,textarea').forEach(e => { e.addEventListener('input',markDirty); e.addEventListener('change',markDirty); });
+}
+function setUserRole(role) {
+  currentUserRole = role;
+  resolutionState = { purpose:'', path:'', breakGlass:false, mfaVerified:false, result:null };
+  refreshIdentityDrawer();
+}
+function setResolutionPurpose(p) { resolutionState.purpose = p; resolutionState.path=''; resolutionState.result=null; refreshIdentityDrawer(); }
+function setResolutionPath(p)    { resolutionState.path = p; resolutionState.result=null; refreshIdentityDrawer(); }
+function toggleBreakGlass()      { resolutionState.breakGlass = !resolutionState.breakGlass; refreshIdentityDrawer(); }
+function submitMFA() {
+  resolutionState.mfaVerified = true;
+  notify('Step-up verification successful','ok');
+  refreshIdentityDrawer();
+}
+function submitResolutionRequest() {
+  const perms = RBAC_PERMS[currentUserRole];
+  const abac  = abacCheck(currentPt);
+  const breakGlassUsed = resolutionState.breakGlass && !abac.pass && perms.breakGlass;
+  const allowed = resolutionState.path === 'system' ? true : (abac.pass || breakGlassUsed);
+  resolutionState.result = { allowed, breakGlass:breakGlassUsed };
+  logIdentityEvent({
+    action: allowed ? 'identity_resolution_granted' : 'identity_resolution_denied',
+    patient: currentPt,
+    purpose: resolutionState.purpose,
+    path: resolutionState.path,
+    mfa: perms.mfa ? (resolutionState.mfaVerified ? 'TOTP verified' : 'not completed') : 'service auth',
+    breakGlass: breakGlassUsed
+  });
+  notify(allowed ? 'Resolution request logged and approved' : 'Resolution request denied — logged', allowed?'ok':'warn');
+  refreshIdentityDrawer();
+}
+function rotatePlatformId() {
+  if (!RBAC_PERMS[currentUserRole].rotate) { notify('Token rotation requires the Admin role','warn'); return; }
+  if (!tokenRotations[currentPt]) tokenRotations[currentPt] = [];
+  const oldAlias = getDisplayAlias(currentPt);
+  const newAlias = genPlatformId();
+  tokenRotations[currentPt].push({ oldAlias, newAlias, date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) });
+  logIdentityEvent({ action:'token_rotated', patient:currentPt, detail:`${oldAlias} → ${newAlias}`, purpose:'', path:'', mfa:'n/a', breakGlass:false });
+  notify('Platform ID rotated — internal reference unchanged','ok');
+  refreshIdentityDrawer();
+}
+function requestDataExport() {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.export) { notify('Data export requires Admin or Integration role','warn'); return; }
+  logIdentityEvent({ action:'data_export_request', patient:currentPt, detail:'Article 15 access request', purpose:'data_subject_access', path:'', mfa:perms.mfa?'TOTP verified':'service auth', breakGlass:false });
+  notify('Export package generated · logged to audit trail','ok');
+  refreshIdentityDrawer();
+}
+function requestErasure() {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.erasure) { notify('Erasure requests require the Admin role','warn'); return; }
+  logIdentityEvent({ action:'erasure_request_submitted', patient:currentPt, detail:'Article 17 — pending clinical-retention review', purpose:'data_subject_erasure', path:'', mfa:'TOTP verified', breakGlass:false });
+  notify('Erasure request submitted for review','info');
+  refreshIdentityDrawer();
+}
+function toggleConsent(field) {
+  const c = getConsent(currentPt);
+  c[field] = !c[field];
+  c.version += 1;
+  c.date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  logIdentityEvent({ action:'consent_updated', patient:currentPt, detail:`${field} → ${c[field]} (v${c.version})`, purpose:'consent_management', path:'', mfa:'n/a', breakGlass:false });
+  refreshIdentityDrawer();
+}
 
 function regIdBadge() {
   if (!regState.generatedId) return '';
@@ -2419,22 +2976,23 @@ function regBack() {
 function regStep1() {
   return `
   <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-shield-lock"></i><div class="ia-body"><strong>This is the only step that touches personal identifying information.</strong> Everything entered here is written to the encrypted identity mapping table — a store separate from the clinical database. Once you continue, this step is sealed and cannot be reopened.</div></div>
+  <div class="dm-note"><i class="ti ti-filter"></i>Data minimisation: fields marked <span class="req">*</span> are required for the linkage record. Everything else is optional — leave blank if not available.</div>
   <div class="pii-wrap">
     <div class="pii-badge"><i class="ti ti-id-badge"></i>PII — identity mapping table only</div>
     <div class="fg">
       <div class="fgrp"><label class="fl">Full name <span class="req">*</span></label><input class="fi" type="text" placeholder="As per hospital records" oninput="markDirty()"></div>
       <div class="fgrp"><label class="fl">Date of birth <span class="req">*</span></label><input class="fi" type="date" oninput="markDirty()"></div>
       ${Sel('Sex',['','Male','Female','Other'],'')}
-      <div class="fgrp"><label class="fl">Age</label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">yrs</span></div></div>
+      <div class="fgrp"><label class="fl">Age<span class="opt">Optional</span></label><div class="iuw"><input class="fi" type="number" placeholder="—" oninput="markDirty()"><span class="iu">yrs</span></div></div>
     </div>
   </div>
   <div class="pii-wrap">
     <div class="pii-badge"><i class="ti ti-link"></i>Identity mapping table — reconnection bridge</div>
     <div class="fg">
       <div class="fgrp"><label class="fl">Hospital EHR / MRN number <span class="req">*</span></label><input class="fi mono" type="text" placeholder="e.g. HOS-0048291" oninput="markDirty()"><div class="xs muted" style="margin-top:3px">Only link between platform ID and hospital record</div></div>
-      <div class="fgrp"><label class="fl">Hospital</label><input class="fi" type="text" oninput="markDirty()"></div>
+      <div class="fgrp"><label class="fl">Hospital<span class="opt">Optional</span></label><input class="fi" type="text" oninput="markDirty()"></div>
       <div class="fgrp"><label class="fl">Responsible clinician <span class="req">*</span></label><input class="fi" type="text" placeholder="Dr. Surname" oninput="markDirty()"></div>
-      <div class="fgrp"><label class="fl">Registration date</label><input class="fi" type="date" oninput="markDirty()"></div>
+      <div class="fgrp"><label class="fl">Registration date<span class="opt">Optional</span></label><input class="fi" type="date" oninput="markDirty()"></div>
     </div>
   </div>
   ${regNavButtons(false, 'Seal identity & generate platform ID')}`;
@@ -2442,15 +3000,38 @@ function regStep1() {
 
 /* Step 2 — Platform ID interstitial. Confirms pseudonymisation writes. */
 function regStep2() {
+  if (!regState.internalRef) regState.internalRef = genInternalRef();
   return `
   <div class="reg-interstitial">
     <div class="reg-id-badge"><i class="ti ti-shield-check"></i>Pseudonymisation complete</div>
     <div class="xs muted mono" style="letter-spacing:2px;text-transform:uppercase">Platform ID generated</div>
     <div class="reg-id-display">AIRMAP-2024-${regState.generatedId}</div>
-    <div style="display:flex;flex-direction:column;gap:8px;text-align:left;max-width:400px;margin:0 auto">
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body">Identity sealed in encrypted mapping table — name, DOB and EHR number stored separately from clinical data.</div></div>
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body">Clinical record created — platform ID AIRMAP-2024-${regState.generatedId} written to the clinical database.</div></div>
-      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body">Audit log entry created — registration timestamped and attributed to the registering clinician.</div></div>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:-6px 0 18px">
+      <span class="enc-badge"><i class="ti ti-lock"></i>AES-256 at rest</span>
+      <span class="enc-badge"><i class="ti ti-shield-lock"></i>TLS 1.3 in transit</span>
+      <span class="enc-badge"><i class="ti ti-key"></i>KMS-managed keys</span>
+    </div>
+    <div class="id-tiers">
+      <div class="id-tier">
+        <div class="id-tier-lbl">Display alias — shown in this UI</div>
+        <div class="id-tier-val mono">AIRMAP-2024-${regState.generatedId}</div>
+        <div class="id-tier-note">Used throughout the clinical cockpit · can be rotated without breaking links below</div>
+      </div>
+      <div class="id-tier">
+        <div class="id-tier-lbl">Internal reference — database key</div>
+        <div class="id-tier-val mono">${regState.internalRef}</div>
+        <div class="id-tier-note">Never shown to clinicians · stable even if the display alias rotates</div>
+      </div>
+      <div class="id-tier">
+        <div class="id-tier-lbl">Linkage record — hospital bridge</div>
+        <div class="id-tier-val mono">●●●●-●●●●●●●●</div>
+        <div class="id-tier-note">MRN ↔ internal reference recorded in the linkage table only</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;text-align:left;max-width:420px;margin:0 auto">
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Patients vault</strong> — name and date of birth sealed, encrypted, no direct application access.</div></div>
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Pseudonym / linkage table</strong> — display alias, internal reference and MRN bridge recorded together.</div></div>
+      <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Audit log</strong> — registration event timestamped and attributed to the registering clinician.</div></div>
       <div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">From this point on, only the platform ID is shown. No name or date of birth will appear again in this interface.</div></div>
     </div>
   </div>
@@ -2544,7 +3125,7 @@ function bRegister() {
 }
 
 function bExport() {
-  return `<div style="font-size:13px;color:var(--i5);margin-bottom:14px">Intelligence output — not an EHR record. Export supplements the hospital record.</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Intelligence output — not an EHR record. Export supplements the hospital record.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
     ${[['ti-file-type-pdf','Clinical report (PDF)','Full intelligence output · all 7 layers',true],['ti-target','Action plan (PDF)','Zone-based plan for the patient',false],['ti-download','Raw data (JSON)','All fields · engine layers · research',false],['ti-building-hospital','For EHR (summary)','Intelligence summary in note format',false]].map(([icon,lbl,desc,primary])=>`
       <button class="abt ${primary?'abt-p':'abt-s'}" onclick="notify('${lbl} exported','ok')">
@@ -2559,26 +3140,6 @@ function bExport() {
 }
 
 /* GAP 13 — Audit log (illustrative — real data from Supabase audit_log table) */
-function buildAuditLog() {
-  const pt  = getPt();
-  const v   = getVisit();
-  const pv  = prevVisit();
-  const entries = [
-    { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n} — data saved · ${pt.disease.replace('_',' ')}` },
-    { ts:v.date + ' 14:28', user:'Dr. García',  action:'Follow-up drawer opened · visit-update mode' },
-    { ts:v.date + ' 14:10', user:'Dr. García',  action:`FEV₁ recorded: ${v.fev1}% · spirometry saved` },
-    ...(pv ? [{ ts:pv.date + ' 09:15', user:'Dr. García', action:`Visit ${pv.n} saved · CAT ${pv.cat}${v.cat && pv.cat ? ' → '+v.cat : ''}` }] : []),
-    { ts:'System',           user:'AIRMAP',      action:`Pseudonymised ID generated: AIRMAP-2024-${currentPt}` },
-  ];
-  return entries.map(e => `
-    <div style="display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--i1)">
-      <span style="font-family:var(--mono);font-size:9.5px;color:var(--i4);width:130px;flex-shrink:0">${e.ts}</span>
-      <span style="font-size:12px;color:var(--i5);flex:1">${e.action}</span>
-      <span style="font-family:var(--mono);font-size:9.5px;color:var(--n6);flex-shrink:0">${e.user}</span>
-    </div>`).join('') +
-    `<div style="margin-top:8px;font-size:11px;color:var(--i4)">Illustrative entries. Full audit trail stored in Supabase <code>audit_log</code> table on backend.</div>`;
-}
-
 /* ═══════════════════════════════════════════════════════════════════
    ANALYSIS ENGINE — disease-adaptive outputs
 ═══════════════════════════════════════════════════════════════════ */
@@ -2638,7 +3199,7 @@ function runAll() {
 function bAnalysis() {
   const layers = [[1,'Classification','Disease · stage · group'],[2,'Multimodal','Environment · adherence'],[3,'Phenotype','T2 · eosinophilic · ACO'],[4,'Risk','Exacerbation · hosp'],[5,'Treatment','Guidelines · step · biologic'],[6,'Self-mgmt','Engagement · education'],[7,'Trajectory','FEV₁ trend · pattern']];
   const badges = layers.map(([n])=>`<span class="ao-b" id="lb-${n}" onclick="runLayer(${n})">L${n}</span>`).join('');
-  const cells  = layers.map(([n,tt,sb])=>`<div class="ao-cell"><div class="flex ic jsb" style="margin-bottom:6px"><div><div class="ao-ct">${tt}</div><div class="xs muted">${sb}</div></div><div class="flex ic g2"><span class="ao-ref">L${n}</span><button class="btn bp btn-sm" onclick="runLayer(${n})" style="padding:4px 9px;font-size:11px"><i class="ti ti-player-play"></i>Run</button></div></div><div class="ao-out idle" id="lo-${n}">Awaiting data…</div></div>`).join('');
+  const cells  = layers.map(([n,tt,sb])=>`<div class="ao-cell"><div class="flex ic jsb" style="margin-bottom:6px"><div><div class="ao-ct">${tt}</div><div class="xs muted">${sb}</div></div><div class="flex ic g2"><span class="ao-ref">L${n}</span><button class="btn bp btn-sm" onclick="runLayer(${n})" style="padding:4px 9px;font-size:var(--fs-xs)"><i class="ti ti-player-play"></i>Run</button></div></div><div class="ao-out idle" id="lo-${n}">Awaiting data…</div></div>`).join('');
   return `<div class="flex ic jsb" style="margin-bottom:12px"><div class="ao-layers">${badges}</div><button class="btn bp btn-sm" onclick="runAll()"><i class="ti ti-player-play"></i>Run all 7</button></div>
   <div class="ao"><div class="ao-hd"><div class="ao-tt">7-layer engine · ${getPt().disease.replace('_',' ')} · Visit ${getVisit().n}</div></div><div class="ao-grid">${cells}</div></div>
   <div style="margin-top:14px"><div class="xs muted mono" style="margin-bottom:7px;letter-spacing:1px">GENERATED REPORT</div><div class="rep" id="rep-out">Run full analysis to generate report.</div></div>
@@ -2665,6 +3226,8 @@ const g = id => document.getElementById(id);
    BOOT
 ═══════════════════════════════════════════════════════════════════ */
 render();
+hydrateIcons(document.body);
+startIconObserver();
 </script>
 </body>
 </html>
