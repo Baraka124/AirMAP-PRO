@@ -966,6 +966,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
       <div class="cop-cohort-hdr">
         <div class="cop-hdr-mark"><i class="ti ti-sparkles"></i></div>
         <div class="cop-cohort-hdr-name">Resident · cohort scan</div>
+        <button class="cop-cohort-scan-btn" onclick="copCohortAnomaly()" style="margin-left:8px"><i class="ti ti-chart-dots" style="font-size:var(--fs-2xs);vertical-align:-1px;margin-right:3px"></i>Find outliers</button>
         <button class="cop-cohort-scan-btn" onclick="copCohortScan()">Scan clinic</button>
       </div>
       <div class="cop-cohort-body" id="cop-cohort-body">
@@ -1122,6 +1123,12 @@ tbody td.strong{color:var(--i7);font-weight:600;}
           </div>
           <div class="cop-gen-row" style="margin-top:5px">
             <div class="cop-gen-btn" style="flex:1" onclick="copGenerateBundle()"><i class="ti ti-stack-2"></i>Discharge bundle: curso + referral + GP summary</div>
+          </div>
+          <div class="cop-gen-row" style="margin-top:5px">
+            <div class="cop-gen-btn" style="flex:1" onclick="copSuggestCoding()"><i class="ti ti-receipt"></i>Suggest coding for this visit</div>
+          </div>
+          <div class="cop-gen-row" style="margin-top:5px">
+            <div class="cop-gen-btn" style="flex:1" onclick="copSecondOpinion()"><i class="ti ti-scale"></i>Argue the alternative</div>
           </div>
         </div>
         <!-- Free query -->
@@ -1354,6 +1361,8 @@ const ICON_PATHS = {
   'heart': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />',
   'message-2': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M8 9h8" /> <path d="M8 13h6" /> <path d="M9 18h-3a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-3l-3 3l-3 -3" />',
   'microphone': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M9 5a3 3 0 0 1 3 -3a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3a3 3 0 0 1 -3 -3l0 -5" /> <path d="M5 10a7 7 0 0 0 14 0" /> <path d="M8 21l8 0" /> <path d="M12 17l0 4" />',
+  'scale': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M7 20l10 0" /> <path d="M6 6l6 -1l6 1" /> <path d="M12 3l0 17" /> <path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" /> <path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" />',
+  'receipt': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" />',
 };
 function svgIcon(name) {
   const inner = ICON_PATHS[name];
@@ -2608,7 +2617,7 @@ function selectLoginRole(key) {
 const COP_ROLE_DEFAULT_REGISTER = { clinician:'curso', admin:'gp', integration:'gp', auditor:'curso' };
 function doLogin() {
   currentUserRole = loginSelectedRole;
-  copRegister = COP_ROLE_DEFAULT_REGISTER[currentUserRole] || 'curso';
+  copRegister = copLearnedDefault(currentUserRole) || COP_ROLE_DEFAULT_REGISTER[currentUserRole] || 'curso';
   showView('dashboard');
   notify(`Signed in as ${RBAC_ROLES[currentUserRole].label}`, 'ok');
 }
@@ -2654,6 +2663,50 @@ If no patient stands out as urgent, return an empty array.`;
       </div>`;
     }).join('');
     renderDashboard();
+  } catch(e) {
+    body.innerHTML = `<div class="cop-cohort-empty">${copApiErrorMessage(e)}</div>`;
+  }
+}
+
+async function copCohortAnomaly() {
+  const perms = RBAC_PERMS[currentUserRole];
+  const body = g('cop-cohort-body');
+  if (!body) return;
+  if (!perms.resolve) {
+    body.innerHTML = `<div class="cop-cohort-empty">${RBAC_ROLES[currentUserRole].label} access is read-only for cohort scans.</div>`;
+    return;
+  }
+  body.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  const byDisease = {};
+  Object.entries(DB).forEach(([id, pt]) => {
+    if (!byDisease[pt.disease]) byDisease[pt.disease] = [];
+    const v = pt.visits[pt.visits.length - 1];
+    byDisease[pt.disease].push(`AIROS-2024-${id}: FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%, decline pattern across ${pt.visits.length} visits`);
+  });
+  const groupedSummary = Object.entries(byDisease).map(([disease, list]) =>
+    `${disease} group (${list.length} patients):\n${list.join('\n')}`
+  ).join('\n\n');
+  const prompt = `You are AIROS clinical reasoning engine performing anomaly detection across a clinic's patients, grouped by disease. Unlike a simple urgency scan, you are looking for statistical outliers: patients whose pattern diverges unusually from their disease-matched peers in this list, in a way that might be missed when reviewing charts one at a time.
+
+${groupedSummary}
+
+Identify 1 to 3 patients who diverge most from their peer group in a clinically meaningful way (for example, unusually rapid decline relative to others with the same disease, or an eosinophil or adherence value that stands out against the group). If nothing genuinely diverges, say so rather than forcing a finding. Return ONLY a JSON array, no markdown:
+[{"pid":"AIROS-2024-XXXXX","reason":"one sentence naming the peer group and what diverges, using actual numbers, no em-dashes"}]
+If no patient is a genuine outlier, return an empty array.`;
+  try {
+    const raw = await callCopAPI(prompt, copScaleTok(500));
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if (!parsed.length) {
+      body.innerHTML = '<div class="cop-cohort-empty">No patients diverge meaningfully from their disease-matched peers right now.</div>';
+      return;
+    }
+    body.innerHTML = parsed.map(p => {
+      const id = (p.pid||'').replace('AIROS-2024-','');
+      return `<div class="cop-cohort-row">
+        <span class="cop-cohort-row-pid" onclick="selectPt('${id}')">${p.pid}</span>
+        <span class="cop-cohort-row-body"><i class="ti ti-chart-dots" style="font-size:var(--fs-2xs);color:var(--n5);margin-right:3px"></i>${p.reason}</span>
+      </div>`;
+    }).join('');
   } catch(e) {
     body.innerHTML = `<div class="cop-cohort-empty">${copApiErrorMessage(e)}</div>`;
   }
@@ -3108,7 +3161,13 @@ function bVisitUpdate() {
   ${S('Log new event','',`<div class="fg">
     ${Sel('Event type',['None','Hospital visit','Medication change','Exacerbation','Lifestyle change','Clinic visit'],'None')}
     <div class="fgrp"><label class="fl">Date</label><input class="fi" type="date" oninput="markDirty()"></div>
-    <div class="fgrp" style="grid-column:1/-1"><label class="fl">Details</label><textarea class="ft" placeholder="What happened…" oninput="markDirty()"></textarea></div>
+    <div class="fgrp" style="grid-column:1/-1">
+      <label class="fl" style="display:flex;align-items:center;gap:6px">Details
+        <i class="ti ti-microphone" id="visit-dictate-btn" onclick="copDictateVisit()" title="Dictate the full visit note" style="font-size:var(--fs-sm);color:var(--n5);cursor:pointer;margin-left:auto"></i>
+      </label>
+      <textarea class="ft" id="visit-details-ta" placeholder="What happened… or click the microphone to dictate" oninput="markDirty()"></textarea>
+      <div id="visit-dictate-summary"></div>
+    </div>
   </div>`)}`;
 }
 
@@ -3204,7 +3263,7 @@ function buildSpirometryCurves(v) {
   const fevPt = _vtFev1Point(fvc, ratio);
   return `<div class="spiro-grid">
     <div>
-      <svg viewBox="0 0 320 175" style="width:100%;height:auto">
+      <svg viewBox="0 0 320 175" style="width:100%;height:auto;cursor:pointer" onclick="copExplainChart('flow-volume')" title="Click to ask Resident to explain this chart">
         <line x1="35" y1="95" x2="305" y2="95" stroke="var(--i2)" stroke-width="1"/>
         <line x1="35" y1="20" x2="35" y2="150" stroke="var(--i2)" stroke-width="1"/>
         <path d="${_fvPathD(fvc, refRatio)}" fill="none" stroke="var(--i3)" stroke-width="1.5" stroke-dasharray="3,3"/>
@@ -3212,10 +3271,10 @@ function buildSpirometryCurves(v) {
         <text x="170" y="170" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)">Volume (L) →</text>
         <text x="14" y="90" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)" transform="rotate(-90,14,90)">Flow (L/s)</text>
       </svg>
-      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Flow-volume loop</div>
+      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Flow-volume loop <i class="ti ti-sparkles" style="font-size:var(--fs-micro);cursor:pointer;color:var(--n5)" onclick="copExplainChart('flow-volume')" title="Explain with Resident"></i></div>
     </div>
     <div>
-      <svg viewBox="0 0 320 175" style="width:100%;height:auto">
+      <svg viewBox="0 0 320 175" style="width:100%;height:auto;cursor:pointer" onclick="copExplainChart('volume-time')" title="Click to ask Resident to explain this chart">
         <line x1="35" y1="150" x2="305" y2="150" stroke="var(--i2)" stroke-width="1"/>
         <line x1="35" y1="20" x2="35" y2="150" stroke="var(--i2)" stroke-width="1"/>
         <path d="${_vtPathD(fvc, 80)}" fill="none" stroke="var(--i3)" stroke-width="1.5" stroke-dasharray="3,3"/>
@@ -3226,7 +3285,7 @@ function buildSpirometryCurves(v) {
         <text x="170" y="170" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)">Time (s) →</text>
         <text x="14" y="90" text-anchor="middle" style="font-size:var(--fs-2xs);fill:var(--i4)" transform="rotate(-90,14,90)">Volume (L)</text>
       </svg>
-      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Volume-time curve</div>
+      <div style="font-size:var(--fs-2xs);color:var(--i4);text-align:center">Volume-time curve <i class="ti ti-sparkles" style="font-size:var(--fs-micro);cursor:pointer;color:var(--n5)" onclick="copExplainChart('volume-time')" title="Explain with Resident"></i></div>
     </div>
   </div>
   <div style="display:flex;gap:14px;justify-content:center;margin-top:8px;font-size:var(--fs-2xs);color:var(--i4)">
@@ -3388,7 +3447,8 @@ function bCohortOverview() {
       ${kStat(zoneCounts.a||0,'Amber zone')}
       ${kStat(zoneCounts.g||0,'Green zone')}
     </div>
-    <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>k-anonymity guardrail:</strong> any aggregate subgroup below ${K_ANON} patients is suppressed here to reduce re-identification risk. Individual patient cards below remain visible to authorised clinicians for direct care.</div></div>`;
+    <div class="ia ia-i" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ia-body"><strong>k-anonymity guardrail:</strong> any aggregate subgroup below ${K_ANON} patients is suppressed here to reduce re-identification risk. Individual patient cards below remain visible to authorised clinicians for direct care.</div></div>
+    <button class="btn bg btn-sm" style="margin-bottom:14px" onclick="copResearchSummary()"><i class="ti ti-report-analytics"></i>Generate de-identified research summary</button>`;
   return `${statsHTML}${bCohortOverviewCards(entries)}
   <div style="margin-top:14px;font-size:var(--fs-sm);color:var(--i4);text-align:center">Select any patient card to open their cockpit</div>`;
 }
@@ -4198,10 +4258,27 @@ function copLinkGuidelines(text) {
   return out;
 }
 let copDismissed = {};   // { [patientId]: Set of dismissed thought tags this session }
-function copDismissThought(btn, tag) {
+let copConfidenceDrift = { high: { dismissed: 0, total: 0 }, moderate: { dismissed: 0, total: 0 }, inference: { dismissed: 0, total: 0 } };
+function copTrackConfidenceOutcome(confidence, wasDismissed) {
+  const c = confidence || 'moderate';
+  if (!copConfidenceDrift[c]) copConfidenceDrift[c] = { dismissed: 0, total: 0 };
+  if (wasDismissed) copConfidenceDrift[c].dismissed += 1;
+  else copConfidenceDrift[c].total += 1;
+}
+function copCheckDriftSignal() {
+  const high = copConfidenceDrift.high;
+  if (high.total >= 4 && (high.dismissed / high.total) >= 0.4) {
+    return `High-confidence observations have been dismissed ${high.dismissed} of ${high.total} times this session. Treat high-confidence labelling with extra scrutiny for now.`;
+  }
+  return null;
+}
+function copDismissThought(btn, tag, confidence) {
   const card = btn.closest('.cop-thought');
   if (!copDismissed[currentPt]) copDismissed[currentPt] = new Set();
   copDismissed[currentPt].add(tag);
+  copTrackConfidenceOutcome(confidence, true);
+  const drift = copCheckDriftSignal();
+  if (drift) notify(drift, 'warn');
   if (card) { card.style.transition = 'opacity .15s'; card.style.opacity = '0'; setTimeout(()=>card.remove(), 150); }
 }
 function renderThoughts(thoughts) {
@@ -4210,6 +4287,7 @@ function renderThoughts(thoughts) {
   const confLabel = {high:'Directly supported by data', moderate:'Reasonable clinical inference', inference:'Pattern inference, verify clinically'};
   const dismissed = copDismissed[currentPt] || new Set();
   const visible = thoughts.filter(t => !dismissed.has(t.tag));
+  thoughts.forEach(t => copTrackConfidenceOutcome(t.confidence, false));
   if (!visible.length) {
     g('cop-stream').innerHTML = `<div class="cop-thought cop-carry"><div class="cop-thought-tag">Status</div><div class="cop-thought-body">All observations dismissed for this visit.</div></div>`;
     return;
@@ -4224,7 +4302,7 @@ function renderThoughts(thoughts) {
       <div style="display:flex;align-items:flex-start;gap:6px">
         <div class="cop-thought-tag" style="flex:1">${t.tag}</div>
         <span class="cop-conf" title="${confLabel[t.confidence]||confLabel.moderate}">${confDotsHtml}</span>
-        <i class="ti ti-x" style="font-size:var(--fs-xs);color:var(--i3);cursor:pointer;flex-shrink:0" title="Dismiss" onclick="copDismissThought(this,${JSON.stringify(t.tag)})"></i>
+        <i class="ti ti-x" style="font-size:var(--fs-xs);color:var(--i3);cursor:pointer;flex-shrink:0" title="Dismiss" onclick="copDismissThought(this,${JSON.stringify(t.tag)},${JSON.stringify(t.confidence)})"></i>
       </div>
       <div class="cop-thought-body">${copLinkGuidelines(t.body)}</div>
       <div class="cop-thought-src" ${srcAttr}>${t.source}${drw?' <i class="ti ti-arrow-right" style="font-size:var(--fs-micro)"></i>':''}</div>
@@ -4254,6 +4332,19 @@ function loadCopThoughts() {
   }, 350);
 }
 
+let copRegisterUsage = {};   // { [role]: { [register]: count } }, learned per-clinician preference this session
+function copTrackRegisterUse(role, register) {
+  if (!copRegisterUsage[role]) copRegisterUsage[role] = {};
+  copRegisterUsage[role][register] = (copRegisterUsage[role][register] || 0) + 1;
+}
+function copLearnedDefault(role) {
+  const counts = copRegisterUsage[role];
+  if (!counts) return null;
+  let best = null, bestN = 0;
+  for (const [reg, n] of Object.entries(counts)) { if (n > bestN) { best = reg; bestN = n; } }
+  return bestN >= 2 ? best : null;   // only override once a real pattern emerges, not on a single click
+}
+
 async function copGenerate(docType, register, lang) {
   register = register || docType;
   lang     = lang     || copLang;
@@ -4266,6 +4357,7 @@ async function copGenerate(docType, register, lang) {
       : `${RBAC_ROLES[currentUserRole].label} access is read-only for clinical document generation.`;
     return;
   }
+  copTrackRegisterUse(currentUserRole, register);
   const ctx = buildCopContext();
   const titles = {curso:'Curso clinico',referral:'Referral letter',gp:'GP summary',patient:'Patient letter'};
   openCopOut(titles[docType]||'Clinical document');
@@ -4334,7 +4426,104 @@ function copShowBundleDoc(key) {
   ).join('');
 }
 
+async function copSuggestCoding() {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.resolve || readOnlyMode) {
+    openCopOut('Access restricted');
+    g('cop-out-register').innerHTML = '';
+    g('cop-out-body').textContent = readOnlyMode
+      ? 'Coding suggestions are disabled while review mode is active.'
+      : `${RBAC_ROLES[currentUserRole].label} access is read-only for coding suggestions.`;
+    return;
+  }
+  const ctx = buildCopContext();
+  openCopOut('Suggested coding');
+  g('cop-out-register').innerHTML = '';
+  g('cop-out-body').innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  setPulse('thinking', 'Checking codes...');
+  const prompt = `You are AIROS clinical reasoning engine. Suggest ICD-10 diagnosis codes and any relevant procedure or visit-type codes for this visit, based only on what is actually documented.
+
+PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}
+FEV1 ${ctx.fev1}%, exacerbations ${ctx.exac}, hospitalisations ${ctx.hosp}, smoking status ${ctx.smoker}
+Comorbidities: ${ctx.comorbidities}
+Treatment: ${ctx.meds}
+
+List each suggested code with a one-line justification tied to the actual data above. If something would need additional documentation to code accurately (for example exact pack-years or a specific exacerbation date), say so rather than guessing. End with: "Draft suggestion only, verify against local coding requirements before submission." No em-dashes.`;
+  try {
+    const text = await callCopAPI(prompt, copScaleTok(450));
+    g('cop-out-body').textContent = text;
+  } catch(e) {
+    g('cop-out-body').textContent = copApiErrorMessage(e);
+  }
+  setPulse('');
+}
+
+async function copSecondOpinion() {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.resolve || readOnlyMode) {
+    openCopOut('Access restricted');
+    g('cop-out-register').innerHTML = '';
+    g('cop-out-body').textContent = readOnlyMode
+      ? 'Second opinion analysis is disabled while review mode is active.'
+      : `${RBAC_ROLES[currentUserRole].label} access is read-only for this analysis.`;
+    return;
+  }
+  const ctx = buildCopContext();
+  openCopOut('Differential: the alternative case');
+  g('cop-out-register').innerHTML = '';
+  g('cop-out-body').innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  setPulse('thinking', 'Building the counter-case...');
+  const prompt = `You are AIROS clinical reasoning engine, asked to argue against the current working diagnosis or treatment path for this patient. This is not a normal answer, this is a deliberate structured second opinion.
+
+PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}, control ${ctx.control||'N/A'}
+FEV1 ${ctx.fev1}%, decline ${ctx.fev1Decline}, eos ${ctx.eos}, exacerbations ${ctx.exac}, hospitalisations ${ctx.hosp}
+Adherence ${ctx.adherence}%, technique ${ctx.technique}, smoking ${ctx.smoker}
+Current treatment: ${ctx.meds}
+Comorbidities: ${ctx.comorbidities}
+
+VISIT HISTORY: ${ctx.visitHistory}
+
+Write a genuine, well-reasoned alternative case: a different diagnosis, phenotype, or treatment direction that the current data does not rule out, even if it is less likely than the current working assessment. State explicitly what evidence would need to be present or absent to confirm or rule out this alternative. Do not soften this into agreement with the current path, actually argue the alternative as a clinician playing devil's advocate would. 4-6 sentences. No em-dashes.`;
+  try {
+    const text = await callCopAPI(prompt, copScaleTok(500));
+    g('cop-out-body').textContent = text;
+  } catch(e) {
+    g('cop-out-body').textContent = copApiErrorMessage(e);
+  }
+  setPulse('');
+}
+
 let copConvHistory = {};   // { [patientId]: [{q, a}] }, session-only, cleared on logout
+
+async function copExplainChart(chartType) {
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.resolve) {
+    openCopOut('Access restricted');
+    g('cop-out-body').textContent = `${RBAC_ROLES[currentUserRole].label} access is read-only for clinical reasoning queries.`;
+    return;
+  }
+  const ctx = buildCopContext();
+  const v = getVisit();
+  openCopOut('Chart explanation');
+  g('cop-out-register').innerHTML = '';
+  g('cop-out-body').innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  setPulse('thinking', 'Reading chart...');
+  const chartDesc = chartType === 'flow-volume'
+    ? `a flow-volume loop comparing this patient's actual curve (FVC ${v.fvc||3.2}L, FEV1/FVC ratio ${v.ratio||70}%) against a normal reference pattern at the same FVC`
+    : `a volume-time curve showing FEV1 reached at one second (${(((v.fvc||3.2))*((v.ratio||70))/100).toFixed(2)}L) compared against a normal reference pattern`;
+  const prompt = `You are AIROS clinical reasoning engine. A clinician just clicked to ask what a spirometry chart is showing, for patient AIROS-2024-${ctx.id} (${ctx.disease}, FEV1 ${ctx.fev1}%).
+
+The chart is ${chartDesc}.
+
+Explain in 2-3 plain sentences what this specific chart pattern indicates clinically for this patient. No em-dashes. Assume the reader understands clinical terms but wants the visual interpreted quickly.`;
+  try {
+    const text = await callCopAPI(prompt, copScaleTok(250));
+    g('cop-out-body').textContent = text;
+  } catch(e) {
+    g('cop-out-body').textContent = copApiErrorMessage(e);
+  }
+  setPulse('');
+}
 
 async function copSubmit() {
   const input = g('cop-input');
@@ -4399,6 +4588,63 @@ function copToggleVoice() {
     if (input) input.value = transcript;
   };
   copRecognition.start();
+}
+
+/* AI feature 4: full visit dictation, distinct from the query mic above */
+let visitDictateRecognition = null;
+let visitDictateListening = false;
+function copDictateVisit() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { notify('Voice dictation is not supported in this browser.', 'warn'); return; }
+  const btn = g('visit-dictate-btn');
+  if (visitDictateListening) { visitDictateRecognition?.stop(); return; }
+  visitDictateRecognition = new SR();
+  visitDictateRecognition.lang = copLang === 'es' ? 'es-ES' : 'en-GB';
+  visitDictateRecognition.continuous = true;
+  visitDictateRecognition.interimResults = true;
+  let finalTranscript = '';
+  visitDictateRecognition.onstart = () => { visitDictateListening = true; btn?.classList.add('cop-mic-active'); notify('Listening, dictate the visit now...', 'info'); };
+  visitDictateRecognition.onend = async () => {
+    visitDictateListening = false;
+    btn?.classList.remove('cop-mic-active');
+    if (finalTranscript.trim()) await copStructureDictation(finalTranscript.trim());
+  };
+  visitDictateRecognition.onerror = () => { visitDictateListening = false; btn?.classList.remove('cop-mic-active'); notify('Dictation could not be captured.', 'warn'); };
+  visitDictateRecognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    const ta = g('visit-details-ta');
+    if (ta) ta.value = finalTranscript + interim;
+  };
+  visitDictateRecognition.start();
+}
+async function copStructureDictation(transcript) {
+  const summaryEl = g('visit-dictate-summary');
+  if (summaryEl) summaryEl.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  const ta = g('visit-details-ta');
+  if (ta) ta.value = transcript;
+  markDirty();
+  const prompt = `A clinician just dictated this visit note out loud, transcribed automatically. Clean it up into a clear, well-punctuated clinical note in the same language it was dictated in, fixing only transcription errors and punctuation, not changing clinical meaning or adding anything not said.
+
+RAW DICTATION: ${transcript}
+
+Then on a new line starting with "DETECTED VALUES:", list any specific clinical values you can confidently extract from the dictation (such as FEV1 percentage, CAT score, exacerbation count, adherence percentage) in the form "Field: value". If nothing specific was mentioned, write "DETECTED VALUES: none detected, dictation logged as free text only." No em-dashes.`;
+  try {
+    const text = await callCopAPI(prompt, copScaleTok(350));
+    const [notePart, ...rest] = text.split('DETECTED VALUES:');
+    if (ta) ta.value = notePart.trim();
+    if (summaryEl) {
+      const detected = rest.join('DETECTED VALUES:').trim();
+      summaryEl.innerHTML = detected && !detected.toLowerCase().startsWith('none')
+        ? `<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-sparkles"></i><div class="ia-body"><strong>Resident detected:</strong> ${detected}. Review and enter these into the fields above, values are not auto-applied.</div></div>`
+        : '';
+    }
+  } catch(e) {
+    if (summaryEl) summaryEl.innerHTML = `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
+  }
 }
 
 /* ── Patient Q&A mode (addition 4) ──────────────────────── */
