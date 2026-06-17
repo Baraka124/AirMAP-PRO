@@ -545,6 +545,10 @@ input,select,textarea{font-family:inherit;}
 .fprev{display:flex;align-items:center;gap:5px;font-size:var(--fs-xs);color:var(--i3);margin-bottom:2px;}
 .fprev i{font-size:var(--fs-xs);}
 .fi,.fsel,.ft{width:100%;padding:8px 10px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rsm);font-family:var(--sans);font-size:var(--fs-base);color:var(--i7);transition:border-color .15s,box-shadow .15s;appearance:none;}
+.fi-inline,.fsel-inline{width:100%;padding:5px 7px;background:transparent;border:1.5px solid transparent;border-radius:var(--rsm);font-family:var(--sans);font-size:var(--fs-sm);color:var(--i7);transition:all .16s cubic-bezier(.4,0,.2,1);appearance:none;}
+.fi-inline:hover,.fsel-inline:hover{background:var(--i0);border-color:var(--i1);}
+.fi-inline:focus,.fsel-inline:focus{background:var(--wh);border-color:var(--n6);box-shadow:0 0 0 3px rgba(11,31,58,.07);outline:none;}
+.fsel-inline{cursor:pointer;}
 .fi:focus,.fsel:focus,.ft:focus{outline:none;border-color:var(--n4);box-shadow:0 0 0 3px rgba(44,82,130,.09);}
 .fi::placeholder{color:var(--i3);}
 .fi.live{border-color:var(--t5);box-shadow:0 0 0 2px rgba(8,145,178,.1);}
@@ -1144,7 +1148,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
           <div class="cop-out-body" id="cop-out-body" contenteditable="true" spellcheck="false" oninput="copMarkEdited()" aria-label="Generated clinical document, editable"></div>
           <div class="cop-out-actions">
             <button class="btn bg btn-sm" onclick="copyCopOut()"><i class="ti ti-copy"></i>Copy</button>
-            <button class="btn bg btn-sm" onclick="window.print()"><i class="ti ti-download"></i>PDF</button>
+            <button class="btn bg btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button>
             <button class="btn bg btn-sm" id="cop-lang-btn" onclick="toggleCopLang()"><i class="ti ti-language"></i>EN</button>
             <button class="btn bp btn-sm" id="cop-sign-btn" onclick="copSignAndFile()" style="margin-left:auto"><i class="ti ti-check"></i>Sign and file</button>
           </div>
@@ -1202,7 +1206,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <div class="comp" id="ref-panel">
       <div class="comp-hd">
         <span class="comp-lbl">Referral tracking</span>
-        <button class="btn bg btn-sm" onclick="notify('Add referral','info')" style="padding:3px 8px;font-size:var(--fs-xs)"><i class="ti ti-plus"></i>Add</button>
+        <button class="btn bg btn-sm" onclick="toggleAddReferral()" id="ref-add-btn" style="padding:3px 8px;font-size:var(--fs-xs)"><i class="ti ti-plus"></i>Add</button>
       </div>
       <div class="comp-body" id="ref-body"></div>
     </div>
@@ -1228,7 +1232,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   </div>
 </aside>
 
-<div class="nct" id="nct"></div>
+<div class="nct" id="nct" role="status" aria-live="polite" aria-atomic="false"></div>
 
 <!-- v11: COMMAND PALETTE -->
 <div class="cmdk-ov" id="cmdk-ov" onclick="if(event.target===this)closeCmdK()">
@@ -2058,12 +2062,7 @@ function render() {
   }
 
   /* REFERRALS */
-  const rb = g('ref-body');
-  if (rb) {
-    rb.innerHTML = (pt.referrals||[]).map(r =>
-      `<div class="ref-item"><div class="ref-s ${r.status==='done'?'ref-d':'ref-p'}"></div><div class="ref-lbl">${r.label}</div><div class="ref-dt">${r.date}</div></div>`
-    ).join('') || '<div class="xs muted" style="padding:8px 0">No referrals recorded</div>';
-  }
+  renderReferralPanel();
 
   /* ACTION BUTTONS */
   if (g('action-btns')) g('action-btns').innerHTML = buildActionBtns();
@@ -2082,7 +2081,48 @@ function render() {
   }
 }
 
-/* ── METRICS BUILDER ── */
+function renderReferralPanel() {
+  const pt = getPt();
+  const rb = g('ref-body');
+  if (!rb || !pt) return;
+  rb.innerHTML = (pt.referrals||[]).map(r =>
+    `<div class="ref-item"><div class="ref-s ${r.status==='done'?'ref-d':'ref-p'}"></div><div class="ref-lbl">${r.label}</div><div class="ref-dt">${r.date}</div></div>`
+  ).join('') || '<div class="xs muted" style="padding:8px 0">No referrals recorded</div>';
+}
+function toggleAddReferral() {
+  const rb = g('ref-body');
+  if (!rb) return;
+  if (g('ref-add-row')) { renderReferralPanel(); return; }
+  const presets = ['Pulmonary rehabilitation','Psychology: anxiety/depression','Smoking cessation','Biologic therapy clinic','Allergen / environmental assessment','Asthma nurse education','Cardiac review','Dietitian'];
+  rb.insertAdjacentHTML('afterbegin', `<div id="ref-add-row" style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--i1)">
+    <select class="fsel-inline" id="ref-add-select" style="width:100%;border:1.5px solid var(--i2);margin-bottom:6px">
+      ${presets.map(p=>`<option>${p}</option>`).join('')}
+      <option value="__custom">Other: type below</option>
+    </select>
+    <div id="ref-add-custom-wrap" style="display:none;margin-bottom:6px">
+      <input class="fi-inline" id="ref-add-custom" type="text" placeholder="Referral type" style="width:100%;border:1.5px solid var(--i2)">
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn bp btn-sm" onclick="commitAddReferral()" style="flex:1;justify-content:center">Add</button>
+      <button class="btn bg btn-sm" onclick="renderReferralPanel()">Cancel</button>
+    </div>
+  </div>`);
+  g('ref-add-select').addEventListener('change', (e) => {
+    g('ref-add-custom-wrap').style.display = e.target.value === '__custom' ? 'block' : 'none';
+  });
+}
+function commitAddReferral() {
+  const pt = getPt();
+  if (!pt) return;
+  const sel = g('ref-add-select');
+  const label = sel.value === '__custom' ? (g('ref-add-custom')?.value||'').trim() : sel.value;
+  if (!label) { notify('Enter a referral type first', 'warn'); return; }
+  if (!pt.referrals) pt.referrals = [];
+  pt.referrals.push({ label, status:'pending', date:'Referred today' });
+  markDirty();
+  renderReferralPanel();
+  notify(`Referral added: ${label}`, 'ok');
+}
 function buildMetrics(d, pt, v, grp, stage, ctrl) {
   const cards = d === 'COPD' ? [
     { lbl:'FEV₁ % predicted', val:v.fev1+'%', vc:fev1Class(v.fev1), int:`Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'s'+(v.fev1<50?'d':v.fev1<80?'w':'g'), act:'investigations' },
@@ -3430,19 +3470,157 @@ function buildMedConflicts(pt) {
 }
 
 function bMedications() {
+  medsProposedChanges = null;
   const pt=getPt(), v=getVisit();
   const hasSABAOveruse = pt.disease==='ASTHMA' && v.rescueWk >= 7;
-  return `${S('Current regimen','Treatment',`<div class="tw"><table><thead><tr><th>Drug</th><th>Class</th><th>Dose</th><th>Frequency</th><th>Since</th><th>Status</th><th></th></tr></thead><tbody>
-    ${pt.meds.map(m=>`<tr><td class="strong">${m.drug}</td><td><span class="med-class-pill">${m.cls}</span></td><td class="mono sm">${m.dose}</td><td>${m.freq}</td><td class="mono sm">${m.since}</td><td><span class="sind g"><span class="sind-dot"></span>Active</span></td><td><button class="btn bg btn-sm" onclick="notify('Edit','info')" style="padding:4px 8px"><i class="ti ti-pencil"></i></button></td></tr>`).join('')}
+  return `${S('Current regimen','Treatment',`<div class="tw"><table><thead><tr><th>Drug</th><th>Class</th><th>Dose</th><th>Frequency</th><th>Since</th><th>Status</th><th></th></tr></thead><tbody id="med-table-body">
+    ${pt.meds.map((m,i)=>buildMedRow(i,m)).join('')}
   </tbody></table></div>
   ${hasSABAOveruse?'<div class="ia ia-d" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body"><strong>SABA overuse detected</strong>: daily rescue use indicates uncontrolled asthma. Step-up required before SABA becomes primary treatment.</div></div>':''}
-  <button class="btn bs btn-sm mt2" onclick="notify('Add medication','info')"><i class="ti ti-plus"></i>Add medication</button>
+  <div class="flex g2 mt2" style="flex-wrap:wrap"><button class="btn bs btn-sm" onclick="addMedRow()"><i class="ti ti-plus"></i>Add medication</button><button class="btn bg btn-sm" onclick="medsOpenAIIntake()"><i class="ti ti-sparkles"></i>Describe medication changes</button></div>
   ${buildMedConflicts(pt)}`)}
   ${S('Adherence & technique','Treatment',`<div class="fg">
-    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||''}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div>
-    ${Sel('Technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal')}
+    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||''}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" id="meds-adherence-input" oninput="commitMedsAdherence(this.value)"><span class="iu">%</span></div><div id="fb-meds-adherence">${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div></div>
+    ${Sel('Technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal',null,'meds-technique-input','commitMedsTechnique')}
     ${Sel('Main barrier',['None','Forgetfulness','Side effect concern','Cost','Complex regimen'],'None')}
   </div>`)}`;
+}
+function buildMedRow(i, m) {
+  return `<tr id="med-row-${i}">
+    <td><input class="fi-inline" type="text" value="${m.drug||''}" placeholder="Drug name" oninput="commitMedField(${i},'drug',this.value)"></td>
+    <td><select class="fsel-inline" onchange="commitMedField(${i},'cls',this.value)">${['SABA','LABA','LAMA','ICS','Biologic','T2DM','Other'].map(o=>`<option${o===m.cls?' selected':''}>${o}</option>`).join('')}</select></td>
+    <td><input class="fi-inline mono sm" type="text" value="${m.dose||''}" placeholder="e.g. 100 mcg" oninput="commitMedField(${i},'dose',this.value)"></td>
+    <td><select class="fsel-inline" onchange="commitMedField(${i},'freq',this.value)">${['Once daily','Twice daily','PRN','Other'].map(o=>`<option${o===m.freq?' selected':''}>${o}</option>`).join('')}</select></td>
+    <td class="mono sm">${m.since}</td>
+    <td><span class="sind g"><span class="sind-dot"></span>Active</span></td>
+    <td><button class="btn bg btn-sm" onclick="removeMedRow(${i})" style="padding:4px 8px" title="Remove medication"><i class="ti ti-trash"></i></button></td>
+  </tr>`;
+}
+function medsOpenAIIntake() {
+  const ov = document.createElement('div');
+  ov.className = 'reg-ai-ov';
+  ov.id = 'meds-ai-ov';
+  ov.innerHTML = `
+    <div class="reg-ai-modal">
+      <div class="reg-ai-modal-hdr">
+        <div class="cop-hdr-mark"><i class="ti ti-sparkles"></i></div>
+        <div class="reg-ai-modal-tt">Describe medication changes</div>
+        <i class="ti ti-x" style="cursor:pointer;color:var(--i4);margin-left:auto" onclick="medsCloseAIIntake()"></i>
+      </div>
+      <div class="reg-ai-modal-body">
+        <div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-shield-lock"></i><div class="ia-body">Describe what changed today: started, stopped, or adjusted medications. Nothing is applied until you review the proposed changes below.</div></div>
+        <textarea id="meds-ai-input" class="reg-ai-textarea" placeholder="e.g. Stopping salbutamol due to side effects, starting tiotropium 18mcg once daily, increasing budesonide to 400mcg twice daily..." rows="5"></textarea>
+        <div id="meds-ai-status"></div>
+      </div>
+      <div class="reg-ai-modal-foot">
+        <button class="btn bg" onclick="medsCloseAIIntake()">Cancel</button>
+        <button class="btn bp" style="margin-left:auto" id="meds-ai-submit" onclick="medsProcessAIIntake()"><i class="ti ti-sparkles"></i>Propose changes</button>
+      </div>
+    </div>`;
+  g('drw').appendChild(ov);
+  setTimeout(() => ov.classList.add('open'), 10);
+  setTimeout(() => g('meds-ai-input')?.focus(), 200);
+}
+function medsCloseAIIntake() {
+  const ov = g('meds-ai-ov');
+  if (!ov) return;
+  ov.classList.remove('open');
+  setTimeout(() => ov.remove(), 200);
+}
+let medsProposedChanges = null;
+async function medsProcessAIIntake() {
+  const input = g('meds-ai-input');
+  const text = (input?.value||'').trim();
+  if (!text) { notify('Describe the medication changes first', 'warn'); return; }
+  const statusEl = g('meds-ai-status');
+  const submitBtn = g('meds-ai-submit');
+  if (submitBtn) submitBtn.disabled = true;
+  if (statusEl) statusEl.innerHTML = '<div class="cop-loading" style="margin-top:10px"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  const pt = getPt();
+  const currentMeds = pt.meds.map((m,i) => `[${i}] ${m.drug} (${m.cls}), ${m.dose}, ${m.freq}`).join('\n');
+  const prompt = `A clinician just described medication changes for a patient in free text. Current regimen:
+${currentMeds || 'none recorded'}
+
+DICTATED CHANGES: ${text}
+
+Return ONLY this JSON shape, no markdown fences:
+{"stop":[indexNumber,...],"modify":[{"index":number,"dose":string|null,"freq":string|null}],"add":[{"drug":string,"cls":"SABA"|"LABA"|"LAMA"|"ICS"|"Biologic"|"T2DM"|"Other","dose":string,"freq":string}]}
+"stop" lists indices (from the bracketed numbers above) of medications to discontinue. "modify" lists index plus only the fields that changed. "add" lists brand new medications not in the current list. Only include what is explicitly stated. No em-dashes.`;
+  try {
+    const raw = await callCopAPI(prompt, copScaleTok(400));
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    medsProposedChanges = parsed;
+    const stopCount = (parsed.stop||[]).length, modCount = (parsed.modify||[]).length, addCount = (parsed.add||[]).length;
+    const total = stopCount + modCount + addCount;
+    if (!total) {
+      if (statusEl) statusEl.innerHTML = '<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-info-circle"></i><div class="ia-body">No specific medication changes detected in that description.</div></div>';
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
+    const lines = [];
+    (parsed.stop||[]).forEach(i => { if (pt.meds[i]) lines.push(`<div class="ia ia-w" style="margin-bottom:6px"><i class="ti ti-circle-minus"></i><div class="ia-body">Stop <strong>${pt.meds[i].drug}</strong></div></div>`); });
+    (parsed.modify||[]).forEach(c => { if (pt.meds[c.index]) lines.push(`<div class="ia ia-i" style="margin-bottom:6px"><i class="ti ti-pencil"></i><div class="ia-body">Change <strong>${pt.meds[c.index].drug}</strong> to ${c.dose||pt.meds[c.index].dose}, ${c.freq||pt.meds[c.index].freq}</div></div>`); });
+    (parsed.add||[]).forEach(m => { lines.push(`<div class="ia ia-g" style="margin-bottom:6px"><i class="ti ti-circle-plus"></i><div class="ia-body">Start <strong>${m.drug}</strong> (${m.cls}), ${m.dose}, ${m.freq}</div></div>`); });
+    if (statusEl) statusEl.innerHTML = `<div style="margin-top:10px">${lines.join('')}<button class="btn bp btn-sm" style="margin-top:6px" onclick="medsApplyAIChanges()"><i class="ti ti-circle-check"></i>Apply these ${total} change${total!==1?'s':''}</button></div>`;
+  } catch(e) {
+    if (statusEl) statusEl.innerHTML = `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
+  }
+  if (submitBtn) submitBtn.disabled = false;
+}
+function medsApplyAIChanges() {
+  const pt = getPt();
+  const changes = medsProposedChanges;
+  if (!pt || !changes) return;
+  let applied = 0;
+  (changes.stop||[]).sort((a,b)=>b-a).forEach(i => { if (pt.meds[i]) { pt.meds.splice(i,1); applied++; } }); // remove highest index first to keep remaining indices valid
+  (changes.modify||[]).forEach(c => { if (pt.meds[c.index]) { if (c.dose) pt.meds[c.index].dose = c.dose; if (c.freq) pt.meds[c.index].freq = c.freq; applied++; } });
+  (changes.add||[]).forEach(m => { pt.meds.push({ drug:m.drug, cls:m.cls||'Other', tag:'tn', dose:m.dose||'', freq:m.freq||'Once daily', since: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) }); applied++; });
+  medsProposedChanges = null;
+  markDirty();
+  medsCloseAIIntake();
+  const tbody = g('med-table-body');
+  if (tbody) tbody.innerHTML = pt.meds.map((m,j)=>buildMedRow(j,m)).join('');
+  notify(`${applied} medication change${applied!==1?'s':''} applied. Review the regimen below.`, 'ok');
+}
+function commitMedField(i, field, value) {
+  const pt = getPt();
+  if (!pt || !pt.meds[i]) return;
+  pt.meds[i][field] = value;
+  markDirty();
+}
+function addMedRow() {
+  const pt = getPt();
+  if (!pt) return;
+  const newMed = { drug:'', cls:'Other', tag:'tn', dose:'', freq:'Once daily', since: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) };
+  pt.meds.push(newMed);
+  const tbody = g('med-table-body');
+  if (tbody) tbody.insertAdjacentHTML('beforeend', buildMedRow(pt.meds.length-1, newMed));
+  markDirty();
+  notify('Medication row added, fill in the details', 'info');
+}
+function removeMedRow(i) {
+  const pt = getPt();
+  if (!pt || !pt.meds[i]) return;
+  pt.meds.splice(i, 1);
+  const tbody = g('med-table-body');
+  if (tbody) tbody.innerHTML = pt.meds.map((m,j)=>buildMedRow(j,m)).join('');
+  markDirty();
+  notify('Medication removed', 'info');
+}
+function commitMedsAdherence(val) {
+  commitVisitField('adherence', val);
+  const fb = g('fb-meds-adherence');
+  const n = parseFloat(val);
+  if (fb) fb.innerHTML = (!isNaN(n) && n<80) ? '<div class="lfb lfb-w">Below 80%: address before step-up</div>' : '';
+  const visitFb = g('fb-adherence'); // keep visit-update's own adherence field in sync if both drawers are used in the same session
+  const visitInput = g('adherence-input');
+  if (visitInput) visitInput.value = val;
+}
+function commitMedsTechnique(val) {
+  const map = { 'Adequate':'adequate', 'Suboptimal':'suboptimal', 'Poor: needs retraining':'poor' };
+  commitVisitField('technique', map[val]||val.toLowerCase(), false);
+  const visitSel = g('technique-input');
+  if (visitSel) visitSel.value = val;
 }
 
 /* v11: flow-volume loop & volume-time curve generation (item 5).
@@ -4573,7 +4751,24 @@ function bAnalysis() {
   return `<div class="flex ic jsb" style="margin-bottom:12px"><div class="ao-layers">${badges}</div><button class="btn bp btn-sm" onclick="runAll()"><i class="ti ti-player-play"></i>Run all 7</button></div>
   <div class="ao"><div class="ao-hd"><div class="ao-tt">7-layer engine · ${getPt().disease.replace('_',' ')} · Visit ${getVisit().n}</div></div><div class="ao-grid">${cells}</div></div>
   <div style="margin-top:14px"><div class="xs muted mono" style="margin-bottom:7px;letter-spacing:1px">GENERATED REPORT</div><div class="rep" id="rep-out">Run full analysis to generate report.</div></div>
-  <div class="flex g2" style="margin-top:12px;flex-wrap:wrap"><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button><button class="btn bs btn-sm" onclick="notify('JSON exported','ok')"><i class="ti ti-download"></i>JSON</button><button class="btn bs btn-sm" onclick="notify('EHR export ready','ok')"><i class="ti ti-building-hospital"></i>For EHR</button></div>`;
+  <div class="flex g2" style="margin-top:12px;flex-wrap:wrap"><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button><button class="btn bs btn-sm" onclick="exportPatientJSON()"><i class="ti ti-download"></i>JSON</button><button class="btn bs btn-sm" onclick="previewEHRExport()"><i class="ti ti-building-hospital"></i>For EHR</button></div>`;
+}
+function exportPatientJSON() {
+  const pt = getPt();
+  if (!pt) return;
+  const exportObj = { patientId: `${pidPrefix(currentPt)}${currentPt}`, exportedAt: new Date().toISOString(), disease: pt.disease, demographics: pt.demographics, visits: pt.visits, meds: pt.meds, referrals: pt.referrals };
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${pidPrefix(currentPt)}${currentPt}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  notify('JSON file downloaded', 'ok');
+}
+function previewEHRExport() {
+  const pt = getPt();
+  if (!pt) return;
+  notify('EHR export format is illustrative in this demo, not a live integration', 'info');
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -4584,6 +4779,7 @@ function notify(msg, type='info', action=null) {
   const ct = g('nct');
   const n  = document.createElement('div');
   n.className = `notif ${type==='info'?'':type}`;
+  if (type==='err'||type==='warn') n.setAttribute('aria-live','assertive');
   const actionHtml = action ? `<span class="notif-action" id="${action.id}">${action.label}</span>` : '';
   n.innerHTML = `<i class="ti ${icons[type]||icons.info}"></i><span>${msg}</span>${actionHtml}`;
   ct.appendChild(n);
