@@ -128,11 +128,16 @@ input,select,textarea{font-family:inherit;}
 
 /* v11: k-anonymity guardrail (item 20) + per-tenant segmentation (item 4) */
 .cohort-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
-.kstat{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:9px 11px;text-align:center;}
+.kstat{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:9px 11px;text-align:center;transition:all .16s cubic-bezier(.4,0,.2,1);}
+.kstat:hover{box-shadow:var(--sh1);border-color:var(--i2);transform:translateY(-1px);}
 .kstat-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--i4);margin-bottom:3px;}
 .kstat-val{font-size:var(--fs-h2);font-weight:600;color:var(--i7);font-family:var(--serif);}
 .kstat-val.suppressed{color:var(--i4);font-size:var(--fs-base);font-family:var(--sans);}
 .tenant-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);background:var(--i0);border:1px solid var(--i1);padding:3px 9px;border-radius:99px;margin-bottom:10px;}
+.dash-mix-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.dash-mix-chip{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--i6);background:var(--i0);border:1px solid var(--i1);padding:4px 10px;border-radius:99px;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);}
+.dash-mix-chip:hover{border-color:var(--n3);color:var(--n7);}
+.dash-mix-chip.on{background:var(--n8);color:white;border-color:var(--n8);}
 
 /* v11: status indicator: dot + label, replaces pastel-pill badges for
    alerts/reminders (e.g. "Flu overdue"). No fill, no border: reads as
@@ -146,17 +151,15 @@ input,select,textarea{font-family:inherit;}
 
 /* v11: navigation shell: login / dashboard / cockpit views */
 .login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--n8);padding:24px;}
-.login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;}
+.login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.18);}
 .login-nameplate{background:var(--n8);padding:40px 36px 32px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);}
 .login-mark{display:flex;align-items:center;gap:13px;margin-bottom:20px;}
 .login-mark-icon{width:44px;height:auto;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .login-mark-icon img{width:100%;height:auto;display:block;}
 .login-mark-icon i{font-size:22px;color:white;}
 .login-acronym{font-family:var(--serif);font-size:42px;font-weight:600;color:white;letter-spacing:-1px;line-height:1;}
-.login-longname{display:flex;align-items:flex-start;gap:0;margin-top:12px;}
-.login-longname-bar{width:2px;background:rgba(255,255,255,.2);border-radius:1px;flex-shrink:0;margin-right:12px;align-self:stretch;}
-.login-longname-text{font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.45);line-height:1.7;}
-.login-longname-text strong{display:block;font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:1px;font-weight:500;color:rgba(255,255,255,.75);margin-bottom:2px;}
+.login-longname{margin-top:10px;}
+.login-longname-text{font-family:var(--sans);font-size:var(--fs-sm);font-weight:400;color:rgba(255,255,255,.55);line-height:1.5;}
 .login-body{padding:28px 32px 32px;}
 .login-label{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;display:block;}
 .login-card .role-grid{margin-bottom:18px;}
@@ -174,7 +177,9 @@ input,select,textarea{font-family:inherit;}
 .dash-view{padding:28px 28px 40px;max-width:1100px;margin:0 auto;}
 .dash-title{font-family:var(--serif);font-size:var(--fs-2xl);font-weight:600;color:var(--n8);}
 .dash-sub{font-size:var(--fs-sm);color:var(--i4);margin-top:2px;}
-.dash-search{display:flex;align-items:center;gap:9px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rmd);padding:9px 13px;margin:18px 0 16px;}
+.dash-search{display:flex;align-items:center;gap:9px;background:var(--wh);border:1.5px solid var(--i2);border-radius:var(--rmd);padding:9px 13px;margin:18px 0 16px;transition:all .16s cubic-bezier(.4,0,.2,1);}
+.dash-search:focus-within{border-color:var(--n6);box-shadow:0 0 0 3px rgba(11,31,58,.07);}
+.dash-search:focus-within i.ti-search{color:var(--n7);}
 .dash-search input{flex:1;border:none;outline:none;background:transparent;font-family:var(--sans);font-size:var(--fs-body);color:var(--i7);}
 .dash-search i{color:var(--i4);}
 .dash-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;}
@@ -197,7 +202,7 @@ input,select,textarea{font-family:inherit;}
 
 /* Dashboard filters */
 .dash-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
-.dash-filter{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border:1px solid var(--i2);color:var(--i4);background:transparent;transition:all .12s;}
+.dash-filter{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border:1px solid var(--i2);color:var(--i4);background:transparent;transition:all .16s cubic-bezier(.4,0,.2,1);}
 .dash-filter:hover{border-color:var(--n3);color:var(--n7);}
 .dash-filter.on{background:var(--n8);color:white;border-color:var(--n8);}
 .dash-filter .sind-dot{width:5px;height:5px;}
@@ -206,7 +211,7 @@ input,select,textarea{font-family:inherit;}
 .dash-recent{margin-bottom:20px;}
 .dash-recent-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;}
 .dash-recent-row{display:flex;gap:6px;flex-wrap:wrap;}
-.dash-recent-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .12s;}
+.dash-recent-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);}
 .dash-recent-chip:hover{border-color:var(--n3);background:var(--n0);}
 .dash-recent-chip .pid-sm{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);letter-spacing:.5px;}
 .dash-recent-chip .dis-sm{font-size:var(--fs-3xs);color:var(--i4);}
@@ -231,9 +236,15 @@ input,select,textarea{font-family:inherit;}
 
 /* v11: Identity & Access drawer */
 .role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
-.role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:10px 12px;cursor:pointer;transition:all .14s;}
-.role-card:hover{border-color:var(--n2);}
-.role-card.on{border-color:var(--n8);background:var(--n0);}
+.role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;transition:all .16s cubic-bezier(.34,1.3,.64,1);position:relative;}
+.role-card:hover{border-color:var(--n3);transform:translateY(-1px);}
+.role-card.on{border-color:var(--n8);background:var(--n0);box-shadow:0 2px 8px rgba(11,31,58,.08);}
+.role-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.role-card-top .ti-user, .role-card-top .ti-settings, .role-card-top .ti-plug-connected, .role-card-top .ti-eye{font-size:var(--fs-base);color:var(--i4);}
+.role-card.on .role-card-top .ti-user, .role-card.on .role-card-top .ti-settings, .role-card.on .role-card-top .ti-plug-connected, .role-card.on .role-card-top .ti-eye{color:var(--n7);}
+.role-check{width:15px;height:15px;display:flex;opacity:0;transition:opacity .14s;}
+.role-card.on .role-check{opacity:1;}
+.role-check .ti-circle-check{font-size:var(--fs-sm);color:var(--n7);}
 .role-lbl{font-size:var(--fs-base);font-weight:500;color:var(--i7);}
 .role-desc{font-size:var(--fs-xs);color:var(--i4);margin-top:2px;}
 .perm-grid{display:flex;flex-direction:column;border:1px solid var(--i1);border-radius:var(--rmd);overflow:hidden;}
@@ -803,7 +814,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .cop-cohort-hdr{display:flex;align-items:center;gap:9px;padding:10px 14px;background:var(--n8);}
 .cop-cohort-hdr .cop-hdr-mark{width:22px;height:22px;}
 .cop-cohort-hdr-name{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:white;}
-.cop-cohort-scan-btn{margin-left:auto;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:99px;cursor:pointer;background:transparent;}
+.cop-cohort-scan-btn{margin-left:auto;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:99px;cursor:pointer;background:transparent;transition:all .16s cubic-bezier(.4,0,.2,1);}
 .cop-cohort-scan-btn:hover{background:rgba(255,255,255,.08);color:white;}
 .cop-cohort-body{padding:10px 14px;}
 .cop-cohort-empty{font-size:var(--fs-xs);color:var(--i4);padding:6px 0;}
@@ -952,11 +963,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="login-acronym">AIROS</div>
       </div>
       <div class="login-longname">
-        <div class="login-longname-bar"></div>
-        <div class="login-longname-text">
-          <strong>Airway Intelligence Operating System</strong>
-          Classification · Phenotyping · Risk · Treatment<br>Engagement · Trajectory
-        </div>
+        <div class="login-longname-text">Airway Intelligence Operating System</div>
       </div>
     </div>
     <div class="login-body">
@@ -980,7 +987,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     </div>
     <div class="dash-search">
       <i class="ti ti-search"></i>
-      <input id="dash-search-input" placeholder="Jump to a patient ID or AIROS-2024-XXXX" oninput="dashSearch(this.value)" onkeydown="dashSearchKeydown(event)" autocomplete="off">
+      <input id="dash-search-input" placeholder="Jump to a patient ID or name" oninput="dashSearch(this.value)" onkeydown="dashSearchKeydown(event)" autocomplete="off">
     </div>
     <div class="cop-cohort" id="cop-cohort">
       <div class="cop-cohort-hdr">
@@ -1156,7 +1163,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     <div class="act-panel">
       <div class="act-hd">
         <div class="act-lbl">Current patient</div>
-        <div class="act-pt" id="aside-pid">AIROS-2024-00147</div>
+        <div class="act-pt" id="aside-pid">AIROS-2024-00147</div><!-- overwritten at runtime via pidPrefix() -->
         <div class="act-vis" id="aside-vis">Visit 4 · COPD · Follow-up</div>
       </div>
       <div class="act-btns" id="action-btns"></div>
@@ -1375,6 +1382,7 @@ const ICON_PATHS = {
   'chart-dots': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M3 3v18h18" /> <path d="M7 9a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M17 7a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M12 15a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M10.16 10.62l2.34 2.88" /> <path d="M15.088 13.328l2.837 -4.586" />',
   'report-analytics': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /> <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /> <path d="M9 17v-5" /> <path d="M12 17v-1" /> <path d="M15 17v-3" />',
   'cloud-off': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M9.58 5.548c.24 -.11 .492 -.207 .752 -.286c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 .957 -.383 1.824 -1.003 2.454m-2.997 1.033h-11.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.13 -.582 .37 -1.128 .7 -1.62" /> <path d="M3 3l18 18" />',
+  'plug-connected': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5" /> <path d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5" /> <path d="M3 21l2.5 -2.5" /> <path d="M18.5 5.5l2.5 -2.5" /> <path d="M10 11l-2 2" /> <path d="M13 14l-2 2" />',
 };
 function svgIcon(name) {
   const inner = ICON_PATHS[name];
@@ -1417,32 +1425,32 @@ const DB = {
   '00147': {
     disease: 'COPD', risk: 'r',
     identity: { internalRef:'a1f2e8b4-7c3d-4e91-9a2f-118f3c0d5e6b', responsibleClinician:'Dr. García' },
-    demographics: { age:64, sex:'Male', bmi:26.4, smoker:'Ex-smoker', packYears:20, quitDate:'Mar 2024', onsetAge:58 },
+    demographics: { age:64, sex:'Male', bmi:26.4, smoker:'Ex-smoker', packYears:20, quitDate:'Oct 2025', onsetAge:58 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:true, osteoporosis:false },
     vaccinations: { flu:false, pneumo:false, covid:true },
     meds: [
-      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Mar 2023' },
-      { drug:'Formoterol',  cls:'LABA', tag:'tn', dose:'12 mcg', freq:'Twice daily',since:'Oct 2024' },
-      { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'400 mcg',freq:'Twice daily',since:'Jun 2022' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',        since:'Jan 2021' }
+      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Oct 2024' },
+      { drug:'Formoterol',  cls:'LABA', tag:'tn', dose:'12 mcg', freq:'Twice daily',since:'May 2026' },
+      { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'400 mcg',freq:'Twice daily',since:'Jan 2024' },
+      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',        since:'Aug 2022' }
     ],
     visits: [
-      { n:1, date:'12 Mar 2022', label:'Baseline', fev1:72, fvc:3.8, ratio:68, cat:9,  mmrc:1, exac:0, hosp:0, ocs:0, eos:180, act:null, adherence:90, technique:'adequate',   note:'Stable. LAMA started.' },
-      { n:2, date:'18 Jan 2023', label:'Follow-up', fev1:64, fvc:3.4, ratio:64, cat:12, mmrc:2, exac:1, hosp:0, ocs:1, eos:220, act:null, adherence:82, technique:'suboptimal', note:'Mild decline. ICS added. 1 exacerbation past year.' },
-      { n:3, date:'18 Sep 2024', label:'Follow-up', fev1:52, fvc:3.1, ratio:58, cat:15, mmrc:3, exac:2, hosp:0, ocs:1, eos:260, act:null, adherence:78, technique:'suboptimal', note:'Accelerating decline. LABA added Oct 2024.' },
-      { n:4, date:'14 Nov 2024', label:'Post-ED',   fev1:48, fvc:3.0, ratio:56, cat:18, mmrc:3, exac:3, hosp:1, ocs:2, eos:280, act:null, sixMWD:280, adherence:75, technique:'suboptimal', note:'Post-admission review. FEV₁ not recovered to baseline.' }
+      { n:1, date:'06 May 2025', label:'Baseline', fev1:72, fvc:3.8, ratio:68, cat:9,  mmrc:1, exac:0, hosp:0, ocs:0, eos:180, act:null, adherence:90, technique:'adequate',   note:'Stable. LAMA started.' },
+      { n:2, date:'13 Mar 2026', label:'Follow-up', fev1:64, fvc:3.4, ratio:64, cat:12, mmrc:2, exac:1, hosp:0, ocs:1, eos:220, act:null, adherence:82, technique:'suboptimal', note:'Mild decline. ICS added. 1 exacerbation past year.' },
+      { n:3, date:'14 Apr 2026', label:'Follow-up', fev1:52, fvc:3.1, ratio:58, cat:15, mmrc:3, exac:2, hosp:0, ocs:1, eos:260, act:null, adherence:78, technique:'suboptimal', note:'Accelerating decline. LABA added May 2026.' },
+      { n:4, date:'10 Jun 2026', label:'Post-ED',   fev1:48, fvc:3.0, ratio:56, cat:18, mmrc:3, exac:3, hosp:1, ocs:2, eos:280, act:null, sixMWD:280, adherence:75, technique:'suboptimal', note:'Post-admission review. FEV₁ not recovered to baseline.' }
     ],
     timeline: [
-      { dot:'r', date:'14 Nov 2024 · Admission', ev:'Emergency admission', tag:{cls:'tr',tx:'ED · 3 days'}, detail:'FEV₁ 38% · IV steroids · antibiotics · O₂ support' },
-      { dot:'a', date:'02 Oct 2024 · Rx change',  ev:'LABA added: Formoterol 12 mcg BID', tag:{cls:'ta',tx:'Step-up'}, detail:'Step-up from LAMA + ICS following suboptimal control' },
-      { dot:'',  date:'18 Sep 2024 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Clinic'}, detail:'FEV₁ 52% · CAT 15 · decline noted · LABA planned' },
-      { dot:'g', date:'15 Mar 2024 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'20 pack-years · NRT prescribed · sustained to date' },
-      { dot:'a', date:'08 Feb 2024 · ED', ev:'Exacerbation', tag:{cls:'ta',tx:'Same-day'}, detail:'Oral steroids + antibiotics · discharged same day' }
+      { dot:'r', date:'10 Jun 2026 · Admission', ev:'Emergency admission', tag:{cls:'tr',tx:'ED · 3 days'}, detail:'FEV₁ 38% · IV steroids · antibiotics · O₂ support' },
+      { dot:'a', date:'28 Apr 2026 · Rx change',  ev:'LABA added: Formoterol 12 mcg BID', tag:{cls:'ta',tx:'Step-up'}, detail:'Step-up from LAMA + ICS following suboptimal control' },
+      { dot:'',  date:'14 Apr 2026 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Clinic'}, detail:'FEV₁ 52% · CAT 15 · decline noted · LABA planned' },
+      { dot:'g', date:'09 Oct 2025 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'20 pack-years · NRT prescribed · sustained to date' },
+      { dot:'a', date:'03 Sep 2025 · ED', ev:'Exacerbation', tag:{cls:'ta',tx:'Same-day'}, detail:'Oral steroids + antibiotics · discharged same day' }
     ],
     referrals: [
-      { label:'Pulmonary rehabilitation', status:'pending', date:'Referred 14 Nov 2024' },
-      { label:'Psychology: anxiety/depression', status:'pending', date:'Referred 14 Nov 2024' },
-      { label:'Smoking cessation NRT', status:'done', date:'Completed Mar 2024' }
+      { label:'Pulmonary rehabilitation', status:'pending', date:'Referred 10 Jun 2026' },
+      { label:'Psychology: anxiety/depression', status:'pending', date:'Referred 10 Jun 2026' },
+      { label:'Smoking cessation NRT', status:'done', date:'Completed Oct 2025' }
     ],
     completeness: [
       { label:'Patient ID',   pct:100, cls:'cf-full' },
@@ -1468,25 +1476,25 @@ const DB = {
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     meds: [
-      { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'200 mcg',freq:'Twice daily',since:'Jan 2022' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN daily',  since:'Jan 2022' }
+      { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'200 mcg',freq:'Twice daily',since:'Aug 2023' },
+      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN daily',  since:'Aug 2023' }
     ],
     visits: [
-      { n:1, date:'15 Jan 2022', label:'Baseline',  fev1:88, fvc:4.2, ratio:78, cat:null, mmrc:0, exac:0, hosp:0, ocs:0, eos:220, act:23, rescueWk:0,   nightWk:0,  adherence:95, technique:'adequate',   note:'Well controlled. Low-dose ICS started.' },
-      { n:2, date:'08 Aug 2024', label:'Stable',    fev1:85, fvc:4.0, ratio:76, cat:null, mmrc:1, exac:0, hosp:0, ocs:0, eos:310, act:19, rescueWk:1,   nightWk:1,  adherence:88, technique:'adequate',   note:'Eos rising. Still controlled. Allergen referral.' },
-      { n:3, date:'12 Nov 2024', label:'Deteriorating', fev1:72, fvc:3.6, ratio:70, cat:null, mmrc:2, exac:2, hosp:0, ocs:1, eos:420, act:14, rescueWk:7, nightWk:4, adherence:60, technique:'poor', note:'New apartment (mould, cats). Rapid deterioration. Step-up urgent.' }
+      { n:1, date:'11 Mar 2025', label:'Baseline',  fev1:88, fvc:4.2, ratio:78, cat:null, mmrc:0, exac:0, hosp:0, ocs:0, eos:220, act:23, rescueWk:0,   nightWk:0,  adherence:95, technique:'adequate',   note:'Well controlled. Low-dose ICS started.' },
+      { n:2, date:'04 Mar 2026', label:'Stable',    fev1:85, fvc:4.0, ratio:76, cat:null, mmrc:1, exac:0, hosp:0, ocs:0, eos:310, act:19, rescueWk:1,   nightWk:1,  adherence:88, technique:'adequate',   note:'Eos rising. Still controlled. Allergen referral.' },
+      { n:3, date:'08 Jun 2026', label:'Deteriorating', fev1:72, fvc:3.6, ratio:70, cat:null, mmrc:2, exac:2, hosp:0, ocs:1, eos:420, act:14, rescueWk:7, nightWk:4, adherence:60, technique:'poor', note:'New apartment (mould, cats). Rapid deterioration. Step-up urgent.' }
     ],
     timeline: [
       { dot:'r', date:'Today · Clinic', ev:'ACT 14: uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
-      { dot:'a', date:'12 Nov 2024 · Review', ev:'Deterioration noted', tag:{cls:'ta',tx:'Worsening'}, detail:'Eos 420 · rescue daily · new apartment trigger identified' },
-      { dot:'a', date:'Oct 2024 · Exacerbation', ev:'Acute attack', tag:{cls:'ta',tx:'ED'}, detail:'Nebulised salbutamol · oral prednisolone · discharged' },
-      { dot:'',  date:'Aug 2024 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Stable'}, detail:'ACT 19 · eos rising to 310 · allergen referral made' },
-      { dot:'g', date:'Jan 2022 · Baseline', ev:'Asthma diagnosis', tag:{cls:'tg',tx:'Diagnosis'}, detail:'ACT 23 · well controlled on low-dose ICS' }
+      { dot:'a', date:'08 Jun 2026 · Review', ev:'Deterioration noted', tag:{cls:'ta',tx:'Worsening'}, detail:'Eos 420 · rescue daily · new apartment trigger identified' },
+      { dot:'a', date:'May 2026 · Exacerbation', ev:'Acute attack', tag:{cls:'ta',tx:'ED'}, detail:'Nebulised salbutamol · oral prednisolone · discharged' },
+      { dot:'',  date:'Mar 2026 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Stable'}, detail:'ACT 19 · eos rising to 310 · allergen referral made' },
+      { dot:'g', date:'Aug 2023 · Baseline', ev:'Asthma diagnosis', tag:{cls:'tg',tx:'Diagnosis'}, detail:'ACT 23 · well controlled on low-dose ICS' }
     ],
     referrals: [
       { label:'Biologic therapy: anti-IL5',    status:'pending', date:'Referred today' },
-      { label:'Allergen / environmental assessment', status:'pending', date:'Referred Aug 2024' },
-      { label:'Asthma nurse education',          status:'done',    date:'Completed Jan 2022' }
+      { label:'Allergen / environmental assessment', status:'pending', date:'Referred Mar 2026' },
+      { label:'Asthma nurse education',          status:'done',    date:'Completed Aug 2023' }
     ],
     completeness: [
       { label:'Patient ID',   pct:100, cls:'cf-full' },
@@ -1508,30 +1516,30 @@ const DB = {
   '00089': {
     disease: 'COPD', risk: 'g',
     identity: { internalRef:'7e29b6f0-3a14-4c5d-bf02-6d8e1a9c4f37', responsibleClinician:'Dr. Patel' },
-    demographics: { age:71, sex:'Male', bmi:24.8, smoker:'Ex-smoker', packYears:35, quitDate:'Jan 2022', onsetAge:62 },
+    demographics: { age:71, sex:'Male', bmi:24.8, smoker:'Ex-smoker', packYears:35, quitDate:'Aug 2023', onsetAge:62 },
     comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:false, osteoporosis:false },
     vaccinations: { flu:true, pneumo:true, covid:true },
     meds: [
-      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Feb 2022' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',       since:'Feb 2022' }
+      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Sep 2023' },
+      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',       since:'Sep 2023' }
     ],
     visits: [
-      { n:1, date:'01 Feb 2022', label:'Baseline',  fev1:54, fvc:2.8, ratio:60, cat:14, mmrc:2, exac:1, hosp:0, ocs:1, eos:160, act:null, adherence:78, technique:'suboptimal', note:'COPD diagnosis. LAMA started. Smoking cessation counselling.' },
-      { n:2, date:'14 Jun 2022', label:'Follow-up', fev1:55, fvc:2.9, ratio:61, cat:13, mmrc:2, exac:1, hosp:0, ocs:0, eos:165, act:null, adherence:82, technique:'adequate',   note:'Stable. Smoking cessation maintained. Good technique.' },
-      { n:3, date:'20 Feb 2023', label:'Follow-up', fev1:58, fvc:3.0, ratio:62, cat:11, mmrc:1, exac:0, hosp:0, ocs:0, eos:170, act:null, adherence:88, technique:'adequate',   note:'Improving. Pack-year effect plateauing post-cessation.' },
-      { n:4, date:'15 Aug 2023', label:'Follow-up', fev1:60, fvc:3.1, ratio:63, cat:10, mmrc:1, exac:0, hosp:0, ocs:0, eos:175, act:null, adherence:90, technique:'adequate',   note:'Good trajectory. Step-down review considered.' },
-      { n:5, date:'12 Mar 2024', label:'Follow-up', fev1:61, fvc:3.1, ratio:63, cat:9,  mmrc:1, exac:0, hosp:0, ocs:0, eos:178, act:null, adherence:91, technique:'adequate',   note:'FEV₁ stabilising. CAT low. Consider 6-monthly review.' },
-      { n:6, date:'02 Oct 2024', label:'Current',   fev1:62, fvc:3.2, ratio:64, cat:8,  mmrc:1, exac:0, hosp:0, ocs:0, eos:180, act:null, sixMWD:420, adherence:92, technique:'adequate',   note:'Best FEV₁ since diagnosis. Stable Group B. IHD review due.' }
+      { n:1, date:'28 Mar 2025', label:'Baseline',  fev1:54, fvc:2.8, ratio:60, cat:14, mmrc:2, exac:1, hosp:0, ocs:1, eos:160, act:null, adherence:78, technique:'suboptimal', note:'COPD diagnosis. LAMA started. Smoking cessation counselling.' },
+      { n:2, date:'08 Aug 2025', label:'Follow-up', fev1:55, fvc:2.9, ratio:61, cat:13, mmrc:2, exac:1, hosp:0, ocs:0, eos:165, act:null, adherence:82, technique:'adequate',   note:'Stable. Smoking cessation maintained. Good technique.' },
+      { n:3, date:'15 Apr 2026', label:'Follow-up', fev1:58, fvc:3.0, ratio:62, cat:11, mmrc:1, exac:0, hosp:0, ocs:0, eos:170, act:null, adherence:88, technique:'adequate',   note:'Improving. Pack-year effect plateauing post-cessation.' },
+      { n:4, date:'10 Mar 2025', label:'Follow-up', fev1:60, fvc:3.1, ratio:63, cat:10, mmrc:1, exac:0, hosp:0, ocs:0, eos:175, act:null, adherence:90, technique:'adequate',   note:'Good trajectory. Step-down review considered.' },
+      { n:5, date:'06 Oct 2025', label:'Follow-up', fev1:61, fvc:3.1, ratio:63, cat:9,  mmrc:1, exac:0, hosp:0, ocs:0, eos:178, act:null, adherence:91, technique:'adequate',   note:'FEV₁ stabilising. CAT low. Consider 6-monthly review.' },
+      { n:6, date:'28 Apr 2026', label:'Current',   fev1:62, fvc:3.2, ratio:64, cat:8,  mmrc:1, exac:0, hosp:0, ocs:0, eos:180, act:null, sixMWD:420, adherence:92, technique:'adequate',   note:'Best FEV₁ since diagnosis. Stable Group B. IHD review due.' }
     ],
     timeline: [
-      { dot:'g', date:'02 Oct 2024 · Clinic', ev:'Best FEV₁ since diagnosis', tag:{cls:'tg',tx:'Improving'}, detail:'FEV₁ 62% · CAT 8 · adherence 92% · stable Group B' },
-      { dot:'g', date:'Mar 2024 · Clinic',    ev:'FEV₁ 61%: trajectory maintained', tag:{cls:'tg',tx:'Stable'}, detail:'No exacerbations 2+ years · good technique' },
-      { dot:'g', date:'Jan 2022 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'35 pack-years · NRT · quit sustained 2+ years' },
-      { dot:'a', date:'Dec 2021 · GP',        ev:'COPD diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'FEV₁ 54% · FEV₁/FVC 0.60 · referred to respiratory clinic' }
+      { dot:'g', date:'28 Apr 2026 · Clinic', ev:'Best FEV₁ since diagnosis', tag:{cls:'tg',tx:'Improving'}, detail:'FEV₁ 62% · CAT 8 · adherence 92% · stable Group B' },
+      { dot:'g', date:'Oct 2025 · Clinic',    ev:'FEV₁ 61%: trajectory maintained', tag:{cls:'tg',tx:'Stable'}, detail:'No exacerbations 2+ years · good technique' },
+      { dot:'g', date:'Aug 2023 · Lifestyle', ev:'Smoking cessation confirmed', tag:{cls:'tg',tx:'Positive'}, detail:'35 pack-years · NRT · quit sustained 2+ years' },
+      { dot:'a', date:'Jul 2023 · GP',        ev:'COPD diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'FEV₁ 54% · FEV₁/FVC 0.60 · referred to respiratory clinic' }
     ],
     referrals: [
-      { label:'Cardiac review: IHD', status:'pending', date:'Referred Oct 2024' },
-      { label:'Pulmonary rehabilitation: completed', status:'done', date:'Completed Sep 2022' }
+      { label:'Cardiac review: IHD', status:'pending', date:'Referred May 2026' },
+      { label:'Pulmonary rehabilitation: completed', status:'done', date:'Completed Apr 2024' }
     ],
     completeness: [
       { label:'Patient ID',   pct:100, cls:'cf-full' },
@@ -1554,28 +1562,28 @@ const DB = {
   '00311': {
     disease: 'ACO', risk: 'a',
     identity: { internalRef:'f08c1d7e-9b4a-4f63-a205-3e7c6b2d8f91', responsibleClinician:'Dr. García' },
-    demographics: { age:52, sex:'Female', bmi:23.6, smoker:'Ex-smoker', packYears:12, quitDate:'Jun 2020', onsetAge:30 },
+    demographics: { age:52, sex:'Female', bmi:23.6, smoker:'Ex-smoker', packYears:12, quitDate:'Jan 2022', onsetAge:30 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     meds: [
-      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Jun 2024' },
+      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Jan 2026' },
       { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'400 mcg',freq:'Twice daily',since:'Mar 2015' },
       { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',        since:'Mar 2015' }
     ],
     visits: [
-      { n:1, date:'20 Sep 2024', label:'ACO confirmed', fev1:60, fvc:3.1, ratio:66, cat:14, mmrc:2, exac:0, hosp:0, ocs:0, eos:240, act:20, bdResp:true, adherence:85, technique:'suboptimal', note:'Fixed obstruction confirmed. BD response 15% + 220mL. ACO diagnosis. LAMA added.' },
-      { n:2, date:'12 Nov 2024', label:'Current',       fev1:55, fvc:3.0, ratio:64, cat:16, mmrc:2, exac:1, hosp:0, ocs:1, eos:380, act:17, bdResp:true, sixMWD:320, adherence:80, technique:'suboptimal', note:'Eos rising significantly. ACT declining. Biologic referral made. LABA needed.' }
+      { n:1, date:'16 Apr 2026', label:'ACO confirmed', fev1:60, fvc:3.1, ratio:66, cat:14, mmrc:2, exac:0, hosp:0, ocs:0, eos:240, act:20, bdResp:true, adherence:85, technique:'suboptimal', note:'Fixed obstruction confirmed. BD response 15% + 220mL. ACO diagnosis. LAMA added.' },
+      { n:2, date:'08 Jun 2026', label:'Current',       fev1:55, fvc:3.0, ratio:64, cat:16, mmrc:2, exac:1, hosp:0, ocs:1, eos:380, act:17, bdResp:true, sixMWD:320, adherence:80, technique:'suboptimal', note:'Eos rising significantly. ACT declining. Biologic referral made. LABA needed.' }
     ],
     timeline: [
-      { dot:'a', date:'12 Nov 2024 · Clinic', ev:'Eos 380: biologic eligible', tag:{cls:'tp',tx:'ACO'}, detail:'CAT 16 · ACT 17 · biologic referral initiated · LABA to add' },
-      { dot:'a', date:'Oct 2024 · Exacerbation', ev:'First exacerbation post-ACO diagnosis', tag:{cls:'ta',tx:'ED'}, detail:'OCS + antibiotics · 5 days · discharged' },
-      { dot:'a', date:'20 Sep 2024 · Clinic',    ev:'ACO confirmed', tag:{cls:'tp',tx:'Diagnosis'}, detail:'FEV₁/FVC 0.66 post-BD · BD response present · eos 240 · ACO criteria met' },
-      { dot:'',  date:'Jun 2024 · Clinic',       ev:'Worsening asthma control', tag:{cls:'tn',tx:'Clinic'}, detail:'ACT 20 · new spirometry ordered · LAMA added empirically' }
+      { dot:'a', date:'08 Jun 2026 · Clinic', ev:'Eos 380: biologic eligible', tag:{cls:'tp',tx:'ACO'}, detail:'CAT 16 · ACT 17 · biologic referral initiated · LABA to add' },
+      { dot:'a', date:'May 2026 · Exacerbation', ev:'First exacerbation post-ACO diagnosis', tag:{cls:'ta',tx:'ED'}, detail:'OCS + antibiotics · 5 days · discharged' },
+      { dot:'a', date:'16 Apr 2026 · Clinic',    ev:'ACO confirmed', tag:{cls:'tp',tx:'Diagnosis'}, detail:'FEV₁/FVC 0.66 post-BD · BD response present · eos 240 · ACO criteria met' },
+      { dot:'',  date:'Jan 2026 · Clinic',       ev:'Worsening asthma control', tag:{cls:'tn',tx:'Clinic'}, detail:'ACT 20 · new spirometry ordered · LAMA added empirically' }
     ],
     referrals: [
-      { label:'Biologic therapy clinic',  status:'pending', date:'Referred 12 Nov 2024' },
-      { label:'Allergen assessment',      status:'pending', date:'Referred Sep 2024'    },
-      { label:'Respiratory physio',       status:'done',    date:'Completed Aug 2024'   }
+      { label:'Biologic therapy clinic',  status:'pending', date:'Referred 08 Jun 2026' },
+      { label:'Allergen assessment',      status:'pending', date:'Referred Apr 2026'    },
+      { label:'Respiratory physio',       status:'done',    date:'Completed Mar 2026'   }
     ],
     completeness: [
       { label:'Patient ID',   pct:100, cls:'cf-full' },
@@ -1601,28 +1609,28 @@ const DB = {
     comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:false, anxiety:false, osteoporosis:false },
     vaccinations: { flu:true, pneumo:false, covid:false },
     meds: [
-      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'Oct 2021' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',       since:'Oct 2021' },
+      { drug:'Tiotropium', cls:'LAMA', tag:'tt', dose:'18 mcg', freq:'Once daily', since:'May 2023' },
+      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN',       since:'May 2023' },
       { drug:'Metformin',   cls:'T2DM', tag:'ti2',dose:'500 mg', freq:'Twice daily',since:'Mar 2019' }
     ],
     visits: [
-      { n:1, date:'15 Oct 2021', label:'Baseline',  fev1:74, fvc:3.8, ratio:68, cat:15, mmrc:1, exac:0, hosp:0, ocs:0, eos:120, act:null, sputum:'white', sputumVol:'moderate', adherence:80, technique:'adequate',   note:'Chronic productive cough confirmed. LAMA started. Smoking cessation counselling.' },
-      { n:2, date:'22 Apr 2022', label:'Follow-up', fev1:73, fvc:3.7, ratio:68, cat:13, mmrc:1, exac:0, hosp:0, ocs:0, eos:130, act:null, sputum:'white', sputumVol:'moderate', adherence:82, technique:'adequate',   note:'Stable. Mucus clearance physio programme started.' },
-      { n:3, date:'18 Jan 2023', label:'Follow-up', fev1:72, fvc:3.6, ratio:67, cat:12, mmrc:1, exac:1, hosp:0, ocs:0, eos:140, act:null, sputum:'green', sputumVol:'high',     adherence:78, technique:'adequate',   note:'Infective exacerbation: green sputum · antibiotics given (5-day amoxicillin). Resolved.' },
-      { n:4, date:'15 Oct 2023', label:'Follow-up', fev1:70, fvc:3.5, ratio:67, cat:12, mmrc:1, exac:0, hosp:0, ocs:0, eos:145, act:null, sputum:'white', sputumVol:'low',      adherence:85, technique:'adequate',   note:'Stable. Sputum volume reduced since physio. Still smoking.' },
-      { n:5, date:'10 Nov 2024', label:'Current',   fev1:68, fvc:3.4, ratio:67, cat:11, mmrc:1, exac:0, hosp:0, ocs:0, eos:150, act:null, sixMWD:400, sputum:'white', sputumVol:'low',      adherence:88, technique:'adequate',   note:'Stable. Slow FEV₁ decline (smoking). Pneumococcal vaccination overdue. Smoking cessation priority.' }
+      { n:1, date:'11 Dec 2024', label:'Baseline',  fev1:74, fvc:3.8, ratio:68, cat:15, mmrc:1, exac:0, hosp:0, ocs:0, eos:120, act:null, sputum:'white', sputumVol:'moderate', adherence:80, technique:'adequate',   note:'Chronic productive cough confirmed. LAMA started. Smoking cessation counselling.' },
+      { n:2, date:'16 Jun 2025', label:'Follow-up', fev1:73, fvc:3.7, ratio:68, cat:13, mmrc:1, exac:0, hosp:0, ocs:0, eos:130, act:null, sputum:'white', sputumVol:'moderate', adherence:82, technique:'adequate',   note:'Stable. Mucus clearance physio programme started.' },
+      { n:3, date:'13 Mar 2026', label:'Follow-up', fev1:72, fvc:3.6, ratio:67, cat:12, mmrc:1, exac:1, hosp:0, ocs:0, eos:140, act:null, sputum:'green', sputumVol:'high',     adherence:78, technique:'adequate',   note:'Infective exacerbation: green sputum · antibiotics given (5-day amoxicillin). Resolved.' },
+      { n:4, date:'10 May 2025', label:'Follow-up', fev1:70, fvc:3.5, ratio:67, cat:12, mmrc:1, exac:0, hosp:0, ocs:0, eos:145, act:null, sputum:'white', sputumVol:'low',      adherence:85, technique:'adequate',   note:'Stable. Sputum volume reduced since physio. Still smoking.' },
+      { n:5, date:'06 Jun 2026', label:'Current',   fev1:68, fvc:3.4, ratio:67, cat:11, mmrc:1, exac:0, hosp:0, ocs:0, eos:150, act:null, sixMWD:400, sputum:'white', sputumVol:'low',      adherence:88, technique:'adequate',   note:'Stable. Slow FEV₁ decline (smoking). Pneumococcal vaccination overdue. Smoking cessation priority.' }
     ],
     timeline: [
-      { dot:'g', date:'10 Nov 2024 · Clinic', ev:'Stable: no exacerbations 12m', tag:{cls:'tg',tx:'Stable'}, detail:'CAT 11 · FEV₁ 68% · sputum white · mucus clearance improved' },
-      { dot:'',  date:'Oct 2023 · Clinic',    ev:'Sputum volume reduced', tag:{cls:'tn',tx:'Improving'}, detail:'ACBT technique maintained · still smoking' },
-      { dot:'a', date:'Feb 2023 · GP',        ev:'Infective exacerbation', tag:{cls:'ta',tx:'Antibiotics'}, detail:'Green sputum · amoxicillin 5 days · resolved fully' },
-      { dot:'g', date:'Apr 2022 · Physio',    ev:'Mucus clearance programme', tag:{cls:'tg',tx:'Enrolled'}, detail:'ACBT trained · diaphragmatic breathing · symptoms improving' },
-      { dot:'a', date:'Oct 2021 · Clinic',    ev:'Chronic bronchitis diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'Productive cough > 2 years · FEV₁ 74% · LAMA started' }
+      { dot:'g', date:'06 Jun 2026 · Clinic', ev:'Stable: no exacerbations 12m', tag:{cls:'tg',tx:'Stable'}, detail:'CAT 11 · FEV₁ 68% · sputum white · mucus clearance improved' },
+      { dot:'',  date:'May 2025 · Clinic',    ev:'Sputum volume reduced', tag:{cls:'tn',tx:'Improving'}, detail:'ACBT technique maintained · still smoking' },
+      { dot:'a', date:'Sep 2024 · GP',        ev:'Infective exacerbation', tag:{cls:'ta',tx:'Antibiotics'}, detail:'Green sputum · amoxicillin 5 days · resolved fully' },
+      { dot:'g', date:'Nov 2023 · Physio',    ev:'Mucus clearance programme', tag:{cls:'tg',tx:'Enrolled'}, detail:'ACBT trained · diaphragmatic breathing · symptoms improving' },
+      { dot:'a', date:'May 2023 · Clinic',    ev:'Chronic bronchitis diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'Productive cough > 2 years · FEV₁ 74% · LAMA started' }
     ],
     referrals: [
-      { label:'Smoking cessation clinic', status:'pending', date:'Referred 10 Nov 2024' },
-      { label:'Physiotherapy: ACBT',     status:'done',    date:'Completed Apr 2022'   },
-      { label:'Diabetologist review',     status:'pending', date:'Referred Nov 2024'    }
+      { label:'Smoking cessation clinic', status:'pending', date:'Referred 06 Jun 2026' },
+      { label:'Physiotherapy: ACBT',     status:'done',    date:'Completed Nov 2023'   },
+      { label:'Diabetologist review',     status:'pending', date:'Referred Jun 2026'    }
     ],
     completeness: [
       { label:'Patient ID',    pct:100, cls:'cf-full' },
@@ -1814,7 +1822,7 @@ function acoFormalCriteria(pt, v) {
 ═══════════════════════════════════════════════════════════════════ */
 const ANCHOR_DATE = new Date('2024-11-16');
 function parseClinDate(str) {
-  // "14 Nov 2024" -> Date
+  // "10 Jun 2026" -> Date
   const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   const parts = str.split(' ');
   if (parts.length < 3) return null;
@@ -1994,7 +2002,7 @@ function render() {
   if (g('pctx-disp')) g('pctx-disp').textContent = `Visit ${v.n} of ${pt.visits.length} · ${v.date}`;
 
   /* Aside */
-  if (g('aside-pid')) g('aside-pid').textContent = `AIROS-2024-${currentPt}`;
+  if (g('aside-pid')) g('aside-pid').textContent = `${pidPrefix(currentPt)}${currentPt}`;
   if (g('aside-vis')) g('aside-vis').textContent = `Visit ${v.n} · ${d.replace('_',' ')} · ${v.n===pt.visits.length?'Current':'Historical'}`;
 
   /* METRICS: disease adaptive */
@@ -2412,7 +2420,7 @@ function renderCohort() {
     return `<div class="ci${id===currentPt?' on':''}" onclick="selectPt('${id}')">
       <div class="crisk cr-${pt.risk}"></div>
       <div class="ci-main">
-        <div class="ci-id">AIROS-2024-${id}</div>
+        <div class="ci-id">${pidPrefix(id)}${id}</div>
         <div class="ci-name">${pt.demographics.age}yr ${pt.demographics.sex}</div>
         <div class="ci-detail">${zoneStr}</div>
         <div class="ci-dis" style="color:${disCol}">${disLabel}</div>
@@ -2439,7 +2447,7 @@ function selectPt(id) {
   trackRecentPt(id);
   logIdentityEvent({ action:'patient_record_opened', patient:id, purpose:'clinical_access', path:'direct', mfa:'n/a', breakGlass:false });
   if (appView !== 'cockpit') showView('cockpit');
-  g('pid-disp').textContent = `AIROS-2024-${id}`;
+  g('pid-disp').textContent = `${pidPrefix(id)}${id}`;
   document.querySelectorAll('.ci').forEach(el => el.classList.remove('on'));
   /* GAP 12: brief skeleton loading state */
   const cockpit = g('cockpit');
@@ -2448,7 +2456,7 @@ function selectPt(id) {
     render();
     if (cockpit) { cockpit.style.opacity = '1'; }
   }, 120);
-  notify(`Loaded AIROS-2024-${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
+  notify(`Loaded ${pidPrefix(id)}${id} · ${DB[id].disease.replace('_',' ')}`, 'info');
 }
 
 /* v11: command palette: build, filter, render, navigate */
@@ -2456,7 +2464,7 @@ function buildCommandList() {
   const cmds = [];
   Object.entries(DB).forEach(([id,p]) => {
     cmds.push({ cat:'Patients', icon:'ti-fingerprint',
-      label:`AIROS-2024-${getDisplayAlias(id)}`,
+      label:`${pidPrefix(id)}${getDisplayAlias(id)}`,
       sub:`${p.disease.replace('_',' ')} · ${p.demographics.age}yr ${p.demographics.sex}`,
       action:`closeCmdK();selectPt('${id}')` });
   });
@@ -2556,7 +2564,7 @@ function buildHeaderContext(view) {
         <span class="bcrumb-link" onclick="goToDashboard()"><i class="ti ti-layout-grid"></i>Dashboard</span>
         <span class="bcrumb-sep">/</span>
         <div class="bcrumb-cur">
-          <span class="bcrumb-pid" id="pid-disp">AIROS-2024-${currentPt}</span>
+          <span class="bcrumb-pid" id="pid-disp">${pidPrefix(currentPt)}${currentPt}</span>
           <span class="db" id="dis-badge"></span>
         </div>
       </div>`;
@@ -2615,11 +2623,16 @@ function goToDashboard() {
 }
 
 /* Login */
+const LOGIN_ROLE_ICONS = { clinician:'user', admin:'settings', integration:'plug-connected', auditor:'eye' };
 function buildLoginRoles() {
   const el = g('login-roles');
   if (!el) return;
   el.innerHTML = Object.entries(RBAC_ROLES).map(([key,r]) =>
-    `<div class="role-card${loginSelectedRole===key?' on':''}" onclick="selectLoginRole('${key}')"><div class="role-lbl">${r.label}</div><div class="role-desc">${r.desc}</div></div>`
+    `<div class="role-card${loginSelectedRole===key?' on':''}" onclick="selectLoginRole('${key}')" tabindex="0" role="radio" aria-checked="${loginSelectedRole===key}" aria-label="Sign in as ${r.label}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectLoginRole('${key}')}">
+      <div class="role-card-top"><i class="ti ti-${LOGIN_ROLE_ICONS[key]||'user'}"></i><div class="role-check"><i class="ti ti-circle-check"></i></div></div>
+      <div class="role-lbl">${r.label}</div>
+      <div class="role-desc">${r.desc}</div>
+    </div>`
   ).join('');
 }
 function selectLoginRole(key) {
@@ -2634,6 +2647,7 @@ function doLogin() {
   notify(`Signed in as ${RBAC_ROLES[currentUserRole].label}`, 'ok');
   updateOfflineIndicator();
   broadcastSessionState();
+  copCohortAnomalyBackground();
 }
 
 /* Dashboard */
@@ -2649,7 +2663,7 @@ async function copCohortScan() {
   body.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
   const summaries = Object.entries(DB).map(([id, pt]) => {
     const v = pt.visits[pt.visits.length - 1];
-    return `AIROS-2024-${id} (${pt.disease}): FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%, smoking ${pt.demographics.smoker}, last visit ${v.date}`;
+    return `${pidPrefix(id)}${id} (${pt.disease}): FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%, smoking ${pt.demographics.smoker}, last visit ${v.date}`;
   }).join('\n');
   const prompt = `You are AIROS clinical reasoning engine performing a cohort-level scan across an entire clinic's patients, not a single patient.
 
@@ -2669,7 +2683,7 @@ If no patient stands out as urgent, return an empty array.`;
       return;
     }
     body.innerHTML = parsed.map(p => {
-      const id = (p.pid||'').replace('AIROS-2024-','');
+      const id = (p.pid||'').replace(/AIROS-\d{4}-/,'');
       copCohortFlags[id] = p.reason;
       return `<div class="cop-cohort-row">
         <span class="cop-cohort-row-pid" onclick="selectPt('${id}')">${p.pid}</span>
@@ -2682,20 +2696,13 @@ If no patient stands out as urgent, return an empty array.`;
   }
 }
 
-async function copCohortAnomaly() {
-  const perms = RBAC_PERMS[currentUserRole];
-  const body = g('cop-cohort-body');
-  if (!body) return;
-  if (!perms.resolve) {
-    body.innerHTML = `<div class="cop-cohort-empty">${RBAC_ROLES[currentUserRole].label} access is read-only for cohort scans.</div>`;
-    return;
-  }
-  body.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+let copAnomalyScanRun = false; // tracks whether the background scan has run this session, to avoid repeating it
+async function copRunAnomalyScanCore() {
   const byDisease = {};
   Object.entries(DB).forEach(([id, pt]) => {
     if (!byDisease[pt.disease]) byDisease[pt.disease] = [];
     const v = pt.visits[pt.visits.length - 1];
-    byDisease[pt.disease].push(`AIROS-2024-${id}: FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%, decline pattern across ${pt.visits.length} visits`);
+    byDisease[pt.disease].push(`${pidPrefix(id)}${id}: FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%, decline pattern across ${pt.visits.length} visits`);
   });
   const groupedSummary = Object.entries(byDisease).map(([disease, list]) =>
     `${disease} group (${list.length} patients):\n${list.join('\n')}`
@@ -2707,20 +2714,52 @@ ${groupedSummary}
 Identify 1 to 3 patients who diverge most from their peer group in a clinically meaningful way (for example, unusually rapid decline relative to others with the same disease, or an eosinophil or adherence value that stands out against the group). If nothing genuinely diverges, say so rather than forcing a finding. Return ONLY a JSON array, no markdown:
 [{"pid":"AIROS-2024-XXXXX","reason":"one sentence naming the peer group and what diverges, using actual numbers, no em-dashes"}]
 If no patient is a genuine outlier, return an empty array.`;
+  const raw = await callCopAPI(prompt, copScaleTok(500));
+  const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  parsed.forEach(p => {
+    const id = (p.pid||'').replace(/AIROS-\d{4}-/,'');
+    copCohortFlags[id] = p.reason;
+  });
+  return parsed;
+}
+async function copCohortAnomalyBackground() {
+  if (copAnomalyScanRun) return; // already run this session, avoid repeating the call
+  const perms = RBAC_PERMS[currentUserRole];
+  if (!perms.resolve) return; // read-only roles do not get a background scan either
+  copAnomalyScanRun = true;
   try {
-    const raw = await callCopAPI(prompt, copScaleTok(500));
-    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    await copRunAnomalyScanCore();
+    renderDashboard();
+  } catch(e) {
+    // Silent failure for the background path: this is a quiet enrichment, not a user-initiated action,
+    // so it should never surface an error toast. The manual "Find outliers" button remains available
+    // and will report errors normally if a clinician explicitly retries.
+  }
+}
+async function copCohortAnomaly() {
+  const perms = RBAC_PERMS[currentUserRole];
+  const body = g('cop-cohort-body');
+  if (!body) return;
+  if (!perms.resolve) {
+    body.innerHTML = `<div class="cop-cohort-empty">${RBAC_ROLES[currentUserRole].label} access is read-only for cohort scans.</div>`;
+    return;
+  }
+  body.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  try {
+    const parsed = await copRunAnomalyScanCore();
+    copAnomalyScanRun = true;
     if (!parsed.length) {
       body.innerHTML = '<div class="cop-cohort-empty">No patients diverge meaningfully from their disease-matched peers right now.</div>';
       return;
     }
     body.innerHTML = parsed.map(p => {
-      const id = (p.pid||'').replace('AIROS-2024-','');
+      const id = (p.pid||'').replace(/AIROS-\d{4}-/,'');
       return `<div class="cop-cohort-row">
         <span class="cop-cohort-row-pid" onclick="selectPt('${id}')">${p.pid}</span>
         <span class="cop-cohort-row-body"><i class="ti ti-chart-dots" style="font-size:var(--fs-2xs);color:var(--n5);margin-right:3px"></i>${p.reason}</span>
       </div>`;
     }).join('');
+    renderDashboard();
   } catch(e) {
     body.innerHTML = `<div class="cop-cohort-empty">${copApiErrorMessage(e)}</div>`;
   }
@@ -2762,6 +2801,37 @@ Write a short clinical governance summary, 4-5 sentences, suitable for a quality
   }
 }
 
+function buildDashStatStrip() {
+  const entries = Object.entries(DB);
+  if (!entries.length) return '';
+  const zoneCounts = {r:0,a:0,g:0};
+  const diseaseCounts = {};
+  let adherenceRisk = 0;
+  entries.forEach(([,pt]) => {
+    zoneCounts[pt.risk] = (zoneCounts[pt.risk]||0) + 1;
+    diseaseCounts[pt.disease] = (diseaseCounts[pt.disease]||0) + 1;
+    const lastV = pt.visits[pt.visits.length-1];
+    if (lastV.adherence < 80) adherenceRisk++;
+  });
+  const anomalyCount = Object.keys(copCohortFlags||{}).length;
+  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'};
+  const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'};
+  const mixHTML = Object.entries(diseaseCounts).map(([d,n]) =>
+    `<span class="dash-mix-chip${dashFilters.disease===d?' on':''}" onclick="setDashFilter('disease','${d}')" tabindex="0" role="button" aria-label="Filter to ${disLabel[d]||d}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setDashFilter('disease','${d}')}"><span class="sind-dot" style="background:${disColor[d]||'var(--i4)'}"></span>${disLabel[d]||d} ${n}</span>`
+  ).join('');
+  return `
+  <div class="cohort-stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kstat"><div class="kstat-lbl">Total enrolled</div><div class="kstat-val">${entries.length}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Red zone</div><div class="kstat-val" style="color:var(--r6)">${zoneCounts.r||0}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Amber zone</div><div class="kstat-val" style="color:var(--a6)">${zoneCounts.a||0}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Green zone</div><div class="kstat-val" style="color:var(--g6)">${zoneCounts.g||0}</div></div>
+  </div>
+  <div class="cohort-stats" style="grid-template-columns:repeat(2,1fr)">
+    <div class="kstat"><div class="kstat-lbl">Adherence &lt;80%</div><div class="kstat-val" style="color:${adherenceRisk?'var(--a6)':'var(--i7)'}">${adherenceRisk}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Resident flags</div><div class="kstat-val${anomalyCount?'':' suppressed'}" style="${anomalyCount?'color:var(--n6)':''}">${anomalyCount || 'None yet'}</div></div>
+  </div>
+  <div class="dash-mix-row">${mixHTML}</div>`;
+}
 function renderDashboard() {
   const sub = g('dash-sub');
   const entries = Object.entries(DB);
@@ -2789,14 +2859,14 @@ function renderDashboard() {
       return `<div class="dash-recent-chip" onclick="selectPt('${id}')" title="${flagged?flagged.replace(/"/g,'&quot;'):''}">
         ${flagged?'<i class="ti ti-sparkles" style="font-size:var(--fs-2xs);color:var(--n6)"></i>':''}
         <div class="crisk cr-${pt.risk}" style="width:7px;height:7px;border-radius:50%;flex-shrink:0"></div>
-        <span class="pid-sm">AIROS-2024-${id}</span>
+        <span class="pid-sm">${pidPrefix(id)}${id}</span>
         <span class="dis-sm">${disLabel}</span>
       </div>`;
     }).join('')}</div>
   </div>` : '';
 
   const content = g('dash-content');
-  if (content) content.innerHTML = recentHTML + filterBar + `<div id="dash-cohort-region">${buildFilteredCohort()}</div>`;
+  if (content) content.innerHTML = buildDashStatStrip() + recentHTML + filterBar + `<div id="dash-cohort-region">${buildFilteredCohort()}</div>`;
 }
 
 let dashSearchTerm = '';
@@ -2815,7 +2885,7 @@ function buildFilteredCohort() {
   return bCohortOverviewCards(entries);
 }
 function dashSearch(q) {
-  dashSearchTerm = (q||'').trim().toLowerCase().replace('airos-2024-','');
+  dashSearchTerm = (q||'').trim().toLowerCase().replace(/airos-\d{4}-/,'');
   const content = g('dash-content');
   const cohortContainer = content?.querySelector('.cohort-grid, .dash-cards') || content;
   // Re-render only the filtered cohort portion, not the whole dashboard, so the search input itself never loses focus mid-typing
@@ -2825,7 +2895,7 @@ function dashSearch(q) {
 function dashSearchKeydown(e) {
   if (e.key !== 'Enter') return;
   const raw = e.target.value.trim();
-  const q = raw.toUpperCase().replace('AIROS-2024-', '');
+  const q = raw.toUpperCase().replace(/AIROS-\d{4}-/, '');
   const exactMatch = Object.keys(DB).find(id => id === q || getDisplayAlias(id).toUpperCase() === q);
   if (exactMatch) { selectPt(exactMatch); e.target.value = ''; dashSearchTerm = ''; return; }
   // If the live narrowing has reduced the list to exactly one patient, Enter opens it
@@ -2868,6 +2938,7 @@ function resetCopilotSession() {
   pchatHistory = [];
   dashSearchTerm = '';
   dashFilters = { disease:'all', zone:'all' };
+  copAnomalyScanRun = false;
 }
 function doLogout() {
   sessionMenuOpen = false;
@@ -3185,7 +3256,7 @@ function buildResolutionWorkflow(perms, abac) {
   if (rs.result) {
     const r = rs.result;
     html += `<div class="ia ${r.allowed?'ia-g':'ia-d'}" style="margin-top:10px"><i class="ti ti-${r.allowed?'shield-check':'shield-lock'}"></i><div class="ia-body">${r.allowed
-      ? `<strong>Request logged and approved.</strong> In a production system the Identity Vault Service would now resolve AIROS-2024-${getDisplayAlias(currentPt)} to its linked record.${r.breakGlass?' Flagged for mandatory break-glass review.':''}`
+      ? `<strong>Request logged and approved.</strong> In a production system the Identity Vault Service would now resolve ${pidPrefix(currentPt)}${getDisplayAlias(currentPt)} to its linked record.${r.breakGlass?' Flagged for mandatory break-glass review.':''}`
       : '<strong>Request denied.</strong> ABAC check failed and no break-glass override was applied.'}</div></div>`;
   }
   return html;
@@ -3200,7 +3271,7 @@ function buildIdentityAuditTable(perms) {
   return `<div style="display:flex;flex-direction:column;border:1px solid var(--i1);border-radius:var(--rmd);overflow:hidden">
     ${events.slice(0,12).map(e => `<div style="display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-bottom:1px solid var(--i1);font-size:var(--fs-2xs)">
       <span class="mono" style="color:var(--i4);width:90px;flex-shrink:0">${e.ts}</span>
-      <span style="flex:1">${e.action.replace(/_/g,' ')} · AIROS-2024-${getDisplayAlias(e.patient)}${e.detail?`: ${e.detail}`:''}${e.purpose?` · ${e.purpose.replace(/_/g,' ')}`:''}</span>
+      <span style="flex:1">${e.action.replace(/_/g,' ')} · ${pidPrefix(e.patient)}${getDisplayAlias(e.patient)}${e.detail?`: ${e.detail}`:''}${e.purpose?` · ${e.purpose.replace(/_/g,' ')}`:''}</span>
       <span class="mono" style="color:var(--i4)">${RBAC_ROLES[e.actor].label}</span>
       <span class="mono" style="color:var(--i4)">${e.mfa}</span>
       ${e.breakGlass?'<span class="sind r"><span class="sind-dot"></span>break-glass</span>':''}
@@ -3272,7 +3343,7 @@ function bActionPlan() {
   const hasSABA  = pt.meds.some(m=>m.cls==='SABA');
   const steps = items => items.map(s=>`<li class="apz-s"><span class="apz-arr">→</span>${s}</li>`).join('');
   const trigger = isAsthma ? 'ACT drops below 16' : 'CAT increases by more than 3 points';
-  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · AIROS-2024-${currentPt} · ${pt.disease.replace('_',' ')} · Engagement</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · ${pidPrefix(currentPt)}${currentPt} · ${pt.disease.replace('_',' ')} · Engagement</div>
   <div class="apz apz-g"><div class="apz-tt">Green zone: well controlled</div><ul class="apz-steps">${steps(['Continue current medications as prescribed',`Monitor daily: contact clinic if ${trigger}`,'Aim for 3000+ steps daily','Attend scheduled clinic review'])}</ul></div>
   <div class="apz apz-a"><div class="apz-tt">Amber zone: worsening</div><ul class="apz-steps">${steps([hasSABA?'Increase SABA: up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours: contact clinic','Rest and reduce exertion','Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma?'Double ICS dose if instructed':''])}</ul></div>
   <div class="apz apz-r"><div class="apz-tt">Red zone: emergency</div><ul class="apz-steps">${steps([hasSABA?'Use SABA immediately: 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive: call for assistance'])}</ul></div>
@@ -3449,7 +3520,7 @@ function bLongitudinal() {
 }
 
 function bFullRecord() {
-  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">All data sections for AIROS-2024-${currentPt}.</div>
+  return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">All data sections for ${pidPrefix(currentPt)}${currentPt}.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
     ${[['ti-id-badge','Patient ID & pseudonymisation','register'],['ti-user','Demographics & history','register'],['ti-stethoscope','Spirometry & investigations','investigations'],['ti-clipboard-list','Clinical scores','visit-update'],['ti-shield','Disease-specific assessment','visit-update'],['ti-leaf','Environmental & lifestyle','visit-update'],['ti-pill','Medications & adherence','medications'],['ti-chart-line','Longitudinal progression','longitudinal'],['ti-brain','Clinical analysis: all 7 layers','analysis'],['ti-target','Action plan','action-plan']].map(([icon,lbl,drw])=>`
       <button class="abt abt-s" onclick="closeDrw();setTimeout(()=>openDrw('${drw}'),100)">
@@ -3474,7 +3545,7 @@ function buildAuditLog() {
     { ts:v.date + ' 14:28', user:'Dr. García',  action:'Follow-up drawer opened · visit-update mode' },
     { ts:v.date + ' 14:10', user:'Dr. García',  action:`FEV₁ recorded: ${v.fev1}% · spirometry saved` },
     ...(pv ? [{ ts:pv.date + ' 09:15', user:'Dr. García', action:`Visit ${pv.n} saved · CAT ${pv.cat}${v.cat && pv.cat ? ' → '+v.cat : ''}` }] : []),
-    { ts:'System',           user:'AIROS',      action:`Pseudonymised ID generated: AIROS-2024-${currentPt}` },
+    { ts:'System',           user:'AIROS',      action:`Pseudonymised ID generated: ${pidPrefix(currentPt)}${currentPt}` },
   ];
   return entries.map(e => `
     <div style="display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--i1)">
@@ -3486,6 +3557,15 @@ function buildAuditLog() {
 }
 
 /* GAP 07: Cohort overview drawer */
+function dashFev1Trend(pt) {
+  if (pt.visits.length < 2) return null;
+  const last = pt.visits[pt.visits.length - 1].fev1;
+  const prev = pt.visits[pt.visits.length - 2].fev1;
+  const delta = last - prev;
+  if (delta <= -3) return { dir:'down', icon:'trending-down', color:'var(--r5)', label:`FEV₁ down ${Math.abs(delta)}pt since last visit` };
+  if (delta >= 3)  return { dir:'up',   icon:'trending-up',   color:'var(--g5)', label:`FEV₁ up ${delta}pt since last visit` };
+  return { dir:'flat', icon:'arrow-right', color:'var(--i4)', label:'FEV₁ stable since last visit' };
+}
 function bCohortOverviewCards(entries) {
   const cards = entries.map(([id, pt]) => {
     const lastV = pt.visits[pt.visits.length - 1];
@@ -3510,15 +3590,17 @@ function bCohortOverviewCards(entries) {
     const clickFn = appView === 'cockpit' ? `closeDrw();selectPt('${id}')` : `selectPt('${id}')`;
     const flagged = copCohortFlags[id];
     const flagBadge = flagged ? `<div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;padding:5px 9px;background:var(--n0);border:1px solid var(--n1);border-radius:var(--rsm)"><i class="ti ti-sparkles" style="font-size:var(--fs-2xs);color:var(--n6)"></i><span style="font-size:var(--fs-2xs);color:var(--n7);line-height:1.4">${flagged}</span></div>` : '';
-    return `<div style="background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .15s;" onclick="${clickFn}" tabindex="0" role="button" aria-label="Open patient AIROS-2024-${id}, ${pt.demographics.age} year old ${pt.demographics.sex}, ${disLabel}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${clickFn}}" onmouseover="this.style.borderColor='var(--n3)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform=''">
+    const trend = dashFev1Trend(pt);
+    const trendBadge = trend ? `<i class="ti ti-${trend.icon}" title="${trend.label}" style="font-size:var(--fs-xs);color:${trend.color};margin-left:6px;vertical-align:-1px"></i>` : '';
+    return `<div style="background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:16px;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);" onclick="${clickFn}" tabindex="0" role="button" aria-label="Open patient ${pidPrefix(id)}${id}, ${pt.demographics.age} year old ${pt.demographics.sex}, ${disLabel}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${clickFn}}" onmouseover="this.style.borderColor='var(--n3)';this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.borderColor='var(--i2)';this.style.transform='';this.style.boxShadow=''">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
         <div class="sind-dot" style="width:7px;height:7px;background:${alertSev==='r'?'var(--r5)':alertSev==='a'?'var(--a5)':'var(--g5)'}"></div>
-        <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4)">AIROS-2024-${id}</span>
+        <span style="font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4)">${pidPrefix(id)}${id}</span>
         <span style="font-family:var(--mono);font-size:var(--fs-3xs);text-transform:uppercase;letter-spacing:.8px;color:${disColor};margin-left:auto">${disLabel}</span>
       </div>
       ${flagBadge}
       <div style="font-family:var(--serif);font-size:var(--fs-h3);font-weight:600;color:var(--n8);margin-bottom:3px">${pt.demographics.age}yr ${pt.demographics.sex}</div>
-      <div style="font-size:var(--fs-sm);color:var(--i5);margin-bottom:10px">${zoneStr}</div>
+      <div style="font-size:var(--fs-sm);color:var(--i5);margin-bottom:10px">${zoneStr}${trendBadge}</div>
       <div class="sind ${alertSev}"><span class="sind-dot"></span>${topAlert}</div>
       <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i3)">Visit ${lastV.n} · ${lastV.date} · Adherence ${lastV.adherence}%</div>
     </div>`;
@@ -3566,7 +3648,7 @@ function bDemographics() {
   ${S('Smoking history','Classification',`<div class="fg">
     ${Sel('Smoking status',['Ex-smoker','Current smoker','Never smoked'],d.smoker)}
     <div class="fgrp"><label class="fl">Pack-years</label><div class="iuw"><input class="fi" type="number" step="0.1" value="${d.packYears}" oninput="markDirty()"><span class="iu">pk-yr</span></div></div>
-    <div class="fgrp"><label class="fl">Quit date</label><input class="fi" type="text" value="${d.quitDate||''}" placeholder="e.g. Mar 2024" oninput="markDirty()"></div>
+    <div class="fgrp"><label class="fl">Quit date</label><input class="fi" type="text" value="${d.quitDate||''}" placeholder="e.g. Oct 2025" oninput="markDirty()"></div>
   </div>`)}
   ${S('Comorbidities','Risk · Treatment',`<div class="fg">
     ${YN('Heart failure',        c.heartFailure)}
@@ -3643,7 +3725,7 @@ function bIdentityAccessBody() {
   const idSection = S('This patient&rsquo;s identifiers', 'pseudonym / linkage table', `
     <span class="tenant-badge"><i class="ti ti-building-hospital"></i>Tenant: General Hospital A · pseudonym keyspace tenant_001</span>
     <div class="id-tiers" style="margin:0 0 10px">
-      <div class="id-tier"><div class="id-tier-lbl">Display alias</div><div class="id-tier-val mono">AIROS-2024-${alias}</div><div class="id-tier-note">${rotations.length} rotation${rotations.length!==1?'s':''} this session</div></div>
+      <div class="id-tier"><div class="id-tier-lbl">Display alias</div><div class="id-tier-val mono">${pidPrefix(currentPt)}${alias}</div><div class="id-tier-note">${rotations.length} rotation${rotations.length!==1?'s':''} this session</div></div>
       <div class="id-tier"><div class="id-tier-lbl">Internal reference</div><div class="id-tier-val mono">${pt.identity.internalRef}</div><div class="id-tier-note">Stable across rotations · never shown to clinicians</div></div>
       <div class="id-tier"><div class="id-tier-lbl">Responsible clinician</div><div class="id-tier-val">${pt.identity.responsibleClinician}</div><div class="id-tier-note">Drives the ABAC check below</div></div>
     </div>
@@ -3747,6 +3829,8 @@ let regState = { step:1, maxStep:1, generatedId:null };
    8 symbols from a 32-character unambiguous alphabet (no 0/O/1/I/L) =
    40 bits of entropy, drawn from crypto.getRandomValues: grouped
    as XXXX-XXXX for readability. */
+function regYearPrefix() { return `AIROS-${new Date().getFullYear()}-`; }
+function pidPrefix(id) { const pt = DB[id]; return `AIROS-${(pt && pt.regYear) || 2024}-`; }
 const PSEUDO_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 function genPlatformId() {
   let token;
@@ -3790,8 +3874,8 @@ function abacCheck(id) {
   return {
     pass,
     reason: pass
-      ? `Dr. García is the responsible clinician for AIROS-2024-${getDisplayAlias(id)}`
-      : `Not the responsible clinician for AIROS-2024-${getDisplayAlias(id)}: assigned to ${pt.identity.responsibleClinician}`
+      ? `Dr. García is the responsible clinician for ${pidPrefix(id)}${getDisplayAlias(id)}`
+      : `Not the responsible clinician for ${pidPrefix(id)}${getDisplayAlias(id)}: assigned to ${pt.identity.responsibleClinician}`
   };
 }
 function getConsent(id) {
@@ -3875,7 +3959,7 @@ function toggleConsent(field) {
 
 function regIdBadge() {
   if (!regState.generatedId) return '';
-  return `<div class="reg-id-badge"><i class="ti ti-fingerprint"></i>AIROS-2024-${regState.generatedId}</div>`;
+  return `<div class="reg-id-badge"><i class="ti ti-fingerprint"></i>${regYearPrefix()}${regState.generatedId}</div>`;
 }
 
 function regNavButtons(showBack, nextLabel, nextAction) {
@@ -3942,7 +4026,7 @@ function regBuildPatientRecord() {
     .map(m => ({ drug:m.name, cls:m.cls||'Other', tag:'tn', dose:m.dose||'', freq:m.freq||'Once daily', since:todayLabel }));
 
   return {
-    disease, risk,
+    disease, risk, regYear: new Date().getFullYear(),
     identity: { internalRef: regState.internalRef || genInternalRef(), responsibleClinician: regState.responsibleClinician || RBAC_ROLES[currentUserRole]?.label || 'Unassigned' },
     demographics: {
       age: num('reg-age') ?? 0, sex: txt('reg-sex') || 'Other', bmi: num('reg-bmi') ?? null,
@@ -4002,7 +4086,7 @@ function regNext() {
     const record = regBuildPatientRecord();
     DB[regState.generatedId] = record;
     logIdentityEvent({ action:'patient_registered', patient:regState.generatedId, purpose:'registration', path:'register_drawer', mfa:'n/a', breakGlass:false });
-    notify(`Patient registered · AIROS-2024-${regState.generatedId}`,'ok');
+    notify(`Patient registered · ${regYearPrefix()}${regState.generatedId}`,'ok');
     closeDrw();
     if (appView === 'dashboard') renderDashboard();
   }
@@ -4047,7 +4131,7 @@ function regStep2() {
   <div class="reg-interstitial">
     <div class="reg-id-badge"><i class="ti ti-shield-check"></i>Pseudonymisation complete</div>
     <div class="xs muted mono" style="letter-spacing:2px;text-transform:uppercase">Platform ID generated</div>
-    <div class="reg-id-display">AIROS-2024-${regState.generatedId}</div>
+    <div class="reg-id-display">${regYearPrefix()}${regState.generatedId}</div>
     <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:-6px 0 18px">
       <span class="enc-badge"><i class="ti ti-lock"></i>AES-256 at rest</span>
       <span class="enc-badge"><i class="ti ti-shield-lock"></i>TLS 1.3 in transit</span>
@@ -4056,7 +4140,7 @@ function regStep2() {
     <div class="id-tiers">
       <div class="id-tier">
         <div class="id-tier-lbl">Display alias: shown in this UI</div>
-        <div class="id-tier-val mono">AIROS-2024-${regState.generatedId}</div>
+        <div class="id-tier-val mono">${regYearPrefix()}${regState.generatedId}</div>
         <div class="id-tier-note">Used throughout the clinical cockpit · can be rotated without breaking links below</div>
       </div>
       <div class="id-tier">
@@ -4183,7 +4267,7 @@ function regStep5() {
     ${YN('Pneumococcal', false)}
     ${YN('COVID-19 up to date', false)}
   </div>`)}
-  <div class="ia ia-g" style="margin-top:4px"><i class="ti ti-circle-check"></i><div class="ia-body">Ready to complete registration for <strong>AIROS-2024-${regState.generatedId}</strong>. The patient appears in the cohort list immediately after.</div></div>
+  <div class="ia ia-g" style="margin-top:4px"><i class="ti ti-circle-check"></i><div class="ia-body">Ready to complete registration for <strong>${regYearPrefix()}${regState.generatedId}</strong>. The patient appears in the cohort list immediately after.</div></div>
   ${regNavButtons(true, 'Register patient')}`;
 }
 
@@ -4261,7 +4345,7 @@ function runAll() {
     const ro = g('rep-out');
     if (!ro) return;
     const pt = getPt(), v = getVisit();
-    ro.textContent = `AIROS Report · AIROS-2024-${currentPt}\nGenerated: ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}\nDisease: ${pt.disease.replace('_',' ')} · Visit ${v.n} of ${pt.visits.length}\nNote: Intelligence output: not an EHR record\n${'═'.repeat(48)}\n\n`
+    ro.textContent = `AIROS Report · ${pidPrefix(currentPt)}${currentPt}\nGenerated: ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}\nDisease: ${pt.disease.replace('_',' ')} · Visit ${v.n} of ${pt.visits.length}\nNote: Intelligence output: not an EHR record\n${'═'.repeat(48)}\n\n`
       + [1,2,3,4,5,6,7].map(n=>ENG_OUTPUT(n,pt,v)).join('\n\n');
     notify('7-layer report generated', 'ok');
     /* v10: analysis is now current for this patient */
@@ -4432,13 +4516,13 @@ function renderCopContext() {
     <div class="cop-ctx-cell"><div class="cop-ctx-val ${ec}">${ctx.eos}</div><div class="cop-ctx-lbl">Eos c/µL</div></div>
     <div class="cop-ctx-cell"><div class="cop-ctx-val ${xc}">${ctx.exac}+${ctx.hosp}h</div><div class="cop-ctx-lbl">Exac+hosp</div></div>
     <div class="cop-ctx-cell"><div class="cop-ctx-val ${ac}">${ctx.adherence}%</div><div class="cop-ctx-lbl">Adherence</div></div>`;
-  g('cop-hdr-pid').textContent = `AIROS-2024-${currentPt}`;
+  g('cop-hdr-pid').textContent = `${pidPrefix(currentPt)}${currentPt}`;
 }
 
 function buildThoughtPrompt(ctx) {
   return `You are the clinical reasoning engine inside AIROS, a respiratory intelligence platform. Surface specific, patient-grounded clinical insights, not generic advice.
 
-PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, Stage ${ctx.stage||'N/A'}, Group ${ctx.group||'N/A'}, Control: ${ctx.control||'N/A'}
+PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, Stage ${ctx.stage||'N/A'}, Group ${ctx.group||'N/A'}, Control: ${ctx.control||'N/A'}
 FEV1: ${ctx.fev1}% | Decline: ${ctx.fev1Decline}${ctx.stageToIV?` | Months to Stage IV: ${ctx.stageToIV}`:''}
 Eos: ${ctx.eos} c/uL | CAT: ${ctx.cat||'N/A'} | ACT: ${ctx.act||'N/A'} | Adherence: ${ctx.adherence}% | Technique: ${ctx.technique}
 Exac 12m: ${ctx.exac} | Hosp: ${ctx.hosp} | OCS: ${ctx.ocs} | Smoking: ${ctx.smoker}
@@ -4471,7 +4555,7 @@ function buildDocPrompt(ctx, docType, register, lang) {
   return `You are AIROS document generation. ${langI}
 Document type: ${regMap[register||docType]||regMap.curso}
 
-PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, FEV1 ${ctx.fev1}%, Eos ${ctx.eos} c/uL
+PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, FEV1 ${ctx.fev1}%, Eos ${ctx.eos} c/uL
 Decline: ${ctx.fev1Decline}${ctx.stageToIV?`, ~${ctx.stageToIV} months to Stage IV`:''}
 Exac: ${ctx.exac} | Hosp: ${ctx.hosp} | Adherence: ${ctx.adherence}% | Treatment: ${ctx.meds}
 Smoking: ${ctx.smoker} | Age: ${ctx.age} | Sex: ${ctx.sex} | Pack-years: ${ctx.packYears}
@@ -4481,7 +4565,7 @@ VISIT HISTORY: ${ctx.visitHistory}
 
 ENGINE: ${ctx.moduleOutputs}
 
-Rules: Use only actual patient numbers above. No em-dashes. Section headings in ALL CAPS. Mark as AIROS-2024-${ctx.id}. 300-400 words. Clear plan section at end. This is a DRAFT for clinician review.`;
+Rules: Use only actual patient numbers above. No em-dashes. Section headings in ALL CAPS. Mark as ${pidPrefix(ctx.id)}${ctx.id}. 300-400 words. Clear plan section at end. This is a DRAFT for clinician review.`;
 }
 
 let copCallCount  = 0;
@@ -4732,7 +4816,7 @@ async function copSuggestCoding() {
   setPulse('thinking', 'Checking codes...');
   const prompt = `You are AIROS clinical reasoning engine. Suggest ICD-10 diagnosis codes and any relevant procedure or visit-type codes for this visit, based only on what is actually documented.
 
-PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}
+PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}
 FEV1 ${ctx.fev1}%, exacerbations ${ctx.exac}, hospitalisations ${ctx.hosp}, smoking status ${ctx.smoker}
 Comorbidities: ${ctx.comorbidities}
 Treatment: ${ctx.meds}
@@ -4764,7 +4848,7 @@ async function copSecondOpinion() {
   setPulse('thinking', 'Building the counter-case...');
   const prompt = `You are AIROS clinical reasoning engine, asked to argue against the current working diagnosis or treatment path for this patient. This is not a normal answer, this is a deliberate structured second opinion.
 
-PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}, control ${ctx.control||'N/A'}
+PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, stage ${ctx.stage||'N/A'}, group ${ctx.group||'N/A'}, control ${ctx.control||'N/A'}
 FEV1 ${ctx.fev1}%, decline ${ctx.fev1Decline}, eos ${ctx.eos}, exacerbations ${ctx.exac}, hospitalisations ${ctx.hosp}
 Adherence ${ctx.adherence}%, technique ${ctx.technique}, smoking ${ctx.smoker}
 Current treatment: ${ctx.meds}
@@ -4800,7 +4884,7 @@ async function copExplainChart(chartType) {
   const chartDesc = chartType === 'flow-volume'
     ? `a flow-volume loop comparing this patient's actual curve (FVC ${v.fvc||3.2}L, FEV1/FVC ratio ${v.ratio||70}%) against a normal reference pattern at the same FVC`
     : `a volume-time curve showing FEV1 reached at one second (${(((v.fvc||3.2))*((v.ratio||70))/100).toFixed(2)}L) compared against a normal reference pattern`;
-  const prompt = `You are AIROS clinical reasoning engine. A clinician just clicked to ask what a spirometry chart is showing, for patient AIROS-2024-${ctx.id} (${ctx.disease}, FEV1 ${ctx.fev1}%).
+  const prompt = `You are AIROS clinical reasoning engine. A clinician just clicked to ask what a spirometry chart is showing, for patient ${pidPrefix(ctx.id)}${ctx.id} (${ctx.disease}, FEV1 ${ctx.fev1}%).
 
 The chart is ${chartDesc}.
 
@@ -4838,7 +4922,7 @@ async function copSubmit() {
   const historyBlock = history.length
     ? '\nPrior questions this session:\n' + history.slice(-3).map(h=>`Q: ${h.q}\nA: ${h.a}`).join('\n')
     : '';
-  const prompt = `You are AIROS clinical reasoning engine. PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}, FEV1 ${ctx.fev1}%, Eos ${ctx.eos}, exac ${ctx.exac}, hosp ${ctx.hosp}, adherence ${ctx.adherence}%, treatment: ${ctx.meds}, smoking: ${ctx.smoker}.\nVisit history: ${ctx.visitHistory}\nEngine: ${ctx.moduleOutputs}${historyBlock}\nQuestion: ${q}\nAnswer in 2-4 sentences specific to this patient. If the question refers back to a prior question or answer above, use that context. No em-dashes. Plain medical English.`;
+  const prompt = `You are AIROS clinical reasoning engine. PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, FEV1 ${ctx.fev1}%, Eos ${ctx.eos}, exac ${ctx.exac}, hosp ${ctx.hosp}, adherence ${ctx.adherence}%, treatment: ${ctx.meds}, smoking: ${ctx.smoker}.\nVisit history: ${ctx.visitHistory}\nEngine: ${ctx.moduleOutputs}${historyBlock}\nQuestion: ${q}\nAnswer in 2-4 sentences specific to this patient. If the question refers back to a prior question or answer above, use that context. No em-dashes. Plain medical English.`;
   try {
     const text = await callCopAPI(prompt, copScaleTok(400));
     copLastDoc = text;
@@ -4941,7 +5025,7 @@ let pchatHistory = [];
 function copOpenPatientChat() {
   pchatHistory = [];
   const pt = getPt();
-  g('pchat-sub').textContent = `AIROS-2024-${currentPt}`;
+  g('pchat-sub').textContent = `${pidPrefix(currentPt)}${currentPt}`;
   g('pchat-msgs').innerHTML = `<div class="pchat-msg bot">Hi! I can answer general questions about your zone plan and what to do day to day. For anything about test results, diagnosis, or changing medication, please speak with your care team. What would you like to know?</div>`;
   g('pchat-ov').classList.add('open');
 }
@@ -5008,7 +5092,7 @@ function setPulse(state, label) {
   if (p) p.className = 'cop-pulse' + (state ? ' ' + state : '');
   const pid = g('cop-hdr-pid');
   if (pid && state === 'thinking' && label) pid.textContent = label;
-  else if (pid && !state) pid.textContent = `AIROS-2024-${currentPt}`;
+  else if (pid && !state) pid.textContent = `${pidPrefix(currentPt)}${currentPt}`;
 }
 
 function buildMemThread() {
@@ -5127,7 +5211,7 @@ function copSignAndFile() {
   if (badge) badge.textContent = `Firmado · ${ts}`;
   const signBtn = g('cop-sign-btn');
   if (signBtn) { signBtn.disabled = true; signBtn.innerHTML = '<i class="ti ti-check"></i>Filed'; }
-  notify(`${title} signed and filed to AIROS-2024-${currentPt}`, 'ok');
+  notify(`${title} signed and filed to ${pidPrefix(currentPt)}${currentPt}`, 'ok');
 }
 
 async function copCheckContinuity() {
@@ -5144,7 +5228,7 @@ async function copCheckContinuity() {
   setPulse('thinking', 'Checking continuity...');
   const prompt = `You are AIROS clinical reasoning engine. Review this patient's visit notes and identify whether plans or follow-up actions mentioned in earlier visits were addressed in later visits.
 
-PATIENT AIROS-2024-${ctx.id}: ${ctx.disease}
+PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}
 VISIT HISTORY WITH NOTES:
 ${ctx.visitHistory}
 
@@ -5190,7 +5274,7 @@ async function copCompareVisits() {
 
   const prompt = `You are AIROS clinical reasoning engine. Compare two visits for the same patient and explain what clinically changed.
 
-PATIENT AIROS-2024-${currentPt}: ${pt.disease}
+PATIENT ${pidPrefix(currentPt)}${currentPt}: ${pt.disease}
 Visit ${earlier.n} (${earlier.date}) vs Visit ${later.n} (${later.date})
 
 RAW NUMBER CHANGES:
