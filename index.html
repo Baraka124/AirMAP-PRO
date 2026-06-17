@@ -155,16 +155,16 @@ input,select,textarea{font-family:inherit;}
 .sind.n{color:var(--i5);} .sind.n .sind-dot{background:var(--i3);}
 
 /* v11: navigation shell: login / dashboard / cockpit views */
-.login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--n9);padding:var(--sp-12);}
-.login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.18);}
-.login-nameplate{background:var(--n8);padding:var(--sp-20) var(--sp-18) var(--sp-16);text-align:left;}
+.login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%);padding:var(--sp-12);}
+.login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 90px rgba(34,211,238,.06);}
+.login-nameplate{background:linear-gradient(165deg,#0E2240 0%,#081526 100%);padding:var(--sp-20) var(--sp-18) var(--sp-16);text-align:left;position:relative;overflow:hidden;}
 .login-mark{display:flex;align-items:center;gap:var(--sp-6);margin-bottom:20px;}
 .login-mark-icon{width:44px;height:auto;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .login-mark-icon img{width:100%;height:auto;display:block;}
 .login-mark-icon i{font-size:22px;color:white;}
-.login-acronym{font-family:var(--serif);font-size:42px;font-weight:600;color:white;letter-spacing:-1px;line-height:1;}
-.login-longname{margin-top:10px;}
-.login-longname-text{font-family:var(--sans);font-size:var(--fs-sm);font-weight:400;color:rgba(255,255,255,.55);line-height:1.5;}
+.login-acronym{font-family:var(--serif);font-size:42px;font-weight:600;color:white;letter-spacing:1px;line-height:1;background:linear-gradient(90deg,#FFFFFF 60%,#A5F3FC 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.login-longname{margin-top:10px;position:relative;z-index:1;}
+.login-longname-text{font-family:var(--mono);font-size:var(--fs-2xs);font-weight:400;color:rgba(165,243,252,.65);line-height:1.5;letter-spacing:1.6px;text-transform:uppercase;}
 .login-body{padding:var(--sp-14) var(--sp-16) var(--sp-16);position:relative;background:var(--wh);}
 .login-label{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;display:block;}
 .login-card .role-grid{margin-bottom:18px;}
@@ -373,6 +373,7 @@ input,select,textarea{font-family:inherit;}
 .mc:hover::after{opacity:1;}
 .mc.sd::after{background:var(--r5);} .mc.sw::after{background:var(--a5);} .mc.sg::after{background:var(--g5);} .mc.sn::after{background:var(--n4);}
 .mc-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--i4);margin-bottom:7px;}
+.field-code-tag{display:inline-block;margin-left:var(--sp-2);padding:1px 5px;font-size:9px;font-weight:500;letter-spacing:.3px;text-transform:none;color:var(--i3);background:var(--n1);border:1px solid var(--i1);border-radius:4px;vertical-align:middle;cursor:help;}
 .mc-val{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:600;line-height:1;margin-bottom:4px;color:var(--tx-n8,var(--n8));}
 .mc-val.warn{color:var(--a7);} .mc-val.danger{color:var(--r7);} .mc-val.good{color:var(--g7);} .mc-val.teal{color:var(--t7);}
 .mc-int{font-size:var(--fs-sm);color:var(--i5);line-height:1.4;}
@@ -796,6 +797,10 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   .cop-stream{max-height:200px;}
   .cop-out-body,.cop-mem-body{max-height:200px;}
   .cop-out-register{gap:var(--sp-0b);}
+  .nct{top:70px;right:var(--sp-3);left:var(--sp-3);}
+  .notif{min-width:0;width:100%;}
+  .cockpit-aside{order:0;}
+  #readonly-toggle,.hdr-r .btn[onclick*="openDrw('export')"]{display:none;}
 }
 @media(max-width:480px){
   .ahdr{gap:var(--sp-3);}
@@ -803,6 +808,11 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   .visit-lbl{display:none;}
   .vdate{display:none;}
   .lmk{width:28px;height:28px;}
+  .bcrumb{min-width:0;flex:1;overflow:hidden;}
+  .bcrumb-link{display:none;}
+  .bcrumb-sep{display:none;}
+  .bcrumb-cur{min-width:0;overflow:hidden;}
+  .bcrumb-pid{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60px;display:inline-block;}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
@@ -1020,7 +1030,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="dash-title">Today's clinic</div>
         <div class="dash-sub" id="dash-sub"></div>
       </div>
-      <button class="btn bg btn-sm" onclick="openDrw('register')"><i class="ti ti-user-plus"></i><span class="btn-label">Register new patient</span></button>
+      <button class="btn bg btn-sm" onclick="openDrw('register')" aria-label="Register new patient"><i class="ti ti-user-plus"></i><span class="btn-label">Register new patient</span></button>
     </div>
     <div class="dash-search">
       <i class="ti ti-search"></i>
@@ -1748,6 +1758,19 @@ function fev1Class(fev1) {
   return fev1 < 50 ? 'danger' : fev1 < 80 ? 'warn' : 'good';
 }
 
+/* Standard coding references (item 16). Verified against loinc.org directly;
+   fields without a confirmed code are deliberately omitted rather than guessed. */
+const FIELD_CODES = {
+  fev1:  { system:'LOINC', code:'20152-5', display:'FEV1 measured/predicted' },
+  fvc:   { system:'LOINC', code:'19868-2', display:'FVC' },
+  ratio: { system:'LOINC', code:'19926-5', display:'FEV1/FVC' },
+  eos:   { system:'LOINC', code:'711-2',   display:'Eosinophils #/volume, blood, automated count' }
+};
+function fieldCodeTag(key) {
+  const c = FIELD_CODES[key];
+  return c ? `<span class="field-code-tag" title="${c.system} ${c.code} · ${c.display}">${c.system} ${c.code}</span>` : '';
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    v10: BODE INDEX (Risk)
    B: BMI · O: Obstruction (FEV1%) · D: Dyspnoea (mMRC) · E: Exercise (6MWD)
@@ -1934,6 +1957,8 @@ function toggleReadOnly() {
 
 /* Wraps _baseOpenDrw (defined below) to lock inputs in read-only mode */
 function openDrw(type) {
+  if (type === 'demographics') demoAIFieldSource = {};
+  if (type === 'environment') envAIFieldSource = {};
   _baseOpenDrw(type);
   if (readOnlyMode) {
     setTimeout(() => {
@@ -2139,19 +2164,19 @@ function commitAddReferral() {
 }
 function buildMetrics(d, pt, v, grp, stage, ctrl) {
   const cards = d === 'COPD' ? [
-    { lbl:'FEV₁ % predicted', val:v.fev1+'%', vc:fev1Class(v.fev1), int:`Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'s'+(v.fev1<50?'d':v.fev1<80?'w':'g'), act:'investigations' },
+    { lbl:'FEV₁ % predicted', val:v.fev1+'%', vc:fev1Class(v.fev1), int:`Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'s'+(v.fev1<50?'d':v.fev1<80?'w':'g'), act:'investigations', code:'fev1' },
     { lbl:'CAT score',         val:v.cat,       vc:v.cat>=10?'warn':'good', int:v.cat>=20?'High burden':v.cat>=10?'Medium burden':'Low burden', prev:prevVal('cat'), stat:'s'+(v.cat>=20?'d':v.cat>=10?'w':'g'), act:'visit-update' },
     { lbl:'Exacerbations (12m)',val:v.exac,      vc:v.exac>=2?'danger':v.exac>=1?'warn':'good', int:`${v.hosp} hospitalisation · ${v.ocs} OCS`, prev:prevVal('exac'), stat:'s'+(v.exac>=2?'d':v.exac>=1?'w':'g'), act:'visit-update' }
   ] : d === 'ASTHMA' ? [
     { lbl:'ACT score',          val:v.act,        vc:ctrl.level==='uncontrolled'?'danger':ctrl.level==='partial'?'warn':'good', int:ctrl.label, prev:prevVal('act'), stat:'s'+(ctrl.level==='uncontrolled'?'d':ctrl.level==='partial'?'w':'g'), act:'visit-update' },
-    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high: biologic eligible':v.eos>=150?'Elevated: T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations' },
+    { lbl:'Blood eosinophils',  val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':v.eos>=150?'warn':'good', int:v.eos>=300?'T2-high: biologic eligible':v.eos>=150?'Elevated: T2 possible':'Low T2', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':v.eos>=150?'w':'g'), act:'investigations', code:'eos' },
     { lbl:'Rescue use',         val:v.rescueWk>=7?'Daily':v.rescueWk+'×/wk', vc:v.rescueWk>=7?'danger':v.rescueWk>=3?'warn':'good', int:v.rescueWk>=7?'Significant: poor control':v.rescueWk>=3?'Increased: monitor':'Acceptable', prev:'Was '+prevVisit()?.rescueWk+'×/wk', stat:'s'+(v.rescueWk>=7?'d':v.rescueWk>=3?'w':'g'), act:'visit-update' }
   ] : d === 'ACO' ? [
-    { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:`GOLD Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'sw', act:'investigations' },
+    { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:`GOLD Stage ${stage.s} ${stage.l}`, prev:prevVal('fev1','%'), stat:'sw', act:'investigations', code:'fev1' },
     { lbl:'CAT + ACT',          val:`${v.cat}<span style="font-size:var(--fs-h3);opacity:.6"> / </span>${v.act}`, vc:'warn', int:`CAT ${v.cat>=10?'high':'low'} · ACT ${ctrl.label.toLowerCase()}`, prev:`Was ${prevVisit()?.cat||''} / ${prevVisit()?.act||''}`, stat:'sw', act:'visit-update' },
-    { lbl:'Eosinophils',        val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':'warn', int:v.eos>=300?'Biologic eligible':'Near threshold', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':'w'), act:'investigations' }
+    { lbl:'Eosinophils',        val:v.eos+'<span style="font-size:var(--fs-body);font-weight:400"> c/µL</span>', vc:v.eos>=300?'danger':'warn', int:v.eos>=300?'Biologic eligible':'Near threshold', prev:prevVal('eos','c/µL'), stat:'s'+(v.eos>=300?'d':'w'), act:'investigations', code:'eos' }
   ] : [ // CHRONIC_BRONCHITIS
-    { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:'Airflow limitation', prev:prevVal('fev1','%'), stat:'sn', act:'investigations' },
+    { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:'Airflow limitation', prev:prevVal('fev1','%'), stat:'sn', act:'investigations', code:'fev1' },
     { lbl:'CAT score',          val:v.cat,        vc:v.cat>=10?'warn':'good', int:v.cat>=10?'Medium burden':'Low burden', prev:prevVal('cat'), stat:'s'+(v.cat>=10?'w':'g'), act:'visit-update' },
     { lbl:'Sputum character',   val:v.sputum==='white'?'White':'<span class="danger">'+v.sputum+'</span>', vc:v.sputum!=='white'?'danger':'good', int:v.sputum!=='white'?'Possible infection: review':'No infection signs', prev:prevVisit()?.sputum||'', stat:'s'+(v.sputum!=='white'?'d':'g'), act:'visit-update' }
   ];
@@ -2159,7 +2184,7 @@ function buildMetrics(d, pt, v, grp, stage, ctrl) {
   return cards.map(c => {
     const spark = buildSparkline(c.act === 'investigations' ? 'fev1' : d==='ASTHMA'&&c.lbl==='ACT score'?'act':d==='ASTHMA'&&c.lbl==='Blood eosinophils'?'eos':'cat');
     return `<div class="mc ${c.stat}" onclick="openDrw('${c.act}')" role="button" tabindex="0">
-      <div class="mc-lbl">${c.lbl}</div>
+      <div class="mc-lbl">${c.lbl}${c.code ? fieldCodeTag(c.code) : ''}</div>
       <div class="mc-val ${c.vc}">${c.val}</div>
       <div class="mc-int">${c.int}</div>
       <div class="mc-prev">${c.prev}</div>
@@ -2639,7 +2664,7 @@ function buildHeaderContext(view) {
   if (view === 'cockpit') {
     return `${platform}<div class="hdv"></div>
       <div class="bcrumb">
-        <span class="bcrumb-link" onclick="goToDashboard()"><i class="ti ti-layout-grid"></i>Dashboard</span>
+        <span class="bcrumb-link" onclick="goToDashboard()" role="button" tabindex="0" aria-label="Back to dashboard" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToDashboard()}"><i class="ti ti-layout-grid"></i><span class="bcrumb-link-text">Dashboard</span></span>
         <span class="bcrumb-sep">/</span>
         <div class="bcrumb-cur">
           <span class="bcrumb-pid" id="pid-disp">${pidPrefix(currentPt)}${currentPt}</span>
@@ -2668,8 +2693,8 @@ function buildHeaderActions(view) {
   if (view === 'cockpit') {
     return `${search}
       <button class="btn bg btn-icon btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode"><i class="ti ti-eye" id="readonly-icon"></i></button>
-      <button class="btn bg btn-sm" onclick="openDrw('export')"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
-      <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
+      <button class="btn bg btn-sm" onclick="openDrw('export')" aria-label="Export"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
+      <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')" aria-label="Run analysis"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
       <div class="hdv"></div>
       ${avatar}`;
   }
@@ -3507,7 +3532,7 @@ function bMedications() {
 }
 function buildMedRow(i, m) {
   return `<tr id="med-row-${i}">
-    <td><input class="fi-inline" type="text" value="${m.drug||''}" placeholder="Drug name" oninput="commitMedField(${i},'drug',this.value)"></td>
+    <td><input class="fi-inline" type="text" value="${m.drug||''}" placeholder="Drug name" oninput="commitMedField(${i},'drug',this.value)">${m._aiTouched?' <span class="ai-src-badge" title="Added or modified by Resident from your description: review before saving"><i class="ti ti-sparkles"></i></span>':''}</td>
     <td><select class="fsel-inline" onchange="commitMedField(${i},'cls',this.value)">${['SABA','LABA','LAMA','ICS','Biologic','T2DM','Other'].map(o=>`<option${o===m.cls?' selected':''}>${o}</option>`).join('')}</select></td>
     <td><input class="fi-inline mono sm" type="text" value="${m.dose||''}" placeholder="e.g. 100 mcg" oninput="commitMedField(${i},'dose',this.value)"></td>
     <td><select class="fsel-inline" onchange="commitMedField(${i},'freq',this.value)">${['Once daily','Twice daily','PRN','Other'].map(o=>`<option${o===m.freq?' selected':''}>${o}</option>`).join('')}</select></td>
@@ -3593,8 +3618,8 @@ function medsApplyAIChanges() {
   if (!pt || !changes) return;
   let applied = 0;
   (changes.stop||[]).sort((a,b)=>b-a).forEach(i => { if (pt.meds[i]) { pt.meds.splice(i,1); applied++; } }); // remove highest index first to keep remaining indices valid
-  (changes.modify||[]).forEach(c => { if (pt.meds[c.index]) { if (c.dose) pt.meds[c.index].dose = c.dose; if (c.freq) pt.meds[c.index].freq = c.freq; applied++; } });
-  (changes.add||[]).forEach(m => { pt.meds.push({ drug:m.drug, cls:m.cls||'Other', tag:'tn', dose:m.dose||'', freq:m.freq||'Once daily', since: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) }); applied++; });
+  (changes.modify||[]).forEach(c => { if (pt.meds[c.index]) { if (c.dose) pt.meds[c.index].dose = c.dose; if (c.freq) pt.meds[c.index].freq = c.freq; pt.meds[c.index]._aiTouched = true; applied++; } });
+  (changes.add||[]).forEach(m => { pt.meds.push({ drug:m.drug, cls:m.cls||'Other', tag:'tn', dose:m.dose||'', freq:m.freq||'Once daily', since: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), _aiTouched:true }); applied++; });
   medsProposedChanges = null;
   markDirty();
   medsCloseAIIntake();
@@ -3607,6 +3632,11 @@ function commitMedField(i, field, value) {
   const pt = getPt();
   if (!pt || !pt.meds[i]) return;
   pt.meds[i][field] = value;
+  if (pt.meds[i]._aiTouched && field !== '_aiTouched') {
+    delete pt.meds[i]._aiTouched;
+    const row = g(`med-row-${i}`);
+    if (row) { const badge = row.querySelector('.ai-src-badge'); if (badge) badge.remove(); }
+  }
   markDirty();
 }
 function addMedRow() {
@@ -3981,6 +4011,8 @@ No em-dashes.`;
   try {
     const raw = await callCopAPI(prompt, copScaleTok(350));
     const detected = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const conflicts = findNegationConflicts(detected, text);
+    conflicts.forEach(c => { detected[c.key] = false; }); // the source text explicitly negates this: trust the deterministic check over the LLM's read
     const presentCount = Object.values(detected).filter(v => v !== null && v !== undefined).length;
     if (!presentCount) {
       if (statusEl) statusEl.innerHTML = '<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-info-circle"></i><div class="ia-body">No specific values detected in that description.</div></div>';
@@ -3988,8 +4020,11 @@ No em-dashes.`;
       return;
     }
     demoApplyAIFields(detected);
-    if (statusEl) statusEl.innerHTML = `<div class="ia ia-g" style="margin-top:8px"><i class="ti ti-circle-check"></i><div class="ia-body">${presentCount} field${presentCount!==1?'s':''} filled below, marked with <i class="ti ti-sparkles" style="font-size:var(--fs-2xs)"></i>. Review each one.</div></div>`;
-    setTimeout(demoCloseAIIntake, 900);
+    const conflictNote = conflicts.length
+      ? `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">Corrected ${conflicts.length} field${conflicts.length!==1?'s':''} the model misread as present: your text said "${conflicts.map(c=>c.matchedTerm).join('", "')}" was denied, not affirmed.</div></div>`
+      : '';
+    if (statusEl) statusEl.innerHTML = `<div class="ia ia-g" style="margin-top:8px"><i class="ti ti-circle-check"></i><div class="ia-body">${presentCount} field${presentCount!==1?'s':''} filled below, marked with <i class="ti ti-sparkles" style="font-size:var(--fs-2xs)"></i>. Review each one.</div></div>${conflictNote}`;
+    setTimeout(demoCloseAIIntake, conflicts.length ? 1800 : 900);
   } catch(e) {
     if (statusEl) statusEl.innerHTML = `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
   }
@@ -4002,19 +4037,48 @@ function demoApplyAIFields(detected) {
     const el = g(id);
     if (el) el.value = detected[key];
     commitDemoField(key, detected[key]);
+    demoAIFieldSource[key] = 'ai';
   });
-  if (detected.quitDate) { const el = g('demo-quitdate'); if (el) el.value = detected.quitDate; commitDemoField('quitDate', detected.quitDate, false); }
-  if (detected.sex) { const el = g('demo-sex'); if (el) el.value = detected.sex; commitDemoSex(detected.sex); }
-  if (detected.smoker) { const el = g('demo-smoker'); if (el) el.value = detected.smoker; commitDemoSmoker(detected.smoker); }
+  if (detected.quitDate) { const el = g('demo-quitdate'); if (el) el.value = detected.quitDate; commitDemoField('quitDate', detected.quitDate, false); demoAIFieldSource.quitDate = 'ai'; }
+  if (detected.sex) { const el = g('demo-sex'); if (el) el.value = detected.sex; commitDemoSex(detected.sex); demoAIFieldSource.sex = 'ai'; }
+  if (detected.smoker) { const el = g('demo-smoker'); if (el) el.value = detected.smoker; commitDemoSmoker(detected.smoker); demoAIFieldSource.smoker = 'ai'; }
   const comorbidKeys = ['heartFailure','ihd','t2dm','osa','anxiety','osteoporosis'];
   comorbidKeys.forEach(key => {
     if (detected[key] === null || detected[key] === undefined) return;
     commitComorbidity(null, key, detected[key]);
+    demoAIFieldSource[key] = 'ai';
   });
   // re-render the drawer body so toggles and field values reflect the applied changes visually
   const body = g('drw-body');
   if (body) body.innerHTML = buildDrwContent('demographics');
+  demoMarkAIFields();
   if (currentPt) patientsWithPendingAIFields.add(currentPt);
+}
+const DEMO_FIELD_LABELS = { heartFailure:'Heart failure', ihd:'Ischaemic heart disease', t2dm:'Type 2 diabetes', osa:'OSA', anxiety:'Anxiety / depression', osteoporosis:'Osteoporosis' };
+const DEMO_FIELD_IDS = { age:'demo-age', bmi:'demo-bmi', onsetAge:'demo-onset', packYears:'demo-packyears', quitDate:'demo-quitdate', sex:'demo-sex', smoker:'demo-smoker' };
+function demoClearAIMark(key) {
+  if (demoAIFieldSource[key]) { delete demoAIFieldSource[key]; markDirty(); }
+}
+function demoMarkAIFields() {
+  // Same attribution contract as regMarkAIFields / markVisitAIFields: badge next to the label,
+  // cleared the instant a clinician edits that field, since at that point it's their entry.
+  Object.keys(demoAIFieldSource).forEach(key => {
+    let fgrp = null, el = null;
+    if (DEMO_FIELD_IDS[key]) {
+      el = g(DEMO_FIELD_IDS[key]);
+      fgrp = el?.closest('.fgrp') || el?.closest('.iuw')?.closest('.fgrp');
+    } else if (DEMO_FIELD_LABELS[key]) {
+      fgrp = [...document.querySelectorAll('.fgrp')].find(f => f.querySelector('.fl')?.textContent.trim() === DEMO_FIELD_LABELS[key]);
+    }
+    if (!fgrp || fgrp.querySelector('.ai-src-badge')) return;
+    const label = fgrp.querySelector('.fl');
+    if (label && !label.querySelector('.ai-src-badge')) {
+      label.insertAdjacentHTML('beforeend', ' <span class="ai-src-badge" title="Filled by Resident from your description: review before continuing"><i class="ti ti-sparkles"></i></span>');
+    }
+    const clearOnEdit = () => { demoClearAIMark(key); const badge = fgrp.querySelector('.ai-src-badge'); if (badge) badge.remove(); };
+    if (el) { el.addEventListener('input', clearOnEdit, { once:true }); el.addEventListener('change', clearOnEdit, { once:true }); }
+    else { fgrp.querySelectorAll('.ynb').forEach(b => b.addEventListener('click', clearOnEdit, { once:true })); }
+  });
 }
 function envOpenAIIntake() {
   const ov = document.createElement('div');
@@ -4065,6 +4129,8 @@ No em-dashes.`;
   try {
     const raw = await callCopAPI(prompt, copScaleTok(350));
     const detected = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const conflicts = findNegationConflicts(detected, text);
+    conflicts.forEach(c => { detected[c.key] = false; });
     const presentCount = Object.values(detected).filter(v => v !== null && v !== undefined).length;
     if (!presentCount) {
       if (statusEl) statusEl.innerHTML = '<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-info-circle"></i><div class="ia-body">No specific values detected in that description.</div></div>';
@@ -4072,8 +4138,11 @@ No em-dashes.`;
       return;
     }
     envApplyAIFields(detected);
-    if (statusEl) statusEl.innerHTML = `<div class="ia ia-g" style="margin-top:8px"><i class="ti ti-circle-check"></i><div class="ia-body">${presentCount} field${presentCount!==1?'s':''} filled below, marked with <i class="ti ti-sparkles" style="font-size:var(--fs-2xs)"></i>. Review each one.</div></div>`;
-    setTimeout(envCloseAIIntake, 900);
+    const conflictNote = conflicts.length
+      ? `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">Corrected ${conflicts.length} field${conflicts.length!==1?'s':''} the model misread as present: your text said "${conflicts.map(c=>c.matchedTerm).join('", "')}" was denied, not affirmed.</div></div>`
+      : '';
+    if (statusEl) statusEl.innerHTML = `<div class="ia ia-g" style="margin-top:8px"><i class="ti ti-circle-check"></i><div class="ia-body">${presentCount} field${presentCount!==1?'s':''} filled below, marked with <i class="ti ti-sparkles" style="font-size:var(--fs-2xs)"></i>. Review each one.</div></div>${conflictNote}`;
+    setTimeout(envCloseAIIntake, conflicts.length ? 1800 : 900);
   } catch(e) {
     if (statusEl) statusEl.innerHTML = `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
   }
@@ -4086,6 +4155,7 @@ function envApplyAIFields(detected) {
     const el = g(id);
     if (el) el.value = detected[key];
     commitEnvField(key, detected[key]);
+    envAIFieldSource[key] = 'ai';
   });
   const selectFields = { aqiImpact:'env-aqi-impact', pollen:'env-pollen', occExposure:'env-occ', homeVent:'env-vent', petExposure:'env-pet', healthLiteracy:'env-literacy', transport:'env-transport' };
   Object.entries(selectFields).forEach(([key, id]) => {
@@ -4093,27 +4163,58 @@ function envApplyAIFields(detected) {
     const el = g(id);
     if (el) el.value = detected[key];
     commitEnvSelectField(key, detected[key]);
+    envAIFieldSource[key] = 'ai';
   });
-  if (detected.airPurifier !== null && detected.airPurifier !== undefined) commitComorbidity('env', 'airPurifier', detected.airPurifier);
+  if (detected.airPurifier !== null && detected.airPurifier !== undefined) { commitComorbidity('env', 'airPurifier', detected.airPurifier); envAIFieldSource.airPurifier = 'ai'; }
   const body = g('drw-body');
   if (body) body.innerHTML = buildDrwContent('environment');
+  envMarkAIFields();
   if (currentPt) patientsWithPendingAIFields.add(currentPt);
 }
+const ENV_FIELD_IDS = { aqi:'env-aqi', humidity:'env-humidity', dailySteps:'env-steps', sleepHrs:'env-sleep', socialSupport:'env-social', financialStress:'env-financial',
+  aqiImpact:'env-aqi-impact', pollen:'env-pollen', occExposure:'env-occ', homeVent:'env-vent', petExposure:'env-pet', healthLiteracy:'env-literacy', transport:'env-transport' };
+function envClearAIMark(key) {
+  if (envAIFieldSource[key]) { delete envAIFieldSource[key]; markDirty(); }
+}
+function envMarkAIFields() {
+  Object.keys(envAIFieldSource).forEach(key => {
+    let fgrp = null, el = null;
+    if (ENV_FIELD_IDS[key]) {
+      el = g(ENV_FIELD_IDS[key]);
+      fgrp = el?.closest('.fgrp') || el?.closest('.iuw')?.closest('.fgrp');
+    } else if (key === 'airPurifier') {
+      fgrp = [...document.querySelectorAll('.fgrp')].find(f => f.querySelector('.fl')?.textContent.trim() === 'Air purifier in use');
+    }
+    if (!fgrp || fgrp.querySelector('.ai-src-badge')) return;
+    const label = fgrp.querySelector('.fl');
+    if (label && !label.querySelector('.ai-src-badge')) {
+      label.insertAdjacentHTML('beforeend', ' <span class="ai-src-badge" title="Filled by Resident from your description: review before continuing"><i class="ti ti-sparkles"></i></span>');
+    }
+    const clearOnEdit = () => { envClearAIMark(key); const badge = fgrp.querySelector('.ai-src-badge'); if (badge) badge.remove(); };
+    if (el) { el.addEventListener('input', clearOnEdit, { once:true }); el.addEventListener('change', clearOnEdit, { once:true }); }
+    else { fgrp.querySelectorAll('.ynb').forEach(b => b.addEventListener('click', clearOnEdit, { once:true })); }
+  });
+}
+/* item 17: per-field AI provenance for the demographics drawer, same contract as
+   regAIFieldSource / visitAIFieldSource: set by demoApplyAIFields, cleared the moment
+   a clinician edits the field by hand. */
+let demoAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
 function commitDemoField(key, val, isNumeric=true) {
   const pt = getPt();
   if (!pt) return;
   if (isNumeric) { const n = parseFloat(val); if (!isNaN(n)) pt.demographics[key] = n; }
   else { pt.demographics[key] = val; }
+  if (demoAIFieldSource[key]) delete demoAIFieldSource[key];
   markDirty();
 }
-function commitDemoSex(val) { const pt=getPt(); if (pt) { pt.demographics.sex = val; markDirty(); } }
-function commitDemoSmoker(val) { const pt=getPt(); if (pt) { pt.demographics.smoker = val; markDirty(); } }
+function commitDemoSex(val) { const pt=getPt(); if (pt) { pt.demographics.sex = val; if (demoAIFieldSource.sex) delete demoAIFieldSource.sex; markDirty(); } }
+function commitDemoSmoker(val) { const pt=getPt(); if (pt) { pt.demographics.smoker = val; if (demoAIFieldSource.smoker) delete demoAIFieldSource.smoker; markDirty(); } }
 function commitComorbidity(group, key, isYes) {
   const pt = getPt();
   if (!pt) return;
   if (group === 'vacc') { pt.vaccinations[key] = isYes; }
-  else if (group === 'env') { if (!pt.environment) pt.environment = {}; pt.environment[key] = isYes; }
-  else { pt.comorbidities[key] = isYes; }
+  else if (group === 'env') { if (!pt.environment) pt.environment = {}; pt.environment[key] = isYes; if (envAIFieldSource[key]) delete envAIFieldSource[key]; }
+  else { pt.comorbidities[key] = isYes; if (demoAIFieldSource[key]) delete demoAIFieldSource[key]; }
   markDirty();
 }
 
@@ -4147,12 +4248,15 @@ function bEnvironment() {
   </div>`)}
   <button class="btn bg btn-sm mt2" onclick="envOpenAIIntake()"><i class="ti ti-sparkles"></i>Describe living situation</button>`;
 }
+/* item 17: per-field AI provenance for the environment drawer, same contract as above. */
+let envAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
 function commitEnvField(key, val) {
   const pt = getPt();
   if (!pt) return;
   if (!pt.environment) pt.environment = {};
   const n = parseFloat(val);
   pt.environment[key] = (val === '' || isNaN(n)) ? null : n;
+  if (envAIFieldSource[key]) delete envAIFieldSource[key];
   markDirty();
 }
 function commitEnvSelectField(key, val) {
@@ -4160,6 +4264,7 @@ function commitEnvSelectField(key, val) {
   if (!pt) return;
   if (!pt.environment) pt.environment = {};
   pt.environment[key] = val;
+  if (envAIFieldSource[key]) delete envAIFieldSource[key];
   markDirty();
 }
 const ENV_SELECT_KEYS = ['aqiImpact','pollen','occExposure','homeVent','petExposure','techniqueErrors','healthLiteracy','transport'];
@@ -4729,7 +4834,7 @@ function regMarkAIFields() {
     if (label && !label.querySelector('.ai-src-badge')) {
       label.insertAdjacentHTML('beforeend', ' <span class="ai-src-badge" title="Filled by Resident from your description: review before continuing"><i class="ti ti-sparkles"></i></span>');
     }
-    const clearOnEdit = () => regClearAIMark(fieldId);
+    const clearOnEdit = () => { regClearAIMark(fieldId); const badge = fgrp.querySelector('.ai-src-badge'); if (badge) badge.remove(); };
     el.addEventListener('input', clearOnEdit, { once:true });
     el.addEventListener('change', clearOnEdit, { once:true });
   });
@@ -4986,7 +5091,8 @@ function bAnalysis() {
 function exportPatientJSON() {
   const pt = getPt();
   if (!pt) return;
-  const exportObj = { patientId: `${pidPrefix(currentPt)}${currentPt}`, exportedAt: new Date().toISOString(), disease: pt.disease, demographics: pt.demographics, visits: pt.visits, meds: pt.meds, referrals: pt.referrals };
+  const cleanMeds = pt.meds.map(({ _aiTouched, ...m }) => m); // strip internal UI provenance flag from the export
+  const exportObj = { patientId: `${pidPrefix(currentPt)}${currentPt}`, exportedAt: new Date().toISOString(), disease: pt.disease, demographics: pt.demographics, visits: pt.visits, meds: cleanMeds, referrals: pt.referrals };
   const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -5204,6 +5310,62 @@ VISIT HISTORY: ${ctx.visitHistory}
 ENGINE: ${ctx.moduleOutputs}
 
 Rules: Use only actual patient numbers above. No em-dashes. Section headings in ALL CAPS. Mark as ${pidPrefix(ctx.id)}${ctx.id}. 300-400 words. Clear plan section at end. This is a DRAFT for clinician review.`;
+}
+
+/* item 18: lightweight NegEx-style negation detector. Scans raw clinician text for negation
+   trigger words appearing shortly before a clinical term, and returns which of the supplied
+   terms appear negated. This is a deterministic cross-check run alongside the LLM extraction,
+   not a replacement for it: if the LLM says a symptom/comorbidity is present (true) but this
+   scan finds the term was actually negated in the source text, that's surfaced to the clinician
+   as a discrepancy to review, rather than silently trusting either signal alone. */
+const NEGATION_TRIGGERS = ['denies','denied','no ','not ','without','negative for','absence of','ruled out','free of','rules out'];
+const NEGATION_WINDOW_CHARS = 40; // max lookback distance, in characters, additionally bounded by sentence end below
+function detectNegatedTerms(text, terms) {
+  if (!text || !terms || !terms.length) return [];
+  const lower = text.toLowerCase();
+  const negated = [];
+  terms.forEach(term => {
+    const termLower = term.toLowerCase();
+    let idx = lower.indexOf(termLower);
+    while (idx !== -1) {
+      const charLimit = Math.max(0, idx - NEGATION_WINDOW_CHARS);
+      // Find the nearest sentence boundary before the term, never look back past it:
+      // a negation in a prior sentence shouldn't attach to a term in the next one.
+      const precedingText = lower.slice(0, idx);
+      const lastBoundary = Math.max(precedingText.lastIndexOf('.'), precedingText.lastIndexOf('!'), precedingText.lastIndexOf('?'), precedingText.lastIndexOf('\n'));
+      const windowStart = Math.max(charLimit, lastBoundary + 1);
+      const window = lower.slice(windowStart, idx);
+      if (NEGATION_TRIGGERS.some(trig => window.includes(trig))) {
+        if (!negated.includes(term)) negated.push(term);
+        break;
+      }
+      idx = lower.indexOf(termLower, idx + 1);
+    }
+  });
+  return negated;
+}
+/* Maps internal field keys to the natural-language terms a clinician would actually write,
+   so the regex scan above matches real phrasing rather than the JSON key itself. */
+const NEGATION_TERM_MAP = {
+  heartFailure: ['heart failure', 'cardiac failure', 'chf'],
+  ihd: ['ischaemic heart disease', 'ischemic heart disease', 'ihd', 'coronary artery disease'],
+  t2dm: ['diabetes', 't2dm', 'type 2 diabetes'],
+  osa: ['sleep apnea', 'sleep apnoea', 'osa'],
+  anxiety: ['anxiety', 'depression'],
+  osteoporosis: ['osteoporosis'],
+  airPurifier: ['air purifier', 'air filter']
+};
+/* Cross-checks an LLM-extracted boolean field map against the source text. Returns the subset
+   of keys where the LLM said true but the text contains a negation cue for that term, i.e.
+   likely false positives worth flagging before they're silently applied. */
+function findNegationConflicts(detected, sourceText) {
+  const conflicts = [];
+  Object.entries(NEGATION_TERM_MAP).forEach(([key, terms]) => {
+    if (detected[key] !== true) return;
+    const negatedHere = detectNegatedTerms(sourceText, terms);
+    if (negatedHere.length) conflicts.push({ key, matchedTerm: negatedHere[0] });
+  });
+  return conflicts;
 }
 
 let copCallCount  = 0;
