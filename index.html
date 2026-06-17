@@ -150,9 +150,9 @@ input,select,textarea{font-family:inherit;}
 .sind.n{color:var(--i5);} .sind.n .sind-dot{background:var(--i3);}
 
 /* v11: navigation shell: login / dashboard / cockpit views */
-.login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--n8);padding:24px;}
+.login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--n9);padding:24px;}
 .login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.18);}
-.login-nameplate{background:var(--n8);padding:40px 36px 32px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);}
+.login-nameplate{background:var(--n8);padding:40px 36px 32px;text-align:left;}
 .login-mark{display:flex;align-items:center;gap:13px;margin-bottom:20px;}
 .login-mark-icon{width:44px;height:auto;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .login-mark-icon img{width:100%;height:auto;display:block;}
@@ -160,14 +160,14 @@ input,select,textarea{font-family:inherit;}
 .login-acronym{font-family:var(--serif);font-size:42px;font-weight:600;color:white;letter-spacing:-1px;line-height:1;}
 .login-longname{margin-top:10px;}
 .login-longname-text{font-family:var(--sans);font-size:var(--fs-sm);font-weight:400;color:rgba(255,255,255,.55);line-height:1.5;}
-.login-body{padding:28px 32px 32px;}
+.login-body{padding:28px 32px 32px;position:relative;background:var(--wh);}
 .login-label{font-family:var(--mono);font-size:var(--fs-micro);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);margin-bottom:8px;display:block;}
 .login-card .role-grid{margin-bottom:18px;}
 .login-gdpr{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i3);text-align:center;margin-top:14px;letter-spacing:.3px;}
 
 /* Breadcrumb (cockpit header: replaces patient-chip dropdown) */
 .bcrumb{display:flex;align-items:center;gap:8px;min-width:0;}
-.bcrumb-link{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.6px;text-transform:uppercase;color:var(--i4);cursor:pointer;flex-shrink:0;transition:color .12s;}
+.bcrumb-link{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.6px;text-transform:uppercase;color:var(--i4);cursor:pointer;flex-shrink:0;transition:color .16s cubic-bezier(.4,0,.2,1);}
 .bcrumb-link:hover{color:var(--n8);}
 .bcrumb-sep{color:var(--i2);flex-shrink:0;}
 .bcrumb-cur{display:flex;align-items:center;gap:8px;min-width:0;}
@@ -236,12 +236,14 @@ input,select,textarea{font-family:inherit;}
 
 /* v11: Identity & Access drawer */
 .role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
-.role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;transition:all .16s cubic-bezier(.34,1.3,.64,1);position:relative;}
-.role-card:hover{border-color:var(--n3);transform:translateY(-1px);}
-.role-card.on{border-color:var(--n8);background:var(--n0);box-shadow:0 2px 8px rgba(11,31,58,.08);}
-.role-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.role-card-top .ti-user, .role-card-top .ti-settings, .role-card-top .ti-plug-connected, .role-card-top .ti-eye{font-size:var(--fs-base);color:var(--i4);}
-.role-card.on .role-card-top .ti-user, .role-card.on .role-card-top .ti-settings, .role-card.on .role-card-top .ti-plug-connected, .role-card.on .role-card-top .ti-eye{color:var(--n7);}
+.role-card{border:1.5px solid var(--i2);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;transition:all .16s cubic-bezier(.34,1.3,.64,1);position:relative;box-shadow:0 1px 2px rgba(10,14,23,.04);}
+.role-card:hover{border-color:var(--n3);transform:translateY(-1px);box-shadow:var(--sh1);}
+.role-card.on{border-color:var(--n8);background:var(--n0);box-shadow:0 4px 14px rgba(11,31,58,.14);}
+.role-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.role-icon{width:34px;height:34px;border-radius:10px;background:var(--i0);display:flex;align-items:center;justify-content:center;transition:background .16s cubic-bezier(.4,0,.2,1);}
+.role-icon i{font-size:var(--fs-base);color:var(--i5);}
+.role-card.on .role-icon{background:var(--n8);}
+.role-card.on .role-icon i{color:white;}
 .role-check{width:15px;height:15px;display:flex;opacity:0;transition:opacity .14s;}
 .role-card.on .role-check{opacity:1;}
 .role-check .ti-circle-check{font-size:var(--fs-sm);color:var(--n7);}
@@ -298,15 +300,17 @@ input,select,textarea{font-family:inherit;}
 .cz-g{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:none;border-radius:99px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .13s;white-space:nowrap;line-height:1;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:none;border-radius:99px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);white-space:nowrap;line-height:1;}
 .btn i{font-size:var(--fs-base);flex-shrink:0;}
 .bp{background:var(--n8);color:white;}
-.bp:hover{background:var(--n6);transform:translateY(-1px);}
+.bp:hover{background:var(--n6);transform:translateY(-1px);box-shadow:var(--sh1);}
+.bp:active{transform:translateY(0) scale(.97);}
 .bp:active{transform:translateY(0);}
 .bs{background:var(--wh);color:var(--n8);border:1px solid var(--i2);}
 .bs:hover{background:var(--n0);border-color:var(--n3);}
 .bg{background:transparent;color:var(--i4);border:1px solid var(--i2);}
 .bg:hover{background:var(--n0);color:var(--n7);border-color:var(--i3);}
+.bg:active{transform:scale(.97);}
 .btn-sm{padding:3px 10px;font-size:var(--fs-3xs);}
 .btn-sm i{font-size:var(--fs-xs);}
 .btn-icon{width:30px;height:30px;padding:0;justify-content:center;border-radius:50%;}
@@ -454,7 +458,8 @@ input,select,textarea{font-family:inherit;}
 .act-pt{font-family:var(--mono);font-size:var(--fs-body);color:white;letter-spacing:1px;}
 .act-vis{font-size:var(--fs-xs);color:rgba(255,255,255,.4);margin-top:2px;}
 .act-btns{padding:14px;display:flex;flex-direction:column;gap:9px;}
-.abt{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:var(--rmd);cursor:pointer;transition:all .14s;border:1.5px solid;background:transparent;font-family:var(--sans);text-align:left;width:100%;}
+.abt{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:var(--rmd);cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);border:1.5px solid;background:transparent;font-family:var(--sans);text-align:left;width:100%;}
+.abt:active{transform:scale(.98);}
 .abt-p{background:var(--n8);border-color:var(--n8);}
 .abt-p:hover{background:var(--n7);box-shadow:0 4px 14px rgba(11,31,58,.22);transform:translateY(-1px);}
 .abt-s{background:var(--wh);border-color:var(--i2);}
@@ -497,16 +502,17 @@ input,select,textarea{font-family:inherit;}
 .drw-ov.open{opacity:1;pointer-events:all;}
 
 /* v11: command palette */
-.cmdk-ov{position:fixed;inset:0;background:rgba(10,14,23,.45);display:none;align-items:flex-start;justify-content:center;z-index:500;padding-top:12vh;}
-.cmdk-ov.open{display:flex;}
-.cmdk{width:100%;max-width:560px;margin:0 16px;background:var(--wh);border-radius:var(--rlg);box-shadow:var(--sh3);overflow:hidden;max-height:70vh;display:flex;flex-direction:column;}
+.cmdk-ov{position:fixed;inset:0;background:rgba(10,14,23,.45);display:flex;align-items:flex-start;justify-content:center;z-index:500;padding-top:12vh;opacity:0;pointer-events:none;transition:opacity .18s cubic-bezier(.4,0,.2,1);}
+.cmdk-ov.open{opacity:1;pointer-events:all;}
+.cmdk-ov.open .cmdk{transform:translateY(0) scale(1);}
+.cmdk{width:100%;max-width:560px;margin:0 16px;background:var(--wh);border-radius:var(--rlg);box-shadow:var(--sh3);overflow:hidden;max-height:70vh;display:flex;flex-direction:column;transform:translateY(-6px) scale(.98);transition:transform .18s cubic-bezier(.4,0,.2,1);}
 .cmdk-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--i1);flex-shrink:0;}
 .cmdk-hdr>i{font-size:var(--fs-h1);color:var(--i4);}
 .cmdk-input{flex:1;border:none;outline:none;background:transparent;font-size:var(--fs-body);color:var(--i7);font-family:var(--sans);}
 .cmdk-hint{font-size:var(--fs-xs);color:var(--i3);display:flex;align-items:center;}
 .cmdk-results{overflow-y:auto;padding:6px;}
 .cmdk-cat{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);padding:8px 10px 4px;}
-.cmdk-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rmd);cursor:pointer;}
+.cmdk-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rmd);cursor:pointer;transition:background .14s cubic-bezier(.4,0,.2,1);}
 .cmdk-item i{font-size:var(--fs-h2);color:var(--i4);flex-shrink:0;}
 .cmdk-item.sel,.cmdk-item:hover{background:var(--n0);}
 .cmdk-item.sel{background:var(--n0);}
@@ -629,7 +635,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
 /* ── NOTIF ── */
 .nct{position:fixed;top:14px;right:18px;z-index:500;display:flex;flex-direction:column;gap:7px;pointer-events:none;}
-.notif{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--n8);color:white;border-radius:var(--rmd);box-shadow:var(--sh3);font-size:var(--fs-base);font-weight:500;min-width:250px;pointer-events:all;animation:nin .2s ease;border-left:3px solid #60A5FA;}
+.notif{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--n8);color:white;border-radius:var(--rmd);box-shadow:var(--sh3);font-size:var(--fs-base);font-weight:500;min-width:250px;pointer-events:all;animation:nin .22s cubic-bezier(.4,0,.2,1);border-left:3px solid #60A5FA;}
 .notif-action{margin-left:auto;flex-shrink:0;font-size:var(--fs-xs);font-weight:600;text-decoration:underline;cursor:pointer;padding:2px 4px;}
 .notif-action:hover{opacity:.8;}
 .notif.ok{border-left-color:#68D391;} .notif.warn{border-left-color:#F6AD55;} .notif.err{border-left-color:#FC8181;}
@@ -715,6 +721,24 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .reg-interstitial{text-align:center;padding:36px 20px;}
 .reg-id-display{font-family:var(--mono);font-size:var(--fs-2xl);font-weight:600;letter-spacing:3px;color:white;background:var(--n8);border-radius:var(--rlg);padding:22px;margin:18px 0;}
 .reg-id-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-xs);color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:5px 11px;border-radius:6px;margin-bottom:16px;}
+.reg-ai-offer{display:flex;align-items:flex-start;gap:12px;background:var(--n0);border:1px solid var(--n1);border-radius:var(--rmd);padding:14px 16px;margin-top:18px;text-align:left;}
+.reg-ai-offer-icon{width:30px;height:30px;border-radius:9px;background:var(--n8);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.reg-ai-offer-icon i{font-size:14px;color:white;}
+.reg-ai-offer-tx{flex:1;}
+.reg-ai-offer-tt{font-size:var(--fs-sm);font-weight:600;color:var(--n8);margin-bottom:2px;}
+.reg-ai-offer-sb{font-size:var(--fs-xs);color:var(--i5);line-height:1.5;}
+.reg-ai-ov{position:absolute;inset:0;background:rgba(10,14,23,.45);display:flex;align-items:center;justify-content:center;z-index:30;opacity:0;pointer-events:none;transition:opacity .18s cubic-bezier(.4,0,.2,1);padding:20px;}
+.reg-ai-ov.open{opacity:1;pointer-events:all;}
+.reg-ai-modal{width:100%;max-width:440px;background:var(--wh);border-radius:var(--rlg);box-shadow:var(--sh3);overflow:hidden;transform:translateY(-6px) scale(.98);transition:transform .18s cubic-bezier(.4,0,.2,1);}
+.reg-ai-ov.open .reg-ai-modal{transform:translateY(0) scale(1);}
+.reg-ai-modal-hdr{display:flex;align-items:center;gap:9px;padding:14px 16px;background:var(--n8);}
+.reg-ai-modal-tt{font-size:var(--fs-base);font-weight:600;color:white;}
+.reg-ai-modal-body{padding:16px;}
+.reg-ai-textarea{width:100%;border:1.5px solid var(--i2);border-radius:var(--rmd);padding:11px 13px;font-family:var(--sans);font-size:var(--fs-body);color:var(--i7);resize:vertical;transition:border-color .16s cubic-bezier(.4,0,.2,1);}
+.reg-ai-textarea:focus{outline:none;border-color:var(--n6);box-shadow:0 0 0 3px rgba(11,31,58,.07);}
+.reg-ai-modal-foot{display:flex;gap:10px;padding:12px 16px;border-top:1px solid var(--i1);}
+.ai-src-badge{display:inline-flex;color:var(--n6);}
+.ai-src-badge i{font-size:var(--fs-2xs);vertical-align:-1px;}
 
 /* ═══ v10: BODE / ANTHONISEN GRIDS ═══ */
 .bode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
@@ -2629,7 +2653,7 @@ function buildLoginRoles() {
   if (!el) return;
   el.innerHTML = Object.entries(RBAC_ROLES).map(([key,r]) =>
     `<div class="role-card${loginSelectedRole===key?' on':''}" onclick="selectLoginRole('${key}')" tabindex="0" role="radio" aria-checked="${loginSelectedRole===key}" aria-label="Sign in as ${r.label}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectLoginRole('${key}')}">
-      <div class="role-card-top"><i class="ti ti-${LOGIN_ROLE_ICONS[key]||'user'}"></i><div class="role-check"><i class="ti ti-circle-check"></i></div></div>
+      <div class="role-card-top"><div class="role-icon"><i class="ti ti-${LOGIN_ROLE_ICONS[key]||'user'}"></i></div><div class="role-check"><i class="ti ti-circle-check"></i></div></div>
       <div class="role-lbl">${r.label}</div>
       <div class="role-desc">${r.desc}</div>
     </div>`
@@ -3162,6 +3186,45 @@ function updateLiveZone() {
   const lcpT=g('lcp-txt'); if(lcpT) lcpT.textContent=lcpTxt;
 }
 
+/* Shared visit-field writer (visit update, item: AI-assisted follow-up intake).
+   Mirrors the live-write pattern adj() already established for stepper fields (cat/act/exac/hosp/ocs),
+   extended to cover every other field on the visit-update drawer so manual edits actually persist
+   into the currently-viewed visit, not just adj()'s subset. visitAIFieldSource tracks which fields
+   were filled by the dictation-extraction path below, cleared the moment a clinician edits one by hand,
+   exactly the same attribution contract used in patient registration. */
+let visitAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
+const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence'];
+function commitVisitField(key, rawValue, isNumeric=true) {
+  const v = getVisit();
+  if (!v) return;
+  if (isNumeric) {
+    const n = parseFloat(rawValue);
+    if (!isNaN(n)) v[key] = n;
+  } else {
+    v[key] = rawValue;
+  }
+  clearVisitAIMark(key);
+  markDirty();
+}
+function clearVisitAIMark(key) {
+  if (visitAIFieldSource[key]) { delete visitAIFieldSource[key]; }
+}
+function commitFev1L(val)    { commitVisitField('fev1L', val); }
+function commitFev1pct(val)  { commitVisitField('fev1', val); updateLiveZone(); }
+function commitFvc(val)      { commitVisitField('fvc', val); }
+function commitRatio(val)    { commitVisitField('ratio', val); }
+function commitFeno(val)     { commitVisitField('feno', val); }
+function commitCrp(val)      { commitVisitField('crp', val); }
+function commitAdherence(val) {
+  commitVisitField('adherence', val);
+  const fb = g('fb-adherence');
+  const n = parseFloat(val);
+  if (fb) fb.innerHTML = (!isNaN(n) && n<80) ? '<div class="lfb lfb-w">Below 80%: address before step-up</div>' : '';
+}
+function commitTechnique(val) {
+  const map = { 'Adequate':'adequate', 'Suboptimal':'suboptimal', 'Poor: needs retraining':'poor' };
+  commitVisitField('technique', map[val]||val.toLowerCase(), false);
+}
 function liveEos(val) {
   const n  = parseInt(val);
   const el = g('fb-eos');
@@ -3169,7 +3232,7 @@ function liveEos(val) {
   if (n>=300)  { el.textContent=`${n} c/µL: above threshold · biologic eligible`; el.className='lfb lfb-g'; }
   else if(n>=250){el.textContent=`${n} c/µL: ${300-n} below threshold · repeat next visit`; el.className='lfb lfb-w'; }
   else if(n>0) { el.textContent=`${n} c/µL: below T2-high threshold`; el.className='lfb lfb-i'; }
-  markDirty();
+  commitVisitField('eos', val);
 }
 
 function selR(grp,val) { document.querySelectorAll(`[data-rg="${grp}"]`).forEach(el=>el.classList.toggle('sel',el.dataset.rv===String(val))); markDirty(); }
@@ -3201,7 +3264,7 @@ function buildDrwContent(type) {
 /* Helpers */
 const S = (lbl,eng,content) => `<div class="fsec"><div class="flbl-sec">${lbl}${eng?`<span class="feng">${eng}</span>`:''}</div>${content}</div>`;
 const F = (lbl,unit,ph,prev,id,cb) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="iuw"><input class="${id?'fi live':'fi'}" type="number" placeholder="${ph||''}"${id?` id="${id}" oninput="${cb}(this.value);markDirty()"`:' oninput="markDirty()"'}><span class="iu">${unit}</span></div>${id?`<div class="lfb lfb-i" id="fb-${id.replace('-input','')}">Enter value</div>`:''}</div>`;
-const Sel = (lbl,opts,sel,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><select class="fsel" onchange="markDirty()">${opts.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('')}</select></div>`;
+const Sel = (lbl,opts,sel,prev,id,cb) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><select class="fsel"${id?` id="${id}"`:''} onchange="${cb?`${cb}(this.value);`:''}markDirty()">${opts.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('')}</select></div>`;
 const YN  = (lbl,yes,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="ynw"><div class="ynb no${yes?'':' on'}" onclick="togYN(this)">No</div><div class="ynb yes${yes?' on':''}" onclick="togYN(this)">Yes</div></div></div>`;
 const Stp = (key,lbl,val,prev) => `<div class="fgrp">${prev?`<div class="fprev"><i class="ti ti-history"></i><span>${prev}</span></div>`:''}<label class="fl">${lbl}</label><div class="sw"><div class="sbn" onclick="adj('${key}',-1)">−</div><div class="sdisp" id="sd-${key}">${val}</div><div class="sbn" onclick="adj('${key}',1)">+</div></div><input type="hidden" id="sv-${key}" value="${val}"><div class="lfb lfb-i" id="fb-${key}">Adjust to see live classification</div></div>`;
 /* v11: Identity & Access: extra UI helpers */
@@ -3281,6 +3344,8 @@ function buildIdentityAuditTable(perms) {
 }
 
 function bVisitUpdate() {
+  visitAIFieldSource = {};
+  lastDictatedValues = null;
   const pt=getPt(), v=getVisit(), pv=prevVisit();
   const isAsthma = pt.disease==='ASTHMA';
   const isACO    = pt.disease==='ACO';
@@ -3290,10 +3355,10 @@ function bVisitUpdate() {
   ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span style="font-size:var(--fs-xs);color:var(--i4)">Last visit note (${pv.date}):</span><br><em style="color:var(--i5)">${pv.note}</em></div></div>` : ''}
   ${pv && pv.note ? `<div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-notes"></i><div class="ia-body"><span class="xs muted">Previous visit note (${pv.date}):</span><br><em>${pv.note}</em></div></div>` : ''}
   ${S('Spirometry','Classification · Trajectory',`<div class="fg">
-    ${F('FEV₁','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'')}
-    ${F('FEV₁ % predicted','%','',pv?`Previous: ${pv.fev1}%`:'')}
-    ${F('FVC','L','',pv?`Previous: ${(pv.fvc||3.2).toFixed(2)} L`:'')}
-    ${F('FEV₁/FVC ratio','%','',pv?`Previous: ${pv.ratio||56}%`:'')}
+    ${F('FEV₁','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'','fev1L-input','commitFev1L')}
+    ${F('FEV₁ % predicted','%','',pv?`Previous: ${pv.fev1}%`:'','fev1pct-input','commitFev1pct')}
+    ${F('FVC','L','',pv?`Previous: ${(pv.fvc||3.2).toFixed(2)} L`:'','fvc-input','commitFvc')}
+    ${F('FEV₁/FVC ratio','%','',pv?`Previous: ${pv.ratio||56}%`:'','ratio-input','commitRatio')}
   </div>`)}
   ${(isCOPD||isACO||isCB)?S('CAT score','Classification',`<div class="fg">
     ${Stp('cat','Total CAT (0–40)',v.cat,pv?`Previous: ${pv.cat}`:'')}
@@ -3317,12 +3382,12 @@ function bVisitUpdate() {
   </div>`)}
   ${S('Biomarkers','Phenotyping · Treatment',`<div class="fg">
     <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.eos} c/µL</span></div>`:''}<label class="fl">Blood eosinophils</label><div class="iuw"><input class="fi live" type="number" placeholder="" id="eos-input" oninput="liveEos(this.value);markDirty()"><span class="iu">c/µL</span></div><div class="lfb lfb-i" id="fb-eos">Biologic threshold: 300 cells/µL</div></div>
-    ${F('FeNO','ppb','',pv?'Previous: not measured':'')}
-    ${F('CRP','mg/L','')}
+    ${F('FeNO','ppb','',pv?'Previous: not measured':'','feno-input','commitFeno')}
+    ${F('CRP','mg/L','','','crp-input','commitCrp')}
   </div>`)}
   ${S('Adherence & technique','Treatment',`<div class="fg">
-    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.adherence}%</span></div>`:''}<label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" oninput="markDirty()"><span class="iu">%</span></div>${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div>
-    ${Sel('Inhaler technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal',pv?`Previous: ${pv.technique}`:'')}
+    <div class="fgrp">${pv?`<div class="fprev"><i class="ti ti-history"></i><span>Previous: ${pv.adherence}%</span></div>`:''}<label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" id="adherence-input" oninput="commitAdherence(this.value)"><span class="iu">%</span></div><div id="fb-adherence">${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div></div>
+    ${Sel('Inhaler technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal',pv?`Previous: ${pv.technique}`:'','technique-input','commitTechnique')}
   </div>`)}
   ${S('Log new event','',`<div class="fg">
     ${Sel('Event type',['None','Hospital visit','Medication change','Exacerbation','Lifestyle change','Clinic visit'],'None')}
@@ -4002,6 +4067,7 @@ function renderRegStep() {
       el.addEventListener('input', markDirty);
       el.addEventListener('change', markDirty);
     });
+    regMarkAIFields();
   }
 }
 
@@ -4124,6 +4190,143 @@ function regStep1() {
   ${regNavButtons(false, 'Seal identity & generate platform ID')}`;
 }
 
+/* AI-assisted registration intake: extracts CLINICAL fields only (disease, demographics
+   excluding name/DOB, spirometry, scores, exacerbation history, biomarkers, medications).
+   Identity fields (name, DOB, MRN, hospital) are never touched by this path and remain
+   manual-only, consistent with step 1's existing PII boundary. Every extracted field is
+   visibly marked until the clinician reviews and edits or confirms it; nothing reaches
+   regState.fields without that marking, and nothing reaches DB without the existing
+   step 5 manual "complete registration" action. */
+let regAIFieldSource = {}; // { fieldId: 'ai' } for fields populated via this path, cleared on manual edit
+function regOpenAIIntake() {
+  const ov = document.createElement('div');
+  ov.className = 'reg-ai-ov';
+  ov.id = 'reg-ai-ov';
+  ov.innerHTML = `
+    <div class="reg-ai-modal">
+      <div class="reg-ai-modal-hdr">
+        <div class="cop-hdr-mark"><i class="ti ti-sparkles"></i></div>
+        <div class="reg-ai-modal-tt">Describe the patient</div>
+        <i class="ti ti-x" style="cursor:pointer;color:var(--i4);margin-left:auto" onclick="regCloseAIIntake()"></i>
+      </div>
+      <div class="reg-ai-modal-body">
+        <div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-shield-lock"></i><div class="ia-body">This only fills clinical fields (diagnosis, spirometry, scores, medications). Name, date of birth and MRN are never read from this text: you'll still enter those manually in Step 1.</div></div>
+        <textarea id="reg-ai-input" class="reg-ai-textarea" placeholder="e.g. 64-year-old male, ex-smoker 20 pack-years, COPD, FEV1 52% predicted, CAT 15, two exacerbations and one hospitalisation in the past year, on tiotropium and salbutamol PRN..." rows="6"></textarea>
+        <div id="reg-ai-status"></div>
+      </div>
+      <div class="reg-ai-modal-foot">
+        <button class="btn bg" onclick="regCloseAIIntake()">Cancel</button>
+        <button class="btn bp" style="margin-left:auto" id="reg-ai-submit" onclick="regProcessAIIntake()"><i class="ti ti-sparkles"></i>Extract fields</button>
+      </div>
+    </div>`;
+  g('drw').appendChild(ov);
+  setTimeout(() => ov.classList.add('open'), 10);
+  setTimeout(() => g('reg-ai-input')?.focus(), 200);
+}
+function regCloseAIIntake() {
+  const ov = g('reg-ai-ov');
+  if (!ov) return;
+  ov.classList.remove('open');
+  setTimeout(() => ov.remove(), 200);
+}
+async function regProcessAIIntake() {
+  const input = g('reg-ai-input');
+  const text = (input?.value || '').trim();
+  if (!text) { notify('Describe the patient first', 'warn'); return; }
+  const statusEl = g('reg-ai-status');
+  const submitBtn = g('reg-ai-submit');
+  submitBtn.disabled = true;
+  statusEl.innerHTML = '<div class="cop-loading" style="margin-top:10px"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  const prompt = `You are AIROS clinical reasoning engine, assisting a clinician with patient registration. Extract ONLY clinical fields from the text below into JSON. Do not infer or invent values that are not stated or clearly implied. Leave a field as null if it is not mentioned.
+
+Text: "${text.replace(/"/g,"'")}"
+
+Return ONLY this JSON shape, no markdown, no commentary:
+{
+  "disease": one of "COPD","CHRONIC_BRONCHITIS","ASTHMA","ACO" or null,
+  "age": number or null,
+  "bmi": number or null,
+  "sex": "Male","Female","Other" or null,
+  "smoker": "Ex-smoker","Current smoker","Never smoked" or null,
+  "packyears": number or null,
+  "onset": number or null,
+  "fev1": number or null,
+  "fev1pct": number or null,
+  "fvc": number or null,
+  "ratio": number or null,
+  "cat": number or null,
+  "mmrc": number or null,
+  "act": number or null,
+  "exac": number or null,
+  "hosp": number or null,
+  "ocs": number or null,
+  "eos": number or null,
+  "feno": number or null,
+  "sixmwd": number or null,
+  "meds": [{"cls":"SABA|LABA|LAMA|ICS|Biologic|Other","name":"drug name","dose":"e.g. 100 mcg","freq":"Once daily|Twice daily|PRN|Other"}]
+}
+No em-dashes. If nothing clinical is mentioned, return all nulls and an empty meds array.`;
+  try {
+    const raw = await callCopAPI(prompt, 700);
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    regApplyAIIntake(parsed, text);
+    regCloseAIIntake();
+  } catch(e) {
+    statusEl.innerHTML = `<div class="cop-cohort-empty" style="margin-top:10px">${copApiErrorMessage(e)}</div>`;
+    submitBtn.disabled = false;
+  }
+}
+function regApplyAIIntake(parsed, sourceText) {
+  if (!regState.fields) regState.fields = {};
+  const map = {
+    disease:'reg-disease', age:'reg-age', bmi:'reg-bmi', sex:'reg-sex', smoker:'reg-smoker',
+    packyears:'reg-packyears', onset:'reg-onset', fev1:'reg-fev1', fev1pct:'reg-fev1pct',
+    fvc:'reg-fvc', ratio:'reg-ratio', cat:'reg-cat', mmrc:'reg-mmrc', act:'reg-act',
+    exac:'reg-exac', hosp:'reg-hosp', ocs:'reg-ocs', eos:'reg-eos', feno:'reg-feno', sixmwd:'reg-6mwd'
+  };
+  let filledCount = 0;
+  Object.entries(map).forEach(([key, fieldId]) => {
+    const v = parsed[key];
+    if (v !== null && v !== undefined && v !== '') {
+      regState.fields[fieldId] = String(v);
+      regAIFieldSource[fieldId] = 'ai';
+      filledCount++;
+    }
+  });
+  if (Array.isArray(parsed.meds) && parsed.meds.length) {
+    regState.meds = parsed.meds.filter(m => m.name && m.name.trim()).map(m => ({
+      cls: m.cls || '', name: m.name || '', dose: m.dose || '', freq: m.freq || 'Once daily'
+    }));
+    if (!regState.meds.length) regState.meds = [{ cls:'', name:'', dose:'', freq:'Once daily' }];
+  }
+  regState.aiIntakeSummary = sourceText;
+  notify(`${filledCount} field${filledCount!==1?'s':''} filled from your description. Review before continuing.`, filledCount ? 'ok' : 'warn');
+  // Land the clinician on step 3, the first clinical step, where the filled fields are visible for review.
+  regState.maxStep = Math.max(regState.maxStep, 3);
+  regGoToStep(3);
+}
+function regClearAIMark(fieldId) {
+  if (regAIFieldSource[fieldId]) { delete regAIFieldSource[fieldId]; markDirty(); }
+}
+function regMarkAIFields() {
+  // Visually flags fields populated by the AI intake path, without altering the underlying
+  // field templates used by the manual flow. Runs after each step render; clears its own
+  // mark the moment a clinician edits the field, since at that point it's their entry, not Resident's.
+  Object.keys(regAIFieldSource).forEach(fieldId => {
+    const el = g(fieldId);
+    if (!el) return;
+    const fgrp = el.closest('.fgrp') || el.closest('.iuw')?.closest('.fgrp');
+    if (!fgrp || fgrp.querySelector('.ai-src-badge')) return;
+    const label = fgrp.querySelector('.fl');
+    if (label && !label.querySelector('.ai-src-badge')) {
+      label.insertAdjacentHTML('beforeend', ' <span class="ai-src-badge" title="Filled by Resident from your description: review before continuing"><i class="ti ti-sparkles"></i></span>');
+    }
+    const clearOnEdit = () => regClearAIMark(fieldId);
+    el.addEventListener('input', clearOnEdit, { once:true });
+    el.addEventListener('change', clearOnEdit, { once:true });
+  });
+}
+
 /* Step 2: Platform ID interstitial. Confirms pseudonymisation writes. */
 function regStep2() {
   if (!regState.internalRef) regState.internalRef = genInternalRef();
@@ -4159,6 +4362,14 @@ function regStep2() {
       <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Pseudonym / linkage table</strong>: display alias, internal reference and MRN bridge recorded together.</div></div>
       <div class="ia ia-g"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Audit log</strong>: registration event timestamped and attributed to the registering clinician.</div></div>
       <div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">From this point on, only the platform ID is shown. No name or date of birth will appear again in this interface.</div></div>
+    </div>
+    <div class="reg-ai-offer">
+      <div class="reg-ai-offer-icon"><i class="ti ti-sparkles"></i></div>
+      <div class="reg-ai-offer-tx">
+        <div class="reg-ai-offer-tt">Describe the patient instead</div>
+        <div class="reg-ai-offer-sb">Resident can fill the clinical fields ahead from a few sentences. You'll review and confirm everything before it's saved.</div>
+      </div>
+      <button class="btn bg btn-sm" onclick="regOpenAIIntake()"><i class="ti ti-microphone"></i>Try it</button>
     </div>
   </div>
   ${regNavButtons(false, 'Continue to clinical data')}`;
@@ -4278,6 +4489,7 @@ function buildRegStepContent(n) {
 
 function bRegister() {
   regState = { step:1, maxStep:1, generatedId:null };
+  regAIFieldSource = {};
   return `<div class="reg-stepper" id="reg-stepper">${buildRegStepperHTML()}</div>
   <div id="reg-content">${buildRegStepContent(1)}</div>`;
 }
@@ -4377,10 +4589,10 @@ function notify(msg, type='info', action=null) {
   ct.appendChild(n);
   if (action) {
     const btn = n.querySelector(`#${action.id}`);
-    if (btn) btn.onclick = (e) => { e.stopPropagation(); action.onClick(); n.style.opacity='0'; n.style.transform='translateX(12px)'; n.style.transition='all .2s'; setTimeout(()=>n.remove(),210); };
+    if (btn) btn.onclick = (e) => { e.stopPropagation(); action.onClick(); n.style.opacity='0'; n.style.transform='translateX(12px)'; n.style.transition='all .2s cubic-bezier(.4,0,.2,1)'; setTimeout(()=>n.remove(),210); };
   }
   const dismissDelay = action ? 5500 : 2800;
-  setTimeout(()=>{n.style.opacity='0';n.style.transform='translateX(12px)';n.style.transition='all .2s';setTimeout(()=>n.remove(),210);},dismissDelay);
+  setTimeout(()=>{n.style.opacity='0';n.style.transform='translateX(12px)';n.style.transition='all .2s cubic-bezier(.4,0,.2,1)';setTimeout(()=>n.remove(),210);},dismissDelay);
 }
 
 /* Util */
@@ -5004,20 +5216,90 @@ async function copStructureDictation(transcript) {
 
 RAW DICTATION: ${transcript}
 
-Then on a new line starting with "DETECTED VALUES:", list any specific clinical values you can confidently extract from the dictation (such as FEV1 percentage, CAT score, exacerbation count, adherence percentage) in the form "Field: value". If nothing specific was mentioned, write "DETECTED VALUES: none detected, dictation logged as free text only." No em-dashes.`;
+Then on a new line write exactly "VALUES_JSON:" followed by ONLY this JSON shape (no markdown fences), extracting only values explicitly stated or clearly implied in the dictation, null for anything not mentioned:
+{"fev1pct":number|null,"fvc":number|null,"ratio":number|null,"cat":number|null,"act":number|null,"exac":number|null,"hosp":number|null,"ocs":number|null,"eos":number|null,"feno":number|null,"adherence":number|null,"technique":"adequate"|"suboptimal"|"poor"|null}
+No em-dashes.`;
   try {
-    const text = await callCopAPI(prompt, copScaleTok(350));
-    const [notePart, ...rest] = text.split('DETECTED VALUES:');
+    const text = await callCopAPI(prompt, copScaleTok(400));
+    const [notePart, jsonPart] = text.split('VALUES_JSON:');
     if (ta) ta.value = notePart.trim();
+    let detected = {};
+    try { detected = JSON.parse((jsonPart||'{}').replace(/```json|```/g,'').trim()); } catch(e) { detected = {}; }
+    const presentCount = Object.values(detected).filter(v => v !== null && v !== undefined).length;
     if (summaryEl) {
-      const detected = rest.join('DETECTED VALUES:').trim();
-      summaryEl.innerHTML = detected && !detected.toLowerCase().startsWith('none')
-        ? `<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-sparkles"></i><div class="ia-body"><strong>Resident detected:</strong> ${detected}. Review and enter these into the fields above, values are not auto-applied.</div></div>`
-        : '';
+      summaryEl.innerHTML = presentCount
+        ? `<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-sparkles"></i><div class="ia-body"><strong>Resident detected ${presentCount} value${presentCount!==1?'s':''}</strong> from your dictation. Nothing has been changed yet.</div></div>
+           <button class="btn bp btn-sm" style="margin-top:8px" onclick="copApplyDictatedValues()"><i class="ti ti-sparkles"></i>Apply to fields below for review</button>`
+        : '<div class="ia ia-i" style="margin-top:8px"><i class="ti ti-info-circle"></i><div class="ia-body">No specific clinical values detected, note logged as free text only.</div></div>';
     }
+    lastDictatedValues = detected;
   } catch(e) {
     if (summaryEl) summaryEl.innerHTML = `<div class="ia ia-w" style="margin-top:8px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
   }
+}
+let lastDictatedValues = null;
+function copApplyDictatedValues() {
+  const detected = lastDictatedValues || {};
+  const fieldMap = {
+    fev1pct: { id:'fev1pct-input', key:'fev1' }, fvc: { id:'fvc-input', key:'fvc' },
+    ratio: { id:'ratio-input', key:'ratio' }, eos: { id:'eos-input', key:'eos' },
+    feno: { id:'feno-input', key:'feno' }, adherence: { id:'adherence-input', key:'adherence' }
+  };
+  let applied = 0;
+  Object.entries(fieldMap).forEach(([detKey, target]) => {
+    const v = detected[detKey];
+    if (v === null || v === undefined) return;
+    const el = g(target.id);
+    if (el) { el.value = v; }
+    commitVisitField(target.key, v);
+    visitAIFieldSource[target.key] = 'ai';
+    applied++;
+  });
+  if (detected.cat !== null && detected.cat !== undefined) { window.adj && setStepperValue('cat', detected.cat); visitAIFieldSource.cat = 'ai'; applied++; }
+  if (detected.act !== null && detected.act !== undefined) { setStepperValue('act', detected.act); visitAIFieldSource.act = 'ai'; applied++; }
+  if (detected.exac !== null && detected.exac !== undefined) { setStepperValue('exac', detected.exac); visitAIFieldSource.exac = 'ai'; applied++; }
+  if (detected.hosp !== null && detected.hosp !== undefined) { setStepperValue('hosp', detected.hosp); visitAIFieldSource.hosp = 'ai'; applied++; }
+  if (detected.ocs !== null && detected.ocs !== undefined) { setStepperValue('ocs', detected.ocs); visitAIFieldSource.ocs = 'ai'; applied++; }
+  if (detected.technique) {
+    const techSel = g('technique-input');
+    const labelMap = { adequate:'Adequate', suboptimal:'Suboptimal', poor:'Poor: needs retraining' };
+    if (techSel && labelMap[detected.technique]) { techSel.value = labelMap[detected.technique]; commitVisitField('technique', detected.technique, false); visitAIFieldSource.technique = 'ai'; applied++; }
+  }
+  markVisitAIFields();
+  const summaryEl = g('visit-dictate-summary');
+  if (summaryEl) summaryEl.innerHTML = `<div class="ia ia-g" style="margin-top:8px"><i class="ti ti-circle-check"></i><div class="ia-body">${applied} field${applied!==1?'s':''} filled below, marked with <i class="ti ti-sparkles" style="font-size:var(--fs-2xs)"></i>. Review each one: editing a field clears its marker.</div></div>`;
+  notify(`${applied} field${applied!==1?'s':''} filled from dictation. Review before saving.`, 'ok');
+}
+function setStepperValue(key, n) {
+  const vEl = g(`sv-${key}`), dEl = g(`sd-${key}`);
+  if (!vEl || !dEl) return;
+  vEl.value = n; dEl.textContent = n;
+  const v = getVisit();
+  if (v) { if (key==='cat') v.cat=n; if (key==='act') v.act=n; if (key==='exac') v.exac=n; if (key==='hosp') v.hosp=n; if (key==='ocs') v.ocs=n; updateLiveZone(); }
+  markDirty();
+}
+function markVisitAIFields() {
+  // Visually flags visit fields populated by the dictation-extraction path, the same attribution
+  // pattern used in patient registration. Clears its own mark the moment a clinician edits the field.
+  Object.keys(visitAIFieldSource).forEach(key => {
+    const idMap = { fev1:'fev1pct-input', fvc:'fvc-input', ratio:'ratio-input', eos:'eos-input',
+      feno:'feno-input', adherence:'adherence-input', technique:'technique-input' };
+    const stepperKeys = ['cat','act','exac','hosp','ocs'];
+    let fgrp = null;
+    if (idMap[key]) { fgrp = g(idMap[key])?.closest('.fgrp'); }
+    else if (stepperKeys.includes(key)) { fgrp = g(`sd-${key}`)?.closest('.fgrp'); }
+    if (!fgrp || fgrp.querySelector('.ai-src-badge')) return;
+    const label = fgrp.querySelector('.fl');
+    if (label && !label.querySelector('.ai-src-badge')) {
+      label.insertAdjacentHTML('beforeend', ' <span class="ai-src-badge" title="Filled by Resident from your dictation: review before saving"><i class="ti ti-sparkles"></i></span>');
+    }
+    const inputEl = idMap[key] ? g(idMap[key]) : g(`sv-${key}`);
+    if (inputEl) {
+      const clearMark = () => { delete visitAIFieldSource[key]; const badge = fgrp.querySelector('.ai-src-badge'); if (badge) badge.remove(); };
+      inputEl.addEventListener('input', clearMark, { once:true });
+      inputEl.addEventListener('change', clearMark, { once:true });
+    }
+  });
 }
 
 /* ── Patient Q&A mode (addition 4) ──────────────────────── */
