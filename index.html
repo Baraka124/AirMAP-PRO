@@ -3353,8 +3353,8 @@ function buildDashStatStrip() {
     if (lastV.adherence < 80) adherenceRisk++;
   });
   const anomalyCount = Object.keys(copCohortFlags||{}).length;
-  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'};
-  const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'};
+  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'};
+  const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)'};
   const mixHTML = Object.entries(diseaseCounts).map(([d,n]) =>
     `<span class="dash-mix-chip${dashFilters.disease===d?' on':''}" onclick="setDashFilter('disease','${d}')" tabindex="0" role="button" aria-label="Filter to ${disLabel[d]||d}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setDashFilter('disease','${d}')}"><span class="sind-dot" style="background:${disColor[d]||'var(--i4)'}"></span>${disLabel[d]||d} ${n}</span>`
   ).join('');
@@ -3383,6 +3383,8 @@ function renderDashboard() {
     <span class="dash-filter${dashFilters.disease==='ASTHMA'?' on':''}" onclick="setDashFilter('disease','ASTHMA')"><span class="sind-dot" style="background:var(--t5)"></span>Asthma</span>
     <span class="dash-filter${dashFilters.disease==='ACO'?' on':''}" onclick="setDashFilter('disease','ACO')"><span class="sind-dot" style="background:var(--p5)"></span>ACO</span>
     <span class="dash-filter${dashFilters.disease==='CHRONIC_BRONCHITIS'?' on':''}" onclick="setDashFilter('disease','CHRONIC_BRONCHITIS')"><span class="sind-dot" style="background:var(--a5)"></span>Chr. Bronchitis</span>
+    <span class="dash-filter${dashFilters.disease==='IPF'?' on':''}" onclick="setDashFilter('disease','IPF')"><span class="sind-dot" style="background:var(--g5)"></span>IPF</span>
+    <span class="dash-filter${dashFilters.disease==='OSA'?' on':''}" onclick="setDashFilter('disease','OSA')"><span class="sind-dot" style="background:var(--r5)"></span>OSA</span>
     <div class="hdv" style="height:18px"></div>
     <span class="dash-filter${dashFilters.zone==='r'?' on':''}" onclick="setDashFilter('zone','r')"><span class="sind-dot" style="background:var(--r5)"></span>Red zone</span>
     <span class="dash-filter${dashFilters.zone==='a'?' on':''}" onclick="setDashFilter('zone','a')"><span class="sind-dot" style="background:var(--a5)"></span>Amber</span>
@@ -3393,7 +3395,7 @@ function renderDashboard() {
     <div class="dash-recent-lbl">Recently viewed</div>
     <div class="dash-recent-row">${recentPts.map(id => {
       const pt = DB[id];
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease];
       const flagged = copCohortFlags[id];
       return `<div class="dash-recent-chip" onclick="selectPt('${id}')" title="${flagged?flagged.replace(/"/g,'&quot;'):''}">
         ${flagged?'<i class="ti ti-sparkles" style="font-size:var(--fs-2xs);color:var(--n6)"></i>':''}
@@ -3414,7 +3416,7 @@ function buildFilteredCohort() {
     if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
     if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
     if (dashSearchTerm) {
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis'}[pt.disease] || '';
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease] || '';
       const haystack = `${id} ${getDisplayAlias(id)} ${pt.demographics.age} ${pt.demographics.sex} ${disLabel}`.toLowerCase();
       if (!haystack.includes(dashSearchTerm)) return false;
     }
@@ -3442,7 +3444,7 @@ function dashSearchKeydown(e) {
     const narrowed = Object.entries(DB).filter(([id,pt]) => {
       if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
       if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis'}[pt.disease] || '';
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease] || '';
       const haystack = `${id} ${getDisplayAlias(id)} ${pt.demographics.age} ${pt.demographics.sex} ${disLabel}`.toLowerCase();
       return haystack.includes(dashSearchTerm);
     });
@@ -4300,22 +4302,30 @@ function bCohortOverviewCards(entries) {
     const lastV = pt.visits[pt.visits.length - 1];
     const grp   = (pt.disease==='COPD'||pt.disease==='ACO') ? goldGroup(lastV) : null;
     const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(lastV.act) : null;
+    const gap   = pt.disease==='IPF' ? gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:lastV.fvc, dlco:lastV.dlco })) : null;
+    const osaSev= pt.disease==='OSA' ? osaSeverity(lastV.ahi) : null;
     const zoneStr = pt.disease==='COPD' ? `GOLD Group ${grp} · FEV₁ ${lastV.fev1}%`
                   : pt.disease==='ASTHMA' ? `ACT ${lastV.act} · ${ctrl.label}`
                   : pt.disease==='ACO'    ? `Group ${grp} · ACT ${lastV.act}`
+                  : pt.disease==='IPF'    ? `GAP ${gap.stage} · FVC ${lastV.fvc}%`
+                  : pt.disease==='OSA'    ? `AHI ${lastV.ahi}/hr · ${osaSev.label}`
                   : `FEV₁ ${lastV.fev1}% · sputum ${lastV.sputum||'stable'}`;
     const topAlert = pt.disease==='ASTHMA' && lastV.act < 16 ? 'Uncontrolled: step-up urgent'
                    : pt.disease==='COPD' && lastV.exac >= 2 ? `${lastV.exac} exacerbations: high risk`
                    : pt.disease==='COPD' && lastV.eos >= 250 ? `Eos ${lastV.eos}: biologic threshold`
                    : pt.disease==='ACO' && !pt.meds.find(m=>m.cls==='LABA') ? 'LABA missing: add to regimen'
+                   : pt.disease==='IPF' && gap.stage==='III' ? 'GAP Stage III: consider transplant referral'
+                   : pt.disease==='IPF' && (lastV.dlco===null||lastV.dlco===undefined) ? 'DLCO not performed: GAP scoring incomplete'
+                   : pt.disease==='OSA' && osaSev.level==='severe' && (lastV.adherence===null||lastV.adherence===undefined||lastV.adherence<70) ? 'Severe OSA, inadequate therapy: urgent review'
+                   : pt.disease==='OSA' && pt.demographics.bmi>=30 ? `BMI ${pt.demographics.bmi}: weight management indicated`
                    : pt.demographics.smoker==='Current smoker' ? 'Still smoking: cessation priority'
                    : lastV.adherence < 80 ? `Adherence ${lastV.adherence}%: address`
                    : 'No urgent actions';
     const alertSev = topAlert.includes('urgent')||topAlert.includes('risk') ? 'r'
-                   : topAlert.includes('priority')||topAlert.includes('missing')||topAlert.includes('threshold') ? 'a'
+                   : topAlert.includes('priority')||topAlert.includes('missing')||topAlert.includes('threshold')||topAlert.includes('incomplete')||topAlert.includes('indicated') ? 'a'
                    : 'g';
-    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis'}[pt.disease];
-    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)'}[pt.disease];
+    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease];
+    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)'}[pt.disease];
     const clickFn = appView === 'cockpit' ? `closeDrw();selectPt('${id}')` : `selectPt('${id}')`;
     const flagged = copCohortFlags[id];
     const flagBadge = flagged ? `<div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;padding:5px 9px;background:var(--n0);border:1px solid var(--n1);border-radius:var(--rsm)"><i class="ti ti-sparkles" style="font-size:var(--fs-2xs);color:var(--n6)"></i><span style="font-size:var(--fs-2xs);color:var(--n7);line-height:1.4">${flagged}</span></div>` : '';
