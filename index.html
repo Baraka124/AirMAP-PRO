@@ -1758,17 +1758,159 @@ function fev1Class(fev1) {
   return fev1 < 50 ? 'danger' : fev1 < 80 ? 'warn' : 'good';
 }
 
-/* Standard coding references (item 16). Verified against loinc.org directly;
-   fields without a confirmed code are deliberately omitted rather than guessed. */
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE B: generic protocol rule interpreter (item 2 from the 23-item gap list)
+═══════════════════════════════════════════════════════════════════
+   Built ALONGSIDE the existing hardcoded classification functions above
+   (goldGroup, goldStage, asthmaCtrl), not replacing them yet. The intent is to prove this
+   interpreter produces IDENTICAL output to the real, currently-live clinical logic before
+   anything is ever switched over to depend on it. Until that's verified across real demo
+   patient data, the hardcoded functions remain the source of truth that the app actually uses.
+
+   A rule is a tree of conditions evaluated against a visit object (read via getObservation
+   where a field has a standard code, or the raw key otherwise). Supported operators are kept
+   deliberately minimal: gte, lt, gte_or, the few comparisons the real clinical functions above
+   actually use, rather than a speculative general-purpose language no rule will exercise yet. */
+const RULE_OPERATORS = {
+  // Deliberately NOT guarding against null here: the hardcoded functions being matched rely on
+  // JS's real coercion (null >= 10 is false, null < 10 is true, since null coerces to 0 for
+  // relational comparisons). A defensive null-guard was tried first and caught by the real-data
+  // verification sweep below: it silently diverged from the actual hardcoded behavior for an
+  // asthma patient's null CAT score, exactly the kind of subtle mismatch this phase exists to
+  // surface before trusting the interpreter for anything real.
+  gte: (v, threshold) => v >= threshold,
+  lt:  (v, threshold) => v < threshold,
+};
+/* Evaluates a single condition: { field, op, value } against a visit, reading the field's
+   current value the same way getObservation would (so this stays consistent with Phase A). */
+function evalCondition(visit, cond) {
+  const obs = getObservation(visit, cond.field);
+  const fieldValue = obs ? obs.value : visit[cond.field];
+  const op = RULE_OPERATORS[cond.op];
+  if (!op) throw new Error(`Unknown rule operator: ${cond.op}`);
+  return op(fieldValue, cond.value);
+}
+/* Evaluates a node that's either a single condition, an {any:[...]} OR-group, or an
+   {all:[...]} AND-group, recursively. This is the minimum branching needed to express the
+   three real rules being proven below, not a speculative full boolean-logic engine. */
+function evalNode(visit, node) {
+  if (node.any) return node.any.some(n => evalNode(visit, n));
+  if (node.all) return node.all.every(n => evalNode(visit, n));
+  return evalCondition(visit, node);
+}
+/* Runs an ordered list of {if, then} rules against a visit and returns the first match's
+   result, mirroring how the hardcoded if/else chains above resolve top to bottom. */
+function runRuleSet(visit, ruleSet) {
+  for (const rule of ruleSet) {
+    if (evalNode(visit, rule.if)) return rule.then;
+  }
+  return ruleSet.find(r => r.default)?.then ?? null;
+}
+
+/* The three real, currently-live clinical functions above, re-expressed as JSON rule sets.
+   These are PROOF CASES only: see verifyRuleInterpreter() below, which runs both the hardcoded
+   function and this rule set across every real visit in the demo database and confirms they
+   produce identical output before either is trusted for anything beyond this verification. */
+/* goldGroup's real branch order, traced by hand against the hardcoded function after a
+   synthetic boundary test (low symptoms, high risk via exac alone) caught a mismatch in the
+   first version of this rule set, which wrongly defaulted the fallthrough case to A instead of
+   D. The hardcoded function's actual behavior: low symptoms AND low risk -> A; high symptoms
+   AND low risk -> B; everything else (high symptoms+high risk, OR high risk alone) -> D.
+   Expressed below as three explicit ordered rules, not a vacuous default, since the original
+   bug was exactly that "everything else" was assumed rather than derived from the real logic. */
+const RULESET_GOLD_GROUP = [
+  { if: { all: [
+      { field:'cat', op:'lt', value:10 }, { field:'mmrc', op:'lt', value:2 },
+      { field:'exac', op:'lt', value:2 }, { field:'hosp', op:'lt', value:1 }
+    ]}, then: 'A' },
+  { if: { all: [
+      { any: [{ field:'cat', op:'gte', value:10 }, { field:'mmrc', op:'gte', value:2 }] },
+      { field:'exac', op:'lt', value:2 }, { field:'hosp', op:'lt', value:1 }
+    ]}, then: 'B' },
+  { if: { all: [] }, then: 'D', default: true } // genuinely vacuous now: A and B are both fully and explicitly specified above, so anything left really is D, not assumed
+];
+const RULESET_GOLD_STAGE = [
+  { if: { field:'fev1', op:'gte', value:80 }, then: { s:'I',  l:'Mild' } },
+  { if: { field:'fev1', op:'gte', value:50 }, then: { s:'II', l:'Moderate' } },
+  { if: { field:'fev1', op:'gte', value:30 }, then: { s:'III',l:'Severe' } },
+  { if: { all: [] }, then: { s:'IV', l:'Very Severe' }, default: true }
+];
+const RULESET_ASTHMA_CTRL = [
+  { if: { field:'act', op:'gte', value:20 }, then: {level:'controlled',   label:'Well controlled'} },
+  { if: { field:'act', op:'gte', value:16 }, then: {level:'partial',      label:'Partially controlled'} },
+  { if: { all: [] }, then: {level:'uncontrolled', label:'Uncontrolled'}, default: true }
+];
+/* Runs both the hardcoded function and the equivalent rule set across every visit of every
+   real demo patient and reports any mismatch. This is the actual proof step: nothing downstream
+   should treat the rule interpreter as trustworthy until this returns zero mismatches. */
+function verifyRuleInterpreter() {
+  const mismatches = [];
+  Object.entries(DB).forEach(([pid, pt]) => {
+    pt.visits.forEach(v => {
+      const hardGroup = goldGroup(v);
+      const ruleGroup = runRuleSet(v, RULESET_GOLD_GROUP);
+      if (hardGroup !== ruleGroup) mismatches.push({ pid, visit:v.n, check:'goldGroup', hard:hardGroup, rule:ruleGroup });
+
+      const hardStage = goldStage(v.fev1);
+      const ruleStage = runRuleSet(v, RULESET_GOLD_STAGE);
+      if (JSON.stringify(hardStage) !== JSON.stringify(ruleStage)) mismatches.push({ pid, visit:v.n, check:'goldStage', hard:hardStage, rule:ruleStage });
+
+      if (v.act !== null && v.act !== undefined) {
+        const hardCtrl = asthmaCtrl(v.act);
+        const ruleCtrl = runRuleSet(v, RULESET_ASTHMA_CTRL);
+        if (JSON.stringify(hardCtrl) !== JSON.stringify(ruleCtrl)) mismatches.push({ pid, visit:v.n, check:'asthmaCtrl', hard:hardCtrl, rule:ruleCtrl });
+      }
+    });
+  });
+  return mismatches;
+}
+
+/* Standard coding references (item 16, extended for Phase A). Verified against loinc.org
+   directly; fields without a confirmed code are deliberately omitted rather than guessed.
+   act and sixMWD added after direct loinc.org confirmation (82674-3, 64098-7). Fields like
+   cat, mmrc, hosp, ocs, exac, adherence, technique, sputum, bdResp, nightWk, rescueWk are
+   outcomes or local clinical judgments, not single standardized lab/instrument codes, so they
+   stay uncoded here rather than being forced into a system they don't actually belong to. */
 const FIELD_CODES = {
-  fev1:  { system:'LOINC', code:'20152-5', display:'FEV1 measured/predicted' },
-  fvc:   { system:'LOINC', code:'19868-2', display:'FVC' },
-  ratio: { system:'LOINC', code:'19926-5', display:'FEV1/FVC' },
-  eos:   { system:'LOINC', code:'711-2',   display:'Eosinophils #/volume, blood, automated count' }
+  fev1:   { system:'LOINC', code:'20152-5', display:'FEV1 measured/predicted', unit:'%' },
+  fvc:    { system:'LOINC', code:'19868-2', display:'FVC', unit:'L' },
+  ratio:  { system:'LOINC', code:'19926-5', display:'FEV1/FVC', unit:'%' },
+  eos:    { system:'LOINC', code:'711-2',   display:'Eosinophils #/volume, blood, automated count', unit:'c/µL' },
+  act:    { system:'LOINC', code:'82674-3', display:'Asthma Control Test [ACT]', unit:'score' },
+  sixMWD: { system:'LOINC', code:'64098-7', display:'Six minute walk test', unit:'m' }
 };
 function fieldCodeTag(key) {
   const c = FIELD_CODES[key];
   return c ? `<span class="field-code-tag" title="${c.system} ${c.code} · ${c.display}">${c.system} ${c.code}</span>` : '';
+}
+/* Phase A: standard-coding accessor layer. Wraps the existing bespoke visit-field storage
+   (v.fev1, v.cat, etc.) in an Observation-shaped read, WITHOUT changing how data is stored or
+   touching any of the ~200 existing call sites that read v.fev1 directly. Old code keeps
+   working unmodified; new code (the Phase B rule interpreter, future analytics) reads through
+   this instead, so it always gets a consistent {code,system,display,value,unit} shape whether
+   or not that particular field happens to have a standard code attached yet.
+   This is intentionally additive: a thin read-side wrapper, not a data migration. */
+function getObservation(visit, key) {
+  if (!visit || !(key in visit)) return null;
+  const meta = FIELD_CODES[key] || null;
+  return {
+    code: meta ? meta.code : null,
+    system: meta ? meta.system : null,
+    display: meta ? meta.display : key,
+    value: visit[key],
+    unit: meta ? meta.unit : null
+  };
+}
+/* Returns every observation present on a visit in the standardized shape at once, skipping
+   metadata keys (n, date, label, note) that aren't clinical observations. Useful for anything
+   that wants to iterate "all the clinical data on this visit" generically, e.g. a future
+   analytics query or the rule interpreter, without needing to know the disease-specific key list. */
+const VISIT_METADATA_KEYS = ['n','date','label','note'];
+function getAllObservations(visit) {
+  if (!visit) return [];
+  return Object.keys(visit)
+    .filter(key => !VISIT_METADATA_KEYS.includes(key) && visit[key] !== null && visit[key] !== undefined)
+    .map(key => ({ key, ...getObservation(visit, key) }));
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -4219,10 +4361,33 @@ function commitComorbidity(group, key, isYes) {
 }
 
 /* GAP 05: Environment / lifestyle drawer */
+/* item 19: environmental-correlation flag. Built strictly from fields that already exist in the
+   data model: current AQI, the clinician's own recorded assessment of whether AQI affects this
+   patient (aqiImpact), and the most recent visit's exacerbation count. Deliberately does NOT
+   claim a historical "exacerbations occurred within 48h of AQI spikes" correlation, since the
+   platform has no historical AQI time series, only a single current reading per patient, and
+   fabricating that specific claim would be exactly the kind of false precision this item was
+   meant to avoid. Fires only when all three real signals align, not on any single one alone. */
+function buildEnvCorrelationFlag() {
+  const pt = getPt();
+  if (!pt) return '';
+  const e = pt.environment || {};
+  const v = getVisit();
+  const aqi = e.aqi;
+  const impact = e.aqiImpact;
+  const recentExac = v ? (v.exac || 0) : 0;
+  if (aqi === undefined || aqi === null || !impact) return '';
+  const aqiElevated = aqi > 70; // EPA "Unhealthy for Sensitive Groups" threshold starts at 101, but self-reported
+                                 // impact at this level is already clinically worth flagging for sensitive patients.
+  const impactMeaningful = impact === 'Moderate' || impact === 'Severe';
+  if (!(aqiElevated && impactMeaningful && recentExac >= 1)) return '';
+  return `<div class="ia ia-w" style="margin-bottom:14px"><i class="ti ti-cloud-storm"></i><div class="ia-body"><strong>Environmental correlation worth reviewing</strong>: current AQI is ${aqi} and this patient's own record shows "${impact.toLowerCase()}" symptom impact from air quality, alongside ${recentExac} exacerbation${recentExac!==1?'s':''} at the most recent visit. Based on this patient's current snapshot, not a historical trend (no day-by-day AQI history is recorded). Consider proactive guidance on high-AQI days.</div></div>`;
+}
 function bEnvironment() {
   const pt = getPt();
   const e = pt.environment || {};
   return `
+  ${buildEnvCorrelationFlag()}
   ${S('Air quality & environmental triggers','Assessment',`<div class="fg">
     <div class="fgrp"><label class="fl">Air Quality Index (AQI)</label><div class="iuw"><input class="fi" type="number" min="0" max="500" value="${e.aqi??''}" id="env-aqi" placeholder="0–500" oninput="commitEnvField('aqi',this.value)"><span class="iu">AQI</span></div><div class="fhint">Good &lt;50 · Moderate 51–100 · Unhealthy 101+</div></div>
     ${Sel('AQI impact on symptoms',['No impact','Mild worsening','Moderate','Severe'],e.aqiImpact||'No impact',null,'env-aqi-impact','commitEnvSelect_aqiImpact')}
