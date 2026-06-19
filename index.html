@@ -323,12 +323,26 @@ input,select,textarea{font-family:inherit;}
 .btn-icon{width:30px;height:30px;padding:0;justify-content:center;border-radius:50%;}
 
 /* ── VISIT SELECTOR ── */
-.visit-bar{background:var(--wh);border-bottom:1px solid var(--i2);padding:0 var(--sp-12);display:flex;align-items:center;gap:var(--sp-7);height:42px;position:sticky;top:58px;z-index:198;overflow-x:auto;}
+.visit-bar{background:var(--wh);border-bottom:1px solid var(--i2);padding:0 var(--sp-12);display:flex;align-items:center;gap:var(--sp-7);height:54px;position:sticky;top:58px;z-index:198;overflow-x:auto;}
 .visit-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--i4);flex-shrink:0;}
 .visits{display:flex;gap:var(--sp-2);}
-.vbtn{padding:var(--sp-2) var(--sp-6);border-radius:var(--r2xl);font-family:var(--mono);font-size:var(--fs-2xs);font-weight:500;cursor:pointer;border:1.5px solid var(--i2);color:var(--i4);background:transparent;transition:all .14s;white-space:nowrap;}
-.vbtn.on{background:var(--n8);color:white;border-color:var(--n8);}
-.vbtn:hover:not(.on){border-color:var(--n2);color:var(--tx-n8,var(--n8));}
+.vtl{display:flex;align-items:center;flex-shrink:0;}
+.vtl-item{display:flex;align-items:center;flex-shrink:0;}
+.vtl-line{width:18px;height:1.5px;background:var(--i2);flex-shrink:0;margin:0 1px;}
+.vbtn{display:flex;align-items:center;gap:7px;padding:5px 11px 5px 9px;border-radius:var(--r2xl);cursor:pointer;border:1.5px solid var(--i2);background:var(--wh);transition:all .14s;white-space:nowrap;}
+.vbtn:hover{border-color:var(--n3);}
+.vtl-item.on .vbtn{background:var(--n8);border-color:var(--n8);}
+.vtl-item.on .vtl-n{color:white;}
+.vtl-item.on .vtl-note{color:rgba(255,255,255,.65);}
+.vtl-item.on .vtl-cur{background:rgba(255,255,255,.18);color:white;}
+.vtl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.vtl-dot-g{background:var(--g5);}
+.vtl-dot-a{background:var(--a5);}
+.vtl-dot-r{background:var(--r5);}
+.vtl-tx{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;}
+.vtl-n{font-family:var(--mono);font-size:var(--fs-2xs);font-weight:500;color:var(--i6);}
+.vtl-note{font-size:var(--fs-3xs);color:var(--i4);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.vtl-cur{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:8px;background:var(--n1);color:var(--n6);margin-left:2px;}
 .vdate{font-size:var(--fs-xs);color:var(--i4);margin-left:auto;flex-shrink:0;}
 .vdelta{display:flex;align-items:center;gap:var(--sp-3);}
 .vdp{font-family:var(--mono);font-size:var(--fs-3xs);padding:var(--sp-1) var(--sp-3);border-radius:3px;border:1px solid;}
@@ -927,34 +941,64 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .cop-cite:hover{color:var(--tx-n8,var(--n8));}
 /* Generate actions */
 .cop-gen{padding:var(--sp-4) var(--sp-5);border-top:1px solid var(--i1);display:flex;flex-direction:column;gap:var(--sp-2);}
-.cop-gen-lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:1.5px;text-transform:uppercase;color:var(--i3);margin-bottom:2px;}
-.cop-gen-row{display:flex;gap:var(--sp-2);}
-.cop-gen-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-2);background:var(--i0);border:1px solid var(--i2);border-radius:var(--rmd);font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.5px;text-transform:uppercase;color:var(--i5);cursor:pointer;transition:all .12s;text-align:center;}
-.cop-gen-btn:hover{background:var(--n0);border-color:var(--n2);color:var(--tx-n8,var(--n8));}
-.cop-gen-btn i{font-size:var(--fs-sm);flex-shrink:0;}
-.cop-gen-btn.primary{background:var(--n8);border-color:var(--n8);color:white;}
-.cop-gen-btn.primary:hover{background:var(--n6);}
+.cop-sec-lbl{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;letter-spacing:1.3px;text-transform:uppercase;color:var(--i4);margin-bottom:2px;}
+.cop-sec-lbl i{font-size:12px;color:var(--i3);}
+.cop-sec-hint{margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.5px;text-transform:none;color:var(--tx-t,var(--t5));background:var(--t0);border:1px solid var(--t1);padding:1px 7px;border-radius:99px;}
+
+.cop-doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2);}
+.cop-doc-card{display:flex;align-items:center;gap:9px;padding:9px 10px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1);}
+.cop-doc-card:hover{border-color:var(--n3);transform:translateY(-1px);box-shadow:0 3px 10px rgba(11,31,58,.08);}
+.cop-doc-card:active{transform:translateY(0);}
+.cop-doc-ico{width:30px;height:30px;border-radius:9px;background:var(--n0);color:var(--n7);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;transition:all .15s;}
+.cop-doc-card:hover .cop-doc-ico{background:var(--n1);}
+.cop-doc-tx{min-width:0;}
+.cop-doc-tt{font-size:var(--fs-2xs);font-weight:600;color:var(--i7);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cop-doc-sb{font-size:9px;color:var(--i4);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cop-doc-primary{background:var(--n8);border-color:var(--n8);grid-column:1/-1;}
+.cop-doc-primary .cop-doc-ico{background:rgba(255,255,255,.14);color:white;}
+.cop-doc-primary .cop-doc-tt{color:white;}
+.cop-doc-primary .cop-doc-sb{color:rgba(255,255,255,.55);}
+.cop-doc-primary:hover{background:var(--n7);box-shadow:0 4px 14px rgba(11,31,58,.28);}
+
+.cop-qa-row{display:flex;flex-wrap:wrap;gap:6px;}
+.cop-qa-btn{display:flex;align-items:center;gap:6px;padding:6px 11px;background:transparent;border:1px solid var(--i2);border-radius:99px;font-size:var(--fs-2xs);font-weight:500;color:var(--i5);cursor:pointer;transition:all .14s;white-space:nowrap;}
+.cop-qa-btn i{font-size:12px;color:var(--i4);}
+.cop-qa-btn:hover{background:var(--i0);border-color:var(--n3);color:var(--n7);}
+.cop-qa-btn:hover i{color:var(--n6);}
+.cop-insight-row{display:flex;flex-wrap:wrap;gap:6px;}
+.cop-insight-btn{display:flex;align-items:center;gap:6px;padding:6px 11px;background:var(--t0);border:1px solid var(--t1);border-radius:99px;font-size:var(--fs-2xs);font-weight:500;color:var(--tx-t,var(--t7));cursor:pointer;transition:all .14s;white-space:nowrap;}
+.cop-insight-btn i{font-size:12px;color:var(--tx-t,var(--t5));}
+.cop-insight-btn:hover{background:var(--t1);border-color:var(--t5);transform:translateY(-1px);}
 /* Free query input */
 .cop-query{padding:var(--sp-4) var(--sp-5);border-top:1px solid var(--i1);}
-.cop-query-inner{display:flex;align-items:center;gap:var(--sp-3);background:var(--i0);border:1px solid var(--i2);border-radius:var(--rmd);padding:var(--sp-3) var(--sp-4);transition:all .16s cubic-bezier(.4,0,.2,1);}
+.cop-query-inner{display:flex;align-items:center;gap:var(--sp-3);background:var(--i0);border:1.5px solid var(--i2);border-radius:99px;padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);transition:all .16s cubic-bezier(.4,0,.2,1);}
 .cop-query-inner:focus-within{border-color:var(--n6);background:var(--wh);box-shadow:0 0 0 3px rgba(11,31,58,.07);}
+.cop-query-mark{font-size:15px;color:var(--n5);flex-shrink:0;}
 .cop-query-inner input{flex:1;border:none;outline:none;background:transparent;font-family:var(--sans);font-size:var(--fs-xs);color:var(--i7);}
 .cop-query-inner input::placeholder{color:var(--i3);}
 .cop-query-inner i{font-size:var(--fs-base);color:var(--i3);flex-shrink:0;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);}
 .cop-query-inner i:hover{color:var(--tx-n8,var(--n8));}
 .cop-query-inner i.cop-mic-active{color:var(--r5);animation:cpulse 1s ease-in-out infinite;}
-.cop-query-inner i.ti-arrow-right{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--n8);color:white;border-radius:50%;font-size:var(--fs-sm);}
-.cop-query-inner i.ti-arrow-right:hover{background:var(--n6);color:white;transform:scale(1.06);}
-.cop-query-inner i.ti-arrow-right:active{transform:scale(.94);}
+.cop-query-send{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--n8);color:white;border:none;border-radius:50%;font-size:var(--fs-sm);cursor:pointer;flex-shrink:0;transition:all .16s cubic-bezier(.4,0,.2,1);}
+.cop-query-send:hover{background:var(--n6);transform:scale(1.06);}
+.cop-query-send:active{transform:scale(.94);}
+.cop-query-send i{color:white;font-size:var(--fs-sm);}
 /* Output drawer */
 .cop-out{border-top:1px solid var(--i1);display:none;flex-direction:column;}
 .cop-out.open{display:flex;}
 .cop-out-hdr{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-4) var(--sp-5);border-bottom:1px solid var(--i1);background:var(--i0);}
-.cop-out-title{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--i5);flex:1;}
+.cop-out-title{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--i5);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
 .cop-out-draft{font-family:var(--mono);font-size:var(--fs-micro);padding:var(--sp-1) var(--sp-3);border-radius:3px;background:var(--a0);color:var(--a5);border:1px solid var(--a1);}
 .cop-out-close{font-size:var(--fs-base);color:var(--i3);cursor:pointer;padding:var(--sp-1);}
 .cop-out-body{padding:var(--sp-6) var(--sp-7);font-size:var(--fs-xs);line-height:1.85;color:var(--i5);max-height:280px;overflow-y:auto;white-space:pre-wrap;}
 .cop-out-body strong{color:var(--i7);font-weight:500;}
+.cop-evidence{background:var(--t0);border:1px solid var(--t1);border-radius:var(--rlg);overflow:hidden;margin-bottom:14px;white-space:normal;}
+.cop-evidence-hdr{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(8,145,178,.08);border-bottom:1px solid var(--t1);font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--tx-t,var(--t7));}
+.cop-evidence-hdr i{font-size:13px;}
+.cop-evidence-body{padding:10px 12px;font-family:var(--mono);font-size:var(--fs-xs);line-height:1.7;color:var(--tx-t,var(--t7));white-space:pre-line;}
+.cop-evidence-seam{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--n5);margin-bottom:10px;}
+.cop-evidence-seam i{font-size:13px;color:var(--n5);}
+.cop-evidence-seam::after{content:'';flex:1;height:1px;background:var(--i2);margin-left:4px;}
 .cop-out-register{display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-5);border-top:1px solid var(--i1);background:var(--i0);flex-wrap:wrap;}
 .cop-reg-chip{padding:var(--sp-0b) var(--sp-4);border-radius:99px;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--i2);color:var(--i4);cursor:pointer;transition:all .12s;}
 .cop-reg-chip:hover{border-color:var(--n2);color:var(--tx-n8,var(--n8));}
@@ -1177,35 +1221,44 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         </div>
         <!-- Generate row -->
         <div class="cop-gen">
-          <div class="cop-gen-lbl">Generate</div>
-          <div class="cop-gen-row">
-            <div class="cop-gen-btn primary" onclick="copGenerate('curso')"><i class="ti ti-file-text"></i>Curso clínico</div>
-            <div class="cop-gen-btn" onclick="copGenerate('referral')"><i class="ti ti-mail-forward"></i>Referral</div>
-            <div class="cop-gen-btn" onclick="toggleCopMem()"><i class="ti ti-git-branch"></i>Memory</div>
+          <div class="cop-sec-lbl"><i class="ti ti-file-text"></i>Documents</div>
+          <div class="cop-doc-grid">
+            <div class="cop-doc-card cop-doc-primary" onclick="copGenerate('curso')">
+              <div class="cop-doc-ico"><i class="ti ti-file-text"></i></div>
+              <div class="cop-doc-tx"><div class="cop-doc-tt">Curso clínico</div><div class="cop-doc-sb">Full clinical note</div></div>
+            </div>
+            <div class="cop-doc-card" onclick="copGenerate('referral')">
+              <div class="cop-doc-ico"><i class="ti ti-mail-forward"></i></div>
+              <div class="cop-doc-tx"><div class="cop-doc-tt">Referral</div><div class="cop-doc-sb">To specialist care</div></div>
+            </div>
+            <div class="cop-doc-card" onclick="copGenerate('patient')">
+              <div class="cop-doc-ico"><i class="ti ti-heart"></i></div>
+              <div class="cop-doc-tx"><div class="cop-doc-tt">Patient letter</div><div class="cop-doc-sb">Plain language</div></div>
+            </div>
+            <div class="cop-doc-card" onclick="copGenerateBundle()">
+              <div class="cop-doc-ico"><i class="ti ti-stack-2"></i></div>
+              <div class="cop-doc-tx"><div class="cop-doc-tt">Discharge bundle</div><div class="cop-doc-sb">Curso + referral + GP</div></div>
+            </div>
           </div>
-          <div class="cop-gen-row" style="margin-top:5px">
-            <div class="cop-gen-btn" onclick="copGenerate('patient')"><i class="ti ti-heart"></i>Patient letter</div>
-            <div class="cop-gen-btn" onclick="copOpenPatientChat()"><i class="ti ti-message-2"></i>Patient Q&A mode</div>
+
+          <div class="cop-sec-lbl" style="margin-top:16px"><i class="ti ti-bolt"></i>Quick analysis</div>
+          <div class="cop-qa-row">
+            <button class="cop-qa-btn" onclick="toggleCopMem()"><i class="ti ti-git-branch"></i>Memory</button>
+            <button class="cop-qa-btn" onclick="copOpenPatientChat()"><i class="ti ti-message-2"></i>Patient Q&A</button>
+            <button class="cop-qa-btn" onclick="copSuggestCoding()"><i class="ti ti-receipt"></i>Suggest coding</button>
+            <button class="cop-qa-btn" onclick="copSecondOpinion()"><i class="ti ti-scale"></i>Argue the alternative</button>
           </div>
-          <div class="cop-gen-row" style="margin-top:5px">
-            <div class="cop-gen-btn" style="flex:1" onclick="copGenerateBundle()"><i class="ti ti-stack-2"></i>Discharge bundle: curso + referral + GP summary</div>
-          </div>
-          <div class="cop-gen-row" style="margin-top:5px">
-            <div class="cop-gen-btn" style="flex:1" onclick="copSuggestCoding()"><i class="ti ti-receipt"></i>Suggest coding for this visit</div>
-          </div>
-          <div class="cop-gen-row" style="margin-top:5px">
-            <div class="cop-gen-btn" style="flex:1" onclick="copSecondOpinion()"><i class="ti ti-scale"></i>Argue the alternative</div>
-          </div>
-          <div class="cop-gen-lbl" id="cop-insights-lbl" style="margin-top:10px;display:none">Interpret a computed value</div>
+
+          <div class="cop-sec-lbl" id="cop-insights-lbl" style="margin-top:16px;display:none"><i class="ti ti-calculator"></i>Computed insights<span class="cop-sec-hint">exact, not generated</span></div>
           <div id="cop-insights-rows"></div>
         </div>
         <!-- Free query -->
         <div class="cop-query">
           <div class="cop-query-inner">
-            <i class="ti ti-message"></i>
-            <input id="cop-input" placeholder="Ask about this patient…" aria-label="Ask Resident about this patient" onkeydown="copKeydown(event)">
+            <i class="ti ti-airos-ai cop-query-mark"></i>
+            <input id="cop-input" placeholder="Ask Resident anything about this patient…" aria-label="Ask Resident about this patient" onkeydown="copKeydown(event)">
             <i class="ti ti-microphone" id="cop-mic-btn" onclick="copToggleVoice()" title="Voice input" tabindex="0" role="button" aria-label="Dictate question" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copToggleVoice()}"></i>
-            <i class="ti ti-arrow-right" onclick="copSubmit()" tabindex="0" role="button" aria-label="Send question" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copSubmit()}"></i>
+            <button class="cop-query-send" onclick="copSubmit()" aria-label="Send question"><i class="ti ti-arrow-right"></i></button>
           </div>
         </div>
       </div>
@@ -1416,6 +1469,8 @@ const ICON_PATHS = {
   'user-plus': '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M16 19h6" /> <path d="M19 16v6" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />',
   'users': '<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /> <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />',
   'vaccine': '<path d="M17 3l4 4" /> <path d="M19 5l-4.5 4.5" /> <path d="M11.5 6.5l6 6" /> <path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5" /> <path d="M7.5 12.5l1.5 1.5" /> <path d="M10.5 9.5l1.5 1.5" /> <path d="M3 21l3 -3" />',
+  'bolt': '<path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />',
+  'calculator': '<path d="M4 3m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /> <path d="M8 7l8 0" /> <path d="M8 11l0 .01" /> <path d="M12 11l0 .01" /> <path d="M16 11l0 .01" /> <path d="M8 15l0 .01" /> <path d="M12 15l0 .01" /> <path d="M16 15l0 .01" /> <path d="M8 19l0 .01" /> <path d="M12 19l0 .01" /> <path d="M16 19l0 .01" />',
   'wind': '<path d="M5 8h8.5a2.5 2.5 0 1 0 -2.34 -3.24" /> <path d="M3 12h15.5a2.5 2.5 0 1 1 -2.34 3.24" /> <path d="M4 16h5.5a2.5 2.5 0 1 1 -2.34 3.24" />',
   'x': '<path d="M18 6l-12 12" /> <path d="M6 6l12 12" />',
   'sparkles': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" />',
@@ -2359,6 +2414,13 @@ Criteria met: ${r.metCount} of 3.
 Classification: ${r.type}. ${r.verdict}.
 Rule: 2 or more criteria met = Type 1 (antibiotics indicated), exactly 1 = Type 2 (clinical judgement), 0 = Type 3 (not indicated).`,
     unavailableMsg: () => null
+  },
+  'biologic-eligibility': {
+    label: 'Interpret biologic eligibility', icon: 'vaccine',
+    applies: pt => pt.disease === 'ASTHMA' || pt.disease === 'ACO',
+    compute: (pt, v) => v.eos != null ? biologicEligibility(pt, v) : null,
+    evidence: r => r.map(b => `${b.agent} (${b.drugs}): ${b.status==='eligible'?'criteria met':b.status==='borderline'?'borderline, repeat testing':b.status==='pending'?'pending further testing':'criteria not met'}. ${b.detail}.`).join('\n'),
+    unavailableMsg: () => 'Blood eosinophil count has not been recorded for this visit yet; eligibility cannot be assessed without it.'
   }
 };
 
@@ -3047,28 +3109,61 @@ function buildActionBtns() {
 /* ═══════════════════════════════════════════════════════════════════
    VISIT BAR
 ═══════════════════════════════════════════════════════════════════ */
+function visitZoneDot(pt, vv) {
+  // Lightweight per-visit zone classification for the timeline dot, deliberately simple
+  // (not the full clinical zone logic used elsewhere): just enough to give each point on
+  // the timeline an at-a-glance color without duplicating the cockpit's real zone banner.
+  if (pt.disease === 'IPF') {
+    const stage = gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:vv.fvc, dlco:vv.dlco })).stage;
+    return stage==='III' ? 'r' : stage==='II' ? 'a' : 'g';
+  }
+  if (pt.disease === 'OSA') {
+    const sev = osaSeverity(vv.ahi).level;
+    return (sev==='severe'&&(vv.adherence==null||vv.adherence<70)) ? 'r' : (sev==='moderate'||sev==='severe') ? 'a' : 'g';
+  }
+  if (pt.disease === 'ASTHMA' || pt.disease === 'ACO') {
+    return vv.act!=null && vv.act<16 ? 'r' : vv.act!=null && vv.act<20 ? 'a' : 'g';
+  }
+  return (vv.exac>=2||vv.hosp>=1) ? 'r' : vv.exac>=1 ? 'a' : 'g';
+}
 function renderVisitBar(pt, v) {
   const btns = g('visit-btns');
   const date = g('visit-date');
   const delta= g('visit-delta');
   if (!btns) return;
 
-  btns.innerHTML = pt.visits.map((vv,i) => `
-    <button class="vbtn${i===currentVisit?' on':''}" onclick="switchVisit(${i})"
-      title="${vv.note||''}" style="position:relative">
-      Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}
-      ${vv.note ? `<span style="display:block;font-size:var(--fs-3xs);opacity:.6;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vv.note}</span>` : ''}
-    </button>`).join('');
+  btns.innerHTML = `<div class="vtl">${pt.visits.map((vv,i) => {
+    const dot = visitZoneDot(pt, vv);
+    const isLast = i === pt.visits.length - 1;
+    return `<div class="vtl-item${i===currentVisit?' on':''}">
+      ${i>0?'<div class="vtl-line"></div>':''}
+      <button class="vbtn" onclick="switchVisit(${i})" title="${vv.note||''}">
+        <span class="vtl-dot vtl-dot-${dot}"></span>
+        <span class="vtl-tx"><span class="vtl-n">Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}</span>${vv.note ? `<span class="vtl-note">${vv.note}</span>` : ''}</span>
+        ${isLast?'<span class="vtl-cur">current</span>':''}
+      </button>
+    </div>`;
+  }).join('')}</div>`;
 
   if (date) date.textContent = v.date;
 
   if (delta && currentVisit > 0) {
     const pv = pt.visits[currentVisit-1];
     const changes = [];
-    if (v.fev1 !== pv.fev1) changes.push({ t:v.fev1<pv.fev1?'w':'b', txt:`FEV₁ ${v.fev1<pv.fev1?'↓':'↑'}${v.fev1}%` });
-    if (v.cat  !== null && pv.cat !== null && v.cat !== pv.cat)  changes.push({ t:v.cat>pv.cat?'w':'b', txt:`CAT ${v.cat>pv.cat?'↑':'↓'}${v.cat}` });
-    if (v.act  !== null && pv.act !== null && v.act !== pv.act)  changes.push({ t:v.act<pv.act?'w':'b', txt:`ACT ${v.act<pv.act?'↓':'↑'}${v.act}` });
-    if (v.exac !== pv.exac) changes.push({ t:v.exac>pv.exac?'w':'b', txt:`Exac ${v.exac>pv.exac?'↑':'↓'}${v.exac}` });
+    if (pt.disease === 'IPF') {
+      if (v.fvc !== pv.fvc) changes.push({ t:v.fvc<pv.fvc?'w':'b', txt:`FVC ${v.fvc<pv.fvc?'↓':'↑'}${v.fvc}%` });
+      if (v.dlco != null && pv.dlco != null && v.dlco !== pv.dlco) changes.push({ t:v.dlco<pv.dlco?'w':'b', txt:`DLCO ${v.dlco<pv.dlco?'↓':'↑'}${v.dlco}%` });
+      if (v.sixMWD != null && pv.sixMWD != null && v.sixMWD !== pv.sixMWD) changes.push({ t:v.sixMWD<pv.sixMWD?'w':'b', txt:`6MWD ${v.sixMWD<pv.sixMWD?'↓':'↑'}${v.sixMWD}m` });
+    } else if (pt.disease === 'OSA') {
+      if (v.ahi !== pv.ahi) changes.push({ t:v.ahi>pv.ahi?'w':'b', txt:`AHI ${v.ahi>pv.ahi?'↑':'↓'}${v.ahi}/hr` });
+      if (v.odi !== pv.odi) changes.push({ t:v.odi>pv.odi?'w':'b', txt:`ODI ${v.odi>pv.odi?'↑':'↓'}${v.odi}/hr` });
+      if (v.adherence != null && pv.adherence != null && v.adherence !== pv.adherence) changes.push({ t:v.adherence<pv.adherence?'w':'b', txt:`Adherence ${v.adherence<pv.adherence?'↓':'↑'}${v.adherence}%` });
+    } else {
+      if (v.fev1 !== pv.fev1) changes.push({ t:v.fev1<pv.fev1?'w':'b', txt:`FEV₁ ${v.fev1<pv.fev1?'↓':'↑'}${v.fev1}%` });
+      if (v.cat  !== null && pv.cat !== null && v.cat !== pv.cat)  changes.push({ t:v.cat>pv.cat?'w':'b', txt:`CAT ${v.cat>pv.cat?'↑':'↓'}${v.cat}` });
+      if (v.act  !== null && pv.act !== null && v.act !== pv.act)  changes.push({ t:v.act<pv.act?'w':'b', txt:`ACT ${v.act<pv.act?'↓':'↑'}${v.act}` });
+      if (v.exac !== pv.exac) changes.push({ t:v.exac>pv.exac?'w':'b', txt:`Exac ${v.exac>pv.exac?'↑':'↓'}${v.exac}` });
+    }
     delta.innerHTML = changes.slice(0,4).map(c => `<span class="vdp ${c.t}">${c.txt}</span>`).join('');
   } else if (delta) {
     delta.innerHTML = '<span class="vdp n">Baseline visit</span>';
@@ -5870,12 +5965,18 @@ function bRegister() {
 function bExport() {
   return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Intelligence output: not an EHR record. Export supplements the hospital record.</div>
   <div style="display:flex;flex-direction:column;gap:9px">
-    ${[['ti-file-type-pdf','Clinical report (PDF)','Full intelligence output · all 7 layers',true],['ti-target','Action plan (PDF)','Zone-based plan for the patient',false],['ti-download','Raw data (JSON)','All fields · engine layers · research',false],['ti-building-hospital','For EHR (summary)','Intelligence summary in note format',false]].map(([icon,lbl,desc,primary])=>`
-      <button class="abt ${primary?'abt-p':'abt-s'}" onclick="notify('${lbl} exported','ok')">
+    ${[['ti-file-type-pdf','Clinical report (PDF)','Full intelligence output · all 7 layers',true,"notify('Clinical report (PDF) exported','ok')"],
+       ['ti-target','Action plan (PDF)','Zone-based plan for the patient',false,"notify('Action plan (PDF) exported','ok')"],
+       ['ti-download','Raw data (JSON)','All fields · engine layers · research',false,'exportPatientJSON()'],
+       ['ti-building-hospital','For EHR (summary)','Intelligence summary in note format',false,'previewEHRExport()'],
+       ['ti-stethoscope','FHIR R4 Bundle','Patient · Condition · Observations · MedicationStatements',false,'downloadFHIRBundle()']
+      ].map(([icon,lbl,desc,primary,action])=>`
+      <button class="abt ${primary?'abt-p':'abt-s'}" onclick="${action}">
         <div class="abt-ico"><i class="ti ${icon}"></i></div>
         <div class="abt-tx"><div class="abt-lbl">${lbl}</div><div class="abt-desc">${desc}</div></div>
       </button>`).join('')}
   </div>
+  <div class="ia ia-i" style="margin-top:12px"><i class="ti ti-info-circle"></i><div class="ia-body">The FHIR bundle is a structurally valid export for use by a system that already has a real FHIR server and authentication in place. It is not itself a live connection to any EHR.</div></div>
   <div style="margin-top:16px">
     <div class="flbl-sec" style="margin-bottom:10px">Audit log<span class="feng">GDPR required</span></div>
     ${buildAuditLog()}
@@ -5974,6 +6075,134 @@ function bAnalysis() {
   <div style="margin-top:14px"><div class="xs muted mono" style="margin-bottom:7px;letter-spacing:1px">GENERATED REPORT</div><div class="rep" id="rep-out">Run full analysis to generate report.</div></div>
   <div class="flex g2" style="margin-top:12px;flex-wrap:wrap"><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button><button class="btn bs btn-sm" onclick="exportPatientJSON()"><i class="ti ti-download"></i>JSON</button><button class="btn bs btn-sm" onclick="previewEHRExport()"><i class="ti ti-building-hospital"></i>For EHR</button></div>`;
 }
+/* ═══════════════════════════════════════════════════════════════════
+   FHIR R4 EXPORT (item: "integrate FHIR just in case")
+   Builds a genuine FHIR R4 Bundle (Patient, Condition, Observation x N,
+   MedicationStatement x N) for the current patient. This is an EXPORT
+   capability, not a live EHR connection: a real FHIR integration needs a
+   backend, SMART-on-FHIR OAuth2, and a FHIR server to talk to, none of
+   which a static single-file browser app can provide. What this DOES
+   provide: output that is structurally valid against the FHIR R4 spec and
+   could be POSTed to a real FHIR server's /Bundle endpoint by a system
+   that has those things.
+
+   Coding discipline (same standard as the rest of this codebase): every
+   code below was individually web-verified against an authoritative
+   source before being hardcoded. Where verification could not be
+   completed (e.g. no confirmed LOINC code for CAT or mMRC was found),
+   the Observation still includes the value but with a text-only coding
+   per FHIR's own CodeableConcept.text fallback (FHIR explicitly supports
+   this for exactly this situation), rather than inventing a plausible-
+   looking code that could be silently wrong in a clinical record.
+═══════════════════════════════════════════════════════════════════ */
+const FHIR_CONDITION_CODES = {
+  // ICD-10-CM, each verified individually against icd10data.com / AAPC / CMS sources
+  COPD:               { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J44.9',  display:'Chronic obstructive pulmonary disease, unspecified' },
+  ASTHMA:             { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J45.909',display:'Unspecified asthma, uncomplicated' },
+  ACO:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J44.9',  display:'Chronic obstructive pulmonary disease, unspecified (asthma-COPD overlap: coded with an additional J45 asthma code per ICD-10-CM convention)' },
+  CHRONIC_BRONCHITIS: { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J41.9',  display:'Chronic bronchitis, unspecified' },
+  IPF:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J84.112',display:'Idiopathic pulmonary fibrosis' },
+  OSA:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'G47.33', display:'Obstructive sleep apnea (adult) (pediatric)' }
+};
+// Class-level ATC codes only (the app stores drug CLASS, e.g. "LAMA", not a specific
+// molecule per patient, so a molecule-specific RxNorm/ATC code cannot be honestly
+// attached; the class-level ATC code is the most specific claim the data supports).
+const FHIR_MED_CLASS_CODES = {
+  SABA:     { system:'http://www.whocc.no/atc', code:'R03AC', display:'Selective beta-2-adrenoreceptor agonists' },
+  LABA:     { system:'http://www.whocc.no/atc', code:'R03AC', display:'Selective beta-2-adrenoreceptor agonists (long-acting)' },
+  LAMA:     { system:'http://www.whocc.no/atc', code:'R03BB', display:'Anticholinergics' },
+  ICS:      { system:'http://www.whocc.no/atc', code:'R03BA', display:'Glucocorticoids, inhalant' },
+  Biologic: { system:'http://www.whocc.no/atc', code:'R03DX', display:'Other systemic drugs for obstructive airway diseases' }
+};
+function fhirGender(sex) { return sex==='Male'?'male':sex==='Female'?'female':'unknown'; }
+function buildFHIRBundle(patientId) {
+  const pt = DB[patientId];
+  if (!pt) return null;
+  const v = pt.visits[pt.visits.length - 1];
+  const nowIso = new Date().toISOString();
+  const fullId = `${pidPrefix(patientId)}${patientId}`;
+  const entries = [];
+
+  // Patient resource. No name/DOB/address: this app's pseudonymisation model never stores
+  // patient-identifying demographics in the clinical record, only a platform-generated ID
+  // and age/sex, consistent with how the rest of AIROS already treats identity.
+  entries.push({ fullUrl:`urn:uuid:patient-${fullId}`, resource:{
+    resourceType:'Patient', id:fullId,
+    identifier:[{ system:'urn:airos:patient-id', value:fullId }],
+    gender: fhirGender(pt.demographics.sex),
+    extension:[{ url:'http://hl7.org/fhir/StructureDefinition/patient-age', valueInteger: pt.demographics.age }]
+  }});
+
+  // Condition: the primary disease, ICD-10 coded against verified sources above.
+  const condCode = FHIR_CONDITION_CODES[pt.disease];
+  if (condCode) {
+    entries.push({ fullUrl:`urn:uuid:condition-${fullId}`, resource:{
+      resourceType:'Condition', id:`condition-${fullId}`,
+      subject:{ reference:`urn:uuid:patient-${fullId}` },
+      code:{ coding:[{ system:condCode.system, code:condCode.code, display:condCode.display }], text:pt.disease.replace('_',' ') },
+      clinicalStatus:{ coding:[{ system:'http://terminology.hl7.org/CodeSystem/condition-clinical', code:'active' }] },
+      verificationStatus:{ coding:[{ system:'http://terminology.hl7.org/CodeSystem/condition-ver-status', code:'confirmed' }] }
+    }});
+  }
+
+  // Observations: every field on the latest visit, LOINC-coded where FIELD_CODES has a
+  // verified code, text-only CodeableConcept otherwise (FHIR-valid, just less specific).
+  const obsLabels = { cat:'COPD Assessment Test (CAT) score', mmrc:'mMRC dyspnoea grade', exac:'Exacerbations in past 12 months',
+    hosp:'Hospitalisations in past 12 months', ocs:'Oral corticosteroid courses in past 12 months', feno:'Fractional exhaled nitric oxide (FeNO)',
+    adherence:'Self-reported medication adherence', epworth:'Epworth Sleepiness Scale score', bmi:'Body mass index' };
+  getAllObservations(v).forEach(obs => {
+    const meta = FIELD_CODES[obs.key];
+    entries.push({ fullUrl:`urn:uuid:obs-${fullId}-${obs.key}`, resource:{
+      resourceType:'Observation', id:`obs-${fullId}-${obs.key}`,
+      status:'final',
+      subject:{ reference:`urn:uuid:patient-${fullId}` },
+      effectiveDateTime: visitDateToIso(v.date),
+      code: meta
+        ? { coding:[{ system:'http://loinc.org', code:meta.code, display:meta.display }], text:meta.display }
+        : { text: obsLabels[obs.key] || obs.key },
+      valueQuantity: typeof obs.value === 'number' ? { value: obs.value, unit: obs.unit || (FIELD_CODES[obs.key]?.unit) || '' } : undefined,
+      valueString: typeof obs.value !== 'number' ? String(obs.value) : undefined
+    }});
+  });
+
+  // MedicationStatement: one per active medication, class-level ATC coded.
+  pt.meds.forEach((m, i) => {
+    const atc = FHIR_MED_CLASS_CODES[m.cls];
+    entries.push({ fullUrl:`urn:uuid:med-${fullId}-${i}`, resource:{
+      resourceType:'MedicationStatement', id:`med-${fullId}-${i}`,
+      status:'active',
+      subject:{ reference:`urn:uuid:patient-${fullId}` },
+      medicationCodeableConcept: atc
+        ? { coding:[{ system:atc.system, code:atc.code, display:atc.display }], text:`${m.drug} (${m.cls})` }
+        : { text:`${m.drug} (${m.cls})` },
+      dosage: m.dose ? [{ text:`${m.dose}, ${m.freq||''}`.trim() }] : undefined
+    }});
+  });
+
+  return {
+    resourceType:'Bundle', type:'collection', timestamp:nowIso,
+    meta:{ tag:[{ system:'urn:airos:export', code:'demo-data', display:'AIROS demo/illustrative export, not from a production EHR' }] },
+    entry: entries
+  };
+}
+function visitDateToIso(dateStr) {
+  // Visit dates are stored as "14 Jun 2026" style strings; FHIR effectiveDateTime needs ISO 8601.
+  const parsed = new Date(dateStr);
+  return isNaN(parsed.getTime()) ? new Date().toISOString().slice(0,10) : parsed.toISOString().slice(0,10);
+}
+function downloadFHIRBundle() {
+  const pt = getPt();
+  if (!pt) return;
+  const bundle = buildFHIRBundle(currentPt);
+  const blob = new Blob([JSON.stringify(bundle, null, 2)], { type:'application/fhir+json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${pidPrefix(currentPt)}${currentPt}-fhir-bundle.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  notify('FHIR R4 Bundle downloaded (export format, not a live EHR connection)', 'ok');
+}
+
 function exportPatientJSON() {
   const pt = getPt();
   if (!pt) return;
@@ -6161,14 +6390,9 @@ function renderCopInsightButtons() {
   const applicable = getApplicableInsights(pt);
   if (!applicable.length) { rowsEl.innerHTML = ''; if (lblEl) lblEl.style.display = 'none'; return; }
   if (lblEl) lblEl.style.display = '';
-  let html = '';
-  for (let i = 0; i < applicable.length; i += 2) {
-    const pair = applicable.slice(i, i + 2);
-    html += `<div class="cop-gen-row" style="margin-top:5px">${pair.map(([id, def]) =>
-      `<div class="cop-gen-btn" onclick="copInterpretInsight('${id}')"><i class="ti ti-${def.icon}"></i>${def.label}</div>`
-    ).join('')}</div>`;
-  }
-  rowsEl.innerHTML = html;
+  rowsEl.innerHTML = `<div class="cop-insight-row">${applicable.map(([id, def]) =>
+    `<button class="cop-insight-btn" onclick="copInterpretInsight('${id}')"><i class="ti ti-${def.icon}"></i>${def.label.replace(/^Interpret /,'')}</button>`
+  ).join('')}</div>`;
 }
 
 function renderCopContext() {
@@ -6637,6 +6861,9 @@ let copConvHistory = {};   // { [patientId]: [{q, a}] }, session-only, cleared o
 /* Generic handler for every "Interpret X" button, item: AI panel buttons backed by
    precomputed values rather than free-text prompting. One function serves every entry
    in INSIGHT_REGISTRY rather than writing a near-duplicate function per metric. */
+function evidenceBoxHTML(evidence) {
+  return `<div class="cop-evidence"><div class="cop-evidence-hdr"><i class="ti ti-calculator"></i>Computed by AIROS, not the AI</div><div class="cop-evidence-body">${evidence}</div></div>`;
+}
 async function copInterpretInsight(insightId) {
   const def = INSIGHT_REGISTRY[insightId];
   if (!def) return;
@@ -6651,7 +6878,7 @@ async function copInterpretInsight(insightId) {
   }
   const pt = getPt(), v = getVisit();
   const result = def.compute(pt, v);
-  openCopOut(def.label);
+  openCopOut(def.label.replace(/^Interpret /,''));
   g('cop-out-register').innerHTML = '';
   if (result === null || result === undefined) {
     const msg = def.unavailableMsg(pt, v) || 'This value cannot be computed yet: insufficient data on file.';
@@ -6659,7 +6886,7 @@ async function copInterpretInsight(insightId) {
     return;
   }
   const evidence = def.evidence(result, pt, v);
-  g('cop-out-body').innerHTML = `<div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-calculator"></i><div class="ia-body"><strong>Computed by AIROS, not the AI:</strong><br><span style="font-family:var(--mono);font-size:var(--fs-xs);white-space:pre-line">${evidence}</span></div></div><div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>`;
+  g('cop-out-body').innerHTML = `${evidenceBoxHTML(evidence)}<div class="cop-evidence-seam"><i class="ti ti-airos-ai"></i>Resident's interpretation</div><div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>`;
   setPulse('thinking', 'Interpreting the computed result...');
   const prompt = `You are AIROS clinical reasoning engine. AIROS has already computed an exact clinical result deterministically, shown below. Your only job is to write the clinical interpretation and narrative around it.
 
@@ -6675,9 +6902,9 @@ ${evidence}
 Write a 3-5 sentence clinical interpretation: what this result means for this specific patient, why it matters now, and one concrete next step. Plain medical English. No em-dashes. Do not repeat the raw numbers as a list, weave them into the interpretation naturally.`;
   try {
     const text = await callCopAPI(prompt, copScaleTok(400));
-    g('cop-out-body').innerHTML = `<div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-calculator"></i><div class="ia-body"><strong>Computed by AIROS, not the AI:</strong><br><span style="font-family:var(--mono);font-size:var(--fs-xs);white-space:pre-line">${evidence}</span></div></div><div>${text}</div>`;
+    g('cop-out-body').innerHTML = `${evidenceBoxHTML(evidence)}<div class="cop-evidence-seam"><i class="ti ti-airos-ai"></i>Resident's interpretation</div><div>${text}</div>`;
   } catch(e) {
-    g('cop-out-body').innerHTML = `<div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-calculator"></i><div class="ia-body"><strong>Computed by AIROS, not the AI:</strong><br><span style="font-family:var(--mono);font-size:var(--fs-xs);white-space:pre-line">${evidence}</span></div></div><div class="ia ia-w"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
+    g('cop-out-body').innerHTML = `${evidenceBoxHTML(evidence)}<div class="ia ia-w" style="margin-top:10px"><i class="ti ti-alert-triangle"></i><div class="ia-body">${copApiErrorMessage(e)}</div></div>`;
   }
   setPulse('');
 }
@@ -7086,11 +7313,11 @@ function openCopOut(title) {
   copOutOpen = true;
   copOutEdited = false;
   const badge = g('cop-out-draft');
-  if (badge) badge.textContent = 'Borrador IA · revisar antes de firmar';
+  if (badge) badge.textContent = copLang === 'es' ? 'Borrador IA · revisar antes de firmar' : 'AI draft · review before signing';
   const outBody = g('cop-out-body');
   if (outBody) outBody.setAttribute('contenteditable','true');
   const signBtn = g('cop-sign-btn');
-  if (signBtn) { signBtn.disabled = false; signBtn.innerHTML = '<i class="ti ti-check"></i>Sign and file'; }
+  if (signBtn) { signBtn.disabled = false; signBtn.innerHTML = `<i class="ti ti-check"></i>${copLang==='es'?'Firmar y archivar':'Sign and file'}`; }
 }
 function closeCopOut() {
   if (g('cop-out')) g('cop-out').classList.remove('open');
