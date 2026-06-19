@@ -146,6 +146,11 @@ input,select,textarea{font-family:inherit;}
 .kstat-g .kstat-val{color:var(--g7);}
 .tenant-badge{display:inline-flex;align-items:center;gap:var(--sp-2);font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);background:var(--i0);border:1px solid var(--i1);padding:var(--sp-0b) var(--sp-4);border-radius:99px;margin-bottom:10px;}
 .dash-mix-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;letter-spacing:1.3px;text-transform:uppercase;color:var(--i3);margin-bottom:6px;}
+.cs-filter-bar{display:flex;gap:var(--sp-6);flex-wrap:wrap;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:var(--sp-6) var(--sp-7);margin-bottom:18px;}
+.cs-filter-grp{display:flex;flex-direction:column;gap:5px;min-width:180px;}
+.cs-filter-lbl{font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--i4);}
+.cs-agg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);}
+@media(max-width:900px){.cs-agg-grid{grid-template-columns:repeat(2,1fr);}}
 .dash-mix-row{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:14px;}
 .dash-mix-chip{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-2xs);color:var(--i5);background:var(--i0);border:1px solid transparent;padding:3px 9px 3px 7px;border-radius:99px;cursor:pointer;transition:all .14s;}
 .dash-mix-chip b{font-weight:700;color:var(--i6);margin-left:1px;}
@@ -1139,6 +1144,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="dash-title">Today's clinic</div>
         <div class="dash-sub" id="dash-sub"></div>
       </div>
+      <button class="btn bg btn-sm" onclick="showView('cohort-studies')" aria-label="Open cohort studies"><i class="ti ti-chart-histogram"></i><span class="btn-label">Cohort studies</span></button>
       <button class="btn bp btn-sm" onclick="openDrw('register')" aria-label="Register new patient"><i class="ti ti-user-plus"></i><span class="btn-label">Register new patient</span></button>
     </div>
     <div class="dash-search">
@@ -1160,6 +1166,44 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   </div>
 </div>
 
+<div id="cohort-studies-view" tabindex="-1" style="display:none">
+  <div class="dash-view">
+    <div class="dash-row">
+      <div>
+        <div class="dash-title">Cohort studies</div>
+        <div class="dash-sub">Longitudinal analysis across the whole clinic, not a single patient</div>
+      </div>
+      <button class="btn bg btn-sm" onclick="goToDashboard()" aria-label="Back to dashboard"><i class="ti ti-arrow-left"></i><span class="btn-label">Back to clinic</span></button>
+    </div>
+    <div class="cs-filter-bar">
+      <div class="cs-filter-grp">
+        <label class="cs-filter-lbl">Disease</label>
+        <select id="cs-disease" class="fsel" onchange="renderCohortStudy()">
+          <option value="all">All diseases</option>
+          <option value="COPD">COPD</option>
+          <option value="ASTHMA">Asthma</option>
+          <option value="ACO">ACO</option>
+          <option value="CHRONIC_BRONCHITIS">Chronic Bronchitis</option>
+          <option value="IPF">IPF</option>
+          <option value="OSA">OSA</option>
+        </select>
+      </div>
+      <div class="cs-filter-grp">
+        <label class="cs-filter-lbl">Years since onset</label>
+        <select id="cs-onset-min" class="fsel" onchange="renderCohortStudy()">
+          <option value="0">Any</option><option value="1">1+</option><option value="3">3+</option><option value="5">5+</option><option value="10">10+</option>
+        </select>
+      </div>
+      <div class="cs-filter-grp">
+        <label class="cs-filter-lbl">Compare around</label>
+        <select id="cs-drug-filter" class="fsel" onchange="renderCohortStudy()">
+          <option value="">No drug comparison</option>
+        </select>
+      </div>
+    </div>
+    <div id="cs-results"></div>
+  </div>
+</div>
 
 <!-- VISIT BAR -->
 <div class="visit-bar" id="visit-bar" style="display:none">
@@ -1514,6 +1558,7 @@ const ICON_PATHS = {
   'refresh': '<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />',
   'rotate': '<path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" />',
   'route': '<path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4" /> <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />',
+  'chart-histogram': '<path d="M3 3v18h18" /> <path d="M20 18v3" /> <path d="M16 16v5" /> <path d="M12 13v8" /> <path d="M8 16v5" /> <path d="M3 11c6 0 5 -5 9 -5s3 5 9 5" />',
   'search': '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" />',
   'server-2': '<path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-2" /> <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /> <path d="M7 8l0 .01" /> <path d="M7 16l0 .01" /> <path d="M11 8h6" /> <path d="M11 16h6" />',
   'settings': '<path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /> <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />',
@@ -2186,6 +2231,11 @@ function checkProtocols(pt) {
    exac, adherence, technique, sputum, bdResp, nightWk, rescueWk are outcomes or local clinical
    judgments, not single standardized lab/instrument codes, so they stay uncoded here rather
    than being forced into a system they don't actually belong to. */
+// Shared minimum-cohort-size privacy threshold: any aggregate or comparison view covering
+// fewer than this many patients is suppressed to reduce re-identification risk. Previously
+// defined separately inside two different functions; consolidated to one constant so the
+// actual threshold can never silently drift between call sites.
+const K_ANON = 5;
 const FIELD_CODES = {
   fev1:   { system:'LOINC', code:'20152-5', display:'FEV1 measured/predicted', unit:'%' },
   fvc:    { system:'LOINC', code:'19868-2', display:'FVC', unit:'L' },
@@ -2195,7 +2245,9 @@ const FIELD_CODES = {
   sixMWD: { system:'LOINC', code:'64098-7', display:'Six minute walk test', unit:'m' },
   dlco:   { system:'LOINC', code:'19910-9', display:'Diffusion capacity.carbon monoxide Predicted', unit:'%' },
   ahi:    { system:'LOINC', code:'69990-0', display:'Apnea hypopnea index', unit:'/hr' },
-  odi:    { system:'LOINC', code:'90567-9', display:'Oxygen desaturation index', unit:'/hr' }
+  odi:    { system:'LOINC', code:'90567-9', display:'Oxygen desaturation index', unit:'/hr' },
+  tlc:    { system:'LOINC', code:'19862-2', display:'Total lung capacity', unit:'%' },
+  rv:     { system:'LOINC', code:'20146-7', display:'Residual volume', unit:'%' }
 };
 function fieldCodeTag(key) {
   const c = FIELD_CODES[key];
@@ -3455,6 +3507,7 @@ function showView(view) {
   appView = view;
   g('login-view').style.display     = view === 'login'     ? 'flex'  : 'none';
   g('dashboard-view').style.display = view === 'dashboard' ? 'block' : 'none';
+  g('cohort-studies-view').style.display = view === 'cohort-studies' ? 'block' : 'none';
   g('ahdr').style.display           = view === 'login'     ? 'none'  : 'flex';
   g('visit-bar').style.display      = view === 'cockpit'   ? 'flex'  : 'none';
   g('cockpit').style.display        = view === 'cockpit'   ? 'grid'  : 'none';
@@ -3465,6 +3518,7 @@ function showView(view) {
   }
   if (view === 'dashboard') renderDashboard();
   if (view === 'cockpit')   render();
+  if (view === 'cohort-studies') { populateCohortDrugFilter(); renderCohortStudy(); }
 }
 
 function goToDashboard() {
@@ -3635,7 +3689,6 @@ async function copResearchSummary() {
     return;
   }
   target.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
-  const K_ANON = 5;
   const entries = Object.entries(DB);
   const byDisease = {};
   entries.forEach(([id, pt]) => {
@@ -3698,6 +3751,117 @@ function buildDashStatStrip() {
   <div class="dash-mix-lbl">Caseload mix</div>
   <div class="dash-mix-row">${mixHTML}</div>`;
 }
+/* ═══════════════════════════════════════════════════════════════════
+   COHORT STUDIES (item: longitudinal analysis across the whole clinic,
+   not a single patient — filter by disease + years since onset, see
+   aggregate stats, and a real before/after comparison anchored on when
+   a drug was started, using actual recorded visits on either side.
+
+   This deliberately reuses getTrend()'s pattern (real dated visits, not
+   synthetic interpolation) rather than inventing a separate comparison
+   engine, so the same "honest about what it can't compute" discipline
+   applies here: if a patient has no visit before or after the drug
+   start date, they are excluded from the before/after view rather than
+   guessed at, and the UI says so explicitly. */
+function populateCohortDrugFilter() {
+  const sel = g('cs-drug-filter');
+  if (!sel) return;
+  const drugs = new Set();
+  Object.values(DB).forEach(pt => pt.meds.forEach(m => drugs.add(m.drug)));
+  sel.innerHTML = '<option value="">No drug comparison</option>' +
+    [...drugs].sort().map(d => `<option value="${d}">${d}: before vs after starting</option>`).join('');
+}
+function yearsSinceOnset(pt) {
+  if (pt.demographics.onsetAge == null || pt.demographics.age == null) return null;
+  return pt.demographics.age - pt.demographics.onsetAge;
+}
+function getCohortStudyFilters() {
+  return {
+    disease: g('cs-disease')?.value || 'all',
+    onsetMin: parseInt(g('cs-onset-min')?.value || '0', 10),
+    drug: g('cs-drug-filter')?.value || ''
+  };
+}
+function renderCohortStudy() {
+  const out = g('cs-results');
+  if (!out) return;
+  const f = getCohortStudyFilters();
+  const matched = Object.entries(DB).filter(([id, pt]) => {
+    if (f.disease !== 'all' && pt.disease !== f.disease) return false;
+    const yrs = yearsSinceOnset(pt);
+    if (f.onsetMin > 0 && (yrs == null || yrs < f.onsetMin)) return false;
+    return true;
+  });
+
+  if (!matched.length) {
+    out.innerHTML = `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">No patients match this filter combination.</div></div>`;
+    return;
+  }
+  if (matched.length < K_ANON) {
+    out.innerHTML = `<div class="ia ia-w"><i class="ti ti-shield-lock"></i><div class="ia-body"><strong>${matched.length} patient${matched.length!==1?'s':''} match, below the k=${K_ANON} anonymity guardrail.</strong> Aggregate and comparison views are suppressed to reduce re-identification risk for small subgroups. Individual patient cockpits remain accessible directly.</div></div>`;
+    return;
+  }
+
+  const aggregate = buildCohortAggregate(matched);
+  const comparison = f.drug ? buildDrugComparison(matched, f.drug) : '';
+  out.innerHTML = aggregate + comparison;
+}
+function buildCohortAggregate(matched) {
+  const n = matched.length;
+  const ages = matched.map(([,pt])=>pt.demographics.age).filter(a=>a!=null);
+  const avgAge = ages.length ? Math.round(ages.reduce((s,a)=>s+a,0)/ages.length) : null;
+  const adherenceVals = matched.map(([,pt])=>{ const v=pt.visits[pt.visits.length-1]; return v.adherence; }).filter(a=>a!=null);
+  const avgAdherence = adherenceVals.length ? Math.round(adherenceVals.reduce((s,a)=>s+a,0)/adherenceVals.length) : null;
+  const zoneCounts = { r:0, a:0, g:0 };
+  matched.forEach(([,pt]) => { if (zoneCounts[pt.risk] !== undefined) zoneCounts[pt.risk]++; });
+  const onsetYrs = matched.map(([,pt])=>yearsSinceOnset(pt)).filter(y=>y!=null);
+  const avgOnset = onsetYrs.length ? Math.round(onsetYrs.reduce((s,y)=>s+y,0)/onsetYrs.length*10)/10 : null;
+  return `
+  <div class="cs-agg-grid">
+    <div class="kstat"><div class="kstat-lbl">Cohort size</div><div class="kstat-val">${n}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Avg age</div><div class="kstat-val">${avgAge ?? '—'}</div></div>
+    <div class="kstat"><div class="kstat-lbl">Avg years since onset</div><div class="kstat-val">${avgOnset ?? '—'}</div></div>
+    <div class="kstat${avgAdherence!=null&&avgAdherence<80?' kstat-a':''}"><div class="kstat-lbl">Avg adherence</div><div class="kstat-val">${avgAdherence!=null?avgAdherence+'%':'—'}</div></div>
+    <div class="kstat kstat-r"><div class="kstat-lbl">Red zone</div><div class="kstat-val">${zoneCounts.r}</div></div>
+    <div class="kstat kstat-a"><div class="kstat-lbl">Amber zone</div><div class="kstat-val">${zoneCounts.a}</div></div>
+    <div class="kstat kstat-g"><div class="kstat-lbl">Green zone</div><div class="kstat-val">${zoneCounts.g}</div></div>
+  </div>`;
+}
+function buildDrugComparison(matched, drugName) {
+  const trendField = (pt) => pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : 'fev1';
+  const rows = [];
+  matched.forEach(([id, pt]) => {
+    const med = pt.meds.find(m => m.drug === drugName);
+    if (!med || !med.since) return;
+    const startDate = new Date(med.since);
+    if (isNaN(startDate.getTime())) return;
+    const field = trendField(pt);
+    const before = pt.visits.filter(v => new Date(v.date) < startDate && v[field] != null).sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    const after  = pt.visits.filter(v => new Date(v.date) >= startDate && v[field] != null).sort((a,b)=>new Date(a.date)-new Date(b.date)).pop();
+    if (!before || !after) return; // honest exclusion: no usable before/after pair on record for this patient
+    rows.push({ id, field, before: before[field], after: after[field] });
+  });
+  if (rows.length < K_ANON) {
+    return `<div class="ia ia-i" style="margin-top:14px"><i class="ti ti-info-circle"></i><div class="ia-body">${rows.length} patient${rows.length!==1?'s':''} in this cohort have both a recorded visit before and after starting <strong>${drugName}</strong>, below the k=${K_ANON} threshold to show a comparison.</div></div>`;
+  }
+  // Mixed trend fields across a disease-mixed cohort (FEV1 vs FVC vs AHI) can't be honestly
+  // averaged as one number, so report direction (improved/worsened/unchanged) per patient
+  // rather than a single misleading aggregate percentage across non-comparable units.
+  const improved = rows.filter(r => r.field==='ahi' ? r.after < r.before : r.after > r.before).length;
+  const worsened = rows.filter(r => r.field==='ahi' ? r.after > r.before : r.after < r.before).length;
+  const unchanged = rows.length - improved - worsened;
+  return `
+  <div style="margin-top:18px">
+    <div class="dash-mix-lbl">Before vs after starting ${drugName}</div>
+    <div class="cs-agg-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kstat kstat-g"><div class="kstat-lbl">Improved</div><div class="kstat-val">${improved}</div></div>
+      <div class="kstat"><div class="kstat-lbl">Unchanged</div><div class="kstat-val">${unchanged}</div></div>
+      <div class="kstat kstat-r"><div class="kstat-lbl">Worsened</div><div class="kstat-val">${worsened}</div></div>
+    </div>
+    <div class="xs muted" style="margin-top:8px">Based on ${rows.length} patient${rows.length!==1?'s':''} with a recorded visit both before and after starting this drug. "Improved" compares each patient's own primary trend metric for their disease (FEV1/FVC higher is better, AHI lower is better); patients without a usable before/after pair on record are excluded rather than estimated.</div>
+  </div>`;
+}
+
 function renderDashboard() {
   const sub = g('dash-sub');
   const entries = Object.entries(DB);
@@ -4070,7 +4234,7 @@ function updateLiveZone() {
    were filled by the dictation-extraction path below, cleared the moment a clinician edits one by hand,
    exactly the same attribution contract used in patient registration. */
 let visitAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
-const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth'];
+const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv'];
 function commitVisitField(key, rawValue, isNumeric=true) {
   const v = getVisit();
   if (!v) return;
@@ -4098,6 +4262,37 @@ function commitSixMWD(val)   { commitVisitField('sixMWD', val); }
 function commitAhi(val)      { commitVisitField('ahi', val); updateLiveZone(); }
 function commitOdi(val)      { commitVisitField('odi', val); }
 function commitEpworth(val)  { commitVisitField('epworth', val); }
+function commitTlc(val)      { commitVisitField('tlc', val); updateRvTlcFeedback(); }
+function commitRv(val)       { commitVisitField('rv', val); updateRvTlcFeedback(); }
+/* RV/TLC ratio: air trapping in COPD (>=40% threshold, Casanova et al. and the NSCLC/COPD
+   mortality literature found this session), true restriction confirmation in IPF (TLC <80%
+   predicted). Verified LOINC codes: TLC 19862-2, RV 20146-7 (loinc.org, both confirmed
+   directly this session, not guessed). Deliberately NOT added to INSIGHT_REGISTRY yet: RV/TLC
+   is only meaningful once both values exist for a visit, and plethysmography is a less
+   routinely available test than spirometry, so this stays a live inline hint rather than a
+   permanent dashboard metric until real-world usage shows it is being recorded regularly. */
+function rvTlcRatio(v) {
+  if (v.rv == null || v.tlc == null || v.tlc === 0) return null;
+  return Math.round((v.rv / v.tlc) * 1000) / 10;
+}
+function updateRvTlcFeedback() {
+  const pt = getPt(), v = getVisit();
+  const fb = g('fb-rvtlc');
+  if (!fb) return;
+  const ratio = rvTlcRatio(v);
+  if (ratio == null) { fb.innerHTML = ''; return; }
+  if (pt.disease === 'COPD' || pt.disease === 'ACO') {
+    fb.innerHTML = ratio >= 40
+      ? `<div class="lfb lfb-w">RV/TLC ${ratio}%: air trapping present (threshold 40%)</div>`
+      : `<div class="lfb lfb-i">RV/TLC ${ratio}%: no significant air trapping</div>`;
+  } else if (pt.disease === 'IPF') {
+    fb.innerHTML = v.tlc < 80
+      ? `<div class="lfb lfb-i">TLC ${v.tlc}% predicted: consistent with restriction</div>`
+      : `<div class="lfb lfb-i">RV/TLC ${ratio}%</div>`;
+  } else {
+    fb.innerHTML = `<div class="lfb lfb-i">RV/TLC ${ratio}%</div>`;
+  }
+}
 function commitAdherence(val) {
   commitVisitField('adherence', val);
   const fb = g('fb-adherence');
@@ -4622,10 +4817,13 @@ function bInvestigations() {
   if (pt.disease === 'IPF') {
     return `
     ${S('Lung physiology','Classification',`<div class="fg">
-      ${F('FVC','%','',pv?`Previous: ${pv.fvc}%`:'')}
-      ${F('DLCO','%','',pv?`Previous: ${pv.dlco??'not performed'}${pv.dlco!=null?'%':''}`:'')}
-      ${F('TLC','%','')} ${F('6MWD','m','',pv?`Previous: ${pv.sixMWD??'not performed'}${pv.sixMWD!=null?' m':''}`:'')}
+      ${F('FVC','%','',pv?`Previous: ${pv.fvc}%`:'','fvc-input','commitFvc')}
+      ${F('DLCO','%','',pv?`Previous: ${pv.dlco??'not performed'}${pv.dlco!=null?'%':''}`:'','dlco-input','commitDlco')}
+      ${F('TLC','%','',pv?`Previous: ${pv.tlc??'not performed'}${pv.tlc!=null?'%':''}`:'','tlc-input','commitTlc')}
+      ${F('RV','%','',pv?`Previous: ${pv.rv??'not performed'}${pv.rv!=null?'%':''}`:'','rv-input','commitRv')}
+      ${F('6MWD','m','',pv?`Previous: ${pv.sixMWD??'not performed'}${pv.sixMWD!=null?' m':''}`:'','sixmwd-input','commitSixMWD')}
       <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="markDirty()"></div>
+      <div id="fb-rvtlc" style="grid-column:1/-1"></div>
     </div>`)}
     ${S('Imaging','Phenotyping',`<div class="fg">
       ${Sel('HRCT pattern',['Not yet performed','Definite UIP','Probable UIP','Indeterminate','Alternative diagnosis suggested'],'Not yet performed')}
@@ -4659,6 +4857,9 @@ function bInvestigations() {
     ${F('FEV₁ % predicted','%','',pv?`Previous: ${pv.fev1}%`:'')}
     ${F('FEV₁/FVC ratio','%','',pv?`Previous: ${pv.ratio||56}%`:'')}
     ${F('PEF','L/s','')} ${F('FEF₂₅₋₇₅%','L/s','')}
+    ${F('TLC','%','',pv?`Previous: ${pv.tlc??'not performed'}${pv.tlc!=null?'%':''}`:'','tlc-input','commitTlc')}
+    ${F('RV','%','',pv?`Previous: ${pv.rv??'not performed'}${pv.rv!=null?'%':''}`:'','rv-input','commitRv')}
+    <div id="fb-rvtlc" style="grid-column:1/-1"></div>
     ${Sel('Bronchodilator response',['Not tested','Significant','Partial','None'],'None')}
     <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="markDirty()"></div>
   </div>`)}
@@ -4847,7 +5048,6 @@ function bCohortOverviewCards(entries) {
 
 function bCohortOverview() {
   const entries = Object.entries(DB);
-  const K_ANON = 5;
   const zoneCounts = {r:0,a:0,g:0};
   entries.forEach(([,pt]) => { zoneCounts[pt.risk] = (zoneCounts[pt.risk]||0)+1; });
   const kStat = (n, label) => n < K_ANON
