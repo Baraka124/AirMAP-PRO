@@ -1113,6 +1113,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 
   <div id="ahdr-context" style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;margin-left:14px"></div>
 
+  <button class="btn bg btn-sm" id="ui-lang-btn" onclick="cycleUiLang()" title="Switch interface language" aria-label="Switch interface language" style="margin-right:8px">EN</button>
   <div class="hdr-r" id="hdr-actions"></div>
 </header>
 
@@ -1147,7 +1148,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="dash-sub" id="dash-sub"></div>
       </div>
       <button class="btn bg btn-sm" onclick="showView('cohort-studies')" aria-label="Open cohort studies"><i class="ti ti-chart-histogram"></i><span class="btn-label">Cohort studies</span></button>
-      <button class="btn bp btn-sm" onclick="openDrw('register')" aria-label="Register new patient"><i class="ti ti-user-plus"></i><span class="btn-label">Register new patient</span></button>
+      <button class="btn bp btn-sm" onclick="openDrw('register')" aria-label="Register new patient"><i class="ti ti-user-plus"></i><span class="btn-label" data-t="registerPatient">Register new patient</span></button>
     </div>
     <div class="dash-search">
       <i class="ti ti-search"></i>
@@ -1694,13 +1695,17 @@ const DB = {
     ]
   },
 
-  /* ── P2 · ASTHMA · UNCONTROLLED ────────────────────────────────
+  /* ── P2 · ASTHMA · BIOLOGIC RESPONDER ────────────────────────────
      Sofia R · 28yr · Female · Never smoked
      Story: Well controlled until new apartment (mould + cats).
-     Rapid deterioration. T2-high. Biologic eligible. Step-up urgent.
+     Rapid deterioration, T2-high, eligible per FDA eosinophil pathway.
+     Visit 4 extends the arc 24 weeks after starting mepolizumab,
+     showing a genuine real-world response (ACT 14->22, FEV1 72->84%,
+     0 exacerbations since starting), demonstrating the biologic
+     response-review insight end to end.
   ── */
   '00203': {
-    disease: 'ASTHMA', risk: 'r',
+    disease: 'ASTHMA', risk: 'g',
     identity: { internalRef:'c4d8a213-5f6b-4a02-8e7d-9b1c2f4a3e80', responsibleClinician:'Dr. García' },
     demographics: { age:28, sex:'Female', bmi:22.1, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:14 },
     comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
@@ -1708,22 +1713,26 @@ const DB = {
     environment: { aqi:105, aqiImpact:'Severe', pollen:'Very high', humidity:55, occExposure:'None', homeVent:'Good', airPurifier:true, petExposure:'Cats', dailySteps:5200, sleepHrs:7, techniqueErrors:'None', socialSupport:8, financialStress:3, healthLiteracy:'High', transport:'Good' },
     meds: [
       { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'200 mcg',freq:'Twice daily',since:'Aug 2023' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN daily',  since:'Aug 2023' }
+      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN daily',  since:'Aug 2023' },
+      { drug:'Mepolizumab', cls:'Biologic', tag:'tg', dose:'100 mg', freq:'Every 4 weeks', since:'29 Jun 2026' }
     ],
     visits: [
       { n:1, date:'11 Mar 2025', label:'Baseline',  fev1:88, fvc:4.2, ratio:78, cat:null, mmrc:0, exac:0, hosp:0, ocs:0, eos:220, act:23, rescueWk:0,   nightWk:0,  adherence:95, technique:'adequate',   note:'Well controlled. Low-dose ICS started.' },
       { n:2, date:'04 Mar 2026', label:'Stable',    fev1:85, fvc:4.0, ratio:76, cat:null, mmrc:1, exac:0, hosp:0, ocs:0, eos:310, act:19, rescueWk:1,   nightWk:1,  adherence:88, technique:'adequate',   note:'Eos rising. Still controlled. Allergen referral.' },
-      { n:3, date:'08 Jun 2026', label:'Deteriorating', fev1:72, fvc:3.6, ratio:70, cat:null, mmrc:2, exac:2, hosp:0, ocs:1, eos:420, act:14, rescueWk:7, nightWk:4, adherence:60, technique:'poor', note:'New apartment (mould, cats). Rapid deterioration. Step-up urgent.' }
+      { n:3, date:'08 Jun 2026', label:'Deteriorating', fev1:72, fvc:3.6, ratio:70, cat:null, mmrc:2, exac:2, hosp:0, ocs:1, eos:420, act:14, rescueWk:7, nightWk:4, adherence:60, technique:'poor', note:'New apartment (mould, cats). Rapid deterioration. Step-up urgent.' },
+      { n:4, date:'14 Dec 2026', label:'On biologic', fev1:84, fvc:4.0, ratio:76, cat:null, mmrc:0, exac:0, hosp:0, ocs:0, eos:140, act:22, rescueWk:1, nightWk:0, adherence:92, technique:'adequate', note:'24 weeks on mepolizumab. Eos suppressed, ACT and FEV1 back near baseline, no exacerbations since starting.' }
     ],
     timeline: [
-      { dot:'r', date:'Today · Clinic', ev:'ACT 14: uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
+      { dot:'g', date:'14 Dec 2026 · Review', ev:'Biologic response review', tag:{cls:'tg',tx:'Responding'}, detail:'24 weeks on mepolizumab · ACT 14 -> 22 · 0 exacerbations since starting' },
+      { dot:'g', date:'29 Jun 2026 · Therapy start', ev:'Mepolizumab initiated', tag:{cls:'tg',tx:'Started'}, detail:'Anti-IL5: eos 420, 2 exacerbations in past year, ICS+SABA background' },
+      { dot:'r', date:'08 Jun 2026 · Clinic', ev:'ACT 14: uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
       { dot:'a', date:'08 Jun 2026 · Review', ev:'Deterioration noted', tag:{cls:'ta',tx:'Worsening'}, detail:'Eos 420 · rescue daily · new apartment trigger identified' },
       { dot:'a', date:'May 2026 · Exacerbation', ev:'Acute attack', tag:{cls:'ta',tx:'ED'}, detail:'Nebulised salbutamol · oral prednisolone · discharged' },
       { dot:'',  date:'Mar 2026 · Clinic', ev:'Routine review', tag:{cls:'tn',tx:'Stable'}, detail:'ACT 19 · eos rising to 310 · allergen referral made' },
       { dot:'g', date:'Aug 2023 · Baseline', ev:'Asthma diagnosis', tag:{cls:'tg',tx:'Diagnosis'}, detail:'ACT 23 · well controlled on low-dose ICS' }
     ],
     referrals: [
-      { label:'Biologic therapy: anti-IL5',    status:'pending', date:'Referred today' },
+      { label:'Biologic therapy: anti-IL5',    status:'done', date:'Started 29 Jun 2026' },
       { label:'Allergen / environmental assessment', status:'pending', date:'Referred Mar 2026' },
       { label:'Asthma nurse education',          status:'done',    date:'Completed Aug 2023' }
     ],
@@ -1961,6 +1970,50 @@ const DB = {
       { label:'Medications',   pct:80, cls:'cf-part' },
       { label:'Longitudinal',  pct:70, cls:'cf-part' }
     ]
+  },
+
+  /* ── P8 · PAH (WHO Group 1) · ON BACKGROUND THERAPY ──────────────
+     Carmen V · 41yr · Female · Never smoked
+     Story: Progressive exertional dyspnoea, worked up with echo then RHC.
+     RHC confirms pre-capillary PH (Group 1 pattern): mPAP 38, PAWP 9, PVR 6.2 WU.
+     Started on background dual therapy (PDE-5i + ERA). WHO FC improving III->II.
+     Platelets and Hgb both normal, a genuine sotatercept eligibility candidate
+     once background-therapy duration criteria are confirmed by the specialist team.
+  ── */
+  '00721': {
+    disease: 'PAH', risk: 'a',
+    identity: { internalRef:'7f3a9c41-6e2b-4d8f-9a5c-1b8e3f6d2a94', responsibleClinician:'Dr. García' },
+    demographics: { age:41, sex:'Female', bmi:26.8, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:40 },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, connectiveTissue:false },
+    vaccinations: { flu:true, pneumo:true, covid:true },
+    environment: { aqi:38, aqiImpact:'No impact', pollen:'Low', humidity:50, occExposure:'None', homeVent:'Good', airPurifier:false, petExposure:'None', dailySteps:3200, sleepHrs:7, techniqueErrors:'None', socialSupport:8, financialStress:4, healthLiteracy:'High', transport:'Good' },
+    meds: [
+      { drug:'Tadalafil',   cls:'PDE5i', tag:'tp5', dose:'40 mg', freq:'Once daily', since:'Feb 2026' },
+      { drug:'Ambrisentan', cls:'ERA',   tag:'tera',dose:'10 mg', freq:'Once daily', since:'Feb 2026' }
+    ],
+    visits: [
+      { n:1, date:'05 Feb 2026', label:'RHC diagnosis', mpap:38, pawp:9, pvr:6.2, whoFc:3, sixMWD:310, ntprobnp:680, platelets:240, hgb:13.2, note:'RHC confirms pre-capillary PH (Group 1 pattern). WHO FC III. Background dual therapy started: tadalafil + ambrisentan.' },
+      { n:2, date:'14 May 2026', label:'12-week review', mpap:34, pawp:10, pvr:5.1, whoFc:3, sixMWD:355, ntprobnp:510, platelets:255, hgb:13.5, note:'Improving on dual background therapy. 6MWD up 45m. NT-proBNP falling. Still FC III.' },
+      { n:3, date:'18 Jun 2026', label:'Current', mpap:31, pawp:9, pvr:4.3, whoFc:2, sixMWD:392, ntprobnp:410, platelets:262, hgb:13.7, note:'WHO FC improved III to II. Continued response to background therapy. Platelets and Hgb both normal: eligibility for sotatercept add-on to be discussed at next MDT.' }
+    ],
+    timeline: [
+      { dot:'g', date:'18 Jun 2026 · Clinic', ev:'WHO FC improved to II', tag:{cls:'tg',tx:'Improving'}, detail:'6MWD 392m (was 310m) · NT-proBNP 410 (was 680) · sotatercept eligibility to be discussed' },
+      { dot:'',  date:'14 May 2026 · Review', ev:'12-week background therapy review', tag:{cls:'tn',tx:'Review'}, detail:'PVR 5.1 WU (was 6.2) · still WHO FC III · 6MWD improving' },
+      { dot:'a', date:'05 Feb 2026 · RHC', ev:'PAH (WHO Group 1) confirmed', tag:{cls:'ta',tx:'Diagnosis'}, detail:'mPAP 38 mmHg · PAWP 9 mmHg · PVR 6.2 WU · WHO FC III · dual therapy started' }
+    ],
+    referrals: [
+      { label:'PAH specialist centre MDT', status:'pending', date:'Referred 18 Jun 2026' },
+      { label:'Cardiology: RV function follow-up echo', status:'done', date:'Completed 14 May 2026' }
+    ],
+    completeness: [
+      { label:'Patient ID',    pct:100, cls:'cf-full' },
+      { label:'Demographics',  pct:100, cls:'cf-full' },
+      { label:'RHC hemodynamics', pct:100, cls:'cf-full' },
+      { label:'WHO FC & 6MWD', pct:100, cls:'cf-full' },
+      { label:'Environment',   pct:50,  cls:'cf-low' },
+      { label:'Medications',   pct:100, cls:'cf-full' },
+      { label:'Longitudinal',  pct:90,  cls:'cf-full' }
+    ]
   }
 };
 
@@ -2048,6 +2101,38 @@ function osaSeverity(ahi) {
   if (ahi < 15) return { level:'mild',     label:'Mild OSA' };
   if (ahi < 30) return { level:'moderate', label:'Moderate OSA' };
   return             { level:'severe',   label:'Severe OSA' };
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAH (WHO Group 1 pulmonary arterial hypertension) classification.
+   Verified this session against current ERS/JAHA-cited consensus:
+     - PH defined as mPAP >20 mmHg by RHC
+     - Pre-capillary PH (the PAH/Group 1 pattern): PAWP <=15 mmHg AND PVR >2 WU
+     - Isolated post-capillary PH: PAWP >15 mmHg AND PVR <=2 WU (left heart disease,
+       NOT true PAH; this distinction matters clinically, getting it wrong would
+       misclassify a left-heart-failure patient as a PAH/biologic candidate)
+     - Combined pre- and post-capillary PH: PAWP >15 mmHg AND PVR >2 WU
+   WHO functional class definitions and untreated median survival figures
+   (FC I/II ~6 years, FC III ~2.5 years, FC IV ~6 months) verified against
+   multiple independent trial-protocol sources and a WHO-FC review this session.
+═══════════════════════════════════════════════════════════════════ */
+function pahHemodynamics({ mpap, pawp, pvr }) {
+  if (mpap == null) return { confirmed:false, pattern:'Not yet assessed', detail:'No right heart catheterization data on file.' };
+  if (mpap <= 20) return { confirmed:false, pattern:'No pulmonary hypertension', detail:`mPAP ${mpap} mmHg is within the normal range (threshold >20 mmHg).` };
+  if (pawp == null || pvr == null) return { confirmed:false, pattern:'PH present, pattern unclear', detail:`mPAP ${mpap} mmHg confirms pulmonary hypertension, but PAWP and/or PVR are needed to distinguish pre- from post-capillary PH.` };
+  if (pawp <= 15 && pvr > 2) return { confirmed:true, pattern:'Pre-capillary PH (WHO Group 1 pattern)', detail:`mPAP ${mpap} mmHg, PAWP ${pawp} mmHg (\u226415), PVR ${pvr} WU (>2): consistent with PAH.` };
+  if (pawp > 15 && pvr <= 2) return { confirmed:false, pattern:'Isolated post-capillary PH', detail:`mPAP ${mpap} mmHg, PAWP ${pawp} mmHg (>15), PVR ${pvr} WU (\u22642): pattern suggests left heart disease (WHO Group 2), not PAH. PAH-specific therapy is not indicated by this hemodynamic pattern alone.` };
+  if (pawp > 15 && pvr > 2) return { confirmed:false, pattern:'Combined pre- and post-capillary PH', detail:`mPAP ${mpap} mmHg, PAWP ${pawp} mmHg (>15), PVR ${pvr} WU (>2): a mixed pattern, usually still attributed to left heart disease with a pulmonary vascular component. Specialist review needed to confirm Group 1 PAH is genuinely contributing.` };
+  return { confirmed:false, pattern:'Pattern unclear', detail:`mPAP ${mpap}, PAWP ${pawp}, PVR ${pvr}: does not fit a standard classification pattern, recommend specialist review.` };
+}
+function whoFunctionalClass(fc) {
+  const classes = {
+    1: { label:'WHO FC I',  desc:'No limitation of physical activity', survival:'~6 years untreated (cohort estimate)' },
+    2: { label:'WHO FC II', desc:'Slight limitation; comfortable at rest, ordinary activity causes symptoms', survival:'~6 years untreated (cohort estimate)' },
+    3: { label:'WHO FC III',desc:'Marked limitation; comfortable at rest, less than ordinary activity causes symptoms', survival:'~2.5 years untreated (cohort estimate)' },
+    4: { label:'WHO FC IV', desc:'Symptoms with any activity or at rest; signs of right heart failure', survival:'~6 months untreated (cohort estimate)' }
+  };
+  return classes[fc] || { label:'Not assessed', desc:'WHO functional class not recorded', survival:null };
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2250,7 +2335,11 @@ const FIELD_CODES = {
   ahi:    { system:'LOINC', code:'69990-0', display:'Apnea hypopnea index', unit:'/hr' },
   odi:    { system:'LOINC', code:'90567-9', display:'Oxygen desaturation index', unit:'/hr' },
   tlc:    { system:'LOINC', code:'19862-2', display:'Total lung capacity', unit:'%' },
-  rv:     { system:'LOINC', code:'20146-7', display:'Residual volume', unit:'%' }
+  rv:     { system:'LOINC', code:'20146-7', display:'Residual volume', unit:'%' },
+  mpap:   { system:'LOINC', code:'8414-5',  display:'Pulmonary artery Mean blood pressure', unit:'mmHg' },
+  pawp:   { system:'LOINC', code:'75994-4', display:'Pulmonary artery wedge pressure', unit:'mmHg' },
+  pvr:    { system:'LOINC', code:'8828-6',  display:'Pulmonary vascular Resistance', unit:'WU' },
+  ntprobnp: { system:'LOINC', code:'33762-6', display:'Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma', unit:'pg/mL' }
 };
 function fieldCodeTag(key) {
   const c = FIELD_CODES[key];
@@ -2483,13 +2572,26 @@ function biologicEligibility(pt, v) {
                       : 'No confirmed allergic / atopic phenotype on record'
   });
 
-  // Anti-IL4R: dupilumab
+  // Anti-IL4R: dupilumab. FDA label (verified): approved for eosinophilic phenotype OR
+  // OCS-dependent asthma, with the label explicitly noting effects on exacerbations and lung
+  // function were similar irrespective of baseline eosinophil level, i.e. OCS-dependence is a
+  // genuinely independent eligibility pathway, not a fallback only relevant when eos is low.
+  // ocsDependent here is a proxy (>=2 systemic steroid courses in the past year): this data
+  // model does not structurally distinguish repeated burst courses from true daily maintenance
+  // OCS, so this likely undercounts some genuinely OCS-dependent patients and should be read
+  // as a prompt to confirm with the chart, not a precise determination.
+  const ocsDependent = v.ocs >= 2;
   results.push({
     agent: 'Anti-IL4R',
     drugs: 'Dupilumab',
-    status: v.eos >= 150 ? 'pending' : 'unmet',
-    detail: v.eos >= 150 ? `Eos ${v.eos} c/µL ≥ 150: FeNO ≥ 25 ppb required (not yet measured)`
-                          : `Eos ${v.eos} c/µL < 150: eosinophilic criterion not met`
+    status: (v.eos >= 150 || ocsDependent) ? 'pending' : 'unmet',
+    detail: ocsDependent && v.eos >= 150
+      ? `Eos ${v.eos} c/µL ≥ 150 AND ${v.ocs} OCS courses this year: two independent eligibility pathways both suggest fit, confirm FeNO`
+      : ocsDependent
+      ? `${v.ocs} OCS courses this year suggests possible OCS-dependence (proxy, confirm against chart): FDA label covers this pathway independent of eosinophil level`
+      : v.eos >= 150
+      ? `Eos ${v.eos} c/µL ≥ 150: FeNO ≥ 25 ppb required (not yet measured)`
+      : `Eos ${v.eos} c/µL < 150 and no OCS-dependence signal: neither eligibility pathway currently met`
   });
 
   return results;
@@ -2637,6 +2739,46 @@ Rule: 2 or more criteria met = Type 1 (antibiotics indicated), exactly 1 = Type 
     compute: (pt, v) => v.eos != null ? biologicEligibility(pt, v) : null,
     evidence: r => r.map(b => `${b.agent} (${b.drugs}): ${b.status==='eligible'?'criteria met':b.status==='borderline'?'borderline, repeat testing':b.status==='pending'?'pending further testing':'criteria not met'}. ${b.detail}.`).join('\n'),
     unavailableMsg: () => 'Blood eosinophil count has not been recorded for this visit yet; eligibility cannot be assessed without it.'
+  },
+  'biologic-response-review': {
+    label: 'Interpret biologic response', icon: 'report-medical',
+    applies: pt => (pt.disease === 'ASTHMA' || pt.disease === 'ACO') && pt.meds.some(m => m.cls === 'Biologic'),
+    /* Real-world evidence (Eger et al., 280 severe asthma patients on mepolizumab/benralizumab/
+       dupilumab, verified this session): response is usually achieved by 6 months (24 weeks)
+       and retained at 12 months, with early response assessment at 6 months specifically
+       highlighted as clinically useful; trial data also shows real efficacy signals as early
+       as 12 weeks. There is no single universal "16-24 week" rule as such, the honest framing
+       is: meaningful early signal possible at 12 weeks, but 24 weeks (6 months) is the
+       established point for a structured response judgement in real-world practice. */
+    compute: (pt, v) => {
+      const bio = pt.meds.find(m => m.cls === 'Biologic');
+      if (!bio || !bio.since) return null;
+      const startDate = new Date(bio.since);
+      if (isNaN(startDate.getTime())) return null;
+      const latestVisitDate = new Date(v.date);
+      const weeksSince = Math.round((latestVisitDate - startDate) / (1000*60*60*24*7));
+      if (weeksSince < 0) return null;
+      const priorVisits = pt.visits.filter(x => new Date(x.date) <= startDate);
+      const baselineVisit = priorVisits.length ? priorVisits[priorVisits.length - 1] : pt.visits[0];
+      return { bio, weeksSince, baselineVisit, currentVisit: v };
+    },
+    evidence: r => {
+      const phase = r.weeksSince < 12 ? 'too early for a meaningful response signal'
+                  : r.weeksSince < 24 ? 'early-signal window: trial data shows real effects can appear by 12 weeks, but this is not yet the established assessment point'
+                  : 'in or past the established real-world response-assessment window (24 weeks / 6 months)';
+      const actDelta = (r.currentVisit.act != null && r.baselineVisit.act != null) ? r.currentVisit.act - r.baselineVisit.act : null;
+      const fev1Delta = (r.currentVisit.fev1 != null && r.baselineVisit.fev1 != null) ? r.currentVisit.fev1 - r.baselineVisit.fev1 : null;
+      const exacDelta = (r.currentVisit.exac != null && r.baselineVisit.exac != null) ? r.currentVisit.exac - r.baselineVisit.exac : null;
+      return `${r.bio.drug} started ${r.bio.since}: ${r.weeksSince} weeks ago (${phase}).
+ACT change since baseline: ${actDelta!=null?(actDelta>=0?'+':'')+actDelta:'baseline ACT not recorded'}.
+FEV1 change since baseline: ${fev1Delta!=null?(fev1Delta>=0?'+':'')+fev1Delta+'%':'baseline FEV1 not recorded'}.
+Exacerbation count change since baseline: ${exacDelta!=null?(exacDelta>=0?'+':'')+exacDelta:'baseline exacerbation count not recorded'}.
+Real-world evidence (Eger et al., n=280 on mepolizumab/benralizumab/dupilumab): response usually achieved by 6 months and retained at 12 months.`;
+    },
+    unavailableMsg: (pt) => {
+      const bio = pt.meds.find(m => m.cls === 'Biologic');
+      return bio && !bio.since ? 'Biologic start date not recorded: cannot calculate weeks on therapy.' : 'No start date or baseline visit available for comparison.';
+    }
   }
 };
 
@@ -2744,6 +2886,7 @@ function openDrw(type) {
   if (type === 'demographics') demoAIFieldSource = {};
   if (type === 'environment') envAIFieldSource = {};
   _baseOpenDrw(type);
+  applyUiLang();
   if (readOnlyMode) {
     setTimeout(() => {
       const body = g('drw-body');
@@ -3849,7 +3992,7 @@ function buildDashStatStrip() {
     <div class="kstat${adherenceRisk?' kstat-a':''}"><div class="kstat-lbl">Adherence &lt;80%</div><div class="kstat-val">${adherenceRisk}</div></div>
     <div class="kstat"><div class="kstat-lbl">Resident flags</div><div class="kstat-val${anomalyCount?'':' suppressed'}" style="${anomalyCount?'color:var(--n6)':''}">${anomalyCount || 'None yet'}</div></div>
   </div>
-  <div class="dash-mix-lbl">Caseload mix</div>
+  <div class="dash-mix-lbl" data-t="caseloadMix">Caseload mix</div>
   <div class="dash-mix-row">${mixHTML}</div>`;
 }
 /* ═══════════════════════════════════════════════════════════════════
@@ -4001,6 +4144,7 @@ function renderDashboard() {
   const content = g('dash-content');
   if (content) content.innerHTML = buildDashStatStrip() + recentHTML + filterBar + `<div id="dash-cohort-region">${buildFilteredCohort()}</div>`;
   populateCohortPulse();
+  applyUiLang();
 }
 /* Gives the cohort-scan idle state a live pulse of the current caseload instead of pure
    static prompt text, so it feels like a real instrument reading the clinic rather than a
@@ -7952,6 +8096,7 @@ function copyCopOut() {
 ═══════════════════════════════════════════════════════════════════ */
 showView('login');
 buildLoginRoles();
+applyUiLang();
 hydrateIcons(document.body);
 startIconObserver();
 // Standing safety net: if a future edit to a RULESET_* drifts from its hardcoded
