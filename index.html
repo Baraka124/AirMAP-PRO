@@ -200,6 +200,12 @@ input,select,textarea{font-family:inherit;}
 .pcard-adh-na{color:var(--i3);font-weight:400;}
 
 /* v11: navigation shell: login / dashboard / cockpit views */
+.boot-splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%);animation:bootFadeOut .6s ease-in .9s forwards;}
+.boot-splash-mark{color:#4FC3DE;animation:bootPulse 1.4s ease-in-out infinite;}
+.boot-splash-name{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:1px;color:white;}
+.boot-splash-full{font-family:var(--mono);font-size:var(--fs-2xs);font-weight:400;color:rgba(165,243,252,.65);letter-spacing:1.6px;text-transform:uppercase;}
+@keyframes bootPulse{0%,100%{opacity:.7;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+@keyframes bootFadeOut{from{opacity:1;visibility:visible;}to{opacity:0;visibility:hidden;}}
 .login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%);padding:var(--sp-12);}
 .login-card{width:100%;max-width:420px;background:var(--wh);border-radius:var(--rxl);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 90px rgba(34,211,238,.06);}
 .login-nameplate{background:linear-gradient(165deg,#0E2240 0%,#081526 100%);padding:var(--sp-20) var(--sp-18) var(--sp-16);text-align:left;position:relative;overflow:hidden;}
@@ -330,6 +336,9 @@ input,select,textarea{font-family:inherit;}
 .db-cb{background:var(--a0);color:var(--a7);border-color:var(--a1);}
 .db-aco{background:var(--p0);color:var(--p7);border-color:var(--p1);}
 .db-ipf{background:var(--g0);color:var(--g7);border-color:var(--g1);}
+/* PAH reuses the --r (red) family like OSA: no spare color family exists without adding a new
+   token set (a larger design decision), and the text label always disambiguates the two. */
+.db-pah{background:var(--r1);color:var(--r8);border-color:var(--r2);}
 .db-osa{background:var(--r0);color:var(--r7);border-color:var(--r1);}
 .hdr-r{display:flex;align-items:center;gap:var(--sp-3);margin-left:auto;}
 
@@ -1117,6 +1126,20 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   <div class="hdr-r" id="hdr-actions"></div>
 </header>
 
+<!-- BOOT SPLASH: brief loading flourish showing the full system name, auto-dismisses into login -->
+<div id="boot-splash" class="boot-splash">
+  <div class="boot-splash-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:40px;height:40px">
+      <path d="M5 16c0 -5 2 -9 5 -10c1.2 -0.4 2 0.6 2 2v13"></path>
+      <path d="M19 16c0 -5 -2 -9 -5 -10c-1.2 -0.4 -2 0.6 -2 2v13"></path>
+      <path d="M7 11c1.5 1 3 1 5 0"></path>
+      <path d="M17 11c-1.5 1 -3 1 -5 0"></path>
+    </svg>
+  </div>
+  <div class="boot-splash-name">AIROS</div>
+  <div class="boot-splash-full">Airway Intelligence Operating System</div>
+</div>
+
 <!-- LOGIN VIEW -->
 <div id="login-view" class="login-view">
   <div class="login-card">
@@ -1126,8 +1149,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="login-acronym">AIROS</div>
       </div>
       <div class="login-longname">
-        <div class="login-longname-text">Airway Intelligence Operating System</div>
-        <div class="login-longname-text" style="opacity:.7;margin-top:2px">Accelerated Computing in Pulmonary Medicine</div>
+        <div class="login-longname-text">Accelerated Computing in Pulmonary Medicine</div>
       </div>
     </div>
     <div class="login-body">
@@ -2300,6 +2322,81 @@ const PROTOCOL_COPD_FEV1_DECLINE = {
    history and returns the ones that actually fired. Each protocol's own rule order already
    resolves to the single most relevant alert (30-day check before the looser 90-day one), so
    this just collects across protocols, not within one. */
+/* ═══════════════════════════════════════════════════════════════════
+   TREATMENT PATHWAY MODULE (the "protocol module" the user asked be made
+   more creative/complete: distinct from PROTOCOL_COPD_FEV1_DECLINE above,
+   which is a single trigger rule. This models an actual named guideline
+   ALGORITHM as an ordered ladder of steps, places the patient's REAL
+   current medication regimen on that ladder, and states the specific,
+   citable gap to the next guideline-recommended step. Never auto-acts:
+   this is reference and a flagged suggestion for the clinician, the same
+   "Resident drafts, clinician decides" discipline as every AI feature in
+   this app.
+
+   Each step's criteria are evaluated with the SAME runRuleSet primitive
+   already proven elsewhere in this file, so a pathway is really just a
+   named, ordered sequence of rule-sets rather than a new mechanism.
+
+   GOLD 2026 COPD pathway verified directly against the 2026 GOLD report
+   and independent summaries this session (Group A: single long-acting or
+   short-acting bronchodilator; Group E: LABA+LAMA initial, +ICS if blood
+   eos >=300 cells/uL; triple therapy LABA+LAMA+ICS is the next step for
+   Group E patients with persistent exacerbations despite optimized dual
+   bronchodilation, particularly with elevated eosinophils; GOLD 2026
+   recommends considering escalation after even a single moderate
+   exacerbation, not waiting for two).
+═══════════════════════════════════════════════════════════════════ */
+function medClasses(pt) { return new Set(pt.meds.map(m => m.cls)); }
+const PATHWAY_GOLD_COPD = {
+  id: 'gold_2026_copd_pharmacotherapy',
+  label: 'GOLD 2026 pharmacotherapy ladder',
+  appliesTo: ['COPD','ACO'],
+  steps: [
+    { id:'A_bronchodilator', label:'Single bronchodilator (Group A)',
+      matches: (pt) => { const m = medClasses(pt); return (m.has('LABA') || m.has('LAMA')) && !( m.has('LABA') && m.has('LAMA') ) && !m.has('ICS'); } },
+    { id:'E_dual', label:'LABA + LAMA (Group E initial)',
+      matches: (pt) => { const m = medClasses(pt); return m.has('LABA') && m.has('LAMA') && !m.has('ICS'); } },
+    { id:'E_triple', label:'LABA + LAMA + ICS (triple therapy)',
+      matches: (pt) => { const m = medClasses(pt); return m.has('LABA') && m.has('LAMA') && m.has('ICS'); } }
+  ],
+  /* Returns where the patient currently sits, and whether their own visit data already
+     meets GOLD's stated criteria to move to the next step. */
+  evaluate(pt) {
+    const v = pt.visits[pt.visits.length - 1];
+    const currentStepIdx = this.steps.findIndex(s => s.matches(pt));
+    const currentStep = currentStepIdx >= 0 ? this.steps[currentStepIdx] : null;
+    if (!currentStep) {
+      const m = medClasses(pt);
+      const regimenDesc = pt.meds.filter(med => med.cls !== 'SABA').map(med => med.cls).join('+') || 'no maintenance therapy recorded';
+      const note = (m.has('ICS') && !m.has('LABA') && !m.has('LAMA'))
+        ? `Current regimen (${regimenDesc}) includes ICS without any long-acting bronchodilator. GOLD guidance does not support ICS monotherapy in COPD; worth reviewing.`
+        : (m.has('ICS') && m.has('LABA') && !m.has('LAMA'))
+        ? `Current regimen (${regimenDesc}) combines LABA+ICS without a LAMA. GOLD 2026 does not encourage LABA+ICS as a combination; worth reviewing against the standard ladder.`
+        : (m.has('ICS') && m.has('LAMA') && !m.has('LABA'))
+        ? `Current regimen (${regimenDesc}) combines LAMA+ICS without a LABA. This is a non-standard combination on the GOLD ladder; worth reviewing whether a LABA should be added (moving to triple therapy) or whether ICS is still indicated.`
+        : `Current regimen (${regimenDesc}) does not match a recognised step on this pathway.`;
+      return { onPathway:false, detail: note };
+    }
+    if (currentStepIdx === this.steps.length - 1) return { onPathway:true, currentStep: currentStep.label, atTopOfLadder:true, detail:'Already on triple therapy, the top of the GOLD pharmacotherapy ladder. Further escalation is outside this pathway (consider roflumilast, azithromycin, or non-pharmacological options per GOLD).' };
+    const next = this.steps[currentStepIdx + 1];
+    let escalationIndicated = false, reason = '';
+    if (currentStep.id === 'A_bronchodilator' && (v.exac >= 1 || v.hosp >= 1)) {
+      escalationIndicated = true; reason = `${v.exac} exacerbation(s)/${v.hosp} hospitalisation(s) in the past year: GOLD 2026 groups this patient as E and recommends initial LABA+LAMA.`;
+    } else if (currentStep.id === 'E_dual' && (v.exac >= 1 || v.hosp >= 1)) {
+      escalationIndicated = true;
+      reason = v.eos >= 300
+        ? `${v.exac} exacerbation(s) on dual bronchodilation with blood eosinophils ${v.eos} c/\u00b5L (\u2265300): GOLD 2026 recommends triple therapy (LABA+LAMA+ICS) is the preferred next step in this combination.`
+        : `${v.exac} exacerbation(s) on dual bronchodilation. GOLD 2026 supports considering escalation after even one moderate exacerbation; eosinophil count (${v.eos ?? 'not recorded'} c/\u00b5L) would further strengthen the case for adding ICS if \u2265300.`;
+    }
+    return { onPathway:true, currentStep: currentStep.label, nextStep: next.label, escalationIndicated, detail: escalationIndicated ? reason : `Currently on "${currentStep.label}". No escalation indicated by current exacerbation history.` };
+  }
+};
+const ALL_PATHWAYS = [PATHWAY_GOLD_COPD];
+function checkPathways(pt) {
+  if (!pt || !pt.visits || !pt.visits.length) return [];
+  return ALL_PATHWAYS.filter(p => p.appliesTo.includes(pt.disease)).map(p => ({ pathwayId: p.id, label: p.label, ...p.evaluate(pt) }));
+}
+
 const ALL_PROTOCOLS = [PROTOCOL_COPD_FEV1_DECLINE];
 function checkProtocols(pt) {
   if (!pt || !pt.visits || !pt.visits.length) return [];
@@ -2920,6 +3017,8 @@ function render() {
   const ctrl  = (d === 'ASTHMA' || d === 'ACO') ? asthmaCtrl(v.act) : null;
   const gap   = d === 'IPF' ? gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:v.fvc, dlco:v.dlco })) : null;
   const osaSev= d === 'OSA' ? osaSeverity(v.ahi) : null;
+  const pahHemo = d === 'PAH' ? pahHemodynamics({ mpap:v.mpap, pawp:v.pawp, pvr:v.pvr }) : null;
+  const pahFc   = d === 'PAH' ? whoFunctionalClass(v.whoFc) : null;
 
   /* Zone determination */
   let zCls, zIcon, zLbl, zTt, zIns, lcpCls, lcpTxt;
@@ -2983,6 +3082,19 @@ function render() {
     lcpCls= zCls==='sz-g'?'lcp-ctrl':zCls==='sz-a'?'lcp-part':'lcp-unc';
     lcpTxt= `${osaSev.label} · AHI ${v.ahi}/hr`;
 
+  } else if (d === 'PAH') {
+    const unsafe = v.platelets != null && v.platelets < 50;
+    zCls  = unsafe ? 'sz-r' : v.whoFc >= 4 ? 'sz-r' : v.whoFc === 3 ? 'sz-a' : 'sz-g';
+    zIcon = zCls === 'sz-r' ? 'ti-alert-triangle' : zCls === 'sz-a' ? 'ti-alert-circle' : 'ti-circle-check';
+    zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · ${pahFc.label} · Visit ${v.n}`;
+    zTt   = unsafe ? 'Platelets below 50,000/mm\u00b3: hold add-on therapy and recheck labs'
+          : v.whoFc >= 4 ? 'WHO FC IV: severe limitation, urgent specialist review'
+          : v.whoFc === 3 ? 'WHO FC III: marked limitation, review background therapy'
+          : 'Responding to background therapy';
+    zIns  = `mPAP <strong>${v.mpap} mmHg</strong>, PVR <strong>${v.pvr} WU</strong>: ${pahHemo.pattern}. ${pahFc.label}: ${pahFc.desc}.${v.platelets!=null?` Platelets <strong>${v.platelets}k</strong>${unsafe?' (below sotatercept safety threshold)':''}.`:''}`;
+    lcpCls= zCls==='sz-g'?'lcp-ctrl':zCls==='sz-a'?'lcp-part':'lcp-unc';
+    lcpTxt= `${pahFc.label} · mPAP ${v.mpap} mmHg`;
+
   } else { // CHRONIC_BRONCHITIS
     const infective = v.sputum && v.sputum !== 'white';
     zCls  = infective ? 'sz-a' : v.exac>=2 ? 'sz-a' : 'sz-g';
@@ -3015,7 +3127,8 @@ function render() {
       CHRONIC_BRONCHITIS: {cls:'db-cb',     txt:'Chronic Bronchitis'},
       ACO:                {cls:'db-aco',    txt:'ACO'},
       IPF:                {cls:'db-ipf',    txt:'IPF'},
-      OSA:                {cls:'db-osa',    txt:'OSA'}
+      OSA:                {cls:'db-osa',    txt:'OSA'},
+      PAH:                {cls:'db-pah',    txt:'PAH'}
     };
     const dm = dbMap[d];
     dbBadge.className = `db ${dm.cls}`;
@@ -3140,6 +3253,10 @@ function buildMetrics(d, pt, v, grp, stage, ctrl, gap, osaSev) {
     { lbl:'AHI',               val:v.ahi+'<span style="font-size:var(--fs-body);font-weight:400"> /hr</span>', vc:osaSev.level==='severe'?'danger':osaSev.level==='moderate'?'warn':'good', int:osaSev.label, prev:prevVal('ahi','/hr'), stat:'s'+(osaSev.level==='severe'?'d':osaSev.level==='moderate'?'w':'g'), act:'investigations', code:'ahi', spark:'ahi' },
     { lbl:'ODI',               val:v.odi+'<span style="font-size:var(--fs-body);font-weight:400"> /hr</span>', vc:v.odi>=30?'danger':v.odi>=15?'warn':'good', int:'Oxygen desaturation events/hr', prev:prevVal('odi','/hr'), stat:'s'+(v.odi>=30?'d':v.odi>=15?'w':'g'), act:'investigations', code:'odi', spark:'odi' },
     { lbl:'CPAP adherence',    val:(v.adherence!=null?v.adherence+'%':'Not yet on therapy'), vc:(v.adherence??0)<70?'warn':'good', int:(v.adherence??0)<70?'Below 70% target':'Meeting adherence target', prev:prevVal('adherence','%'), stat:'s'+((v.adherence??0)<70?'w':'g'), act:'visit-update', spark:'adherence' }
+  ] : d === 'PAH' ? [
+    { lbl:'mPAP',              val:v.mpap+'<span style="font-size:var(--fs-body);font-weight:400"> mmHg</span>', vc:v.mpap>40?'danger':v.mpap>25?'warn':'good', int:`PVR ${v.pvr} WU`, prev:prevVal('mpap','mmHg'), stat:'s'+(v.mpap>40?'d':v.mpap>25?'w':'g'), act:'investigations', code:'mpap', spark:'mpap' },
+    { lbl:'WHO functional class', val:'FC '+v.whoFc, vc:v.whoFc>=4?'danger':v.whoFc===3?'warn':'good', int:whoFunctionalClass(v.whoFc).desc, prev:'Was FC '+(prevVisit()?.whoFc??'N/A'), stat:'s'+(v.whoFc>=4?'d':v.whoFc===3?'w':'g'), act:'investigations', code:'', spark:'whoFc' },
+    { lbl:'Platelets',         val:(v.platelets!=null?v.platelets+'<span style="font-size:var(--fs-body);font-weight:400">k</span>':'Not recorded'), vc:(v.platelets??999)<50?'danger':'good', int:(v.platelets??999)<50?'Below sotatercept threshold':'Above safety threshold', prev:prevVal('platelets','k'), stat:'s'+((v.platelets??999)<50?'d':'g'), act:'investigations', code:'', spark:'platelets' }
   ] : [ // CHRONIC_BRONCHITIS
     { lbl:'FEV₁ % predicted',  val:v.fev1+'%',  vc:fev1Class(v.fev1), int:'Airflow limitation', prev:prevVal('fev1','%'), stat:'sn', act:'investigations', code:'fev1', spark:'fev1' },
     { lbl:'CAT score',          val:v.cat,        vc:v.cat>=10?'warn':'good', int:v.cat>=10?'Medium burden':'Low burden', prev:prevVal('cat'), stat:'s'+(v.cat>=10?'w':'g'), act:'visit-update', spark:'cat' },
@@ -3327,6 +3444,17 @@ function buildIntel(d, pt, v, grp, stage, ctrl, gap, osaSev) {
     row('BMI',                `${pt.demographics.bmi} kg/m² &nbsp;<span class="sind ${pt.demographics.bmi>=30?'a':'g'}"><span class="sind-dot"></span>${pt.demographics.bmi>=30?'Weight management indicated':'Within target'}</span>`);
     row('T2DM comorbidity',  pt.comorbidities.t2dm ? '<span class="sind a"><span class="sind-dot"></span>Present: untreated OSA worsens glycaemic control</span>' : '<span class="iv it">Not present</span>');
     row('Priority action',   `<span class="fw">${v.adherence==null?'CPAP initiation · ':v.adherence<70?'Address adherence barriers · ':''}${pt.demographics.bmi>=30?'Weight management referral':'Continue current therapy'}</span>`);
+
+  } else if (d === 'PAH') {
+    const hemo = pahHemodynamics({ mpap:v.mpap, pawp:v.pawp, pvr:v.pvr });
+    const fc = whoFunctionalClass(v.whoFc);
+    row('Hemodynamic pattern', `<span class="sind ${hemo.confirmed?'a':hemo.pattern.includes('No pulmonary')?'g':'r'}"><span class="sind-dot"></span>${hemo.pattern}</span> &nbsp;mPAP ${v.mpap} mmHg`);
+    row('WHO functional class', `<span class="sind ${v.whoFc>=4?'r':v.whoFc===3?'a':'g'}"><span class="sind-dot"></span>${fc.label}</span> &nbsp;${fc.desc}`);
+    row('Exercise capacity',  v.sixMWD!=null ? `${v.sixMWD} m &nbsp;<span class="sind ${v.sixMWD<350?'a':'g'}"><span class="sind-dot"></span>${v.sixMWD<350?'Reduced':'Preserved'}</span>` : '<span class="iv it">6MWT not recorded</span>');
+    const bnpTrend = getTrend(pt.visits, 'ntprobnp', 180);
+    row('NT-proBNP trend',    bnpTrend ? `<span class="sind ${bnpTrend.pctChange>0?'a':'g'}"><span class="sind-dot"></span>${bnpTrend.pctChange>0?'Rising':'Falling'}</span> &nbsp;${v.ntprobnp} pg/mL (${bnpTrend.pctChange>0?'+':''}${bnpTrend.pctChange.toFixed(1)}% over ${bnpTrend.daysBetween} days)` : `${v.ntprobnp ?? 'not recorded'} pg/mL`);
+    row('Sotatercept eligibility', v.platelets!=null && v.platelets<50 ? '<span class="sind r"><span class="sind-dot"></span>Contraindicated: platelets &lt;50,000/mm³</span>' : v.platelets!=null ? `<span class="sind g"><span class="sind-dot"></span>Platelet/Hgb labs clear (${v.platelets}k, Hgb ${v.hgb})</span> &nbsp;background therapy duration to confirm` : '<span class="iv it">Platelets/Hgb not on file</span>');
+    row('Priority action',    `<span class="fw">${v.platelets!=null&&v.platelets<50?'Hold add-on therapy: recheck labs · ':''}${v.whoFc>=3?'Background therapy review: still FC III+ · ':''}PAH specialist centre MDT discussion</span>`);
 
   } else { // CHRONIC_BRONCHITIS
     row('Disease status',    `<span class="sind ${v.exac>=2?'a':'g'}"><span class="sind-dot"></span>${v.exac>=2?'Mild deterioration':'Stable'}</span> &nbsp;FEV₁ ${v.fev1}% preserved`);
@@ -3559,7 +3687,7 @@ function renderCohort() {
                   : pt.disease==='IPF'    ? `GAP ${gap.stage} · FVC ${lastV.fvc}%`
                   : pt.disease==='OSA'    ? `AHI ${lastV.ahi}/hr · ${osaSev.label}`
                   : `FEV₁ ${lastV.fev1}% · ${lastV.sputum||'stable'}`;
-    const disLabel = { COPD:'COPD', ASTHMA:'Asthma', ACO:'ACO', CHRONIC_BRONCHITIS:'Chr. Bronchitis', IPF:'IPF', OSA:'OSA' }[pt.disease];
+    const disLabel = { COPD:'COPD', ASTHMA:'Asthma', ACO:'ACO', CHRONIC_BRONCHITIS:'Chr. Bronchitis', IPF:'IPF', OSA:'OSA', PAH:'PAH' }[pt.disease];
     const disCol   = { COPD:'var(--n6)', ASTHMA:'var(--t7)', ACO:'var(--p7)', CHRONIC_BRONCHITIS:'var(--a7)', IPF:'var(--g7)', OSA:'var(--p5)' }[pt.disease];
     const zoneLabel= pt.risk==='r'?'Red zone':pt.risk==='a'?'Amber zone':'Green zone';
     const zoneCls  = pt.risk==='r'?'cz-r':pt.risk==='a'?'cz-a':'cz-g';
@@ -3976,8 +4104,8 @@ function buildDashStatStrip() {
     if (lastV.adherence < 80) adherenceRisk++;
   });
   const anomalyCount = Object.keys(copCohortFlags||{}).length;
-  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'};
-  const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)'};
+  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'};
+  const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)',PAH:'var(--r7)'};
   const mixHTML = Object.entries(diseaseCounts).map(([d,n]) =>
     `<span class="dash-mix-chip${dashFilters.disease===d?' on':''}" onclick="setDashFilter('disease','${d}')" tabindex="0" role="button" aria-label="Filter to ${disLabel[d]||d}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setDashFilter('disease','${d}')}"><span class="sind-dot" style="background:${disColor[d]||'var(--i4)'}"></span>${disLabel[d]||d}<b>${n}</b></span>`
   ).join('');
@@ -4130,7 +4258,7 @@ function renderDashboard() {
     <div class="dash-recent-lbl">Recently viewed</div>
     <div class="dash-recent-row">${recentPts.map(id => {
       const pt = DB[id];
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease];
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease];
       const flagged = copCohortFlags[id];
       return `<div class="dash-recent-chip" onclick="selectPt('${id}')" title="${flagged?flagged.replace(/"/g,'&quot;'):''}">
         ${flagged?'<i class="ti ti-airos-ai" style="font-size:var(--fs-2xs);color:var(--n6)"></i>':''}
@@ -4170,7 +4298,7 @@ function buildFilteredCohort() {
     if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
     if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
     if (dashSearchTerm) {
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease] || '';
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease] || '';
       const haystack = `${id} ${getDisplayAlias(id)} ${pt.demographics.age} ${pt.demographics.sex} ${disLabel}`.toLowerCase();
       if (!haystack.includes(dashSearchTerm)) return false;
     }
@@ -4198,7 +4326,7 @@ function dashSearchKeydown(e) {
     const narrowed = Object.entries(DB).filter(([id,pt]) => {
       if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
       if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
-      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease] || '';
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease] || '';
       const haystack = `${id} ${getDisplayAlias(id)} ${pt.demographics.age} ${pt.demographics.sex} ${disLabel}`.toLowerCase();
       return haystack.includes(dashSearchTerm);
     });
@@ -4479,7 +4607,7 @@ function updateLiveZone() {
    were filled by the dictation-extraction path below, cleared the moment a clinician edits one by hand,
    exactly the same attribution contract used in patient registration. */
 let visitAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
-const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv'];
+const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv','mpap','pawp','pvr','whoFc','ntprobnp','platelets','hgb'];
 function commitVisitField(key, rawValue, isNumeric=true) {
   const v = getVisit();
   if (!v) return;
@@ -4509,6 +4637,13 @@ function commitOdi(val)      { commitVisitField('odi', val); }
 function commitEpworth(val)  { commitVisitField('epworth', val); }
 function commitTlc(val)      { commitVisitField('tlc', val); updateRvTlcFeedback(); }
 function commitRv(val)       { commitVisitField('rv', val); updateRvTlcFeedback(); }
+function commitMpap(val)     { commitVisitField('mpap', val); updatePahFeedback(); }
+function commitPawp(val)     { commitVisitField('pawp', val); updatePahFeedback(); }
+function commitPvr(val)      { commitVisitField('pvr', val); updatePahFeedback(); }
+function commitWhoFc(val)    { commitVisitField('whoFc', parseInt(val,10)); }
+function commitNtprobnp(val) { commitVisitField('ntprobnp', val); }
+function commitPlatelets(val){ commitVisitField('platelets', val); updatePahFeedback(); }
+function commitHgb(val)      { commitVisitField('hgb', val); }
 /* RV/TLC ratio: air trapping in COPD (>=40% threshold, Casanova et al. and the NSCLC/COPD
    mortality literature found this session), true restriction confirmation in IPF (TLC <80%
    predicted). Verified LOINC codes: TLC 19862-2, RV 20146-7 (loinc.org, both confirmed
@@ -4537,6 +4672,22 @@ function updateRvTlcFeedback() {
   } else {
     fb.innerHTML = `<div class="lfb lfb-i">RV/TLC ${ratio}%</div>`;
   }
+}
+function updatePahFeedback() {
+  const v = getVisit();
+  const fbHemo = g('fb-pahhemo');
+  if (fbHemo) {
+    const hemo = pahHemodynamics({ mpap:v.mpap, pawp:v.pawp, pvr:v.pvr });
+    fbHemo.innerHTML = hemo.confirmed
+      ? `<div class="lfb lfb-w">${hemo.pattern}: ${hemo.detail}</div>`
+      : `<div class="lfb lfb-i">${hemo.pattern}${hemo.detail?': '+hemo.detail:''}</div>`;
+  }
+  const fbSota = g('fb-sotatercept');
+  if (fbSota && v.platelets != null) {
+    fbSota.innerHTML = v.platelets < 50
+      ? `<div class="lfb lfb-w">Platelets ${v.platelets}k &lt;50k: sotatercept contraindicated, hold dose and recheck</div>`
+      : `<div class="lfb lfb-i">Platelets ${v.platelets}k: above the 50k sotatercept safety threshold</div>`;
+  } else if (fbSota) { fbSota.innerHTML = ''; }
 }
 function commitAdherence(val) {
   commitVisitField('adherence', val);
@@ -4730,6 +4881,26 @@ function bVisitUpdate() {
     </div>`)}
     ${eventLog}`;
   }
+  if (pt.disease==='PAH') {
+    return `${header}
+    ${S('Hemodynamics','Classification · Trajectory',`<div class="fg">
+      ${F('mPAP','mmHg','',pv?`Previous: ${pv.mpap} mmHg`:'','mpap-input','commitMpap')}
+      ${F('PAWP','mmHg','',pv?`Previous: ${pv.pawp} mmHg`:'','pawp-input','commitPawp')}
+      ${F('PVR','WU','',pv?`Previous: ${pv.pvr} WU`:'','pvr-input','commitPvr')}
+      <div id="fb-pahhemo" style="grid-column:1/-1"></div>
+    </div>`)}
+    ${S('Functional status','Classification · Risk',`<div class="fg">
+      ${Sel('WHO functional class',['1','2','3','4'],String(v.whoFc),pv?`Previous: WHO FC ${pv.whoFc}`:'','whofc-input','commitWhoFc')}
+      ${F('6MWD','m','',pv?`Previous: ${pv.sixMWD??'not performed'}${pv.sixMWD!=null?' m':''}`:'','sixmwd-input','commitSixMWD')}
+    </div>`)}
+    ${S('Biomarkers & safety labs','Risk · Treatment',`<div class="fg">
+      ${F('NT-proBNP','pg/mL','',pv?`Previous: ${pv.ntprobnp??'N/A'} pg/mL`:'','ntprobnp-input','commitNtprobnp')}
+      ${F('Platelets','x10\u00b3/\u00b5L','',pv?`Previous: ${pv.platelets??'N/A'}k`:'','platelets-input','commitPlatelets')}
+      ${F('Haemoglobin','g/dL','',pv?`Previous: ${pv.hgb??'N/A'} g/dL`:'','hgb-input','commitHgb')}
+      <div id="fb-sotatercept" style="grid-column:1/-1"></div>
+    </div>`)}
+    ${eventLog}`;
+  }
 
   return `${header}
   ${S('Spirometry','Classification · Trajectory',`<div class="fg">
@@ -4828,7 +4999,7 @@ function bMedications() {
   <div class="flex g2 mt2" style="flex-wrap:wrap"><button class="btn bs btn-sm" onclick="addMedRow()"><i class="ti ti-plus"></i>Add medication</button><button class="btn bg btn-sm" onclick="medsOpenAIIntake()"><i class="ti ti-airos-ai"></i>Describe medication changes</button></div>
   ${buildMedConflicts(pt)}`)}
   ${S('Adherence & technique','Treatment',`<div class="fg">
-    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||''}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence}" id="meds-adherence-input" oninput="commitMedsAdherence(this.value)"><span class="iu">%</span></div><div id="fb-meds-adherence">${v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div></div>
+    <div class="fgrp"><div class="fprev"><i class="ti ti-history"></i><span>Previous visit: ${prevVisit()?.adherence||''}%</span></div><label class="fl">Self-reported adherence</label><div class="iuw"><input class="fi" type="number" min="0" max="100" value="${v.adherence??''}" id="meds-adherence-input" oninput="commitMedsAdherence(this.value)"><span class="iu">%</span></div><div id="fb-meds-adherence">${v.adherence!=null&&v.adherence<80?'<div class="lfb lfb-w">Below 80%: address before step-up</div>':''}</div></div>
     ${Sel('Technique',['Adequate','Suboptimal','Poor: needs retraining'],v.technique==='adequate'?'Adequate':v.technique==='poor'?'Poor: needs retraining':'Suboptimal',null,'meds-technique-input','commitMedsTechnique')}
     ${Sel('Main barrier',['None','Forgetfulness','Side effect concern','Cost','Complex regimen'],'None')}
   </div>`)}`;
@@ -5078,6 +5249,26 @@ function bInvestigations() {
       ${F('Resting SpO₂','%','')} ${F('Exertional desaturation','%','')}
     </div>`)}`;
   }
+  if (pt.disease === 'PAH') {
+    return `
+    ${S('Right heart catheterisation','Classification',`<div class="fg">
+      ${F('mPAP','mmHg','',pv?`Previous: ${pv.mpap} mmHg`:'','mpap-input','commitMpap')}
+      ${F('PAWP','mmHg','',pv?`Previous: ${pv.pawp} mmHg`:'','pawp-input','commitPawp')}
+      ${F('PVR','WU','',pv?`Previous: ${pv.pvr} WU`:'','pvr-input','commitPvr')}
+      <div class="fgrp"><label class="fl">RHC date</label><input class="fi" type="date" oninput="markDirty()"></div>
+      <div id="fb-pahhemo" style="grid-column:1/-1"></div>
+    </div>`)}
+    ${S('Functional status','Classification',`<div class="fg">
+      ${Sel('WHO functional class',['1','2','3','4'],String(v.whoFc),pv?`Previous: WHO FC ${pv.whoFc}`:'','whofc-input','commitWhoFc')}
+      ${F('6MWD','m','',pv?`Previous: ${pv.sixMWD??'not performed'}${pv.sixMWD!=null?' m':''}`:'','sixmwd-input','commitSixMWD')}
+    </div>`)}
+    ${S('Biomarkers & safety labs','Risk',`<div class="fg">
+      ${F('NT-proBNP','pg/mL','',pv?`Previous: ${pv.ntprobnp??'N/A'} pg/mL`:'','ntprobnp-input','commitNtprobnp')}
+      ${F('Platelets','x10\u00b3/\u00b5L','',pv?`Previous: ${pv.platelets??'N/A'}k`:'','platelets-input','commitPlatelets')}
+      ${F('Haemoglobin','g/dL','',pv?`Previous: ${pv.hgb??'N/A'} g/dL`:'','hgb-input','commitHgb')}
+      <div id="fb-sotatercept" style="grid-column:1/-1"></div>
+    </div>`)}`;
+  }
   if (pt.disease === 'OSA') {
     return `
     ${S('Sleep study','Classification',`<div class="fg">
@@ -5120,21 +5311,24 @@ function bInvestigations() {
 
 function bLongitudinal() {
   const pt = getPt();
-  const trendField = pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : 'fev1';
-  const trendUnit = pt.disease==='OSA' ? '/hr' : '%';
+  const trendField = pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : pt.disease==='PAH' ? 'whoFc' : 'fev1';
+  const trendUnit = pt.disease==='OSA' ? '/hr' : pt.disease==='PAH' ? '' : '%';
   const vals = pt.visits.map(v=>v[trendField]).filter(x=>x!=null);
   const mx = vals.length ? Math.max(...vals) : 1;
   const chartH = 90;
   // For OSA, a falling AHI is improvement (lower is better), the inverse of FEV1/FVC where higher is better.
-  // The "danger" colour band logic is flipped accordingly so it still reads as "red = concerning" either way.
+  // PAH's WHO FC follows the same lower-is-better logic. The "danger" colour band logic is flipped
+  // accordingly so it still reads as "red = concerning" either way.
   const bars = pt.visits.map((v,i) => {
     const val = v[trendField];
     const h = val!=null ? Math.round((val/mx)*chartH) : 4;
     const cls = val==null ? '' : pt.disease==='OSA'
       ? (val>=30?'danger':val>=15?'warn':'good')
+      : pt.disease==='PAH'
+      ? (val>=4?'danger':val===3?'warn':'good')
       : (val<50?'danger':val<80?'warn':'good');
     const active = i === currentVisit;
-    return `<div class="fbw"><div class="fb ${cls}" style="height:${h}px;${active?'border-width:2px;':''}"><span>${val!=null?val+trendUnit:'N/A'}</span></div><div class="fbl">${v.label||'V'+v.n}</div></div>`;
+    return `<div class="fbw"><div class="fb ${cls}" style="height:${h}px;${active?'border-width:2px;':''}"><span>${val!=null?(pt.disease==='PAH'?'FC '+val:val+trendUnit):'N/A'}</span></div><div class="fbl">${v.label||'V'+v.n}</div></div>`;
   }).join('');
 
   const biologic = pt.disease==='ASTHMA'||pt.disease==='ACO';
@@ -5146,14 +5340,16 @@ function bLongitudinal() {
       { ok:getVisit().ocs>0,      brd:false, crit:'OCS dependent or frequent',   val:`${getVisit().ocs} courses` }
     ].map(r=>`<div class="bio-row ${r.ok?'met':r.brd?'borderline':'unmet'}"><div class="bio-icon"><i class="ti ${r.ok?'ti-check':r.brd?'ti-minus':'ti-x'}"></i></div><div class="bio-crit">${r.crit}</div><div class="bio-val">${r.val}</div></div>`).join('')}</div>` : '';
 
-  const trendTitle = pt.disease==='IPF' ? 'FVC trend across all visits' : pt.disease==='OSA' ? 'AHI trend across all visits' : 'FEV₁ trend across all visits';
+  const trendTitle = pt.disease==='IPF' ? 'FVC trend across all visits' : pt.disease==='OSA' ? 'AHI trend across all visits' : pt.disease==='PAH' ? 'WHO functional class trend across all visits' : 'FEV₁ trend across all visits';
   const trendBody = pt.disease==='IPF'
     ? (() => { const t = getTrend(pt.visits,'fvc',180); return t ? `Current: <strong>${getVisit().fvc}%</strong> · ${t.pctChange<0?'Declining':'Stable'} · ${Math.abs(t.pctChange).toFixed(1)}% over ${t.daysBetween} days` : `Current: <strong>${getVisit().fvc}%</strong> · insufficient history for a time-bounded trend`; })()
     : pt.disease==='OSA'
     ? (() => { const t = getTrend(pt.visits,'ahi',180); return t ? `Current: <strong>${getVisit().ahi}/hr</strong> · ${t.pctChange<0?'Improving':'Worsening or stable'} · ${Math.abs(t.pctChange).toFixed(1)}% over ${t.daysBetween} days` : `Current: <strong>${getVisit().ahi}/hr</strong> · insufficient history for a time-bounded trend`; })()
+    : pt.disease==='PAH'
+    ? (() => { const cur=getVisit(), base=pt.visits[0]; return `Current: <strong>WHO FC ${cur.whoFc}</strong> · ${cur.whoFc<base.whoFc?'Improved':cur.whoFc>base.whoFc?'Worsened':'Unchanged'} since baseline (was FC ${base.whoFc})`; })()
     : `Current: <strong>${getVisit().fev1}%</strong> · ${fev1TrendTxt()} · ${fev1TrendDetail()}`;
-  const trendIaCls = pt.disease==='IPF' ? (vals.length>1 && vals[vals.length-1]<vals[0] ? 'w':'i') : pt.disease==='OSA' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'w':'i') : (fev1Trend()==='tr'?'w':'i');
-  const trendIaIcon = pt.disease==='IPF' ? (vals.length>1 && vals[vals.length-1]<vals[0] ? 'down':'up') : pt.disease==='OSA' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'up':'down') : (fev1Trend()==='tr'?'down':'up');
+  const trendIaCls = pt.disease==='IPF' ? (vals.length>1 && vals[vals.length-1]<vals[0] ? 'w':'i') : pt.disease==='OSA' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'w':'i') : pt.disease==='PAH' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'w':'i') : (fev1Trend()==='tr'?'w':'i');
+  const trendIaIcon = pt.disease==='IPF' ? (vals.length>1 && vals[vals.length-1]<vals[0] ? 'down':'up') : pt.disease==='OSA' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'up':'down') : pt.disease==='PAH' ? (vals.length>1 && vals[vals.length-1]>vals[0] ? 'up':'down') : (fev1Trend()==='tr'?'down':'up');
 
   return `
   ${S(trendTitle,'Trajectory',`<div class="fev1-chart">${bars}</div><div class="ia ia-${trendIaCls}" style="margin-top:6px"><i class="ti ti-trending-${trendIaIcon}"></i><div class="ia-body">${trendBody}</div></div>`)}
@@ -5162,11 +5358,15 @@ function bLongitudinal() {
     ${Sel('Referral status',['Not indicated','Under consideration','Referred','Listed'],'Not indicated')}
     <div class="fgrp"><label class="fl">MDT discussion date</label><input class="fi" type="date" oninput="markDirty()"></div>
   </div>`):''}
+  ${pt.disease==='PAH'?S('Background-to-add-on therapy pathway','Risk · Treatment',`<div class="fg">
+    ${Sel('Sotatercept add-on status',['Not yet indicated','Under MDT discussion','Approved, awaiting first dose','On therapy'],'Not yet indicated')}
+    <div class="fgrp"><label class="fl">MDT discussion date</label><input class="fi" type="date" oninput="markDirty()"></div>
+  </div>`):''}
   ${pt.disease==='OSA'?S('CPAP titration history','Treatment · Trajectory',`<div class="fg">
     ${Sel('Mask type tried',['Nasal','Full face','Nasal pillow','Multiple tried'],'Nasal')}
     ${F('Pressure setting','cmH2O','')}
   </div>`):''}
-  ${(pt.disease!=='IPF'&&pt.disease!=='OSA')?S('Exacerbation pattern','Risk · Trajectory',`<div class="fg">
+  ${(pt.disease!=='IPF'&&pt.disease!=='OSA'&&pt.disease!=='PAH')?S('Exacerbation pattern','Risk · Trajectory',`<div class="fg">
     ${Sel('Seasonal pattern',['No pattern','Winter predominant','Spring','Autumn'],'Winter predominant')}
     ${F('Mean interval between exacerbations','days','')}
     ${Sel('Recent symptom trend',['Stable','Mild worsening','Moderate worsening','Significant worsening'],'Stable')}
@@ -5204,11 +5404,15 @@ function buildAuditLog() {
     ? `FVC recorded: ${v.fvc}% · DLCO ${v.dlco??'not performed'}${v.dlco!=null?'%':''} · physiology saved`
     : pt.disease === 'OSA'
     ? `AHI recorded: ${v.ahi}/hr · ODI ${v.odi}/hr · sleep study saved`
+    : pt.disease === 'PAH'
+    ? `RHC recorded: mPAP ${v.mpap} mmHg · WHO FC ${v.whoFc} · hemodynamics saved`
     : `FEV₁ recorded: ${v.fev1}% · spirometry saved`;
   const compareLine = pt.disease === 'IPF'
     ? `Visit ${pv?.n} saved · FVC ${pv?.fvc}%${v.fvc && pv?.fvc ? ' → '+v.fvc+'%' : ''}`
     : pt.disease === 'OSA'
     ? `Visit ${pv?.n} saved · AHI ${pv?.ahi}/hr${v.ahi!=null && pv?.ahi!=null ? ' → '+v.ahi+'/hr' : ''}`
+    : pt.disease === 'PAH'
+    ? `Visit ${pv?.n} saved · WHO FC ${pv?.whoFc}${v.whoFc!=null && pv?.whoFc!=null ? ' → '+v.whoFc : ''}`
     : `Visit ${pv?.n} saved · CAT ${pv?.cat}${v.cat && pv?.cat ? ' → '+v.cat : ''}`;
   const entries = [
     { ts:v.date + ' 14:32', user:'Dr. García',  action:`Visit ${v.n}: data saved · ${pt.disease.replace('_',' ')}` },
@@ -5243,11 +5447,13 @@ function bCohortOverviewCards(entries) {
     const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(lastV.act) : null;
     const gap   = pt.disease==='IPF' ? gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:lastV.fvc, dlco:lastV.dlco })) : null;
     const osaSev= pt.disease==='OSA' ? osaSeverity(lastV.ahi) : null;
+    const whoFc = pt.disease==='PAH' ? whoFunctionalClass(lastV.whoFc) : null;
     const zoneStr = pt.disease==='COPD' ? `GOLD Group ${grp} · FEV₁ ${lastV.fev1}%`
                   : pt.disease==='ASTHMA' ? `ACT ${lastV.act} · ${ctrl.label}`
                   : pt.disease==='ACO'    ? `Group ${grp} · ACT ${lastV.act}`
                   : pt.disease==='IPF'    ? `GAP ${gap.stage} · FVC ${lastV.fvc}%`
                   : pt.disease==='OSA'    ? `AHI ${lastV.ahi}/hr · ${osaSev.label}`
+                  : pt.disease==='PAH'    ? `${whoFc.label} · mPAP ${lastV.mpap} mmHg`
                   : `FEV₁ ${lastV.fev1}% · sputum ${lastV.sputum||'stable'}`;
     const [topAlert, alertSev] = pt.disease==='ASTHMA' && lastV.act < 16 ? ['Uncontrolled: step-up urgent', 'r']
                    : pt.disease==='COPD' && lastV.exac >= 2 ? [`${lastV.exac} exacerbations: high risk`, 'r']
@@ -5257,11 +5463,13 @@ function bCohortOverviewCards(entries) {
                    : pt.disease==='IPF' && (lastV.dlco===null||lastV.dlco===undefined) ? ['DLCO not performed: GAP scoring incomplete', 'a']
                    : pt.disease==='OSA' && osaSev.level==='severe' && (lastV.adherence===null||lastV.adherence===undefined||lastV.adherence<70) ? ['Severe OSA, inadequate therapy: urgent review', 'r']
                    : pt.disease==='OSA' && pt.demographics.bmi>=30 ? [`BMI ${pt.demographics.bmi}: weight management indicated`, 'a']
+                   : pt.disease==='PAH' && lastV.whoFc >= 3 ? [`WHO FC ${lastV.whoFc}: marked limitation, review therapy`, 'a']
+                   : pt.disease==='PAH' && lastV.platelets < 50 ? ['Platelets <50,000/mm³: sotatercept contraindicated', 'r']
                    : pt.demographics.smoker==='Current smoker' ? ['Still smoking: cessation priority', 'a']
                    : lastV.adherence < 80 ? [`Adherence ${lastV.adherence}%: address`, 'a']
                    : ['No urgent actions', 'g'];
-    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA'}[pt.disease];
-    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)'}[pt.disease];
+    const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease];
+    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)',PAH:'var(--r7)'}[pt.disease];
     const clickFn = appView === 'cockpit' ? `closeDrw();selectPt('${id}')` : `selectPt('${id}')`;
     const flagged = copCohortFlags[id];
     const flagBadge = flagged ? `<div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;padding:5px 9px;background:var(--n0);border:1px solid var(--n1);border-radius:var(--rsm)"><i class="ti ti-airos-ai" style="font-size:var(--fs-2xs);color:var(--n6)"></i><span style="font-size:var(--fs-2xs);color:var(--n7);line-height:1.4">${flagged}</span></div>` : '';
@@ -5740,7 +5948,7 @@ function bIdentityAccessBody() {
 function bAsthmAco() {
   const pt = getPt();
   const v  = getVisit();
-  if (pt.disease === 'IPF' || pt.disease === 'OSA') {
+  if (pt.disease === 'IPF' || pt.disease === 'OSA' || pt.disease === 'PAH') {
     return `<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">T2-inflammation phenotyping and biologic eligibility criteria on this page apply to asthma, COPD, ACO, and chronic bronchitis. They are not part of the standard ${pt.disease} workup.</div></div>`;
   }
   const isACO = pt.disease === 'ACO';
@@ -6529,6 +6737,8 @@ function ENG_OUTPUT(n, pt, v) {
   const ctrl  = (pt.disease==='ASTHMA'||pt.disease==='ACO') ? asthmaCtrl(v.act) : null;
   const gap   = pt.disease==='IPF' ? gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:v.fvc, dlco:v.dlco })) : null;
   const osaSev= pt.disease==='OSA' ? osaSeverity(v.ahi) : null;
+  const pahHemo = pt.disease==='PAH' ? pahHemodynamics({ mpap:v.mpap, pawp:v.pawp, pvr:v.pvr }) : null;
+  const pahFc   = pt.disease==='PAH' ? whoFunctionalClass(v.whoFc) : null;
   const map = {
     1: () => pt.disease==='ASTHMA'
       ? `CLASSIFICATION  [Classification]\nACT   : ${v.act}: ${ctrl.label}\nEos   : ${v.eos} c/µL\nStep  : 3 current → 4 indicated`
@@ -6538,24 +6748,34 @@ function ENG_OUTPUT(n, pt, v) {
       ? `CLASSIFICATION  [Classification]\nGAP   : ${gap.label} (${gapPoints({sex:pt.demographics.sex,age:pt.demographics.age,fvc:v.fvc,dlco:v.dlco})} pts)\nFVC   : ${v.fvc}%  DLCO: ${v.dlco??'not performed'}${v.dlco!=null?'%':''}\nMortality: ${gap.mortality1yr}% (1yr) · ${gap.mortality3yr}% (3yr)`
       : pt.disease==='OSA'
       ? `CLASSIFICATION  [Classification]\nAHI   : ${v.ahi}/hr: ${osaSev.label}\nODI   : ${v.odi}/hr\nStatus: ${v.adherence!=null?(v.adherence>=70?'Controlled on therapy':'Inadequate adherence'):'Not yet on therapy'}`
+      : pt.disease==='PAH'
+      ? `CLASSIFICATION  [Classification]\nHemodynamics: ${pahHemo.pattern}\nmPAP/PAWP/PVR: ${v.mpap} / ${v.pawp} / ${v.pvr} WU\nWHO FC : ${pahFc.label}`
       : `CLASSIFICATION  [Classification]\nStage : ${stage.s}: ${stage.l}\nGroup : ${grp}\nCAT   : ${v.cat}  mMRC: ${v.mmrc}\nExac  : ${v.exac} · ${v.hosp} hosp · ${v.ocs} OCS`,
-    2: () => `ASSESSMENT  [Assessment]\nAdherence : ${v.adherence??'N/A'}${v.adherence!=null?'%':''}\nTechnique : ${v.technique??'N/A'}\nSmoking   : ${pt.demographics.smoker}\nVaccinations: Flu ${pt.vaccinations.flu?'✓':'overdue'} · Pneumo ${pt.vaccinations.pneumo?'✓':'pending'}`,
+    2: () => pt.disease==='PAH'
+      ? `ASSESSMENT  [Assessment]\n6MWD      : ${v.sixMWD??'N/A'}${v.sixMWD!=null?' m':''}\nNT-proBNP : ${v.ntprobnp??'N/A'}${v.ntprobnp!=null?' pg/mL':''}\nPlatelets/Hgb: ${v.platelets??'N/A'}k / ${v.hgb??'N/A'} g/dL\nVaccinations: Flu ${pt.vaccinations.flu?'✓':'overdue'} · Pneumo ${pt.vaccinations.pneumo?'✓':'pending'}`
+      : `ASSESSMENT  [Assessment]\nAdherence : ${v.adherence??'N/A'}${v.adherence!=null?'%':''}\nTechnique : ${v.technique??'N/A'}\nSmoking   : ${pt.demographics.smoker}\nVaccinations: Flu ${pt.vaccinations.flu?'✓':'overdue'} · Pneumo ${pt.vaccinations.pneumo?'✓':'pending'}`,
     3: () => pt.disease==='IPF'
       ? `PHENOTYPE  [Phenotyping]\nPattern : UIP/IPF (restrictive)\nFVC/DLCO: ${v.fvc}% / ${v.dlco??'not performed'}${v.dlco!=null?'%':''}\nTrend   : ${(v.fvc < (prevVisit()?.fvc ?? v.fvc)) ? 'Declining' : 'Stable'}`
       : pt.disease==='OSA'
       ? `PHENOTYPE  [Phenotyping]\nPattern   : Obstructive sleep apnoea\nBMI       : ${pt.demographics.bmi} kg/m²\nComorbid  : T2DM ${pt.comorbidities.t2dm?'present':'absent'}`
+      : pt.disease==='PAH'
+      ? `PHENOTYPE  [Phenotyping]\nPattern   : ${pahHemo.pattern}\nWHO Group : 1 (PAH) if hemodynamics confirmed\nComorbid  : Connective tissue disease ${pt.comorbidities.connectiveTissue?'present':'absent'}`
       : `PHENOTYPE  [Phenotyping]\nEos     : ${v.eos} c/µL: ${v.eos>=300?'T2-HIGH':'T2-intermediate'}\nBiologic: ${v.eos>=300?'Eligible':'Borderline: repeat eos + FeNO'}\nACO     : ${pt.disease==='ACO'?'Confirmed':'Not applicable'}`,
     4: () => pt.disease==='IPF'
       ? `RISK PROFILE  [Risk]\nGAP risk  : ${gap.label}\nMortality : ${gap.mortality1yr}% (1yr) · ${gap.mortality3yr}% (3yr)\n6MWD      : ${v.sixMWD??'not performed'}${v.sixMWD!=null?' m':''}`
       : pt.disease==='OSA'
       ? `RISK PROFILE  [Risk]\nOSA severity: ${osaSev.label}\nAHI/ODI     : ${v.ahi}/hr · ${v.odi}/hr\nAdherence   : ${v.adherence??'not yet established'}${v.adherence!=null?'%':''}`
+      : pt.disease==='PAH'
+      ? `RISK PROFILE  [Risk]\nWHO FC      : ${pahFc.label}\nUntreated survival: ${pahFc.survival||'not applicable, on therapy'}\n6MWD/NT-proBNP: ${v.sixMWD??'N/A'}m / ${v.ntprobnp??'N/A'}pg/mL`
       : `RISK PROFILE  [Risk]\nExac risk : ${v.exac>=2||v.hosp>=1?'HIGH':'MODERATE'}\n${v.exac} exacerbations · ${v.hosp} hosp · ${v.ocs} OCS\nAdherence : ${v.adherence}%\nFEV₁ trend: ${fev1TrendTxt()}`,
     5: () => pt.disease==='IPF'
       ? `TREATMENT  [Treatment]\nCurrent : ${pt.meds.map(m=>m.drug).join(' + ')}\nMatch   : ${gap.stage==='III'?'Consider transplant referral':'Antifibrotic appropriate to stage'}\nGERD    : ${pt.comorbidities.gerd?'Treated':'Screen if cough persists'}`
       : pt.disease==='OSA'
       ? `TREATMENT  [Treatment]\nCurrent : ${v.adherence!=null?'CPAP':'Awaiting therapy initiation'}\nMatch   : ${v.adherence!=null&&v.adherence<70?'Address adherence barriers':'Appropriate'}\nWeight  : ${pt.demographics.bmi>=30?'Weight management indicated':'Not indicated'}`
+      : pt.disease==='PAH'
+      ? `TREATMENT  [Treatment]\nCurrent : ${pt.meds.map(m=>m.drug).join(' + ')}\nMatch   : Background dual therapy${v.whoFc>=3?', escalation review indicated':' appropriate to FC'}\nSotatercept: ${v.platelets!=null&&v.platelets<50?'Contraindicated, platelets <50k':'Eligibility to confirm with specialist team'}`
       : `TREATMENT  [Treatment]\nCurrent : ${pt.meds.map(m=>m.cls).join(' + ')}\nMatch   : ${pt.disease==='ASTHMA'&&ctrl.level!=='controlled'?'Step-up indicated':'Appropriate'}\nBiologic: ${v.eos>=300?'Refer: eligible':'Repeat eos next visit'}\nVaccine : Flu ${pt.vaccinations.flu?'✓':'overdue'}`,
-    6: () => `ENGAGEMENT  [Engagement]\nZone plan : Generated\nMonitoring: Daily ${pt.disease==='ASTHMA'?'ACT':pt.disease==='IPF'?'symptom diary':pt.disease==='OSA'?'CPAP usage log':'CAT'} + ${pt.disease==='OSA'?'mask fit check':'rescue use'}\nReferrals : ${(pt.referrals||[]).filter(r=>r.status==='pending').map(r=>r.label).join(', ')||'None pending'}`,
+    6: () => `ENGAGEMENT  [Engagement]\nZone plan : Generated\nMonitoring: Daily ${pt.disease==='ASTHMA'?'ACT':pt.disease==='IPF'?'symptom diary':pt.disease==='OSA'?'CPAP usage log':pt.disease==='PAH'?'symptom/weight diary':'CAT'} + ${pt.disease==='OSA'?'mask fit check':pt.disease==='PAH'?'fluid status check':'rescue use'}\nReferrals : ${(pt.referrals||[]).filter(r=>r.status==='pending').map(r=>r.label).join(', ')||'None pending'}`,
     7: () => {
       if (pt.disease==='IPF') {
         const allFvc = pt.visits.map(v=>`${v.label||'V'+v.n}: FVC ${v.fvc}% / DLCO ${v.dlco??'N/A'}${v.dlco!=null?'%':''}`).join('\n  ');
@@ -6564,6 +6784,10 @@ function ENG_OUTPUT(n, pt, v) {
       if (pt.disease==='OSA') {
         const allAhi = pt.visits.map(v=>`${v.label||'V'+v.n}: AHI ${v.ahi}/hr${v.adherence!=null?` · adherence ${v.adherence}%`:''}`).join('\n  ');
         return `TRAJECTORY  [Trajectory]\nAHI history:\n  ${allAhi}\n\nTrend : ${v.ahi < pt.visits[0].ahi ? 'Improving since baseline' : 'Stable or worsening since baseline'}`;
+      }
+      if (pt.disease==='PAH') {
+        const allPah = pt.visits.map(v=>`${v.label||'V'+v.n}: mPAP ${v.mpap} · WHO FC ${v.whoFc} · 6MWD ${v.sixMWD??'N/A'}m`).join('\n  ');
+        return `TRAJECTORY  [Trajectory]\nHemodynamic/functional history:\n  ${allPah}\n\nTrend : ${v.whoFc < pt.visits[0].whoFc ? 'Improving since baseline' : v.whoFc > pt.visits[0].whoFc ? 'Worsening since baseline' : 'Stable since baseline'}`;
       }
       const allFev1 = pt.visits.map(v=>`${v.label||'V'+v.n}: ${v.fev1}%`).join('\n  ');
       return `TRAJECTORY  [Trajectory]\nFEV₁ history:\n  ${allFev1}\n\nTrend : ${fev1TrendTxt()}\nDetail: ${fev1TrendDetail()}`;
@@ -6971,13 +7195,15 @@ function buildCopContext() {
   const ctrl  = (d==='ASTHMA'||d==='ACO') ? asthmaCtrl(v.act) : null;
   const gap   = d==='IPF' ? gapStage(gapPoints({ sex:pt.demographics.sex, age:pt.demographics.age, fvc:v.fvc, dlco:v.dlco })) : null;
   const osaSev= d==='OSA' ? osaSeverity(v.ahi) : null;
+  const pahFc = d==='PAH' ? whoFunctionalClass(v.whoFc) : null;
   const visitHistory = pt.visits.map(vi => {
     if (d === 'IPF') return `Visit ${vi.n} (${vi.date}): FVC=${vi.fvc}%, DLCO=${vi.dlco??'N/A'}${vi.dlco!=null?'%':''}, 6MWD=${vi.sixMWD??'N/A'}, Adherence=${vi.adherence??'N/A'}%, Note=${(vi.note||'none').substring(0,80)}`;
     if (d === 'OSA') return `Visit ${vi.n} (${vi.date}): AHI=${vi.ahi}/hr, ODI=${vi.odi}/hr, Adherence=${vi.adherence??'N/A'}%, Note=${(vi.note||'none').substring(0,80)}`;
+    if (d === 'PAH') return `Visit ${vi.n} (${vi.date}): mPAP=${vi.mpap}mmHg, PVR=${vi.pvr}WU, WHO FC=${vi.whoFc}, 6MWD=${vi.sixMWD??'N/A'}, NT-proBNP=${vi.ntprobnp??'N/A'}, Note=${(vi.note||'none').substring(0,80)}`;
     return `Visit ${vi.n} (${vi.date}): FEV1=${vi.fev1}%, CAT=${vi.cat||'N/A'}, Exac=${vi.exac}, Adherence=${vi.adherence}%, Note=${(vi.note||'none').substring(0,80)}`;
   }).join('\n');
   const fev1Decline = (() => {
-    if (d === 'IPF' || d === 'OSA') return 'not applicable: tracked via FVC/DLCO or AHI trend instead';
+    if (d === 'IPF' || d === 'OSA' || d === 'PAH') return 'not applicable: tracked via FVC/DLCO, AHI, or hemodynamic trend instead';
     if (pt.visits.length < 2) return 'insufficient data';
     const first = pt.visits[0].fev1, last = v.fev1;
     const yrs = (pt.visits.length - 1) * 0.75;
@@ -6991,20 +7217,22 @@ function buildCopContext() {
   })();
   return {
     id:currentPt, disease:d,
-    stage: stage?.l || (d==='IPF' ? gap.label : null) || (d==='OSA' ? osaSev.label : null) || null,
+    stage: stage?.l || (d==='IPF' ? gap.label : null) || (d==='OSA' ? osaSev.label : null) || (d==='PAH' ? pahFc.label : null) || null,
     group:grp, control:ctrl?.label||null,
-    fev1: d==='IPF'||d==='OSA' ? 'N/A' : v.fev1, fev1Decline, stageToIV,
-    eos: d==='IPF'||d==='OSA' ? 'N/A' : v.eos,
-    cat: d==='IPF'||d==='OSA' ? 'N/A' : v.cat,
-    act: d==='IPF'||d==='OSA' ? 'N/A' : v.act,
+    fev1: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.fev1, fev1Decline, stageToIV,
+    eos: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.eos,
+    cat: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.cat,
+    act: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.act,
     adherence:v.adherence??'N/A', technique:v.technique??'N/A', smoker:pt.demographics.smoker,
     age:pt.demographics.age, sex:pt.demographics.sex, packYears:pt.demographics.packYears,
     meds:pt.meds.map(m=>m.cls).join(' + '),
-    exac: d==='IPF'||d==='OSA' ? 'N/A' : v.exac,
-    hosp: d==='IPF'||d==='OSA' ? 'N/A' : v.hosp,
-    ocs:  d==='IPF'||d==='OSA' ? 'N/A' : v.ocs,
-    fvc: d==='IPF' ? v.fvc : 'N/A', dlco: d==='IPF' ? (v.dlco??'not performed') : 'N/A', sixMWD: d==='IPF' ? (v.sixMWD??'not performed') : 'N/A',
+    exac: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.exac,
+    hosp: ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.hosp,
+    ocs:  ['IPF','OSA','PAH'].includes(d) ? 'N/A' : v.ocs,
+    fvc: d==='IPF' ? v.fvc : 'N/A', dlco: d==='IPF' ? (v.dlco??'not performed') : 'N/A', sixMWD: (d==='IPF'||d==='PAH') ? (v.sixMWD??'not performed') : 'N/A',
     ahi: d==='OSA' ? v.ahi : 'N/A', odi: d==='OSA' ? v.odi : 'N/A',
+    mpap: d==='PAH' ? v.mpap : 'N/A', pawp: d==='PAH' ? v.pawp : 'N/A', pvr: d==='PAH' ? v.pvr : 'N/A',
+    whoFc: d==='PAH' ? v.whoFc : 'N/A', ntprobnp: d==='PAH' ? (v.ntprobnp??'N/A') : 'N/A', platelets: d==='PAH' ? (v.platelets??'N/A') : 'N/A',
     visitN:v.n, totalVisits:pt.visits.length, visitDate:v.date, visitHistory,
     comorbidities:Object.entries(pt.comorbidities).filter(([,val])=>val).map(([k])=>k).join(', ')||'none recorded',
     moduleOutputs:[1,2,3,4,5,6,7].map(n=>ENG_OUTPUT(n,pt,v)).join('\n\n')
@@ -7049,6 +7277,14 @@ function renderCopContext() {
       <div class="cop-ctx-cell"><div class="cop-ctx-val ${odiC}">${v.odi}</div><div class="cop-ctx-lbl">ODI /hr</div></div>
       <div class="cop-ctx-cell"><div class="cop-ctx-val ${ac}">${ctx.adherence}${ctx.adherence!=='N/A'?'%':''}</div><div class="cop-ctx-lbl">CPAP adherence</div></div>
       <div class="cop-ctx-cell"><div class="cop-ctx-val">${pt.demographics.bmi}</div><div class="cop-ctx-lbl">BMI</div></div>`;
+  } else if (pt.disease === 'PAH') {
+    const fcC = v.whoFc >= 4 ? 'r' : v.whoFc === 3 ? 'a' : 'g';
+    const plateletC = (v.platelets!=null && v.platelets<50) ? 'r' : 'g';
+    g('cop-ctx').innerHTML = `
+      <div class="cop-ctx-cell"><div class="cop-ctx-val">${v.mpap}</div><div class="cop-ctx-lbl">mPAP mmHg</div></div>
+      <div class="cop-ctx-cell"><div class="cop-ctx-val ${fcC}">FC ${v.whoFc}</div><div class="cop-ctx-lbl">WHO class</div></div>
+      <div class="cop-ctx-cell"><div class="cop-ctx-val">${v.ntprobnp??'N/A'}</div><div class="cop-ctx-lbl">NT-proBNP</div></div>
+      <div class="cop-ctx-cell"><div class="cop-ctx-val ${plateletC}">${v.platelets??'N/A'}${v.platelets!=null?'k':''}</div><div class="cop-ctx-lbl">Platelets</div></div>`;
   } else {
     const fc = ctx.fev1 < 50 ? 'r' : ctx.fev1 < 70 ? 'a' : 'g';
     const ec = ctx.eos >= 300 ? 'g' : ctx.eos >= 200 ? 'a' : '';
@@ -7067,6 +7303,8 @@ function buildThoughtPrompt(ctx) {
     ? `FVC: ${ctx.fvc}% | DLCO: ${ctx.dlco} | 6MWD: ${ctx.sixMWD} | Adherence: ${ctx.adherence}% | Technique: ${ctx.technique}`
     : ctx.disease === 'OSA'
     ? `AHI: ${ctx.ahi}/hr | ODI: ${ctx.odi}/hr | CPAP adherence: ${ctx.adherence}% | Technique: ${ctx.technique}`
+    : ctx.disease === 'PAH'
+    ? `mPAP: ${ctx.mpap} mmHg | PAWP: ${ctx.pawp} mmHg | PVR: ${ctx.pvr} WU | WHO FC: ${ctx.whoFc} | 6MWD: ${ctx.sixMWD} | NT-proBNP: ${ctx.ntprobnp} | Platelets: ${ctx.platelets}`
     : `FEV1: ${ctx.fev1}% | Decline: ${ctx.fev1Decline}${ctx.stageToIV?` | Months to Stage IV: ${ctx.stageToIV}`:''}
 Eos: ${ctx.eos} c/uL | CAT: ${ctx.cat||'N/A'} | ACT: ${ctx.act||'N/A'} | Adherence: ${ctx.adherence}% | Technique: ${ctx.technique}
 Exac 12m: ${ctx.exac} | Hosp: ${ctx.hosp} | OCS: ${ctx.ocs} | Smoking: ${ctx.smoker}`;
@@ -7104,6 +7342,8 @@ function buildDocPrompt(ctx, docType, register, lang) {
     ? `FVC ${ctx.fvc}%, DLCO ${ctx.dlco}, 6MWD ${ctx.sixMWD}\nAdherence: ${ctx.adherence}% | Treatment: ${ctx.meds}`
     : ctx.disease === 'OSA'
     ? `AHI ${ctx.ahi}/hr, ODI ${ctx.odi}/hr\nCPAP adherence: ${ctx.adherence}% | Treatment: ${ctx.meds}`
+    : ctx.disease === 'PAH'
+    ? `mPAP ${ctx.mpap} mmHg, PAWP ${ctx.pawp} mmHg, PVR ${ctx.pvr} WU, WHO FC ${ctx.whoFc}\n6MWD ${ctx.sixMWD} | NT-proBNP ${ctx.ntprobnp} | Platelets ${ctx.platelets} | Treatment: ${ctx.meds}`
     : `FEV1 ${ctx.fev1}%, Eos ${ctx.eos} c/uL\nDecline: ${ctx.fev1Decline}${ctx.stageToIV?`, ~${ctx.stageToIV} months to Stage IV`:''}\nExac: ${ctx.exac} | Hosp: ${ctx.hosp} | Adherence: ${ctx.adherence}% | Treatment: ${ctx.meds}`;
   // Item: ground document generation in the same exact, code-computed evidence the
   // standalone "Interpret X" buttons use, rather than letting the LLM restate derived
@@ -8099,6 +8339,7 @@ buildLoginRoles();
 applyUiLang();
 hydrateIcons(document.body);
 startIconObserver();
+setTimeout(() => { const splash = g('boot-splash'); if (splash) splash.remove(); }, 1600);
 // Standing safety net: if a future edit to a RULESET_* drifts from its hardcoded
 // counterpart, this fails loudly in devtools on every load rather than silently shipping
 // a classification regression. Deliberately console-only: a clinician should never see this.
