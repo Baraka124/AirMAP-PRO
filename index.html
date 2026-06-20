@@ -1211,6 +1211,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
           <option value="CHRONIC_BRONCHITIS">Chronic Bronchitis</option>
           <option value="IPF">IPF</option>
           <option value="OSA">OSA</option>
+          <option value="PAH">PAH</option>
         </select>
       </div>
       <div class="cs-filter-grp">
@@ -2036,6 +2037,53 @@ const DB = {
       { label:'Medications',   pct:100, cls:'cf-full' },
       { label:'Longitudinal',  pct:90,  cls:'cf-full' }
     ]
+  },
+
+  /* ── P9 · PAH (WHO Group 1) · HIGH-RISK, MONOTHERAPY, PLATELET CONTRAINDICATION ──
+     Javier M · 63yr · Male · Ex-smoker
+     Story: Deliberately contrasting with 00721 (Carmen, improving on dual therapy,
+     clean labs, no comorbidities). Javier is the harder case: diagnosed late, still
+     on PDE5i monotherapy, worsening WHO FC, genuinely low platelets (thrombocytopenia,
+     a real and recognised association in some PAH subtypes/comorbid liver disease),
+     and a heart-failure comorbidity that should prompt the Group 1 vs Group 2
+     differential. This patient exists specifically to demonstrate, live in the UI
+     rather than only in synthetic tests, the red-zone path, the sotatercept platelet
+     contraindication, the heart-failure differential rule, and the monotherapy
+     escalation flag on the treatment pathway.
+  ── */
+  '00756': {
+    disease: 'PAH', risk: 'r',
+    identity: { internalRef:'9d2e7a18-3f4c-4b91-8a6d-2c5f1e9b7d33', responsibleClinician:'Dr. García' },
+    demographics: { age:63, sex:'Male', bmi:31.2, smoker:'Ex-smoker', packYears:22, quitDate:'2014', onsetAge:61 },
+    comorbidities: { heartFailure:true, ihd:false, t2dm:true, osa:false, anxiety:true, osteoporosis:false, connectiveTissue:false },
+    vaccinations: { flu:true, pneumo:false, covid:true },
+    environment: { aqi:55, aqiImpact:'Moderate', pollen:'Medium', humidity:48, occExposure:'None', homeVent:'Fair', airPurifier:false, petExposure:'None', dailySteps:1400, sleepHrs:6, techniqueErrors:'None', socialSupport:5, financialStress:6, healthLiteracy:'Medium', transport:'Limited' },
+    meds: [
+      { drug:'Sildenafil', cls:'PDE5i', tag:'tp5', dose:'20 mg', freq:'Three times daily', since:'Sep 2025' }
+    ],
+    visits: [
+      { n:1, date:'18 Sep 2025', label:'RHC diagnosis', mpap:46, pawp:11, pvr:8.4, whoFc:3, sixMWD:260, ntprobnp:1350, platelets:165, hgb:14.8, note:'RHC confirms pre-capillary PH (Group 1 pattern), diagnosed late after prolonged dyspnoea work-up. WHO FC III. Sildenafil monotherapy started, comorbid heart failure and T2DM on file.' },
+      { n:2, date:'20 Jan 2026', label:'12-week review', mpap:48, pawp:12, pvr:8.9, whoFc:3, sixMWD:230, ntprobnp:1480, platelets:98, hgb:13.9, note:'No improvement on monotherapy. Platelets trending down (165->98), haematology review requested. ERA add-on under discussion but delayed pending platelet work-up.' },
+      { n:3, date:'17 Jun 2026', label:'Current', mpap:51, pawp:13, pvr:9.6, whoFc:4, sixMWD:165, ntprobnp:1620, platelets:42, hgb:13.2, note:'WHO FC worsened to IV. Platelets now 42k, below the sotatercept safety threshold and a contraindication to any add-on requiring platelet monitoring. Urgent specialist centre referral made.' }
+    ],
+    timeline: [
+      { dot:'r', date:'17 Jun 2026 · Clinic', ev:'WHO FC worsened to IV', tag:{cls:'tr',tx:'Deteriorating'}, detail:'6MWD 165m (was 260m at diagnosis) · platelets 42k, below safety threshold · urgent referral' },
+      { dot:'a', date:'20 Jan 2026 · Review', ev:'Platelets falling, ERA add-on delayed', tag:{cls:'ta',tx:'Review'}, detail:'Platelets 165k -> 98k · haematology review requested · no hemodynamic improvement on monotherapy' },
+      { dot:'a', date:'18 Sep 2025 · RHC', ev:'PAH (WHO Group 1) confirmed, late diagnosis', tag:{cls:'ta',tx:'Diagnosis'}, detail:'mPAP 46 mmHg · PAWP 11 mmHg · PVR 8.4 WU · WHO FC III · comorbid heart failure and T2DM' }
+    ],
+    referrals: [
+      { label:'PAH specialist centre, urgent', status:'pending', date:'Referred 17 Jun 2026' },
+      { label:'Haematology: thrombocytopenia work-up', status:'pending', date:'Referred 20 Jan 2026' }
+    ],
+    completeness: [
+      { label:'Patient ID',    pct:100, cls:'cf-full' },
+      { label:'Demographics',  pct:100, cls:'cf-full' },
+      { label:'RHC hemodynamics', pct:100, cls:'cf-full' },
+      { label:'WHO FC & 6MWD', pct:100, cls:'cf-full' },
+      { label:'Environment',   pct:40,  cls:'cf-low' },
+      { label:'Medications',   pct:60,  cls:'cf-part' },
+      { label:'Longitudinal',  pct:90,  cls:'cf-full' }
+    ]
   }
 };
 
@@ -2078,11 +2126,15 @@ const getVisit   = () => { const pt = getPt(); if (!pt) return null; const v = p
    Classification: runs on visit data
 ═══════════════════════════════════════════════════════════════════ */
 function goldGroup(v) {
+  // GOLD ABE assessment tool (verified this session: replaced ABCD in the 2023 GOLD update;
+  // groups C and D were merged into a single Group E based purely on exacerbation history,
+  // no longer stratified further by symptom score). Previously this function returned the
+  // pre-2023 'D' for high-risk patients, a real, outdated bug now corrected.
   const hiSx  = v.cat >= 10 || v.mmrc >= 2;
   const hiRisk= v.exac >= 2 || v.hosp >= 1;
-  if (!hiSx && !hiRisk) return 'A';
-  if (hiSx  && !hiRisk) return 'B';
-  return 'D';
+  if (hiRisk) return 'E';
+  if (hiSx) return 'B';
+  return 'A';
 }
 function goldStage(fev1) {
   if (fev1 >= 80) return {s:'I',  l:'Mild'};
@@ -2117,6 +2169,22 @@ function gapStage(points) {
 }
 /* OSA severity from AHI, standard clinical bands (confirmed directly on loinc.org's AHI entry):
    <5 normal, 5-15 mild, 15-30 moderate, >30 severe. */
+/* mMRC dyspnoea scale descriptive text. Verified this session: the mMRC is explicitly
+   public domain (confirmed via the official ePROVIDE/Mapi Research Trust instrument page
+   and a formal clinical performance-measure specification), unlike CAT, ACT, and CCQ, which
+   remain proprietary, licensed instruments. AIROS therefore only ever stores and displays a
+   bare score for those three (consistent with how clinicians already use them in real
+   records), but can honestly show the real grade descriptions for mMRC. */
+function mmrcGrade(grade) {
+  const grades = {
+    0: 'I only get breathless with strenuous exercise.',
+    1: 'I get short of breath when hurrying on level ground or walking up a slight hill.',
+    2: 'On level ground, I walk slower than people of the same age because of breathlessness, or I have to stop for breath when walking at my own pace on the level.',
+    3: 'I stop for breath after walking about 100 yards (90 m) or after a few minutes on level ground.',
+    4: 'I am too breathless to leave the house, or I am breathless when dressing.'
+  };
+  return grades[grade] !== undefined ? { grade, desc: grades[grade] } : null;
+}
 function osaSeverity(ahi) {
   if (ahi === null || ahi === undefined) return { level:'unknown', label:'Not assessed' };
   if (ahi < 5)  return { level:'normal',   label:'Normal (no significant OSA)' };
@@ -2238,7 +2306,7 @@ const RULESET_GOLD_GROUP = [
       { any: [{ field:'cat', op:'gte', value:10 }, { field:'mmrc', op:'gte', value:2 }] },
       { field:'exac', op:'lt', value:2 }, { field:'hosp', op:'lt', value:1 }
     ]}, then: 'B' },
-  { if: { all: [] }, then: 'D', default: true } // genuinely vacuous now: A and B are both fully and explicitly specified above, so anything left really is D, not assumed
+  { if: { all: [] }, then: 'E', default: true } // GOLD ABE nomenclature (verified this session: ABCD eliminated, C/D merged into E based on exacerbation history, since the 2023 GOLD update). A and B are both fully and explicitly specified above, so anything left really is E, not assumed.
 ];
 const RULESET_GOLD_STAGE = [
   { if: { field:'fev1', op:'gte', value:80 }, then: { s:'I',  l:'Mild' } },
@@ -2392,9 +2460,134 @@ const PATHWAY_GOLD_COPD = {
   }
 };
 const ALL_PATHWAYS = [PATHWAY_GOLD_COPD];
+
+/* ESC/ERS 2022 PAH risk-stratified treatment pathway, verified this session against the
+   2022 ESC/ERS PH guidelines and independent reviews of the four-strata follow-up risk
+   model. Low risk requires meeting at least 2 of: WHO-FC I/II, 6MWD >440m, NT-proBNP
+   <300 ng/L (Hoeper et al., cited in multiple 2022-guideline reviews this session).
+   Treatment-goal framing (not a hard escalation rule the way GOLD's exacerbation count
+   is): achieving and maintaining low-risk status is the explicit ESC/ERS treatment goal,
+   sotatercept is positioned as add-on therapy specifically for patients who fail to
+   reach low-risk status despite dual or triple background therapy. */
+function pahRiskStratum(v) {
+  if (v.whoFc == null && v.sixMWD == null && v.ntprobnp == null) return null;
+  const lowCriteriaMet = [
+    v.whoFc != null && v.whoFc <= 2,
+    v.sixMWD != null && v.sixMWD > 440,
+    v.ntprobnp != null && v.ntprobnp < 300
+  ].filter(Boolean).length;
+  const highFeatures = [
+    v.whoFc != null && v.whoFc === 4,
+    v.sixMWD != null && v.sixMWD < 165,
+    v.ntprobnp != null && v.ntprobnp > 1100
+  ].filter(Boolean).length;
+  if (highFeatures >= 1) return { stratum:'high', mortality1yr:'>20%' };
+  if (lowCriteriaMet >= 2) return { stratum:'low', mortality1yr:'0-3%' };
+  return { stratum:'intermediate', mortality1yr:'2-19%' };
+}
+const PATHWAY_PAH = {
+  id: 'esc_ers_2022_pah_pharmacotherapy',
+  label: 'ESC/ERS 2022 PAH risk-stratified treatment pathway',
+  appliesTo: ['PAH'],
+  steps: [
+    { id:'mono', label:'Monotherapy (single agent)',
+      matches: (pt) => { const m = medClasses(pt); return (m.has('PDE5i')!==m.has('ERA')) && !pt.meds.some(x=>x.cls==='Biologic'); } },
+    { id:'dual', label:'ERA + PDE5i dual background therapy',
+      matches: (pt) => { const m = medClasses(pt); return m.has('PDE5i') && m.has('ERA') && !pt.meds.some(x=>x.cls==='Biologic'); } },
+    { id:'sotatercept_addon', label:'Background therapy + sotatercept add-on',
+      matches: (pt) => pt.meds.some(x=>x.cls==='Biologic') }
+  ],
+  evaluate(pt) {
+    const v = pt.visits[pt.visits.length - 1];
+    const currentStepIdx = this.steps.findIndex(s => s.matches(pt));
+    const currentStep = currentStepIdx >= 0 ? this.steps[currentStepIdx] : null;
+    const risk = pahRiskStratum(v);
+    if (!currentStep) {
+      const m = medClasses(pt);
+      const regimenDesc = pt.meds.map(med => med.cls).join('+') || 'no PAH-specific therapy recorded';
+      return { onPathway:false, detail: `Current regimen (${regimenDesc}) does not match a recognised step on this pathway.` };
+    }
+    if (currentStepIdx === this.steps.length - 1) {
+      return { onPathway:true, currentStep: currentStep.label, atTopOfLadder:true, risk,
+        detail: risk ? `On background therapy + sotatercept, the top of this pathway. Current risk stratum: ${risk.stratum} (~${risk.mortality1yr} estimated 1-year mortality, cohort figure). Treatment goal is achieving and maintaining low-risk status; further escalation beyond this combination is a specialist-centre decision.` : 'On background therapy + sotatercept. Risk stratum cannot be calculated without WHO FC, 6MWD, or NT-proBNP.' };
+    }
+    const next = this.steps[currentStepIdx + 1];
+    let escalationIndicated = false, reason = '';
+    if (risk && risk.stratum !== 'low') {
+      escalationIndicated = true;
+      reason = `Current risk stratum: ${risk.stratum} (not low risk, the explicit ESC/ERS treatment goal). ${currentStep.id==='mono' ? 'ESC/ERS 2022 recommends initial dual therapy (ERA+PDE5i) for low-to-intermediate risk patients without cardiopulmonary comorbidities; monotherapy alone is not meeting the low-risk goal here.' : currentStep.id==='dual' ? 'Despite dual background therapy, this patient has not reached low-risk status: sotatercept add-on is specifically positioned for this situation per ESC/ERS-aligned guidance.' : ''}`;
+    }
+    return { onPathway:true, currentStep: currentStep.label, nextStep: next.label, escalationIndicated, risk,
+      detail: escalationIndicated ? reason : `Currently on "${currentStep.label}". ${risk ? `Risk stratum: ${risk.stratum}, meeting the low-risk treatment goal.` : 'Risk stratum cannot be calculated without WHO FC, 6MWD, or NT-proBNP.'}` };
+  }
+};
+ALL_PATHWAYS.push(PATHWAY_PAH);
+
 function checkPathways(pt) {
   if (!pt || !pt.visits || !pt.visits.length) return [];
   return ALL_PATHWAYS.filter(p => p.appliesTo.includes(pt.disease)).map(p => ({ pathwayId: p.id, label: p.label, ...p.evaluate(pt) }));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   OUTCOME-PREDICTION VALIDATION (item 16 of the "centralized brain" set):
+   checks AIROS's own deterministic predictions against what actually
+   happened at the next real visit, the closed loop this app did not
+   previously have anywhere.
+
+   Honesty constraint, stated plainly rather than glossed over: AIROS
+   never literally logged a prediction "at the time" for these demo
+   patients, no such log existed before now. What this function does is
+   RECONSTRUCT what the existing, already-proven classification logic
+   would have output at a prior visit, using ONLY the data that visit
+   actually had on file (never looking ahead), then compares that
+   reconstructed prediction against the NEXT real visit's actual
+   recorded outcome. This is a legitimate validation of the underlying
+   logic's predictive value, since the classification functions are
+   deterministic and the historical data is real, but it is retrospective
+   reconstruction, not a record of decisions actually made in real time,
+   and the UI must say so rather than imply otherwise.
+═══════════════════════════════════════════════════════════════════ */
+function checkOutcomePredictions(pt) {
+  if (!pt || !pt.visits || pt.visits.length < 2) return [];
+  const results = [];
+  for (let i = 0; i < pt.visits.length - 1; i++) {
+    const v = pt.visits[i], next = pt.visits[i+1];
+    if (pt.disease === 'COPD' || pt.disease === 'ACO') {
+      // Prediction: GOLD Group E (high exacerbation risk) at visit i predicts >=1
+      // exacerbation or hospitalisation will be recorded by the next visit.
+      const grp = goldGroup(v);
+      if (grp === 'E') {
+        const eventOccurred = (next.exac > v.exac) || (next.hosp > v.hosp);
+        results.push({
+          visitN: v.n, nextVisitN: next.n, type: 'exacerbation-risk',
+          prediction: `GOLD Group E (high exacerbation risk) at visit ${v.n}`,
+          predicted: 'Further exacerbation or hospitalisation likely before next review',
+          actual: eventOccurred ? `Exacerbations rose ${v.exac}\u2192${next.exac}, hospitalisations ${v.hosp}\u2192${next.hosp}` : `No new exacerbation recorded: ${v.exac}\u2192${next.exac}, hosp ${v.hosp}\u2192${next.hosp}`,
+          matched: eventOccurred
+        });
+      }
+      // Prediction: the GOLD escalation pathway flagging escalation should correspond
+      // to an actual medication-class change by the next visit (using med class counts
+      // as the only signal this data model can check without per-visit med history).
+    }
+    if (pt.disease === 'PAH') {
+      // Prediction: risk stratum at visit i should track toward low risk if the patient
+      // is on background therapy already (the explicit ESC/ERS treatment goal), i.e.
+      // WHO FC should not worsen and 6MWD should not meaningfully fall.
+      const risk = pahRiskStratum(v);
+      if (risk && risk.stratum !== 'low' && v.whoFc != null && next.whoFc != null) {
+        const improved = next.whoFc <= v.whoFc && (next.sixMWD == null || v.sixMWD == null || next.sixMWD >= v.sixMWD - 20);
+        results.push({
+          visitN: v.n, nextVisitN: next.n, type: 'pah-risk-trajectory',
+          prediction: `${risk.stratum} risk stratum at visit ${v.n} (not yet at the ESC/ERS low-risk treatment goal)`,
+          predicted: 'Risk stratum should improve or stabilise with continued background therapy; meaningful worsening would be unexpected',
+          actual: improved ? `WHO FC ${v.whoFc}\u2192${next.whoFc}, 6MWD ${v.sixMWD??'N/A'}\u2192${next.sixMWD??'N/A'}: stable or improving` : `WHO FC ${v.whoFc}\u2192${next.whoFc}, 6MWD ${v.sixMWD??'N/A'}\u2192${next.sixMWD??'N/A'}: worsened`,
+          matched: improved
+        });
+      }
+    }
+  }
+  return results;
 }
 
 const ALL_PROTOCOLS = [PROTOCOL_COPD_FEV1_DECLINE];
@@ -2436,7 +2629,9 @@ const FIELD_CODES = {
   mpap:   { system:'LOINC', code:'8414-5',  display:'Pulmonary artery Mean blood pressure', unit:'mmHg' },
   pawp:   { system:'LOINC', code:'75994-4', display:'Pulmonary artery wedge pressure', unit:'mmHg' },
   pvr:    { system:'LOINC', code:'8828-6',  display:'Pulmonary vascular Resistance', unit:'WU' },
-  ntprobnp: { system:'LOINC', code:'33762-6', display:'Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma', unit:'pg/mL' }
+  ntprobnp: { system:'LOINC', code:'33762-6', display:'Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma', unit:'pg/mL' },
+  aat:    { system:'LOINC', code:'1825-9',  display:'Alpha 1 antitrypsin [Mass/volume] in Serum or Plasma', unit:'mg/dL' },
+  vegfd:  { system:'LOINC', code:'',        display:'Vascular endothelial growth factor D (no confirmed LOINC code found this session; text-only)', unit:'pg/mL' }
 };
 function fieldCodeTag(key) {
   const c = FIELD_CODES[key];
@@ -2635,6 +2830,44 @@ This patient's current disease activity is in the amber/red range, the combinati
 This is a cross-sectional flag based on TODAY's reported exposure, not a claim that this patient's past exacerbations were caused by air quality: no dated exposure history is recorded to support that stronger claim.
 ${pt.environment.airPurifier ? 'An air purifier is already in use at home, which may partially mitigate indoor exposure.' : 'No air purifier is currently recorded; indoor filtration may reduce exposure on high-AQI days.'}`;
     }
+  },
+  'sotatercept-platelet-safety': {
+    label: 'Sotatercept eligibility & safety check',
+    severity: 'caution', icon: 'alert-triangle',
+    applies: (pt) => pt.disease === 'PAH',
+    evidence: (pt) => {
+      const v = pt.visits[pt.visits.length-1];
+      const unsafe = v.platelets != null && v.platelets < 50;
+      const pvrMeetsEligibility = v.pvr != null && v.pvr >= 5;
+      const fcEligible = v.whoFc === 2 || v.whoFc === 3;
+      return `Eligibility criteria (payer clinical-criteria document, verified this session, distinct from the general >2 WU PAH diagnostic threshold used elsewhere in this app):
+- PVR \u22655 Wood units for sotatercept specifically: current ${v.pvr??'not recorded'} WU ${pvrMeetsEligibility?'(meets this threshold)':v.pvr!=null?'(below this threshold)':''}.
+- WHO FC II or III (not IV): current FC ${v.whoFc??'not recorded'} ${fcEligible?'(meets this criterion)':v.whoFc!=null?'(does not meet this criterion as written)':''}.
+- Must be add-on to existing background PAH therapy, not monotherapy.
+- PAWP/LVEDP \u226415 mmHg: current PAWP ${v.pawp??'not recorded'} mmHg.
+
+Safety gate, separate from eligibility (FDA label, hard threshold): do not initiate or continue dosing if platelet count is below 50,000/mm\u00b3.
+Current platelets: ${v.platelets!=null?v.platelets+',000/mm\u00b3':'not recorded'}${unsafe?', BELOW the safety threshold, hold dose and recheck labs before any sotatercept administration.':v.platelets!=null?', above the safety threshold.':'.'}
+Current haemoglobin: ${v.hgb??'not recorded'}${v.hgb!=null?' g/dL':''}. Label also requires monitoring for haemoglobin increases; a substantial rise above the upper limit of normal warrants dose delay and recheck.`;
+    }
+  },
+  'pah-group2-differential': {
+    label: 'PAH classification: cardiometabolic comorbidity differential',
+    severity: 'caution', icon: 'heart',
+    applies: (pt) => pt.disease === 'PAH' && (pt.comorbidities?.heartFailure || pt.comorbidities?.ihd || pt.comorbidities?.t2dm),
+    evidence: (pt) => {
+      const present = [];
+      if (pt.comorbidities.heartFailure) present.push('heart failure');
+      if (pt.comorbidities.ihd) present.push('ischaemic heart disease');
+      if (pt.comorbidities.t2dm) present.push('type 2 diabetes');
+      const bmi = pt.demographics?.bmi;
+      const v = pt.visits[pt.visits.length-1];
+      const metSyndromeFeatures = [pt.comorbidities.t2dm, bmi!=null && bmi>=30].filter(Boolean).length;
+      return `This patient has ${present.join(', ')} on file alongside a PAH (WHO Group 1) diagnosis. Worth flagging as a differential-diagnosis prompt, not just a severity note:
+Group 2 PH (PH due to left heart disease, mainly HFpEF) accounts for an estimated 65-80% of all pulmonary hypertension cases, substantially more common than true Group 1 PAH. Studies comparing the two groups found 2 or more metabolic syndrome features in 94% of Group 2 PH patients versus only 34% of Group 1 PAH patients; this patient has ${metSyndromeFeatures} such feature${metSyndromeFeatures!==1?'s':''} on file (diabetes, obesity).
+${v.pawp!=null && v.pawp>15 ? `Current PAWP is ${v.pawp} mmHg, above the 15 mmHg pre-capillary threshold: this hemodynamic pattern itself would argue AGAINST true Group 1 PAH, worth re-confirming the classification.` : v.pawp!=null ? `Current PAWP (${v.pawp} mmHg) remains within the pre-capillary range, consistent with the existing Group 1 classification.` : 'PAWP is not recorded for the current visit; this is the key hemodynamic value for distinguishing the two patterns.'}
+This is not a claim that the diagnosis is wrong, only that the comorbidity profile is the kind ESC/ERS guidance specifically flags as warranting re-confirmation of Group 1 versus Group 2 classification.`;
+    }
   }
 };
 function getApplicableInteractions(pt, v) {
@@ -2782,6 +3015,14 @@ GOLD ABE group: ${r.group} (symptom burden: CAT ${r.cat}, mMRC ${r.mmrc}; exacer
 Group assignment rule: high symptoms = CAT >=10 or mMRC >=2; high risk = >=2 exacerbations or >=1 hospitalisation; Group E if high risk regardless of symptoms, otherwise A if neither high, B if high symptoms only.`,
     unavailableMsg: () => null
   },
+  'mmrc-dyspnoea': {
+    label: 'Interpret mMRC dyspnoea grade', icon: 'report-medical',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'CHRONIC_BRONCHITIS',
+    compute: (pt, v) => v.mmrc != null ? mmrcGrade(v.mmrc) : null,
+    evidence: (r) => `mMRC Grade ${r.grade}: "${r.desc}"
+This is the real, complete public-domain mMRC descriptor (verified this session, distinct from CAT/ACT which remain proprietary and are shown as a score only). A grade of 2 or higher is the established threshold for significant symptoms, used directly in GOLD ABE group assignment alongside CAT.`,
+    unavailableMsg: () => 'mMRC grade has not been recorded for this visit.'
+  },
   'fev1-trend': {
     label: 'Interpret FEV1 trend', icon: 'trending-down',
     applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'CHRONIC_BRONCHITIS',
@@ -2837,6 +3078,105 @@ Rule: 2 or more criteria met = Type 1 (antibiotics indicated), exactly 1 = Type 
     evidence: r => r.map(b => `${b.agent} (${b.drugs}): ${b.status==='eligible'?'criteria met':b.status==='borderline'?'borderline, repeat testing':b.status==='pending'?'pending further testing':'criteria not met'}. ${b.detail}.`).join('\n'),
     unavailableMsg: () => 'Blood eosinophil count has not been recorded for this visit yet; eligibility cannot be assessed without it.'
   },
+  'rv-tlc-trajectory': {
+    label: 'Interpret RV/TLC trajectory', icon: 'trending-down',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'IPF',
+    compute: (pt, v) => {
+      const visitsWithRatio = pt.visits.map(vi => ({ ...vi, rvTlc: (vi.rv!=null && vi.tlc!=null && vi.tlc!==0) ? Math.round((vi.rv/vi.tlc)*1000)/10 : null })).filter(vi => vi.rvTlc != null);
+      if (visitsWithRatio.length < 1) return null;
+      const current = visitsWithRatio[visitsWithRatio.length - 1];
+      const baseline = visitsWithRatio[0];
+      return { current, baseline, hasTrend: visitsWithRatio.length >= 2 };
+    },
+    evidence: (r, pt) => {
+      const isIpf = pt.disease === 'IPF';
+      const currentLine = isIpf
+        ? `Current TLC: ${r.current.tlc}% predicted (RV/TLC ${r.current.rvTlc}%).`
+        : `Current RV/TLC: ${r.current.rvTlc}% (threshold for air trapping: \u226540%).`;
+      if (!r.hasTrend) {
+        return `${currentLine}\nOnly one visit on record with both RV and TLC recorded: no trend available yet. A second measurement at a future visit would allow tracking whether ${isIpf?'restriction':'air trapping'} is changing over time, independent of the single-visit snapshot already shown elsewhere.`;
+      }
+      const delta = r.current.rvTlc - r.baseline.rvTlc;
+      const direction = isIpf
+        ? (r.current.tlc < r.baseline.tlc ? 'TLC has fallen' : r.current.tlc > r.baseline.tlc ? 'TLC has risen' : 'TLC is unchanged')
+        : (delta > 0 ? 'RV/TLC has risen' : delta < 0 ? 'RV/TLC has fallen' : 'RV/TLC is unchanged');
+      return `${currentLine}\nBaseline (${r.baseline.label||'Visit '+r.baseline.n}): RV/TLC ${r.baseline.rvTlc}%${isIpf?`, TLC ${r.baseline.tlc}%`:''}.
+${direction} since baseline (${delta>0?'+':''}${delta.toFixed(1)} percentage points).
+${isIpf ? 'A falling TLC over time is consistent with progressive restriction; this is a separate signal from FVC decline and worth tracking alongside it.' : 'A rising RV/TLC over time suggests worsening air trapping/hyperinflation, a marker of disease progression independent of FEV1.'}`;
+    },
+    unavailableMsg: () => 'RV and TLC have not both been recorded for any visit yet: this trajectory cannot be calculated without at least one paired measurement.'
+  },
+  'aatd-screening': {
+    label: 'Interpret AATD screening status', icon: 'flask',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'CHRONIC_BRONCHITIS',
+    /* Verified this session: guidelines recommend AATD testing at least once in every COPD
+       patient regardless of age or smoking history. Specific suspicion is raised by early-age
+       emphysema (<=45y), emphysema without recognised risk factors, lower-lobe-predominant
+       pattern, or unexplained bronchiectasis. Threshold: AAT <11 umol/L (~<80 mg/dL) is the
+       level below which emphysema is common; augmentation therapy is conditionally
+       recommended at FEV1 <80% with documented deficiency genotype and AAT <11 umol/L
+       (0.57 g/L). LOINC 1825-9 for serum AAT, verified directly against loinc.org. */
+    compute: (pt, v) => {
+      const earlyOnset = pt.demographics.onsetAge != null && pt.demographics.onsetAge <= 45;
+      const lowRiskFactors = pt.demographics.smoker === 'Never smoked';
+      const suspicionFlags = [earlyOnset, lowRiskFactors].filter(Boolean);
+      return { aat: v.aat ?? null, onsetAge: pt.demographics.onsetAge, smoker: pt.demographics.smoker, earlyOnset, lowRiskFactors, suspicionCount: suspicionFlags.length };
+    },
+    evidence: (r) => {
+      const screeningLine = `Guidelines recommend AAT testing at least once in every COPD patient, regardless of age or smoking history.`;
+      const suspicionLine = r.suspicionCount > 0
+        ? `This patient has ${r.earlyOnset?`early symptom onset (age ${r.onsetAge})`:''}${r.earlyOnset&&r.lowRiskFactors?' and ':''}${r.lowRiskFactors?'no significant smoking history':''}, which specifically raises suspicion for AATD beyond routine screening; guidelines flag emphysema at age \u226445, or without typical risk factors, for targeted consideration.`
+        : `No specific AATD-suspicion features (early onset, absence of smoking history) on file for this patient; routine once-in-a-lifetime screening still applies regardless.`;
+      const resultLine = r.aat != null
+        ? `AAT level on file: ${r.aat} mg/dL. ${r.aat < 80 ? 'Below the threshold (~80 mg/dL / 11 \u00b5mol/L) below which emphysema is common: discuss phenotyping/genotyping and hepatology correlation if not already done.' : 'Above the threshold associated with emphysema risk.'}`
+        : `No AAT level on file. ${r.suspicionCount > 0 ? 'Given the suspicion features above, testing is worth prioritising if not already done.' : 'Routine once-in-a-lifetime testing has likely not yet been performed; consider ordering.'}`;
+      return `${screeningLine}\n${suspicionLine}\n${resultLine}`;
+    },
+    unavailableMsg: () => null
+  },
+  'lam-special-track': {
+    label: 'Interpret LAM special-track criteria', icon: 'flask',
+    applies: pt => pt.demographics.sex === 'Female' && (pt.disease === 'ASTHMA' || pt.disease === 'COPD' || pt.disease === 'IPF'),
+    /* Verified this session: LAM should be suspected in women of childbearing age with
+       unexplained dyspnoea, especially if there is a history of recurrent pneumothorax or
+       chylous pleural effusion, often initially misdiagnosed as asthma or COPD given similar
+       presentation. HRCT showing diffuse, thin-walled cysts is the key imaging clue. Serum
+       VEGF-D >=800 pg/mL with compatible HRCT is diagnostic, often avoiding biopsy. No LOINC
+       code for VEGF-D was confirmed this session; field is recorded as text-only rather than
+       guessed. This is a low-volume, deliberately rare-disease flag, NOT a claim that any
+       given patient has LAM, only that the demographic + symptom pattern is the kind worth
+       a second look given how often LAM is initially misdiagnosed as asthma/COPD. */
+    compute: (pt) => {
+      const childbearingAge = pt.demographics.age >= 18 && pt.demographics.age <= 50;
+      const poorResponseToTherapy = pt.disease === 'ASTHMA' && pt.visits[pt.visits.length-1].act != null && pt.visits[pt.visits.length-1].act < 16 && pt.meds.length >= 3;
+      return { childbearingAge, poorResponseToTherapy, age: pt.demographics.age, currentDisease: pt.disease };
+    },
+    evidence: (r) => {
+      if (!r.childbearingAge) {
+        return `This patient is outside the typical LAM presentation age range (usually diagnosed in the 4th-5th decade of life). LAM is rare and this flag is not clinically indicated based on age alone; included for completeness only.`;
+      }
+      return `LAM (lymphangioleiomyomatosis) is a rare, female-predominant cystic lung disease, frequently misdiagnosed initially as asthma or COPD due to overlapping presentation (progressive dyspnoea, sometimes with recurrent pneumothorax or chylous effusion).
+This patient is female and within the typical presentation age range (4th-5th decade), currently coded as ${r.currentDisease.toLowerCase()}.${r.poorResponseToTherapy ? ' Poor response to escalated asthma therapy (low ACT despite 3+ medications) is itself a pattern worth a second look, not specific to LAM, but the kind of treatment-resistant case where a broader differential is reasonable.' : ''}
+This is not a diagnostic claim: it is a prompt to consider whether HRCT (looking for diffuse, thin-walled cysts, generally pathognomonic if present) and serum VEGF-D (\u2265800 pg/mL is diagnostic with compatible HRCT, avoiding the need for biopsy) have been considered, particularly if there is any history of pneumothorax, chylous effusion, or treatment-resistant symptoms.`;
+    },
+    unavailableMsg: () => null
+  },
+  'dlco-hb-corrected': {
+    label: 'Interpret DLCO corrected for haemoglobin', icon: 'flask',
+    applies: pt => pt.disease === 'IPF',
+    compute: (pt, v) => v.dlco != null ? { observed: v.dlco, hgb: v.hgb ?? null, corrected: v.hgb != null ? dlcoCorrected(v.dlco, v.hgb, pt.demographics.sex) : null } : null,
+    evidence: (r) => {
+      if (r.hgb == null) {
+        return `Observed DLCO: ${r.observed}% predicted. Haemoglobin has not been recorded for this visit: a low DLCO can be partly or wholly an artifact of anaemia rather than true alveolar membrane disease, so this value should be read with that caveat until Hb is on file.
+ATS/ERS guidelines recommend correcting DLCO for haemoglobin using the Cotes equation; record a haemoglobin value at the next visit to enable this.`;
+      }
+      const delta = r.corrected - r.observed;
+      return `Observed DLCO: ${r.observed}% predicted. Haemoglobin: ${r.hgb} g/dL.
+Hb-corrected DLCO (Cotes equation, ATS/ERS-recommended method): ${r.corrected}% predicted (${delta>=0?'+':''}${delta.toFixed(1)} points vs observed).
+${Math.abs(delta) >= 5 ? `This is a meaningful correction: the observed value ${delta>0?'understates':'overstates'} true alveolar membrane function once anaemia is accounted for. Consider using the corrected value, not the raw observed value, for staging decisions (e.g. GAP scoring) where DLCO is an input.` : 'The correction is small at this haemoglobin level; the observed and corrected values are clinically similar.'}`;
+    },
+    unavailableMsg: () => 'DLCO has not been recorded for this visit yet.'
+  },
   'biologic-response-review': {
     label: 'Interpret biologic response', icon: 'report-medical',
     applies: pt => (pt.disease === 'ASTHMA' || pt.disease === 'ACO') && pt.meds.some(m => m.cls === 'Biologic'),
@@ -2876,6 +3216,30 @@ Real-world evidence (Eger et al., n=280 on mepolizumab/benralizumab/dupilumab): 
       const bio = pt.meds.find(m => m.cls === 'Biologic');
       return bio && !bio.since ? 'Biologic start date not recorded: cannot calculate weeks on therapy.' : 'No start date or baseline visit available for comparison.';
     }
+  },
+  'pah-hemodynamics': {
+    label: 'Interpret hemodynamic pattern', icon: 'heart',
+    applies: pt => pt.disease === 'PAH',
+    compute: (pt, v) => v.mpap != null ? pahHemodynamics({ mpap:v.mpap, pawp:v.pawp, pvr:v.pvr }) : null,
+    evidence: r => `Pattern: ${r.pattern}.
+${r.detail}
+${r.confirmed ? 'This hemodynamic pattern is consistent with WHO Group 1 PAH, the population sotatercept and other PAH-specific therapies are studied in.' : ''}`,
+    unavailableMsg: () => 'mPAP has not been recorded for this visit: hemodynamic pattern cannot be classified without right heart catheterisation data.'
+  },
+  'pah-functional-trajectory': {
+    label: 'Interpret WHO FC trajectory', icon: 'trending-down',
+    applies: pt => pt.disease === 'PAH',
+    compute: (pt, v) => {
+      if (v.whoFc == null) return null;
+      const baseline = pt.visits[0];
+      const sixMWDTrend = getTrend(pt.visits, 'sixMWD', 365);
+      return { current: v.whoFc, baseline: baseline.whoFc, currentFc: whoFunctionalClass(v.whoFc), sixMWDTrend, currentSixMWD: v.sixMWD, baselineSixMWD: baseline.sixMWD };
+    },
+    evidence: r => `WHO functional class: ${r.currentFc.label} (${r.currentFc.desc}). Was FC ${r.baseline} at baseline.
+${r.current < r.baseline ? 'Improved' : r.current > r.baseline ? 'Worsened' : 'Unchanged'} since baseline.
+6MWD: ${r.currentSixMWD ?? 'not recorded'} m${r.baselineSixMWD!=null && r.currentSixMWD!=null ? ` (was ${r.baselineSixMWD} m at baseline, ${r.currentSixMWD-r.baselineSixMWD>=0?'+':''}${r.currentSixMWD-r.baselineSixMWD} m change)` : ''}.
+Untreated median survival by WHO FC (cohort estimate, not a prediction for this individual): ${r.currentFc.survival}.`,
+    unavailableMsg: () => 'WHO functional class has not been recorded for this visit.'
   }
 };
 
@@ -3049,7 +3413,7 @@ function render() {
     lcpTxt= `Asthma ${ctrl.label} · ACT ${v.act}`;
 
   } else if (d === 'ACO') {
-    zCls  = (ctrl.level!=='controlled'||grp==='D') ? 'sz-a' : 'sz-g';
+    zCls  = (ctrl.level!=='controlled'||grp==='E') ? 'sz-a' : 'sz-g';
     zIcon = 'ti-alert-circle';
     zLbl  = `Amber zone · GOLD Group ${grp} · Asthma ${ctrl.label} · Visit ${v.n}`;
     zTt   = 'Overlap syndrome: dual pathway assessment';
@@ -3944,6 +4308,8 @@ async function copCohortScan() {
       ? `FVC ${v.fvc}%, DLCO ${v.dlco??'not performed'}${v.dlco!=null?'%':''}, 6MWD ${v.sixMWD??'N/A'}`
       : pt.disease === 'OSA'
       ? `AHI ${v.ahi}/hr, ODI ${v.odi}/hr, CPAP adherence ${v.adherence??'not yet established'}${v.adherence!=null?'%':''}`
+      : pt.disease === 'PAH'
+      ? `mPAP ${v.mpap} mmHg, PVR ${v.pvr} WU, WHO FC ${v.whoFc}, 6MWD ${v.sixMWD??'N/A'}, platelets ${v.platelets??'N/A'}k`
       : `FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%`;
     return `${pidPrefix(id)}${id} (${pt.disease}): ${clinicalSummary}, smoking ${pt.demographics.smoker}, last visit ${v.date}`;
   }).join('\n');
@@ -3988,6 +4354,8 @@ async function copRunAnomalyScanCore() {
       ? `FVC ${v.fvc}%, DLCO ${v.dlco??'not performed'}${v.dlco!=null?'%':''}, 6MWD ${v.sixMWD??'N/A'}`
       : pt.disease === 'OSA'
       ? `AHI ${v.ahi}/hr, ODI ${v.odi}/hr, CPAP adherence ${v.adherence??'not yet established'}${v.adherence!=null?'%':''}`
+      : pt.disease === 'PAH'
+      ? `mPAP ${v.mpap} mmHg, PVR ${v.pvr} WU, WHO FC ${v.whoFc}, 6MWD ${v.sixMWD??'N/A'}, platelets ${v.platelets??'N/A'}k`
       : `FEV1 ${v.fev1}%, Eos ${v.eos}, exac ${v.exac}, hosp ${v.hosp}, adherence ${v.adherence}%`;
     byDisease[pt.disease].push(`${pidPrefix(id)}${id}: ${clinicalSummary}, decline pattern across ${pt.visits.length} visits`);
   });
@@ -4200,7 +4568,8 @@ function buildCohortAggregate(matched) {
   </div>`;
 }
 function buildDrugComparison(matched, drugName) {
-  const trendField = (pt) => pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : 'fev1';
+  const trendField = (pt) => pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : pt.disease==='PAH' ? 'whoFc' : 'fev1';
+  const lowerIsBetter = (field) => field==='ahi' || field==='whoFc';
   const rows = [];
   matched.forEach(([id, pt]) => {
     const med = pt.meds.find(m => m.drug === drugName);
@@ -4216,11 +4585,11 @@ function buildDrugComparison(matched, drugName) {
   if (rows.length < K_ANON) {
     return `<div class="ia ia-i" style="margin-top:14px"><i class="ti ti-info-circle"></i><div class="ia-body">${rows.length} patient${rows.length!==1?'s':''} in this cohort have both a recorded visit before and after starting <strong>${drugName}</strong>, below the k=${K_ANON} threshold to show a comparison.</div></div>`;
   }
-  // Mixed trend fields across a disease-mixed cohort (FEV1 vs FVC vs AHI) can't be honestly
-  // averaged as one number, so report direction (improved/worsened/unchanged) per patient
-  // rather than a single misleading aggregate percentage across non-comparable units.
-  const improved = rows.filter(r => r.field==='ahi' ? r.after < r.before : r.after > r.before).length;
-  const worsened = rows.filter(r => r.field==='ahi' ? r.after > r.before : r.after < r.before).length;
+  // Mixed trend fields across a disease-mixed cohort (FEV1 vs FVC vs AHI vs WHO FC) can't be
+  // honestly averaged as one number, so report direction (improved/worsened/unchanged) per
+  // patient rather than a single misleading aggregate percentage across non-comparable units.
+  const improved = rows.filter(r => lowerIsBetter(r.field) ? r.after < r.before : r.after > r.before).length;
+  const worsened = rows.filter(r => lowerIsBetter(r.field) ? r.after > r.before : r.after < r.before).length;
   const unchanged = rows.length - improved - worsened;
   return `
   <div style="margin-top:18px">
@@ -4230,7 +4599,7 @@ function buildDrugComparison(matched, drugName) {
       <div class="kstat"><div class="kstat-lbl">Unchanged</div><div class="kstat-val">${unchanged}</div></div>
       <div class="kstat kstat-r"><div class="kstat-lbl">Worsened</div><div class="kstat-val">${worsened}</div></div>
     </div>
-    <div class="xs muted" style="margin-top:8px">Based on ${rows.length} patient${rows.length!==1?'s':''} with a recorded visit both before and after starting this drug. "Improved" compares each patient's own primary trend metric for their disease (FEV1/FVC higher is better, AHI lower is better); patients without a usable before/after pair on record are excluded rather than estimated.</div>
+    <div class="xs muted" style="margin-top:8px">Based on ${rows.length} patient${rows.length!==1?'s':''} with a recorded visit both before and after starting this drug. "Improved" compares each patient's own primary trend metric for their disease (FEV1/FVC higher is better, AHI/WHO FC lower is better); patients without a usable before/after pair on record are excluded rather than estimated.</div>
   </div>`;
 }
 
@@ -4607,7 +4976,7 @@ function updateLiveZone() {
    were filled by the dictation-extraction path below, cleared the moment a clinician edits one by hand,
    exactly the same attribution contract used in patient registration. */
 let visitAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
-const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv','mpap','pawp','pvr','whoFc','ntprobnp','platelets','hgb'];
+const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv','mpap','pawp','pvr','whoFc','ntprobnp','platelets','hgb','bdPreFev1','bdPostFev1','spo2Pre','spo2Post'];
 function commitVisitField(key, rawValue, isNumeric=true) {
   const v = getVisit();
   if (!v) return;
@@ -4644,6 +5013,58 @@ function commitWhoFc(val)    { commitVisitField('whoFc', parseInt(val,10)); }
 function commitNtprobnp(val) { commitVisitField('ntprobnp', val); }
 function commitPlatelets(val){ commitVisitField('platelets', val); updatePahFeedback(); }
 function commitHgb(val)      { commitVisitField('hgb', val); }
+function commitSpo2Pre(val)  { commitVisitField('spo2Pre', val); updateDesatFeedback(); }
+function commitSpo2Post(val) { commitVisitField('spo2Post', val); updateDesatFeedback(); }
+/* Exercise-induced desaturation during 6MWT, verified this session: significant desaturation
+   defined as a drop of >=4% in SpO2 between pre- and post-test AND post-test SpO2 <90%
+   (multiple independent sources, including a COPD cohort study showing desaturators had
+   ~2x mortality risk). CMS ambulatory-oxygen prescription threshold is a separate, lower
+   bar: post-exercise SpO2 <=88%. Both are reported since they answer different questions
+   (prognostic significance vs an oxygen-prescription trigger). */
+function exertionalDesaturation(spo2Pre, spo2Post) {
+  if (spo2Pre == null || spo2Post == null) return null;
+  const drop = spo2Pre - spo2Post;
+  const significant = drop >= 4 && spo2Post < 90;
+  const oxygenThreshold = spo2Post <= 88;
+  return { drop: Math.round(drop*10)/10, spo2Post, significant, oxygenThreshold };
+}
+function updateDesatFeedback() {
+  const v = getVisit();
+  const fb = g('fb-desat');
+  if (!fb) return;
+  const r = exertionalDesaturation(v.spo2Pre, v.spo2Post);
+  if (!r) { fb.innerHTML = ''; return; }
+  if (r.oxygenThreshold) {
+    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets the CMS \u226488% threshold for ambulatory oxygen prescription, and is significant desaturation (cohort data shows ~2x mortality risk in COPD when this pattern is present).</div>`;
+  } else if (r.significant) {
+    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets criteria for significant exercise-induced desaturation (\u22654% drop AND post-test <90%).</div>`;
+  } else {
+    fb.innerHTML = `<div class="lfb lfb-i">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): does not meet the significant-desaturation threshold.</div>`;
+  }
+}
+function commitBdPre(val)    { commitVisitField('bdPreFev1', val); updateBdResponseFeedback(); }
+function commitBdPost(val)   { commitVisitField('bdPostFev1', val); updateBdResponseFeedback(); }
+/* Bronchodilator reversibility, ATS/ERS 2005 criteria (verified this session): a positive
+   test requires BOTH an increase of >=12% from baseline AND >=200 mL absolute increase in
+   FEV1. Replaces a generic 'Significant/Partial/None' dropdown with the real computed
+   verdict from actual pre/post values, the same discipline used throughout this app. */
+function bronchodilatorResponse(preFev1, postFev1) {
+  if (preFev1 == null || postFev1 == null || preFev1 === 0) return null;
+  const absoluteChangeL = postFev1 - preFev1;
+  const pctChange = (absoluteChangeL / preFev1) * 100;
+  const positive = pctChange >= 12 && absoluteChangeL >= 0.2;
+  return { absoluteChangeL: Math.round(absoluteChangeL*1000)/1000, pctChange: Math.round(pctChange*10)/10, positive };
+}
+function updateBdResponseFeedback() {
+  const v = getVisit();
+  const fb = g('fb-bdresponse');
+  if (!fb) return;
+  const r = bronchodilatorResponse(v.bdPreFev1, v.bdPostFev1);
+  if (!r) { fb.innerHTML = ''; return; }
+  fb.innerHTML = r.positive
+    ? `<div class="lfb lfb-w">Positive (ATS/ERS): +${(r.absoluteChangeL*1000).toFixed(0)} mL, +${r.pctChange}% (meets \u226512% AND \u2265200 mL)</div>`
+    : `<div class="lfb lfb-i">Negative: +${(r.absoluteChangeL*1000).toFixed(0)} mL, +${r.pctChange}% (does not meet the 12% + 200 mL ATS/ERS threshold)</div>`;
+}
 /* RV/TLC ratio: air trapping in COPD (>=40% threshold, Casanova et al. and the NSCLC/COPD
    mortality literature found this session), true restriction confirmation in IPF (TLC <80%
    predicted). Verified LOINC codes: TLC 19862-2, RV 20146-7 (loinc.org, both confirmed
@@ -4654,6 +5075,18 @@ function commitHgb(val)      { commitVisitField('hgb', val); }
 function rvTlcRatio(v) {
   if (v.rv == null || v.tlc == null || v.tlc === 0) return null;
   return Math.round((v.rv / v.tlc) * 1000) / 10;
+}
+/* DLCO hemoglobin correction, Cotes equation, the ATS/ERS-recommended method (verified this
+   session; the Dinakara equation is a separate, less-favored alternative that tends to
+   overcorrect and is NOT used here). A low DLCO can be partly or wholly an artifact of
+   anemia rather than true alveolar-membrane disease; correcting for the patient's actual
+   hemoglobin gives a more accurate reflection of membrane health, important for IPF/COPD
+   severity staging where DLCO is a real input (e.g. GAP staging). */
+function dlcoCorrected(observedDlcoPct, hgb, sex) {
+  if (observedDlcoPct == null || hgb == null) return null;
+  const ageSexFactor = sex === 'Male' ? 10.22 : 9.38;
+  const factor = (1.7 * hgb) / (ageSexFactor + hgb);
+  return Math.round((observedDlcoPct / factor) * 10) / 10;
 }
 function updateRvTlcFeedback() {
   const pt = getPt(), v = getVisit();
@@ -5245,8 +5678,11 @@ function bInvestigations() {
       ${Sel('HRCT pattern',['Not yet performed','Definite UIP','Probable UIP','Indeterminate','Alternative diagnosis suggested'],'Not yet performed')}
       <div class="fgrp"><label class="fl">HRCT date</label><input class="fi" type="date" oninput="markDirty()"></div>
     </div>`)}
-    ${S('Functional','',`<div class="fg">
-      ${F('Resting SpO₂','%','')} ${F('Exertional desaturation','%','')}
+    ${S('Functional','Risk',`<div class="fg">
+      ${F('Resting SpO\u2082','%','')}
+      ${F('SpO\u2082 pre-walk','%','',pv?`Previous: ${pv.spo2Pre??'N/A'}${pv.spo2Pre!=null?'%':''}`:'','spo2pre-input','commitSpo2Pre')}
+      ${F('SpO\u2082 post-walk (lowest)','%','',pv?`Previous: ${pv.spo2Post??'N/A'}${pv.spo2Post!=null?'%':''}`:'','spo2post-input','commitSpo2Post')}
+      <div id="fb-desat" style="grid-column:1/-1"></div>
     </div>`)}`;
   }
   if (pt.disease === 'PAH') {
@@ -5296,7 +5732,9 @@ function bInvestigations() {
     ${F('TLC','%','',pv?`Previous: ${pv.tlc??'not performed'}${pv.tlc!=null?'%':''}`:'','tlc-input','commitTlc')}
     ${F('RV','%','',pv?`Previous: ${pv.rv??'not performed'}${pv.rv!=null?'%':''}`:'','rv-input','commitRv')}
     <div id="fb-rvtlc" style="grid-column:1/-1"></div>
-    ${Sel('Bronchodilator response',['Not tested','Significant','Partial','None'],'None')}
+    ${F('Pre-BD FEV\u2081','L','',pv?`Previous: ${(pv.fev1/100*3.75).toFixed(2)} L`:'','bd-pre-input','commitBdPre')}
+    ${F('Post-BD FEV\u2081','L','','','bd-post-input','commitBdPost')}
+    <div id="fb-bdresponse" style="grid-column:1/-1"></div>
     <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="markDirty()"></div>
   </div>`)}
   ${S('Flow-volume & volume-time curves','Classification', buildSpirometryCurves(v))}
@@ -5358,6 +5796,15 @@ function bLongitudinal() {
     ${Sel('Referral status',['Not indicated','Under consideration','Referred','Listed'],'Not indicated')}
     <div class="fgrp"><label class="fl">MDT discussion date</label><input class="fi" type="date" oninput="markDirty()"></div>
   </div>`):''}
+  ${pt.disease==='PAH'?S('Hemodynamic trend (RHC values across visits)','Trajectory',`
+    <div class="tw"><table><thead><tr><th>Visit</th><th>mPAP</th><th>PAWP</th><th>PVR</th><th>Pattern</th></tr></thead><tbody>
+    ${pt.visits.map(vi => {
+      const h = pahHemodynamics({ mpap:vi.mpap, pawp:vi.pawp, pvr:vi.pvr });
+      return `<tr><td>${vi.label||'V'+vi.n}</td><td>${vi.mpap??'\u2014'}${vi.mpap!=null?' mmHg':''}</td><td>${vi.pawp??'\u2014'}${vi.pawp!=null?' mmHg':''}</td><td>${vi.pvr??'\u2014'}${vi.pvr!=null?' WU':''}</td><td>${h.pattern}</td></tr>`;
+    }).join('')}
+    </tbody></table></div>
+    <div class="ia ia-i" style="margin-top:8px"><i class="ti ti-info-circle"></i><div class="ia-body">PVR trending down alongside improving WHO FC and 6MWD is the expected pattern of response to background therapy; a rising PVR despite therapy is a signal worth flagging to the specialist team independent of symptom-based functional class, which can lag behind hemodynamic change.</div></div>
+  `):''}
   ${pt.disease==='PAH'?S('Background-to-add-on therapy pathway','Risk · Treatment',`<div class="fg">
     ${Sel('Sotatercept add-on status',['Not yet indicated','Under MDT discussion','Approved, awaiting first dose','On therapy'],'Not yet indicated')}
     <div class="fgrp"><label class="fl">MDT discussion date</label><input class="fi" type="date" oninput="markDirty()"></div>
@@ -6242,6 +6689,18 @@ function regBuildPatientRecord() {
       adherence: adh, technique: adh!=null?'adequate':null, note:'Baseline registration visit.'
     };
     completenessExtra = [{ label:'Sleep study (AHI/ODI)', pct: num('reg-odi')!=null?80:40, cls:'cf-part' }];
+  } else if (disease === 'PAH') {
+    const whoFc = num('reg-whofc') ?? null;
+    const platelets = num('reg-platelets');
+    const unsafe = platelets != null && platelets < 50;
+    risk = unsafe ? 'r' : (whoFc>=4) ? 'r' : (whoFc===3) ? 'a' : 'g';
+    visit = {
+      n:1, date:todayLabel, label:'RHC diagnosis',
+      mpap: num('reg-mpap') ?? null, pawp: num('reg-pawp') ?? null, pvr: num('reg-pvr') ?? null,
+      whoFc, sixMWD: num('reg-6mwd') ?? null, ntprobnp: num('reg-ntprobnp') ?? null,
+      platelets, hgb: num('reg-hgb') ?? null, note:'Baseline registration visit, RHC findings recorded.'
+    };
+    completenessExtra = [{ label:'RHC hemodynamics', pct: (num('reg-mpap')!=null&&num('reg-pawp')!=null&&num('reg-pvr')!=null)?90:40, cls:'cf-part' }];
   } else {
     const fev1pct = num('reg-fev1pct') ?? 70;
     const exac = num('reg-exac') ?? 0;
@@ -6262,7 +6721,7 @@ function regBuildPatientRecord() {
     ];
   }
 
-  const baseComorbidities = { heartFailure:false, ihd:false, t2dm:false, osa:disease==='OSA', anxiety:false, osteoporosis:false };
+  const baseComorbidities = { heartFailure:false, ihd:false, t2dm:false, osa:disease==='OSA', anxiety:false, osteoporosis:false, connectiveTissue:false };
 
   return {
     disease, risk, regYear: new Date().getFullYear(),
@@ -6294,7 +6753,8 @@ function regBuildPatientRecord() {
 
 const REG_FIELD_IDS = ['reg-disease','reg-age','reg-bmi','reg-sex','reg-smoker','reg-packyears','reg-onset',
   'reg-fev1','reg-fev1pct','reg-fvc','reg-ratio','reg-cat','reg-mmrc','reg-act','reg-exac','reg-hosp','reg-ocs','reg-eos','reg-feno','reg-6mwd',
-  'reg-fvc-l','reg-dlco','reg-ahi','reg-odi','reg-epworth','reg-cpap-adherence'];
+  'reg-fvc-l','reg-dlco','reg-ahi','reg-odi','reg-epworth','reg-cpap-adherence',
+  'reg-mpap','reg-pawp','reg-pvr','reg-whofc','reg-ntprobnp','reg-platelets','reg-hgb'];
 function regCaptureCurrentStepFields() {
   if (!regState.fields) regState.fields = {};
   REG_FIELD_IDS.forEach(id => {
@@ -6410,7 +6870,7 @@ Text: "${text.replace(/"/g,"'")}"
 
 Return ONLY this JSON shape, no markdown, no commentary:
 {
-  "disease": one of "COPD","CHRONIC_BRONCHITIS","ASTHMA","ACO","IPF","OSA" or null,
+  "disease": one of "COPD","CHRONIC_BRONCHITIS","ASTHMA","ACO","IPF","OSA","PAH" or null,
   "age": number or null,
   "bmi": number or null,
   "sex": "Male","Female","Other" or null,
@@ -6435,7 +6895,14 @@ Return ONLY this JSON shape, no markdown, no commentary:
   "odi": number or null,
   "epworth": number or null,
   "cpapAdherence": number or null,
-  "meds": [{"cls":"SABA|LABA|LAMA|ICS|Biologic|Other","name":"drug name","dose":"e.g. 100 mcg","freq":"Once daily|Twice daily|PRN|Other"}]
+  "mpap": number or null,
+  "pawp": number or null,
+  "pvr": number or null,
+  "whofc": number or null,
+  "ntprobnp": number or null,
+  "platelets": number or null,
+  "hgb": number or null,
+  "meds": [{"cls":"SABA|LABA|LAMA|ICS|Biologic|PDE5i|ERA|Other","name":"drug name","dose":"e.g. 100 mcg","freq":"Once daily|Twice daily|PRN|Other"}]
 }
 No em-dashes. If nothing clinical is mentioned, return all nulls and an empty meds array.`;
   try {
@@ -6455,7 +6922,8 @@ function regApplyAIIntake(parsed, sourceText) {
     packyears:'reg-packyears', onset:'reg-onset', fev1:'reg-fev1', fev1pct:'reg-fev1pct',
     fvc:'reg-fvc', ratio:'reg-ratio', cat:'reg-cat', mmrc:'reg-mmrc', act:'reg-act',
     exac:'reg-exac', hosp:'reg-hosp', ocs:'reg-ocs', eos:'reg-eos', feno:'reg-feno', sixmwd:'reg-6mwd',
-    dlco:'reg-dlco', ahi:'reg-ahi', odi:'reg-odi', epworth:'reg-epworth', cpapAdherence:'reg-cpap-adherence'
+    dlco:'reg-dlco', ahi:'reg-ahi', odi:'reg-odi', epworth:'reg-epworth', cpapAdherence:'reg-cpap-adherence',
+    mpap:'reg-mpap', pawp:'reg-pawp', pvr:'reg-pvr', whofc:'reg-whofc', ntprobnp:'reg-ntprobnp', platelets:'reg-platelets', hgb:'reg-hgb'
   };
   let filledCount = 0;
   Object.entries(map).forEach(([key, fieldId]) => {
@@ -6554,7 +7022,7 @@ function regStep3() {
   return `
   ${regIdBadge()}
   ${S('Disease assignment','Classification',`<div class="fg">
-    <div class="fgrp"><label class="fl">Primary diagnosis <span class="req">*</span></label><select class="fsel" id="reg-disease" onchange="markDirty();regRefreshClinicalStep()"><option value="">Select</option><option value="COPD"${rf['reg-disease']==='COPD'?' selected':''}>COPD</option><option value="CHRONIC_BRONCHITIS"${rf['reg-disease']==='CHRONIC_BRONCHITIS'?' selected':''}>Chronic Bronchitis</option><option value="ASTHMA"${rf['reg-disease']==='ASTHMA'?' selected':''}>Asthma</option><option value="ACO"${rf['reg-disease']==='ACO'?' selected':''}>ACO: Asthma-COPD Overlap</option><option value="IPF"${rf['reg-disease']==='IPF'?' selected':''}>IPF: Idiopathic Pulmonary Fibrosis</option><option value="OSA"${rf['reg-disease']==='OSA'?' selected':''}>OSA: Obstructive Sleep Apnoea</option></select></div>
+    <div class="fgrp"><label class="fl">Primary diagnosis <span class="req">*</span></label><select class="fsel" id="reg-disease" onchange="markDirty();regRefreshClinicalStep()"><option value="">Select</option><option value="COPD"${rf['reg-disease']==='COPD'?' selected':''}>COPD</option><option value="CHRONIC_BRONCHITIS"${rf['reg-disease']==='CHRONIC_BRONCHITIS'?' selected':''}>Chronic Bronchitis</option><option value="ASTHMA"${rf['reg-disease']==='ASTHMA'?' selected':''}>Asthma</option><option value="ACO"${rf['reg-disease']==='ACO'?' selected':''}>ACO: Asthma-COPD Overlap</option><option value="IPF"${rf['reg-disease']==='IPF'?' selected':''}>IPF: Idiopathic Pulmonary Fibrosis</option><option value="OSA"${rf['reg-disease']==='OSA'?' selected':''}>OSA: Obstructive Sleep Apnoea</option><option value="PAH"${rf['reg-disease']==='PAH'?' selected':''}>PAH: Pulmonary Arterial Hypertension</option></select></div>
     ${Sel('Secondary diagnosis',['None','Chronic Bronchitis','Asthma','Bronchiectasis','Other'],'None')}
   </div>`)}
   ${S('Basic demographics','Classification · Risk',`<div class="fg">
@@ -6606,6 +7074,27 @@ function regStep4() {
       ${fi('reg-cpap-adherence','CPAP adherence (leave blank if not yet started)','%')}
     </div>`)}
     <div class="ia ia-i" style="margin-top:4px"><i class="ti ti-info-circle"></i><div class="ia-body">OSA severity is calculated automatically from AHI: under 5 normal, 5-15 mild, 15-30 moderate, over 30 severe.</div></div>
+    ${regNavButtons(true, 'Next: Medications')}`;
+  }
+  if (disease === 'PAH') {
+    const rfc = rf['reg-whofc'] || '';
+    return `
+    ${regIdBadge()}
+    ${S('Right heart catheterisation','Classification',`<div class="fg">
+      ${fi('reg-mpap','mPAP','mmHg')}
+      ${fi('reg-pawp','PAWP','mmHg')}
+      ${fi('reg-pvr','PVR','WU','0.1')}
+    </div>`)}
+    ${S('Functional status','Classification · Risk',`<div class="fg">
+      <div class="fgrp"><label class="fl">WHO functional class</label><select class="fsel" id="reg-whofc" onchange="markDirty()"><option value="">Select</option><option value="1"${rfc==='1'?' selected':''}>I</option><option value="2"${rfc==='2'?' selected':''}>II</option><option value="3"${rfc==='3'?' selected':''}>III</option><option value="4"${rfc==='4'?' selected':''}>IV</option></select></div>
+      ${fi('reg-6mwd','6-minute walk distance','m')}
+    </div>`)}
+    ${S('Biomarkers & safety labs','Risk · Treatment',`<div class="fg">
+      ${fi('reg-ntprobnp','NT-proBNP','pg/mL')}
+      ${fi('reg-platelets','Platelets','x10\u00b3/\u00b5L')}
+      ${fi('reg-hgb','Haemoglobin','g/dL','0.1')}
+    </div>`)}
+    <div class="ia ia-i" style="margin-top:4px"><i class="ti ti-info-circle"></i><div class="ia-body">Hemodynamic pattern (pre-capillary PH / Group 1 vs left-heart-disease patterns) is calculated automatically from mPAP, PAWP, and PVR once saved.</div></div>
     ${regNavButtons(true, 'Next: Medications')}`;
   }
   return `
@@ -6868,7 +7357,8 @@ const FHIR_CONDITION_CODES = {
   ACO:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J44.9',  display:'Chronic obstructive pulmonary disease, unspecified (asthma-COPD overlap: coded with an additional J45 asthma code per ICD-10-CM convention)' },
   CHRONIC_BRONCHITIS: { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J41.9',  display:'Chronic bronchitis, unspecified' },
   IPF:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'J84.112',display:'Idiopathic pulmonary fibrosis' },
-  OSA:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'G47.33', display:'Obstructive sleep apnea (adult) (pediatric)' }
+  OSA:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'G47.33', display:'Obstructive sleep apnea (adult) (pediatric)' },
+  PAH:                { system:'http://hl7.org/fhir/sid/icd-10-cm', code:'I27.0',  display:'Primary pulmonary hypertension' }
 };
 // Class-level ATC codes only (the app stores drug CLASS, e.g. "LAMA", not a specific
 // molecule per patient, so a molecule-specific RxNorm/ATC code cannot be honestly
@@ -6878,7 +7368,9 @@ const FHIR_MED_CLASS_CODES = {
   LABA:     { system:'http://www.whocc.no/atc', code:'R03AC', display:'Selective beta-2-adrenoreceptor agonists (long-acting)' },
   LAMA:     { system:'http://www.whocc.no/atc', code:'R03BB', display:'Anticholinergics' },
   ICS:      { system:'http://www.whocc.no/atc', code:'R03BA', display:'Glucocorticoids, inhalant' },
-  Biologic: { system:'http://www.whocc.no/atc', code:'R03DX', display:'Other systemic drugs for obstructive airway diseases' }
+  Biologic: { system:'http://www.whocc.no/atc', code:'R03DX', display:'Other systemic drugs for obstructive airway diseases' },
+  PDE5i:    { system:'http://www.whocc.no/atc', code:'G04BE08', display:'Tadalafil (PDE5 inhibitor class used in PAH; ATC groups this under Urologicals per WHO convention)' },
+  ERA:      { system:'http://www.whocc.no/atc', code:'C02KX02', display:'Ambrisentan (endothelin receptor antagonist class)' }
 };
 function fhirGender(sex) { return sex==='Male'?'male':sex==='Female'?'female':'unknown'; }
 function buildFHIRBundle(patientId) {
