@@ -429,7 +429,7 @@ input,select,textarea{font-family:inherit;}
 .sz-ins{font-size:var(--fs-base);color:var(--i5);line-height:1.65;}
 .sz-ins strong{color:var(--i7);font-weight:600;}
 .lcp{display:inline-flex;align-items:center;gap:var(--sp-3);padding:var(--sp-2) var(--sp-5);border-radius:999px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;border:1.5px solid;margin-top:10px;transition:all .25s;}
-.lcp-d{background:var(--r0);color:var(--r7);border-color:var(--r2);}
+.lcp-e{background:var(--r0);color:var(--r7);border-color:var(--r2);}
 .lcp-b{background:var(--a0);color:var(--a7);border-color:var(--a2);}
 .lcp-a{background:var(--g0);color:var(--g7);border-color:var(--g2);}
 .lcp-ctrl{background:var(--g0);color:var(--g7);border-color:var(--g2);}
@@ -920,7 +920,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
      This block (placed after all base rules, so it wins on source
      order at equal specificity) restores >=4.5:1 everywhere. */
   .tn,.db-copd,.ia-i,.lfb-i,.reg-id-badge,.enc-badge,.pm-item.on{color:var(--tx-n);}
-  .tr,.lcp-d,.lcp-unc,.vdp.w,.cz-r,.ia-d,.lfb-d,.pii-badge{color:var(--r2);}
+  .tr,.lcp-e,.lcp-unc,.vdp.w,.cz-r,.ia-d,.lfb-d,.pii-badge{color:var(--r2);}
   .ta,.lcp-b,.lcp-part,.db-cb,.cz-a,.abt-state-light.st-stale,.ia-w,.lfb-w{color:var(--a2);}
   .tg,.lcp-a,.lcp-ctrl,.ia-g,.lfb-g,.vdp.b,.cz-g,.abt-state-light.st-current{color:var(--g2);}
   .tt,.db-asthma{color:var(--tx-t);}
@@ -932,8 +932,8 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 ══════════════════════════════════════════════════════════════ */
 .cop-panel{background:var(--wh);border:1px solid var(--i2);border-radius:var(--r2xl);overflow:hidden;display:flex;flex-direction:column;}
 .cop-hdr{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-5) var(--sp-7);border-bottom:1px solid var(--i1);background:var(--n8);cursor:pointer;user-select:none;}
-.cop-hdr-mark{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.cop-hdr-mark i{font-size:13px;color:white;}
+.cop-hdr-mark{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cop-hdr-mark i{font-size:16px;color:#4FC3DE;}
 .cop-hdr-name{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:white;}
 .cop-hdr-status{display:flex;align-items:center;gap:var(--sp-2);margin-left:auto;}
 .cop-pulse{width:6px;height:6px;border-radius:50%;background:var(--cop-blue);flex-shrink:0;transition:background .3s;}
@@ -1248,7 +1248,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="sz-lbl" id="z-lbl"></div>
         <div class="sz-tt" id="z-tt"></div>
         <div class="sz-ins" id="z-ins"></div>
-        <div class="lcp lcp-d" id="lcp"><span class="lcp-dot"></span><span id="lcp-txt"></span></div>
+        <div class="lcp lcp-e" id="lcp"><span class="lcp-dot"></span><span id="lcp-txt"></span></div>
       </div>
     </div>
     <div class="mgrid" id="metrics-grid"></div>
@@ -1597,6 +1597,7 @@ const ICON_PATHS = {
   'target': '<path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M7 12a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /> <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />',
   'trash': '<path d="M4 7l16 0" /> <path d="M10 11l0 6" /> <path d="M14 11l0 6" /> <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /> <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />',
   'trending-down': '<path d="M3 7l6 6l4 -4l8 8" /> <path d="M21 10l0 7l-7 0" />',
+  'stairs-up': '<path d="M21 20h-7v-4h-4v-4h-4v-4h-4v-5h19v17z" />',
   'trending-up': '<path d="M3 17l6 -6l4 4l8 -8" /> <path d="M14 7l7 0l0 7" />',
   'user': '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />',
   'user-plus': '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M16 19h6" /> <path d="M19 16v6" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />',
@@ -1618,7 +1619,7 @@ const ICON_PATHS = {
      "AIROS reasoning about breath" rather than a borrowed generic-AI symbol. Used everywhere the
      app previously used ti-sparkles to mean "this came from Resident / the AI", so the same
      currentColor-driven hydrateIcon() pipeline picks it up automatically. */
-  'airos-ai': '<path d="M5 16c0 -5 2 -9 5 -10c1.2 -0.4 2 0.6 2 2v13" /> <path d="M19 16c0 -5 -2 -9 -5 -10c-1.2 -0.4 -2 0.6 -2 2v13" /> <path d="M7 11c1.5 1 3 1 5 0" /> <path d="M17 11c-1.5 1 -3 1 -5 0" />',
+  'airos-ai': '<path d="M4 13c2.5 -3.5 5 -5 7 -5s4.5 1.5 4.5 4s-2 4 -4.5 4c-1.2 0 -2.2 -0.5 -3 -1.3" /> <path d="M5 8c1.5 -1.2 3 -1.8 4.5 -1.8" /> <path d="M4 18c1.8 1.6 3.6 2.3 5.5 2.3c3.2 0 6 -1.8 7.5 -4.8" />',
   'git-branch': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M5 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M5 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M15 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M7 8l0 8" /> <path d="M9 18h6a2 2 0 0 0 2 -2v-5" /> <path d="M14 14l3 -3l3 3" />',
   'file-text': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M14 3v4a1 1 0 0 0 1 1h4" /> <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /> <path d="M9 9l1 0" /> <path d="M9 13l6 0" /> <path d="M9 17l6 0" />',
   'copy': '<path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666" /> <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />',
@@ -1679,7 +1680,7 @@ const DB = {
     disease: 'COPD', risk: 'r',
     identity: { internalRef:'a1f2e8b4-7c3d-4e91-9a2f-118f3c0d5e6b', responsibleClinician:'Dr. García' },
     demographics: { age:64, sex:'Male', bmi:26.4, smoker:'Ex-smoker', packYears:20, quitDate:'Oct 2025', onsetAge:58 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:true, osteoporosis:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:true, osteoporosis:false, gerd:false, allerRhinitis:false, nasalPolyps:false, connectiveTissue:false },
     vaccinations: { flu:false, pneumo:false, covid:true },
     environment: { aqi:78, aqiImpact:'Moderate', pollen:'Medium', humidity:62, occExposure:'Dust / fumes', homeVent:'Fair', airPurifier:false, petExposure:'None', dailySteps:1800, sleepHrs:6, techniqueErrors:'1-2 minor errors', socialSupport:6, financialStress:7, healthLiteracy:'Medium', transport:'Good' },
     meds: [
@@ -1731,12 +1732,11 @@ const DB = {
     disease: 'ASTHMA', risk: 'g',
     identity: { internalRef:'c4d8a213-5f6b-4a02-8e7d-9b1c2f4a3e80', responsibleClinician:'Dr. García' },
     demographics: { age:28, sex:'Female', bmi:22.1, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:14 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false, gerd:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     environment: { aqi:105, aqiImpact:'Severe', pollen:'Very high', humidity:55, occExposure:'None', homeVent:'Good', airPurifier:true, petExposure:'Cats', dailySteps:5200, sleepHrs:7, techniqueErrors:'None', socialSupport:8, financialStress:3, healthLiteracy:'High', transport:'Good' },
     meds: [
-      { drug:'Budesonide',  cls:'ICS',  tag:'ta', dose:'200 mcg',freq:'Twice daily',since:'Aug 2023' },
-      { drug:'Salbutamol',  cls:'SABA', tag:'tn', dose:'100 mcg',freq:'PRN daily',  since:'Aug 2023' },
+      { drug:'Budesonide-formoterol', cls:'ICS-formoterol', tag:'ta', dose:'200/6 mcg', freq:'MART: maintenance + as-needed', since:'29 Jun 2026' },
       { drug:'Mepolizumab', cls:'Biologic', tag:'tg', dose:'100 mg', freq:'Every 4 weeks', since:'29 Jun 2026' }
     ],
     visits: [
@@ -1747,7 +1747,7 @@ const DB = {
     ],
     timeline: [
       { dot:'g', date:'14 Dec 2026 · Review', ev:'Biologic response review', tag:{cls:'tg',tx:'Responding'}, detail:'24 weeks on mepolizumab · ACT 14 -> 22 · 0 exacerbations since starting' },
-      { dot:'g', date:'29 Jun 2026 · Therapy start', ev:'Mepolizumab initiated', tag:{cls:'tg',tx:'Started'}, detail:'Anti-IL5: eos 420, 2 exacerbations in past year, ICS+SABA background' },
+      { dot:'g', date:'29 Jun 2026 · Therapy start', ev:'Mepolizumab initiated, switched to ICS-formoterol MART', tag:{cls:'tg',tx:'Started'}, detail:'Anti-IL5: eos 420, 2 exacerbations in past year. Background switched from separate ICS+SABA to budesonide-formoterol MART (GINA Track 1) at the same visit.' },
       { dot:'r', date:'08 Jun 2026 · Clinic', ev:'ACT 14: uncontrolled', tag:{cls:'tr',tx:'Urgent'}, detail:'Eos 420 · daily rescue use · step-up to Step 4 indicated' },
       { dot:'a', date:'08 Jun 2026 · Review', ev:'Deterioration noted', tag:{cls:'ta',tx:'Worsening'}, detail:'Eos 420 · rescue daily · new apartment trigger identified' },
       { dot:'a', date:'May 2026 · Exacerbation', ev:'Acute attack', tag:{cls:'ta',tx:'ED'}, detail:'Nebulised salbutamol · oral prednisolone · discharged' },
@@ -1780,7 +1780,7 @@ const DB = {
     disease: 'COPD', risk: 'g',
     identity: { internalRef:'7e29b6f0-3a14-4c5d-bf02-6d8e1a9c4f37', responsibleClinician:'Dr. Patel' },
     demographics: { age:71, sex:'Male', bmi:24.8, smoker:'Ex-smoker', packYears:35, quitDate:'Aug 2023', onsetAge:62 },
-    comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:false, osteoporosis:false },
+    comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:false, osteoporosis:false, gerd:false, allerRhinitis:false, nasalPolyps:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:true, covid:true },
     environment: { aqi:42, aqiImpact:'No impact', pollen:'Low', humidity:48, occExposure:'None', homeVent:'Good', airPurifier:true, petExposure:'Dogs', dailySteps:4100, sleepHrs:7.5, techniqueErrors:'None', socialSupport:9, financialStress:2, healthLiteracy:'High', transport:'Good' },
     meds: [
@@ -1827,7 +1827,7 @@ const DB = {
     disease: 'ACO', risk: 'a',
     identity: { internalRef:'f08c1d7e-9b4a-4f63-a205-3e7c6b2d8f91', responsibleClinician:'Dr. García' },
     demographics: { age:52, sex:'Female', bmi:23.6, smoker:'Ex-smoker', packYears:12, quitDate:'Jan 2022', onsetAge:30 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, allerRhinitis:true, nasalPolyps:false, gerd:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     environment: { aqi:68, aqiImpact:'Mild worsening', pollen:'High', humidity:58, occExposure:'Chemicals', homeVent:'Fair', airPurifier:false, petExposure:'None', dailySteps:3200, sleepHrs:6.5, techniqueErrors:'1-2 minor errors', socialSupport:7, financialStress:5, healthLiteracy:'Medium', transport:'Limited' },
     meds: [
@@ -1871,7 +1871,7 @@ const DB = {
     disease: 'CHRONIC_BRONCHITIS', risk: 'g',
     identity: { internalRef:'2b6f4e91-c8a3-4d70-95e1-4a8b3f6c2d10', responsibleClinician:'Dr. García' },
     demographics: { age:58, sex:'Male', bmi:28.2, smoker:'Current smoker', packYears:25, quitDate:null, onsetAge:52 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:false, anxiety:false, osteoporosis:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:false, anxiety:false, osteoporosis:false, gerd:false, allerRhinitis:false, nasalPolyps:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:false, covid:false },
     environment: { aqi:55, aqiImpact:'Mild worsening', pollen:'Low', humidity:50, occExposure:'Smoke / combustion', homeVent:'Fair', airPurifier:false, petExposure:'None', dailySteps:2600, sleepHrs:6, techniqueErrors:'None', socialSupport:5, financialStress:6, healthLiteracy:'Medium', transport:'Good' },
     meds: [
@@ -1920,7 +1920,7 @@ const DB = {
     disease: 'IPF', risk: 'a',
     identity: { internalRef:'7a91d2c4-3e5f-4b8a-9d2c-6f1a8e3b9c47', responsibleClinician:'Dr. García' },
     demographics: { age:67, sex:'Male', bmi:25.8, smoker:'Ex-smoker', packYears:18, quitDate:'Feb 2018', onsetAge:65 },
-    comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:true, osteoporosis:false, gerd:true },
+    comorbidities: { heartFailure:false, ihd:true, t2dm:false, osa:false, anxiety:true, osteoporosis:false, gerd:true, allerRhinitis:false, nasalPolyps:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:true, covid:true },
     environment: { aqi:48, aqiImpact:'No impact', pollen:'Low', humidity:45, occExposure:'None', homeVent:'Good', airPurifier:true, petExposure:'None', dailySteps:2200, sleepHrs:7, techniqueErrors:'None', socialSupport:8, financialStress:4, healthLiteracy:'High', transport:'Good' },
     meds: [
@@ -1963,7 +1963,7 @@ const DB = {
     disease: 'OSA', risk: 'w',
     identity: { internalRef:'4c8e1a72-9b3d-4f6e-8a1c-2d7b5e9f4a83', responsibleClinician:'Dr. García' },
     demographics: { age:49, sex:'Female', bmi:33.4, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:46 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:true, anxiety:false, osteoporosis:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:true, osa:true, anxiety:false, osteoporosis:false, gerd:false, allerRhinitis:false, nasalPolyps:false, connectiveTissue:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     environment: { aqi:40, aqiImpact:'No impact', pollen:'Low', humidity:48, occExposure:'None', homeVent:'Good', airPurifier:false, petExposure:'Dogs', dailySteps:4100, sleepHrs:5, techniqueErrors:'None', socialSupport:7, financialStress:5, healthLiteracy:'Medium', transport:'Good' },
     meds: [
@@ -2007,7 +2007,7 @@ const DB = {
     disease: 'PAH', risk: 'a',
     identity: { internalRef:'7f3a9c41-6e2b-4d8f-9a5c-1b8e3f6d2a94', responsibleClinician:'Dr. García' },
     demographics: { age:41, sex:'Female', bmi:26.8, smoker:'Never smoked', packYears:0, quitDate:null, onsetAge:40 },
-    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, connectiveTissue:false },
+    comorbidities: { heartFailure:false, ihd:false, t2dm:false, osa:false, anxiety:false, osteoporosis:false, connectiveTissue:false, gerd:false, allerRhinitis:false, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:true, covid:true },
     environment: { aqi:38, aqiImpact:'No impact', pollen:'Low', humidity:50, occExposure:'None', homeVent:'Good', airPurifier:false, petExposure:'None', dailySteps:3200, sleepHrs:7, techniqueErrors:'None', socialSupport:8, financialStress:4, healthLiteracy:'High', transport:'Good' },
     meds: [
@@ -2055,7 +2055,7 @@ const DB = {
     disease: 'PAH', risk: 'r',
     identity: { internalRef:'9d2e7a18-3f4c-4b91-8a6d-2c5f1e9b7d33', responsibleClinician:'Dr. García' },
     demographics: { age:63, sex:'Male', bmi:31.2, smoker:'Ex-smoker', packYears:22, quitDate:'2014', onsetAge:61 },
-    comorbidities: { heartFailure:true, ihd:false, t2dm:true, osa:false, anxiety:true, osteoporosis:false, connectiveTissue:false },
+    comorbidities: { heartFailure:true, ihd:false, t2dm:true, osa:false, anxiety:true, osteoporosis:false, connectiveTissue:false, gerd:false, allerRhinitis:false, nasalPolyps:false },
     vaccinations: { flu:true, pneumo:false, covid:true },
     environment: { aqi:55, aqiImpact:'Moderate', pollen:'Medium', humidity:48, occExposure:'None', homeVent:'Fair', airPurifier:false, petExposure:'None', dailySteps:1400, sleepHrs:6, techniqueErrors:'None', socialSupport:5, financialStress:6, healthLiteracy:'Medium', transport:'Limited' },
     meds: [
@@ -2523,6 +2523,139 @@ const PATHWAY_PAH = {
 };
 ALL_PATHWAYS.push(PATHWAY_PAH);
 
+/* GINA 2026 asthma pharmacotherapy pathway, verified this session against the 2026 GINA
+   Strategy Report and independent 2026 update summaries. Two tracks:
+     Track 1 (preferred): ICS-formoterol used as anti-inflammatory reliever (AIR) at low
+       symptom burden, or as combined maintenance-and-reliever therapy (MART) at higher
+       steps. Reduces severe exacerbations ~60-65% vs SABA-only reliever therapy. GINA
+       states ICS-formoterol is the ONLY ICS-LABA combination that can be used this way,
+       a plain ICS+LABA combination (e.g. for COPD) does not qualify.
+     Track 2 (alternative, used when Track 1 is not feasible): separate ICS maintenance
+       inhaler plus an as-needed reliever (SABA or ICS-SABA). GINA is explicit that SABA
+       monotherapy (no ICS at all) is not recommended at any step for any patient.
+   This module distinguishes the modelled patient's track from their medication classes
+   rather than assuming, and frames a Track 2 patient's Track 1 candidacy as a real,
+   guideline-grounded discussion point, not an automatic instruction to switch a
+   documented clinical decision. */
+const PATHWAY_GINA_ASTHMA = {
+  id: 'gina_2026_asthma_pharmacotherapy',
+  label: 'GINA 2026 asthma pharmacotherapy pathway',
+  appliesTo: ['ASTHMA'],
+  steps: [
+    { id:'no_ics', label:'No ICS-containing therapy on record',
+      matches: (pt) => { const m = medClasses(pt); return !m.has('ICS') && !m.has('ICS-formoterol'); } },
+    { id:'track2_ics_saba', label:'Track 2: separate ICS + SABA reliever',
+      matches: (pt) => { const m = medClasses(pt); return m.has('ICS') && !m.has('ICS-formoterol') && m.has('SABA'); } },
+    { id:'track1_air_mart', label:'Track 1: ICS-formoterol (AIR/MART)',
+      matches: (pt) => medClasses(pt).has('ICS-formoterol') && !medClasses(pt).has('Biologic') },
+    { id:'step5_biologic', label:'Step 5: biologic add-on to ICS-formoterol background',
+      matches: (pt) => medClasses(pt).has('ICS-formoterol') && medClasses(pt).has('Biologic') }
+  ],
+  evaluate(pt) {
+    const v = pt.visits[pt.visits.length - 1];
+    const currentStepIdx = this.steps.findIndex(s => s.matches(pt));
+    const currentStep = currentStepIdx >= 0 ? this.steps[currentStepIdx] : null;
+    if (!currentStep) {
+      return { onPathway:false, detail:'Current regimen does not match a recognised step on this pathway.' };
+    }
+    if (currentStep.id === 'no_ics') {
+      return { onPathway:true, currentStep: currentStep.label, escalationIndicated:true,
+        detail:'No ICS-containing therapy on record. GINA 2026 is explicit that asthma should not be treated with SABA alone at any step, regardless of symptom frequency, due to increased risk of exacerbations, worse lung function, and increased asthma-related mortality with SABA-only use. ICS-containing therapy (Track 1 or Track 2) should be started.' };
+    }
+    if (currentStep.id === 'track2_ics_saba') {
+      const uncontrolled = v.act != null && v.act < 20;
+      return { onPathway:true, currentStep: currentStep.label, escalationIndicated: uncontrolled,
+        detail: `Currently on Track 2 (separate ICS + SABA reliever). GINA 2026 states Track 1 (ICS-formoterol as AIR or MART) remains the preferred approach where available, reducing severe exacerbations by approximately 60-65% compared with SABA-based regimens, with a simpler single-inhaler regimen. Track 2 remains a reasonable alternative specifically when Track 1 is not feasible (cost, access, device preference) or for a stable, adherent patient who prefers to continue it.${uncontrolled ? ' Given current control is suboptimal (ACT '+v.act+'), this is a reasonable point to discuss switching to Track 1 with the patient.' : ' Current control appears reasonable; if stable, continuing Track 2 by patient preference is guideline-consistent, this is a discussion point, not an automatic switch.'}` };
+    }
+    if (currentStep.id === 'track1_air_mart') {
+      const uncontrolled = v.act != null && v.act < 20;
+      return { onPathway:true, currentStep: currentStep.label, escalationIndicated: uncontrolled,
+        detail: uncontrolled
+          ? `On Track 1 (ICS-formoterol). ACT ${v.act} suggests suboptimal control despite the preferred regimen: GINA 2026 supports stepping up the maintenance ICS-formoterol dose, and Step 5 add-on options (LAMA, the new ICS-LABA-LAMA triple combination, or biologic phenotyping) are worth considering if control does not improve.`
+          : `On Track 1 (ICS-formoterol), the GINA-preferred regimen. Current control appears reasonable.` };
+    }
+    if (currentStep.id === 'step5_biologic') {
+      return { onPathway:true, currentStep: currentStep.label, atTopOfLadder:true,
+        detail:'On Step 5: biologic add-on to ICS-formoterol background therapy, the top of this pathway. Further changes are a specialist-centre decision based on phenotype and response.' };
+    }
+  }
+};
+ALL_PATHWAYS.push(PATHWAY_GINA_ASTHMA);
+
+/* IPF antifibrotic pathway, verified this session: nintedanib and pirfenidone are both
+   conditionally recommended by ATS/ERS/JRS/ALAT guidelines starting AT DIAGNOSIS, not
+   gated behind a severity threshold ("watch and wait" is explicitly noted as common but
+   debated practice, not the recommended default). A >=10% relative decline in %FVC at any
+   point is the key progression signal associated with significantly increased mortality
+   (multiple independent cohort studies), the trigger this pathway uses for escalation,
+   not the GAP stage alone. Nintedanib dose reduction (e.g. 150mg BID -> 100mg BID for
+   tolerability) does not significantly compromise efficacy per post-hoc trial analysis,
+   included here so a dose-reduced patient is not mistakenly flagged as undertreated. */
+const PATHWAY_IPF_ANTIFIBROTIC = {
+  id: 'ats_ers_ipf_antifibrotic',
+  label: 'IPF antifibrotic therapy pathway',
+  appliesTo: ['IPF'],
+  steps: [
+    { id:'no_antifibrotic', label:'No antifibrotic therapy on record',
+      matches: (pt) => !pt.meds.some(m => /nintedanib|pirfenidone/i.test(m.drug||'')) },
+    { id:'on_antifibrotic', label:'On antifibrotic therapy',
+      matches: (pt) => pt.meds.some(m => /nintedanib|pirfenidone/i.test(m.drug||'')) }
+  ],
+  evaluate(pt) {
+    const v = pt.visits[pt.visits.length - 1];
+    const baseline = pt.visits[0];
+    const currentStepIdx = this.steps.findIndex(s => s.matches(pt));
+    const currentStep = this.steps[currentStepIdx];
+    const fvcDeclinePct = (baseline.fvc != null && v.fvc != null && baseline.fvc !== 0)
+      ? Math.round(((baseline.fvc - v.fvc) / baseline.fvc) * 1000) / 10 : null;
+    const significantDecline = fvcDeclinePct != null && fvcDeclinePct >= 10;
+    if (currentStep.id === 'no_antifibrotic') {
+      return { onPathway:true, currentStep: currentStep.label, escalationIndicated:true,
+        detail:'No antifibrotic therapy on record. ATS/ERS/JRS/ALAT guidelines conditionally recommend nintedanib or pirfenidone starting at diagnosis, not gated behind a severity threshold; a "watch and wait" approach is common in practice but not the guideline default, and earlier initiation is generally favoured given that FVC decline is an early mortality signal.' };
+    }
+    const drug = pt.meds.find(m => /nintedanib|pirfenidone/i.test(m.drug||''));
+    return { onPathway:true, currentStep: currentStep.label, escalationIndicated: significantDecline, atTopOfLadder:true,
+      detail: significantDecline
+        ? `On ${drug.drug}. FVC has declined ${fvcDeclinePct}% from baseline (${baseline.fvc}% \u2192 ${v.fvc}%), meeting the >=10% threshold associated with significantly increased mortality in cohort studies. Specialist discussion warranted: consider dose review, switching antifibrotic agent, or transplant pathway evaluation, dose reduction for tolerability alone does not significantly compromise efficacy and is not itself a reason to switch.`
+        : `On ${drug.drug}. FVC change from baseline: ${fvcDeclinePct!=null?fvcDeclinePct+'%':'not yet calculable'}, below the >=10% mortality-associated threshold. Continue current therapy and monitoring.` };
+  }
+};
+ALL_PATHWAYS.push(PATHWAY_IPF_ANTIFIBROTIC);
+
+/* OSA escalation pathway, verified this session: oral appliance therapy is indicated
+   specifically for patients with mild-to-moderate OSA who prefer it, do not respond to
+   CPAP, are not CPAP candidates, or fail CPAP; BiPAP is the escalation for documented CPAP
+   intolerance/failure during therapy. Uses the same adherence threshold (>=4h/night on
+   >=70% of nights) already established and verified elsewhere in this app, rather than a
+   new number, so the two stay consistent. */
+const PATHWAY_OSA_ESCALATION = {
+  id: 'osa_cpap_escalation',
+  label: 'OSA therapy escalation pathway',
+  appliesTo: ['OSA'],
+  steps: [
+    { id:'untreated', label:'No PAP therapy established',
+      matches: (pt, v) => v.adherence == null },
+    { id:'on_cpap', label:'On CPAP',
+      matches: (pt, v) => v.adherence != null }
+  ],
+  evaluate(pt) {
+    const v = pt.visits[pt.visits.length - 1];
+    const currentStepIdx = this.steps.findIndex(s => s.matches(pt, v));
+    const currentStep = this.steps[currentStepIdx];
+    if (currentStep.id === 'untreated') {
+      return { onPathway:true, currentStep: currentStep.label, escalationIndicated:true,
+        detail:'No PAP therapy established yet. CPAP remains first-line; initiation should not be delayed for the patient\'s OSA severity on file.' };
+    }
+    const poorAdherence = v.adherence < 70;
+    const severe = osaSeverity(v.ahi).level === 'severe';
+    return { onPathway:true, currentStep: currentStep.label, escalationIndicated: poorAdherence, atTopOfLadder: !poorAdherence,
+      detail: poorAdherence
+        ? `CPAP adherence ${v.adherence}%, below the established 4h/night on 70% of nights benchmark used to define adequate use. Before assuming treatment failure, address mask fit, pressure comfort, and education first, the literature shows most non-adherence is multifactorial and often resolves with support. If genuine intolerance persists despite this: oral appliance therapy is a reasonable option${!severe?' given the OSA severity on file is not severe':' though evidence is less robust at this severity'}; BiPAP is the escalation specifically for documented CPAP titration failure.`
+        : `CPAP adherence ${v.adherence}%, meeting the adequate-use benchmark. Continue current therapy.` };
+  }
+};
+ALL_PATHWAYS.push(PATHWAY_OSA_ESCALATION);
+
 function checkPathways(pt) {
   if (!pt || !pt.visits || !pt.visits.length) return [];
   return ALL_PATHWAYS.filter(p => p.appliesTo.includes(pt.disease)).map(p => ({ pathwayId: p.id, label: p.label, ...p.evaluate(pt) }));
@@ -2583,6 +2716,38 @@ function checkOutcomePredictions(pt) {
           predicted: 'Risk stratum should improve or stabilise with continued background therapy; meaningful worsening would be unexpected',
           actual: improved ? `WHO FC ${v.whoFc}\u2192${next.whoFc}, 6MWD ${v.sixMWD??'N/A'}\u2192${next.sixMWD??'N/A'}: stable or improving` : `WHO FC ${v.whoFc}\u2192${next.whoFc}, 6MWD ${v.sixMWD??'N/A'}\u2192${next.sixMWD??'N/A'}: worsened`,
           matched: improved
+        });
+      }
+    }
+    if (pt.disease === 'IPF' && v.fvc != null && next.fvc != null && pt.visits[0].fvc != null) {
+      // Prediction: a patient who has already crossed the >=10% FVC decline from baseline
+      // threshold at visit i is predicted to continue declining (not stabilise) by the
+      // next visit, since the antifibrotic pathway frames this as a mortality-associated
+      // signal warranting specialist review, not a one-off fluctuation.
+      const declineFromBaselineAtV = ((pt.visits[0].fvc - v.fvc) / pt.visits[0].fvc) * 100;
+      if (declineFromBaselineAtV >= 10) {
+        const continuedDecline = next.fvc < v.fvc;
+        results.push({
+          visitN: v.n, nextVisitN: next.n, type: 'ipf-fvc-trajectory',
+          prediction: `FVC already \u226510% below baseline at visit ${v.n} (${declineFromBaselineAtV.toFixed(1)}%)`,
+          predicted: 'Continued decline expected by next visit without a treatment change',
+          actual: continuedDecline ? `FVC fell further: ${v.fvc}%\u2192${next.fvc}%` : `FVC stable or improved: ${v.fvc}%\u2192${next.fvc}%`,
+          matched: continuedDecline
+        });
+      }
+    }
+    if (pt.disease === 'OSA' && v.adherence != null && next.adherence != null && v.ahi != null && next.ahi != null) {
+      // Prediction: poor CPAP adherence at visit i predicts AHI will not meaningfully
+      // improve by the next visit, using the same 70%-of-nights benchmark verified for
+      // the OSA escalation pathway.
+      if (v.adherence < 70) {
+        const ahiImproved = next.ahi <= v.ahi - 2;
+        results.push({
+          visitN: v.n, nextVisitN: next.n, type: 'osa-adherence-outcome',
+          prediction: `CPAP adherence below the 70% benchmark at visit ${v.n} (${v.adherence}%)`,
+          predicted: 'AHI unlikely to meaningfully improve without better adherence',
+          actual: ahiImproved ? `AHI improved: ${v.ahi}\u2192${next.ahi}/hr despite low adherence` : `AHI did not meaningfully improve: ${v.ahi}\u2192${next.ahi}/hr`,
+          matched: !ahiImproved
         });
       }
     }
@@ -2867,6 +3032,64 @@ Current haemoglobin: ${v.hgb??'not recorded'}${v.hgb!=null?' g/dL':''}. Label al
 Group 2 PH (PH due to left heart disease, mainly HFpEF) accounts for an estimated 65-80% of all pulmonary hypertension cases, substantially more common than true Group 1 PAH. Studies comparing the two groups found 2 or more metabolic syndrome features in 94% of Group 2 PH patients versus only 34% of Group 1 PAH patients; this patient has ${metSyndromeFeatures} such feature${metSyndromeFeatures!==1?'s':''} on file (diabetes, obesity).
 ${v.pawp!=null && v.pawp>15 ? `Current PAWP is ${v.pawp} mmHg, above the 15 mmHg pre-capillary threshold: this hemodynamic pattern itself would argue AGAINST true Group 1 PAH, worth re-confirming the classification.` : v.pawp!=null ? `Current PAWP (${v.pawp} mmHg) remains within the pre-capillary range, consistent with the existing Group 1 classification.` : 'PAWP is not recorded for the current visit; this is the key hemodynamic value for distinguishing the two patterns.'}
 This is not a claim that the diagnosis is wrong, only that the comorbidity profile is the kind ESC/ERS guidance specifically flags as warranting re-confirmation of Group 1 versus Group 2 classification.`;
+    }
+  },
+  'aerd-screening': {
+    label: 'NSAID-exacerbated respiratory disease (AERD) screening',
+    severity: 'caution', icon: 'alert-triangle',
+    applies: (pt) => (pt.disease === 'ASTHMA' || pt.disease === 'ACO') && pt.comorbidities?.nasalPolyps,
+    /* Verified this session: AERD (Samter's triad: asthma + nasal polyps + NSAID/aspirin
+       hypersensitivity) affects an estimated 7.1% of adult asthmatics and 14.9% of severe
+       asthmatics, genuinely underrecognised since up to 15% of cases have no prior reaction
+       history and need a formal provocation test to confirm. Patients with this triad tend
+       to have more severe, treatment-resistant asthma and higher OCS burden. This rule fires
+       on documented nasal polyps in an asthma/ACO patient as a screening prompt, not a
+       diagnosis: NSAID hypersensitivity itself is a history/challenge-test finding this data
+       model does not separately track. */
+    evidence: (pt) => {
+      const v = pt.visits[pt.visits.length-1];
+      return `Nasal polyps are documented for this patient alongside asthma${pt.disease==='ACO'?'/ACO':''}. This combination is the first two-thirds of the recognised AERD (Samter's triad) pattern: asthma + nasal polyps + NSAID/aspirin hypersensitivity.
+AERD affects an estimated 7.1% of adult asthmatics and is notably more common in severe asthma (14.9%). It is genuinely underrecognised: around 15% of patients have no documented prior reaction to NSAIDs and require a supervised aspirin/NSAID provocation challenge to confirm or exclude the diagnosis, a history of no reaction does not rule it out.
+${v.eos!=null && v.eos>=300 ? `Current eosinophil count (${v.eos} c/\u00b5L) is consistent with the eosinophilic inflammation pattern typical of AERD.` : ''}
+Worth asking directly about any history of reaction to aspirin or NSAIDs (even mild nasal/respiratory symptoms, not just classic anaphylaxis), since confirming or excluding AERD changes both NSAID-avoidance counselling and the threshold for considering aspirin desensitisation therapy.`;
+    }
+  },
+  'ipf-gerd-comorbidity': {
+    label: 'IPF-GERD comorbidity',
+    severity: 'info', icon: 'info-circle',
+    applies: (pt) => pt.disease === 'IPF' && pt.comorbidities?.gerd,
+    /* Verified this session, and deliberately framed with the genuine controversy intact
+       rather than presented as settled: GERD prevalence in IPF reaches up to 80-88% and a
+       microaspiration-mediated pathogenic link is biologically plausible (animal models,
+       biomarker studies), but a pooled meta-analysis (18 studies, >12,000 patients) found
+       the GERD-IPF association disappeared after controlling for smoking status, a critical
+       confounder. International IPF guidelines have historically recommended antacid therapy
+       regardless of symptoms, but newer national guidelines do not support this given
+       conflicting trial results on whether treatment actually slows progression. */
+    evidence: (pt) => `GERD is documented as a comorbidity. This is the single most common comorbidity in IPF, reported in up to 80-88% of patients, and a microaspiration-mediated contribution to lung injury is biologically plausible.
+This association is genuinely contested, not settled: a pooled meta-analysis of 18 case-control studies (over 12,000 patients combined) found a significant GERD-IPF association that disappeared after controlling for smoking status, a major confounder shared by both conditions.
+Clinical guidance is similarly unsettled: international IPF guidelines have previously recommended antacid therapy regardless of symptoms, but newer national guidelines do not support this given conflicting trial data on whether treatment measurably slows disease progression.
+Practical takeaway: treat symptomatic GERD on its own merits (a reasonable, low-risk intervention), but be cautious about presenting antacid therapy as a disease-modifying intervention for IPF itself, the evidence does not currently support that framing as settled.`
+  },
+  'osa-ohs-screening': {
+    label: 'Obesity hypoventilation syndrome (OHS) risk screening',
+    severity: 'caution', icon: 'alert-triangle',
+    applies: (pt) => pt.disease === 'OSA' && pt.demographics?.bmi >= 30 && pt.visits[pt.visits.length-1]?.ahi != null && osaSeverity(pt.visits[pt.visits.length-1].ahi).level === 'severe',
+    /* Verified this session: OHS is defined as BMI >30-40 kg/m2 PLUS daytime hypercapnia
+       (PaCO2 >45 mmHg) PLUS sleep-disordered breathing, with OSA accounting for ~90% of the
+       sleep-disordered-breathing component. This app does not track arterial blood gas data,
+       so OHS cannot be diagnosed here, this is a risk-screening prompt based on the two
+       components it CAN see (obesity + severe OSA), not a diagnostic claim. Important
+       physiological note this rule deliberately gets right rather than wrong: obesity
+       produces a RESTRICTIVE lung-volume pattern (reduced TLC/FRC), the opposite of the
+       obstructive air-trapping pattern (elevated RV/TLC) used elsewhere in this app for
+       COPD, so this rule does NOT reuse that threshold, which would be a genuine clinical
+       mismatch if applied here. */
+    evidence: (pt) => {
+      const v = pt.visits[pt.visits.length-1];
+      return `BMI ${pt.demographics.bmi} kg/m\u00b2 combined with severe OSA (AHI ${v.ahi}/hr) is the pattern that warrants screening for obesity hypoventilation syndrome (OHS).
+OHS requires obesity (BMI typically >30-40 kg/m\u00b2) plus daytime hypercapnia (PaCO2 >45 mmHg) plus sleep-disordered breathing; OSA accounts for an estimated 90% of the sleep-disordered-breathing component in OHS, with isolated sleep-related hypoventilation making up the remainder.
+This is a risk-screening prompt, not a diagnosis: arterial blood gas data is not recorded in this chart, so true hypercapnia cannot be confirmed here. A daytime ABG or venous bicarbonate level (as a screening proxy) is worth considering if not already done, since OHS carries materially worse outcomes than OSA alone if untreated, and management differs (often requiring bilevel rather than standard CPAP).`;
     }
   }
 };
@@ -3177,6 +3400,46 @@ ${Math.abs(delta) >= 5 ? `This is a meaningful correction: the observed value ${
     },
     unavailableMsg: () => 'DLCO has not been recorded for this visit yet.'
   },
+  'aa-gradient': {
+    label: 'Interpret A-a gradient', icon: 'flask',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'IPF',
+    compute: (pt, v) => (v.abgFio2 != null && v.abgPaco2 != null && v.abgPao2 != null) ? aaGradient({ fio2:v.abgFio2, paco2:v.abgPaco2, pao2:v.abgPao2, age:pt.demographics.age }) : null,
+    evidence: (r) => `Calculated PAO2: ${r.PAO2} mmHg. A-a gradient: ${r.gradient} mmHg (age-adjusted normal upper bound: ${r.normalUpperBound} mmHg).
+${r.elevated
+  ? 'Elevated gradient: hypoxemia is NOT explained by hypoventilation alone, points to a true ventilation-perfusion mismatch, diffusion impairment, or shunt, the kind of pattern seen with parenchymal lung disease, pulmonary embolism, or significant V/Q mismatch.'
+  : 'Normal gradient: if hypoxemia is present, it is more likely explained by alveolar hypoventilation or reduced inspired oxygen (e.g. altitude) than by a primary gas-exchange problem in the lung itself.'}
+This calculation uses the standard alveolar gas equation (RQ assumed 0.8) and an age-adjusted normal range; it does not replace direct clinical correlation.`,
+    unavailableMsg: () => 'Arterial blood gas values (FiO2, PaCO2, PaO2) have not been recorded for this visit.'
+  },
+  'acid-base-interpretation': {
+    label: 'Interpret acid-base status', icon: 'flask',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'IPF',
+    compute: (pt, v) => (v.abgPh != null && v.abgPaco2 != null && v.abgHco3 != null) ? acidBaseInterpret({ pH:v.abgPh, paco2:v.abgPaco2, hco3:v.abgHco3 }) : null,
+    evidence: (r) => `pH ${r.acidemia?'(acidaemia)':r.alkalemia?'(alkalaemia)':'(normal range)'}.
+${r.primary}
+${r.compensationNote ? r.compensationNote : ''}
+${r.scopeNote}`,
+    unavailableMsg: () => 'Arterial blood gas values (pH, PaCO2, HCO3) have not been recorded for this visit.'
+  },
+  'spirometry-cpt-coding': {
+    label: 'Suggest spirometry CPT code', icon: 'receipt',
+    applies: pt => pt.disease === 'COPD' || pt.disease === 'ACO' || pt.disease === 'CHRONIC_BRONCHITIS' || pt.disease === 'ASTHMA',
+    /* Verified this session against current (2026) pulmonology coding guidance: CPT 94010
+       is baseline spirometry only; CPT 94060 is spirometry performed pre- AND post-
+       bronchodilator. The two are mutually exclusive for the same session, NCCI policy
+       treats 94060 as already including the baseline (94010) component, billing both is a
+       documented bundling error. This rule reads the SAME bdPreFev1/bdPostFev1 fields
+       already built and verified for the bronchodilator-reversibility insight this session,
+       so the coding suggestion and the clinical reversibility result can never disagree
+       with each other, they come from the same underlying data. */
+    compute: (pt, v) => ({ hasBdData: v.bdPreFev1 != null && v.bdPostFev1 != null }),
+    evidence: (r) => r.hasBdData
+      ? `CPT 94060 (Bronchodilation responsiveness, spirometry pre- and post-bronchodilator administration): pre- and post-bronchodilator FEV1 values are recorded for this visit.
+Do NOT also bill 94010 (baseline spirometry) for the same session: NCCI policy treats 94010 as bundled into 94060 when both are performed in the same encounter, billing both is a documented bundling error that risks denial or recoupment.`
+      : `CPT 94010 (Spirometry, including graphic record, total and timed vital capacity, expiratory flow rate measurements): no bronchodilator pre/post data recorded for this visit, consistent with a baseline-only study.
+If a bronchodilator was administered and post-dose values were not recorded, consider whether 94060 is the more accurate code instead, billing 94010 for a session that actually included bronchodilator responsiveness testing under-codes the service.`,
+    unavailableMsg: () => null
+  },
   'biologic-response-review': {
     label: 'Interpret biologic response', icon: 'report-medical',
     applies: pt => (pt.disease === 'ASTHMA' || pt.disease === 'ACO') && pt.meds.some(m => m.cls === 'Biologic'),
@@ -3397,7 +3660,7 @@ function render() {
           : zCls === 'sz-a' ? 'Suboptimal control: treatment review needed'
           : 'Stable: continue current management';
     zIns  = `FEV₁ <strong>${v.fev1}%</strong> predicted: GOLD Stage ${stage.s} ${stage.l}. ${v.exac} exacerbation${v.exac!==1?'s':''} past year${v.hosp>0?`, ${v.hosp} hospitalisation`:''}. Adherence <strong>${v.adherence}%</strong>.`;
-    lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-d';
+    lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-e';
     lcpTxt= `GOLD Group ${grp} · Stage ${stage.s} ${stage.l}`;
 
   } else if (d === 'ASTHMA') {
@@ -3683,6 +3946,14 @@ function buildAlerts(d, pt, v, grp, stage, ctrl) {
     push(rule.severity==='caution'?'w':'i', `ti-${rule.icon}`, `<strong>${rule.label}</strong><br><span style="font-size:var(--fs-2xs);white-space:pre-line">${rule.evidence(pt,v)}</span>`);
   });
 
+  // Treatment-pathway engine: surfaces only when escalation is genuinely indicated, a
+  // "no change needed" result on every visit would be noise rather than signal.
+  checkPathways(pt).forEach(result => {
+    if (result.onPathway && result.escalationIndicated) {
+      push('w', 'ti-stairs-up', `<strong>${result.label}</strong>: ${result.currentStep}${result.nextStep?` &rarr; consider ${result.nextStep}`:''}<br><span style="font-size:var(--fs-2xs);white-space:pre-line">${result.detail}</span>`);
+    }
+  });
+
   if (d === 'COPD' || d === 'ACO') {
     if (v.eos >= 300) push('g','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong>: biologic eligibility threshold met. Anti-IL5 appropriate.`);
     else if (v.eos >= 250) push('w','ti-flask', `<strong>Eos ${v.eos} cells/µL</strong>: ${300-v.eos} cells below biologic threshold. Repeat at next visit.`);
@@ -3715,8 +3986,8 @@ function buildAlerts(d, pt, v, grp, stage, ctrl) {
   }
 
   if (d === 'ACO') {
-    const hasICSa  = pt.meds.some(m=>m.cls==='ICS');
-    const hasLABAa = pt.meds.some(m=>m.cls==='LABA');
+    const hasICSa  = pt.meds.some(m=>m.cls==='ICS'||m.cls==='ICS-formoterol');
+    const hasLABAa = pt.meds.some(m=>m.cls==='LABA'||m.cls==='ICS-formoterol');
     push('i','ti-circle-dashed', `<strong>ACO management</strong>: ICS is mandatory (asthma). LABA required for COPD component. Triple therapy target.`);
     /* v10: ICS-mandatory enforcement */
     if (!hasICSa) push('d','ti-alert-triangle', `<strong>ICS missing</strong>: ICS is MANDATORY in ACO because of the asthma component. A regimen without ICS risks severe exacerbation. Add immediately.`);
@@ -3784,8 +4055,8 @@ function buildIntel(d, pt, v, grp, stage, ctrl, gap, osaSev) {
     if (bodeAco) row('BODE index', buildBODESummary(bodeAco));
     row('Biologic eligibility', `<span class="sind ${v.eos>=300?'g':'a'}"><span class="sind-dot"></span>${v.eos>=300?'Eligible':'Borderline'}</span> &nbsp;Eos ${v.eos} · Anti-IL5 or anti-IL4R`);
     /* v10: hardened ICS-mandatory / LABA-without-ICS status */
-    const hasICS  = pt.meds.some(m=>m.cls==='ICS');
-    const hasLABA = pt.meds.some(m=>m.cls==='LABA');
+    const hasICS  = pt.meds.some(m=>m.cls==='ICS'||m.cls==='ICS-formoterol');
+    const hasLABA = pt.meds.some(m=>m.cls==='LABA'||m.cls==='ICS-formoterol');
     row('ICS mandatory',     hasICS ? '<span class="sind g"><span class="sind-dot"></span>Present: required, never remove</span>' : '<span class="sind r"><span class="sind-dot"></span>MISSING: mandatory for ACO asthma component</span>');
     row('LABA status',       hasLABA ? (hasICS ? '<span class="sind g"><span class="sind-dot"></span>Present (with ICS)</span>' : '<span class="sind r"><span class="sind-dot"></span>Present WITHOUT ICS: contraindicated in ACO</span>') : '<span class="sind r"><span class="sind-dot"></span>Missing: add to regimen</span>');
     row('Priority action',   `<span class="fw">${!hasLABA?'Add LABA · ':''}biologic referral · allergen assessment</span>`);
@@ -4924,7 +5195,7 @@ function updateLiveZone() {
     const grp=goldGroup(v), st=goldStage(v.fev1);
     const hiR=v.exac>=2||v.hosp>=1, hiS=v.cat>=10;
     zCls  = hiR&&hiS?'sz-r':hiS?'sz-a':'sz-g';
-    lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-d';
+    lcpCls= grp==='A'?'lcp-a':grp==='B'?'lcp-b':'lcp-e';
     lcpTxt= `GOLD Group ${grp} · Stage ${st.s} ${st.l}`;
     zLbl  = `${zCls==='sz-r'?'Red':zCls==='sz-a'?'Amber':'Green'} zone · GOLD Group ${grp} · Visit ${v.n}`;
     zTt   = zCls==='sz-r'?'Progressive decline: immediate review':zCls==='sz-a'?'Suboptimal control: treatment review':'Stable: continue current management';
@@ -4976,7 +5247,7 @@ function updateLiveZone() {
    were filled by the dictation-extraction path below, cleared the moment a clinician edits one by hand,
    exactly the same attribution contract used in patient registration. */
 let visitAIFieldSource = {}; // { fieldKey: 'ai' }, reset each time the drawer opens for a patient
-const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv','mpap','pawp','pvr','whoFc','ntprobnp','platelets','hgb','bdPreFev1','bdPostFev1','spo2Pre','spo2Post'];
+const VISIT_FIELD_KEYS = ['fev1','fev1pct','fvc','ratio','rescueWk','nightWk','feno','crp','eos','adherence','dlco','sixMWD','ahi','odi','epworth','tlc','rv','mpap','pawp','pvr','whoFc','ntprobnp','platelets','hgb','bdPreFev1','bdPostFev1','spo2Pre','spo2Post','abgFio2','abgPaco2','abgPao2','abgPh','abgHco3'];
 function commitVisitField(key, rawValue, isNumeric=true) {
   const v = getVisit();
   if (!v) return;
@@ -5029,21 +5300,42 @@ function exertionalDesaturation(spo2Pre, spo2Post) {
   return { drop: Math.round(drop*10)/10, spo2Post, significant, oxygenThreshold };
 }
 function updateDesatFeedback() {
-  const v = getVisit();
+  const pt = getPt(), v = getVisit();
   const fb = g('fb-desat');
   if (!fb) return;
   const r = exertionalDesaturation(v.spo2Pre, v.spo2Post);
   if (!r) { fb.innerHTML = ''; return; }
+  const prognosisNote = pt.disease === 'PAH'
+    ? 'a cohort study found exercise-induced desaturation carries a hazard ratio of 6.1 for adverse clinical events in PAH'
+    : 'cohort data shows ~2x mortality risk in COPD when this pattern is present';
   if (r.oxygenThreshold) {
-    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets the CMS \u226488% threshold for ambulatory oxygen prescription, and is significant desaturation (cohort data shows ~2x mortality risk in COPD when this pattern is present).</div>`;
+    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets the CMS \u226488% threshold for ambulatory oxygen prescription, and is significant desaturation (${prognosisNote}).</div>`;
   } else if (r.significant) {
-    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets criteria for significant exercise-induced desaturation (\u22654% drop AND post-test <90%).</div>`;
+    fb.innerHTML = `<div class="lfb lfb-w">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): meets criteria for significant exercise-induced desaturation (\u22654% drop AND post-test <90%), ${prognosisNote}.</div>`;
   } else {
     fb.innerHTML = `<div class="lfb lfb-i">Post-walk SpO\u2082 ${r.spo2Post}% (drop of ${r.drop} points): does not meet the significant-desaturation threshold.</div>`;
   }
 }
 function commitBdPre(val)    { commitVisitField('bdPreFev1', val); updateBdResponseFeedback(); }
 function commitBdPost(val)   { commitVisitField('bdPostFev1', val); updateBdResponseFeedback(); }
+function commitAbgFio2(val)  { commitVisitField('abgFio2', val); updateAbgFeedback(); }
+function commitAbgPaco2(val) { commitVisitField('abgPaco2', val); updateAbgFeedback(); }
+function commitAbgPao2(val)  { commitVisitField('abgPao2', val); updateAbgFeedback(); }
+function commitAbgPh(val)    { commitVisitField('abgPh', val); updateAbgFeedback(); }
+function commitAbgHco3(val)  { commitVisitField('abgHco3', val); updateAbgFeedback(); }
+function updateAbgFeedback() {
+  const pt = getPt(), v = getVisit();
+  const fbAa = g('fb-aagradient');
+  if (fbAa) {
+    const r = (v.abgFio2!=null && v.abgPaco2!=null && v.abgPao2!=null) ? aaGradient({fio2:v.abgFio2, paco2:v.abgPaco2, pao2:v.abgPao2, age:pt.demographics.age}) : null;
+    fbAa.innerHTML = r ? `<div class="lfb ${r.elevated?'lfb-w':'lfb-i'}">A-a gradient ${r.gradient} mmHg (normal <${r.normalUpperBound} mmHg for age): ${r.elevated?'elevated, suggests V/Q mismatch or diffusion defect':'normal range'}</div>` : '';
+  }
+  const fbAb = g('fb-acidbase');
+  if (fbAb) {
+    const r = (v.abgPh!=null && v.abgPaco2!=null && v.abgHco3!=null) ? acidBaseInterpret({pH:v.abgPh, paco2:v.abgPaco2, hco3:v.abgHco3}) : null;
+    fbAb.innerHTML = r ? `<div class="lfb lfb-i">${r.primary}</div>` : '';
+  }
+}
 /* Bronchodilator reversibility, ATS/ERS 2005 criteria (verified this session): a positive
    test requires BOTH an increase of >=12% from baseline AND >=200 mL absolute increase in
    FEV1. Replaces a generic 'Significant/Partial/None' dropdown with the real computed
@@ -5087,6 +5379,53 @@ function dlcoCorrected(observedDlcoPct, hgb, sex) {
   const ageSexFactor = sex === 'Male' ? 10.22 : 9.38;
   const factor = (1.7 * hgb) / (ageSexFactor + hgb);
   return Math.round((observedDlcoPct / factor) * 10) / 10;
+}
+/* A-a (alveolar-arterial) oxygen gradient, verified this session against the standard
+   alveolar gas equation: PAO2 = FiO2 x (Patm - PH2O) - (PaCO2 / RQ), with Patm=760mmHg
+   (sea level), PH2O=47mmHg, RQ (respiratory quotient)=0.8 (standard assumed value for a
+   typical mixed diet). Normal range is age-dependent: (Age/4)+4 mmHg (widely cited bedside
+   estimate). Clinically distinguishes hypoventilation (normal A-a gradient, hypoxemia from
+   reduced ventilation alone) from a true V/Q mismatch or diffusion defect (elevated
+   gradient), the key diagnostic branch point this calculation exists to support. */
+function aaGradient({ fio2, paco2, pao2, age }) {
+  if (fio2 == null || paco2 == null || pao2 == null) return null;
+  const PAO2 = fio2 * (760 - 47) - (paco2 / 0.8);
+  const gradient = Math.round((PAO2 - pao2) * 10) / 10;
+  const normalUpperBound = age != null ? Math.round(((age / 4) + 4) * 10) / 10 : 15;
+  return { PAO2: Math.round(PAO2*10)/10, gradient, normalUpperBound, elevated: gradient > normalUpperBound };
+}
+/* Acid-base interpreter, verified this session. Honestly scoped to the well-established
+   four-quadrant primary-disorder classification (pH direction + which of PaCO2/HCO3 moved
+   in the same direction as the pH change identifies respiratory vs metabolic, acidosis vs
+   alkalosis) plus a basic Winters' formula check for respiratory compensation in metabolic
+   acidosis. This does NOT implement the full Boston vs Copenhagen mixed-disorder analysis,
+   anion gap, or delta-delta ratio, that is a genuinely more complex multi-step clinical
+   reasoning process and is out of scope here; this function will correctly identify a
+   single primary disorder but will not reliably distinguish a mixed disorder, and says so
+   in its own output rather than overclaiming precision it does not have. */
+function acidBaseInterpret({ pH, paco2, hco3 }) {
+  if (pH == null || paco2 == null || hco3 == null) return null;
+  const acidemia = pH < 7.35, alkalemia = pH > 7.45;
+  if (!acidemia && !alkalemia) {
+    return { primary: 'Normal pH (7.35-7.45)', detail: 'No acidemia or alkalemia. A normal pH does not exclude a fully-compensated or mixed disorder; correlate with PaCO2/HCO3 and clinical context.' };
+  }
+  const respiratoryDirection = acidemia ? paco2 > 45 : paco2 < 35; // same-direction as pH change = respiratory
+  const metabolicDirection = acidemia ? hco3 < 22 : hco3 > 26;
+  let primary, compensationNote = '';
+  if (respiratoryDirection && !metabolicDirection) {
+    primary = `${acidemia?'Respiratory acidosis':'Respiratory alkalosis'} (PaCO2 ${paco2} mmHg, ${acidemia?'>45':'<35'})`;
+  } else if (metabolicDirection && !respiratoryDirection) {
+    primary = `${acidemia?'Metabolic acidosis':'Metabolic alkalosis'} (HCO3 ${hco3} mmol/L, ${acidemia?'<22':'>26'})`;
+    if (acidemia) {
+      const expectedPaco2 = Math.round((1.5 * hco3 + 8));
+      compensationNote = `Winters' formula expected respiratory compensation: PaCO2 \u2248 ${expectedPaco2-2}-${expectedPaco2+2} mmHg. Measured PaCO2 ${paco2} mmHg ${(paco2 >= expectedPaco2-2 && paco2 <= expectedPaco2+2) ? 'is within the expected compensation range.' : 'is OUTSIDE the expected compensation range, suggesting a concurrent second primary disorder, this calculator does not further characterise mixed disorders.'}`;
+    }
+  } else if (respiratoryDirection && metabolicDirection) {
+    primary = `Mixed picture: both PaCO2 and HCO3 are moving in the direction consistent with the pH change. This pattern can reflect a single disorder with partial compensation, or two primary disorders acting in the same direction; this calculator cannot distinguish those here.`;
+  } else {
+    primary = `PaCO2 and HCO3 do not clearly point to a single primary process (pattern suggests a mixed or compensated disorder). Full Boston/Copenhagen-method analysis with anion gap is recommended rather than relying on this simplified classification.`;
+  }
+  return { acidemia, alkalemia, primary, compensationNote, scopeNote: 'This is a single-primary-disorder classification, not a full mixed-disorder workup.' };
 }
 function updateRvTlcFeedback() {
   const pt = getPt(), v = getVisit();
@@ -5380,6 +5719,7 @@ function bActionPlan() {
   const isIPF = pt.disease==='IPF';
   const isOSA = pt.disease==='OSA';
   const hasSABA  = pt.meds.some(m=>m.cls==='SABA');
+  const hasIcsFormoterol = pt.meds.some(m=>m.cls==='ICS-formoterol');
   const steps = items => items.filter(Boolean).map(s=>`<li class="apz-s"><span class="apz-arr">→</span>${s}</li>`).join('');
 
   if (isIPF) {
@@ -5398,12 +5738,20 @@ function bActionPlan() {
     <div style="margin-top:14px">${[['Daily','CPAP hours used · mask comfort'],['Weekly','Daytime sleepiness self-check (Epworth)'],['Monthly','Review with healthcare provider'],['Quarterly','Download CPAP adherence data'],['Annual','Repeat sleep study if clinically indicated · weight review']].map(([k,vv])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:var(--fs-base);color:var(--i7)">${vv}</span></div>`).join('')}</div>
     <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="window.print();notify('Print dialog opened','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
   }
+  if (pt.disease === 'PAH') {
+    return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · ${pidPrefix(currentPt)}${currentPt} · PAH · Engagement</div>
+    <div class="apz apz-g"><div class="apz-tt">Green zone: stable</div><ul class="apz-steps">${steps(['Continue background PAH therapy exactly as prescribed: do not stop suddenly even if feeling well','Weigh yourself daily at the same time: sudden weight gain can be an early sign of fluid retention','Pace activity within your usual limits; gentle, supervised exercise is encouraged, not strenuous unsupervised exertion','Attend scheduled WHO functional class and 6-minute walk reviews'])}</ul></div>
+    <div class="apz apz-a"><div class="apz-tt">Amber zone: worsening</div><ul class="apz-steps">${steps(['Contact clinic within 24-48 hours if breathlessness is noticeably worse than your usual baseline','Weight gain of 2kg or more in 2-3 days: contact clinic, this can signal fluid retention before other symptoms appear','New or worsening ankle/leg swelling: report to your team','Do not start any new medication, including over-the-counter decongestants or NSAIDs, without checking with your PAH team first'])}</ul></div>
+    <div class="apz apz-r"><div class="apz-tt">Red zone: emergency</div><ul class="apz-steps">${steps(['Seek emergency care for: severe breathlessness at rest, chest pain, fainting or near-fainting, or blue lips/fingertips','Call emergency services for sudden, severe symptoms: PAH-related collapse can progress quickly','Do not drive yourself: call for assistance','Tell emergency responders you have pulmonary arterial hypertension and bring your medication list, this affects which emergency treatments are safe to give you'])}</ul></div>
+    <div style="margin-top:14px">${[['Daily','Weight · symptom diary'],['Weekly','Activity tolerance self-check'],['Monthly','Review with PAH specialist team'],['Quarterly','6-minute walk test · NT-proBNP'],['Annual','Right heart catheterisation review if indicated · echo']].map(([k,vv])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:var(--fs-base);color:var(--i7)">${vv}</span></div>`).join('')}</div>
+    <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="window.print();notify('Print dialog opened','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
+  }
 
   const trigger = isAsthma ? 'ACT drops below 16' : 'CAT increases by more than 3 points';
   return `<div style="font-size:var(--fs-base);color:var(--i5);margin-bottom:14px">Personalised zone plan · ${pidPrefix(currentPt)}${currentPt} · ${pt.disease.replace('_',' ')} · Engagement</div>
   <div class="apz apz-g"><div class="apz-tt">Green zone: well controlled</div><ul class="apz-steps">${steps(['Continue current medications as prescribed',`Monitor daily: contact clinic if ${trigger}`,'Aim for 3000+ steps daily','Attend scheduled clinic review'])}</ul></div>
-  <div class="apz apz-a"><div class="apz-tt">Amber zone: worsening</div><ul class="apz-steps">${steps([hasSABA?'Increase SABA: up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours: contact clinic','Rest and reduce exertion','Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma?'Double ICS dose if instructed':''])}</ul></div>
-  <div class="apz apz-r"><div class="apz-tt">Red zone: emergency</div><ul class="apz-steps">${steps([hasSABA?'Use SABA immediately: 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive: call for assistance'])}</ul></div>
+  <div class="apz apz-a"><div class="apz-tt">Amber zone: worsening</div><ul class="apz-steps">${steps([hasIcsFormoterol?'Increase your ICS-formoterol reliever doses as needed for symptoms (this is your combined maintenance and reliever inhaler)':hasSABA?'Increase SABA: up to 4 puffs every 4 hours':'Use reliever as directed','If not improving within 24 hours: contact clinic','Rest and reduce exertion',hasIcsFormoterol?'Seek medical attention if you need significantly more inhalations than usual in 24 hours':'Start oral prednisolone 30 mg × 5 days if prescribed',isAsthma && !hasIcsFormoterol?'Double ICS dose if instructed':''])}</ul></div>
+  <div class="apz apz-r"><div class="apz-tt">Red zone: emergency</div><ul class="apz-steps">${steps([hasIcsFormoterol?'Use your ICS-formoterol reliever immediately and seek urgent medical attention':hasSABA?'Use SABA immediately: 4–8 puffs via spacer':'Use emergency reliever','Call emergency services if no improvement in 20 minutes','Go to ED if: severe breathlessness, blue lips, confusion','Do not drive: call for assistance'])}</ul></div>
   <div style="margin-top:14px">${[['Daily','Symptom score · rescue use'],['Weekly',isAsthma?'ACT self-assessment':'CAT self-assessment'],['Monthly','Review with healthcare provider'],['Quarterly','Pulmonary function test'],['Annual','Comprehensive review · vaccinations']].map(([k,v])=>`<div style="display:flex;gap:11px;padding:6px 0;border-bottom:1px solid var(--i1)"><span class="mono xs muted" style="width:68px;flex-shrink:0">${k}</span><span style="font-size:var(--fs-base);color:var(--i7)">${v}</span></div>`).join('')}</div>
   <div class="flex g2" style="margin-top:14px;flex-wrap:wrap"><button class="btn bp btn-sm" onclick="window.print();notify('Print dialog opened','ok')"><i class="ti ti-printer"></i>Print for patient</button><button class="btn bs btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button></div>`;
 }
@@ -5413,10 +5761,13 @@ function buildMedConflicts(pt) {
   const cls = pt.meds.map(m=>m.cls);
   const hasBetaBlocker = pt.meds.some(m=>m.drug.toLowerCase().includes('atenolol')||m.drug.toLowerCase().includes('bisoprolol')||m.drug.toLowerCase().includes('metoprolol')||m.drug.toLowerCase().includes('carvedilol'));
   if (hasBetaBlocker && cls.includes('SABA')) conflicts.push({ sev:'d', icon:'ti-alert-triangle', txt:'<strong>SABA + beta-blocker conflict</strong>: beta-blockers reduce SABA efficacy and may precipitate bronchospasm. Review with cardiology.' });
-  if (cls.includes('ICS') && pt.comorbidities?.osteoporosis) conflicts.push({ sev:'w', icon:'ti-bone', txt:'<strong>High-dose ICS + osteoporosis</strong>: cumulative ICS burden increases fracture risk. Consider bone protection therapy.' });
+  const hasICSClass = cls.includes('ICS') || cls.includes('ICS-formoterol');
+  if (hasICSClass && pt.comorbidities?.osteoporosis) conflicts.push({ sev:'w', icon:'ti-bone', txt:'<strong>High-dose ICS + osteoporosis</strong>: cumulative ICS burden increases fracture risk. Consider bone protection therapy.' });
   const ocsV = pt.visits.reduce((s,v)=>s+(v.ocs||0),0);
-  if (cls.includes('ICS') && ocsV >= 3) conflicts.push({ sev:'w', icon:'ti-pill', txt:`<strong>ICS + repeated OCS (${ocsV} courses)</strong>: cumulative steroid burden significant. Consider biologic to reduce OCS dependency.` });
-  if (pt.demographics?.smoker==='Current smoker' && cls.includes('ICS')) conflicts.push({ sev:'w', icon:'ti-flame', txt:'<strong>ICS + active smoking</strong>: smoking reduces ICS efficacy by up to 50%. Smoking cessation is the most important therapeutic intervention.' });
+  if (hasICSClass && ocsV >= 3) conflicts.push({ sev:'w', icon:'ti-pill', txt:`<strong>ICS + repeated OCS (${ocsV} courses)</strong>: cumulative steroid burden significant. Consider biologic to reduce OCS dependency.` });
+  if (pt.demographics?.smoker==='Current smoker' && hasICSClass) conflicts.push({ sev:'w', icon:'ti-flame', txt:'<strong>ICS + active smoking</strong>: smoking reduces ICS efficacy by up to 50%. Smoking cessation is the most important therapeutic intervention.' });
+  const hasNitrate = pt.meds.some(m=>m.drug.toLowerCase().includes('nitrate')||m.drug.toLowerCase().includes('nitroglycerin')||m.drug.toLowerCase().includes('isosorbide')||m.drug.toLowerCase().includes('gtn'));
+  if (cls.includes('PDE5i') && hasNitrate) conflicts.push({ sev:'d', icon:'ti-alert-triangle', txt:'<strong>PDE5 inhibitor + nitrate: absolute contraindication</strong>. Concurrent use can cause severe, potentially life-threatening hypotension via synergistic cGMP-mediated vasodilation. Nitrates should not be given within 24-48 hours of a PDE5i dose (verified, class-wide effect). Flag immediately with the prescribing team and cardiology.' });
   if (!conflicts.length) return '';
   return `<div style="margin-top:12px"><div class="flbl-sec">Medication conflict checker<span class="feng">Treatment</span></div>${conflicts.map(c=>`<div class="ia ia-${c.sev}" style="margin-bottom:7px"><i class="ti ${c.icon}"></i><div class="ia-body">${c.txt}</div></div>`).join('')}</div>`;
 }
@@ -5697,6 +6048,9 @@ function bInvestigations() {
     ${S('Functional status','Classification',`<div class="fg">
       ${Sel('WHO functional class',['1','2','3','4'],String(v.whoFc),pv?`Previous: WHO FC ${pv.whoFc}`:'','whofc-input','commitWhoFc')}
       ${F('6MWD','m','',pv?`Previous: ${pv.sixMWD??'not performed'}${pv.sixMWD!=null?' m':''}`:'','sixmwd-input','commitSixMWD')}
+      ${F('SpO\u2082 pre-walk','%','',pv?`Previous: ${pv.spo2Pre??'N/A'}${pv.spo2Pre!=null?'%':''}`:'','spo2pre-input','commitSpo2Pre')}
+      ${F('SpO\u2082 post-walk (lowest)','%','',pv?`Previous: ${pv.spo2Post??'N/A'}${pv.spo2Post!=null?'%':''}`:'','spo2post-input','commitSpo2Post')}
+      <div id="fb-desat" style="grid-column:1/-1"></div>
     </div>`)}
     ${S('Biomarkers & safety labs','Risk',`<div class="fg">
       ${F('NT-proBNP','pg/mL','',pv?`Previous: ${pv.ntprobnp??'N/A'} pg/mL`:'','ntprobnp-input','commitNtprobnp')}
@@ -5736,6 +6090,15 @@ function bInvestigations() {
     ${F('Post-BD FEV\u2081','L','','','bd-post-input','commitBdPost')}
     <div id="fb-bdresponse" style="grid-column:1/-1"></div>
     <div class="fgrp"><label class="fl">Test date</label><input class="fi" type="date" oninput="markDirty()"></div>
+  </div>`)}
+  ${S('Arterial blood gas','Risk',`<div class="fg">
+    ${F('FiO\u2082','fraction','',pv?`Previous: ${pv.abgFio2??'N/A'}`:'','abgfio2-input','commitAbgFio2')}
+    ${F('PaCO\u2082','mmHg','',pv?`Previous: ${pv.abgPaco2??'N/A'}`:'','abgpaco2-input','commitAbgPaco2')}
+    ${F('PaO\u2082','mmHg','',pv?`Previous: ${pv.abgPao2??'N/A'}`:'','abgpao2-input','commitAbgPao2')}
+    ${F('pH','','',pv?`Previous: ${pv.abgPh??'N/A'}`:'','abgph-input','commitAbgPh')}
+    ${F('HCO\u2083\u207b','mmol/L','',pv?`Previous: ${pv.abgHco3??'N/A'}`:'','abghco3-input','commitAbgHco3')}
+    <div id="fb-aagradient" style="grid-column:1/-1"></div>
+    <div id="fb-acidbase" style="grid-column:1/-1"></div>
   </div>`)}
   ${S('Flow-volume & volume-time curves','Classification', buildSpirometryCurves(v))}
   ${S('Biomarkers','Phenotyping · Treatment',`<div class="fg">
@@ -5791,6 +6154,15 @@ function bLongitudinal() {
 
   return `
   ${S(trendTitle,'Trajectory',`<div class="fev1-chart">${bars}</div><div class="ia ia-${trendIaCls}" style="margin-top:6px"><i class="ti ti-trending-${trendIaIcon}"></i><div class="ia-body">${trendBody}</div></div>`)}
+  ${(() => {
+    const predictions = checkOutcomePredictions(pt);
+    if (!predictions.length) return '';
+    const matched = predictions.filter(p=>p.matched).length;
+    return S('Prediction-validation history', 'Trajectory · Risk', `
+    <div class="ia ia-i" style="margin-bottom:10px"><i class="ti ti-info-circle"></i><div class="ia-body">Retrospective check, not a real-time log: AIROS reconstructs what its own logic would have predicted at each prior visit using only data available at that time, then compares it against what the next real visit actually showed. ${matched} of ${predictions.length} predictions matched.</div></div>
+    ${predictions.map(p => `<div class="ia ia-${p.matched?'g':'w'}" style="margin-bottom:7px"><i class="ti ti-${p.matched?'check':'alert-triangle'}"></i><div class="ia-body"><strong>${p.prediction}</strong> (visit ${p.visitN} \u2192 ${p.nextVisitN})<br><span style="font-size:var(--fs-2xs)">Predicted: ${p.predicted}<br>Actual: ${p.actual}</span></div></div>`).join('')}
+    `);
+  })()}
   ${biologic?S('Biologic eligibility criteria','Treatment',criteria):''}
   ${pt.disease==='IPF'?S('Transplant referral pathway','Risk · Trajectory',`<div class="fg">
     ${Sel('Referral status',['Not indicated','Under consideration','Referred','Listed'],'Not indicated')}
@@ -5880,12 +6252,25 @@ function buildAuditLog() {
 /* GAP 07: Cohort overview drawer */
 function dashFev1Trend(pt) {
   if (pt.visits.length < 2) return null;
-  const last = pt.visits[pt.visits.length - 1].fev1;
-  const prev = pt.visits[pt.visits.length - 2].fev1;
+  const field = pt.disease==='IPF' ? 'fvc' : pt.disease==='OSA' ? 'ahi' : pt.disease==='PAH' ? 'whoFc' : 'fev1';
+  const metricLabel = pt.disease==='IPF' ? 'FVC' : pt.disease==='OSA' ? 'AHI' : pt.disease==='PAH' ? 'WHO FC' : 'FEV\u2081';
+  const lowerIsBetter = field === 'ahi' || field === 'whoFc';
+  const last = pt.visits[pt.visits.length - 1][field];
+  const prev = pt.visits[pt.visits.length - 2][field];
+  if (last == null || prev == null) return null;
   const delta = last - prev;
-  if (delta <= -3) return { dir:'down', icon:'trending-down', color:'var(--r5)', label:`FEV₁ down ${Math.abs(delta)}pt since last visit` };
-  if (delta >= 3)  return { dir:'up',   icon:'trending-up',   color:'var(--g5)', label:`FEV₁ up ${delta}pt since last visit` };
-  return { dir:'flat', icon:'arrow-right', color:'var(--i4)', label:'FEV₁ stable since last visit' };
+  const improving = lowerIsBetter ? delta <= -1 : delta >= 3;
+  const worsening = lowerIsBetter ? delta >= 1 : delta <= -3;
+  if (field === 'whoFc') {
+    // WHO FC is a 1-4 ordinal grade, not a percentage; a +-1 point change is itself meaningful,
+    // the +-3 threshold used for FEV1/FVC percentages would never fire on this scale.
+    if (delta < 0) return { dir:'up', icon:'trending-up', color:'var(--g5)', label:`${metricLabel} improved by ${Math.abs(delta)} since last visit` };
+    if (delta > 0) return { dir:'down', icon:'trending-down', color:'var(--r5)', label:`${metricLabel} worsened by ${delta} since last visit` };
+    return { dir:'flat', icon:'arrow-right', color:'var(--i4)', label:`${metricLabel} stable since last visit` };
+  }
+  if (worsening) return { dir:'down', icon:'trending-down', color:'var(--r5)', label:`${metricLabel} ${lowerIsBetter?'up':'down'} ${Math.abs(delta)}${field==='ahi'?'/hr':'pt'} since last visit` };
+  if (improving) return { dir:'up', icon:'trending-up', color:'var(--g5)', label:`${metricLabel} ${lowerIsBetter?'down':'up'} ${Math.abs(delta)}${field==='ahi'?'/hr':'pt'} since last visit` };
+  return { dir:'flat', icon:'arrow-right', color:'var(--i4)', label:`${metricLabel} stable since last visit` };
 }
 function bCohortOverviewCards(entries) {
   const cards = entries.map(([id, pt]) => {
@@ -5910,8 +6295,8 @@ function bCohortOverviewCards(entries) {
                    : pt.disease==='IPF' && (lastV.dlco===null||lastV.dlco===undefined) ? ['DLCO not performed: GAP scoring incomplete', 'a']
                    : pt.disease==='OSA' && osaSev.level==='severe' && (lastV.adherence===null||lastV.adherence===undefined||lastV.adherence<70) ? ['Severe OSA, inadequate therapy: urgent review', 'r']
                    : pt.disease==='OSA' && pt.demographics.bmi>=30 ? [`BMI ${pt.demographics.bmi}: weight management indicated`, 'a']
-                   : pt.disease==='PAH' && lastV.whoFc >= 3 ? [`WHO FC ${lastV.whoFc}: marked limitation, review therapy`, 'a']
                    : pt.disease==='PAH' && lastV.platelets < 50 ? ['Platelets <50,000/mm³: sotatercept contraindicated', 'r']
+                   : pt.disease==='PAH' && lastV.whoFc >= 3 ? [`WHO FC ${lastV.whoFc}: marked limitation, review therapy`, 'a']
                    : pt.demographics.smoker==='Current smoker' ? ['Still smoking: cessation priority', 'a']
                    : lastV.adherence < 80 ? [`Adherence ${lastV.adherence}%: address`, 'a']
                    : ['No urgent actions', 'g'];
@@ -5994,6 +6379,10 @@ function bDemographics() {
     ${YN('OSA',                 c.osa, null, 'osa')}
     ${YN('Anxiety / depression',c.anxiety, null, 'anxiety')}
     ${YN('Osteoporosis',        c.osteoporosis, null, 'osteoporosis')}
+    ${(pt.disease==='IPF'||pt.disease==='COPD'||pt.disease==='ACO'||pt.disease==='CHRONIC_BRONCHITIS') ? YN('GERD', c.gerd, null, 'gerd') : ''}
+    ${(pt.disease==='ASTHMA'||pt.disease==='ACO'||pt.disease==='COPD'||pt.disease==='CHRONIC_BRONCHITIS') ? YN('Allergic rhinitis', c.allerRhinitis, null, 'allerRhinitis') : ''}
+    ${(pt.disease==='ASTHMA'||pt.disease==='ACO') ? YN('Nasal polyps', c.nasalPolyps, null, 'nasalPolyps') : ''}
+    ${(pt.disease==='PAH'||pt.disease==='IPF') ? YN('Connective tissue disease', c.connectiveTissue, null, 'connectiveTissue') : ''}
   </div>`)}
   ${S('Vaccinations','Treatment',`<div class="fg">
     ${YN('Influenza (last 12m)', v.flu, null, 'flu', 'vacc')}
@@ -6250,6 +6639,7 @@ function commitDemoField(key, val, isNumeric=true) {
 function commitDemoSex(val) { const pt=getPt(); if (pt) { pt.demographics.sex = val; if (demoAIFieldSource.sex) delete demoAIFieldSource.sex; markDirty(); } }
 function commitDemoSmoker(val) { const pt=getPt(); if (pt) { pt.demographics.smoker = val; if (demoAIFieldSource.smoker) delete demoAIFieldSource.smoker; markDirty(); } }
 function commitComorbidity(group, key, isYes) {
+  if (group === 'reg') { if (!regState.comorbidities) regState.comorbidities = {}; regState.comorbidities[key] = isYes; markDirty(); return; }
   const pt = getPt();
   if (!pt) return;
   if (group === 'vacc') { pt.vaccinations[key] = isYes; }
@@ -6299,9 +6689,9 @@ function bEnvironment() {
     ${Sel('Pet exposure',['None','Dogs','Cats','Other animals'],e.petExposure||'None',null,'env-pet','commitEnvSelect_petExposure')}
   </div>`)}
   ${S('Lifestyle & behavioural','Assessment · Engagement',`<div class="fg">
-    <div class="fgrp"><label class="fl">Daily steps (average)</label><div class="iuw"><input class="fi" type="number" value="${e.dailySteps??''}" id="env-steps" placeholder="" oninput="commitEnvField('dailySteps',this.value)"><span class="iu">steps</span></div><div class="fhint">Target ≥3000 for COPD</div></div>
+    <div class="fgrp"><label class="fl">Daily steps (average)</label><div class="iuw"><input class="fi" type="number" value="${e.dailySteps??''}" id="env-steps" placeholder="" oninput="commitEnvField('dailySteps',this.value)"><span class="iu">steps</span></div><div class="fhint">${pt.disease==='PAH'?'Activity should be paced, not pushed to a step target; discuss appropriate level with the PAH team':pt.disease==='IPF'?'Activity tolerance matters more than a fixed step count; pulmonary rehab guidance preferred':pt.disease==='OSA'?'General activity guidance; no disease-specific step target':'Target \u22653000 for COPD'}</div></div>
     <div class="fgrp"><label class="fl">Sleep (average)</label><div class="iuw"><input class="fi" type="number" step="0.5" value="${e.sleepHrs??''}" id="env-sleep" placeholder="" oninput="commitEnvField('sleepHrs',this.value)"><span class="iu">hrs</span></div></div>
-    ${Sel('Inhaler technique errors',['None','1-2 minor errors','3-4 errors','Major errors needing retraining'],e.techniqueErrors||'None',null,'env-technique-err','commitEnvSelect_techniqueErrors')}
+    ${(pt.disease!=='OSA'&&pt.disease!=='PAH') ? Sel('Inhaler technique errors',['None','1-2 minor errors','3-4 errors','Major errors needing retraining'],e.techniqueErrors||'None',null,'env-technique-err','commitEnvSelect_techniqueErrors') : ''}
   </div>`)}
   ${S('Social determinants','Risk · Engagement',`<div class="fg">
     <div class="fgrp"><label class="fl">Social support (1-10)</label><input class="fi" type="number" min="1" max="10" value="${e.socialSupport??''}" id="env-social" placeholder="1-10" oninput="commitEnvField('socialSupport',this.value)"></div>
@@ -6721,7 +7111,12 @@ function regBuildPatientRecord() {
     ];
   }
 
-  const baseComorbidities = { heartFailure:false, ihd:false, t2dm:false, osa:disease==='OSA', anxiety:false, osteoporosis:false, connectiveTissue:false };
+  const rcm = regState.comorbidities || {};
+  const baseComorbidities = {
+    heartFailure: !!rcm.heartFailure, ihd: !!rcm.ihd, t2dm: !!rcm.t2dm,
+    osa: disease==='OSA' ? true : !!rcm.osa, anxiety: !!rcm.anxiety, osteoporosis: !!rcm.osteoporosis,
+    gerd: !!rcm.gerd, allerRhinitis: !!rcm.allerRhinitis, nasalPolyps: !!rcm.nasalPolyps, connectiveTissue: !!rcm.connectiveTissue
+  };
 
   return {
     disease, risk, regYear: new Date().getFullYear(),
@@ -7019,6 +7414,7 @@ function regStep2() {
 /* Step 3: Disease & demographics (non-PII, free navigation) */
 function regStep3() {
   const rf = regState.fields || {};
+  const rcm = regState.comorbidities || {};
   return `
   ${regIdBadge()}
   ${S('Disease assignment','Classification',`<div class="fg">
@@ -7034,13 +7430,16 @@ function regStep3() {
     <div class="fgrp"><label class="fl">Age at symptom onset</label><div class="iuw"><input class="fi" type="number" id="reg-onset" value="${rf['reg-onset']||''}" placeholder="" oninput="markDirty()"><span class="iu">yrs</span></div></div>
   </div>`)}
   ${S('Comorbidities','Risk · Treatment',`<div class="fg">
-    ${YN('Heart failure', false)}
-    ${YN('Ischaemic heart disease', false)}
-    ${YN('Type 2 diabetes', false)}
-    ${YN('OSA', false)}
-    ${YN('Anxiety / depression', false)}
-    ${YN('Osteoporosis', false)}
-    ${YN('Allergic rhinitis', false)}
+    <div id="reg-com-heartFailure">${YN('Heart failure', rcm.heartFailure, null, 'heartFailure', 'reg')}</div>
+    <div id="reg-com-ihd">${YN('Ischaemic heart disease', rcm.ihd, null, 'ihd', 'reg')}</div>
+    <div id="reg-com-t2dm">${YN('Type 2 diabetes', rcm.t2dm, null, 't2dm', 'reg')}</div>
+    <div id="reg-com-osa">${YN('OSA', rcm.osa, null, 'osa', 'reg')}</div>
+    <div id="reg-com-anxiety">${YN('Anxiety / depression', rcm.anxiety, null, 'anxiety', 'reg')}</div>
+    <div id="reg-com-osteoporosis">${YN('Osteoporosis', rcm.osteoporosis, null, 'osteoporosis', 'reg')}</div>
+    <div id="reg-com-gerd">${YN('GERD', rcm.gerd, null, 'gerd', 'reg')}</div>
+    <div id="reg-com-allerRhinitis">${YN('Allergic rhinitis', rcm.allerRhinitis, null, 'allerRhinitis', 'reg')}</div>
+    <div id="reg-com-nasalPolyps">${YN('Nasal polyps', rcm.nasalPolyps, null, 'nasalPolyps', 'reg')}</div>
+    <div id="reg-com-connectiveTissue">${YN('Connective tissue disease', rcm.connectiveTissue, null, 'connectiveTissue', 'reg')}</div>
   </div>`)}
   ${regNavButtons(true, 'Next: Spirometry & scores')}`;
 }
@@ -7727,7 +8126,8 @@ function buildCopContext() {
     whoFc: d==='PAH' ? v.whoFc : 'N/A', ntprobnp: d==='PAH' ? (v.ntprobnp??'N/A') : 'N/A', platelets: d==='PAH' ? (v.platelets??'N/A') : 'N/A',
     visitN:v.n, totalVisits:pt.visits.length, visitDate:v.date, visitHistory,
     comorbidities:Object.entries(pt.comorbidities).filter(([,val])=>val).map(([k])=>k).join(', ')||'none recorded',
-    moduleOutputs:[1,2,3,4,5,6,7].map(n=>ENG_OUTPUT(n,pt,v)).join('\n\n')
+    moduleOutputs:[1,2,3,4,5,6,7].map(n=>ENG_OUTPUT(n,pt,v)).join('\n\n'),
+    pathwayFindings: checkPathways(pt).filter(r=>r.onPathway).map(r=>`${r.label}: ${r.currentStep}${r.escalationIndicated?' (ESCALATION INDICATED: '+r.detail+')':''}`).join('\n') || 'No applicable treatment pathway on file.'
   };
 }
 
@@ -7826,7 +8226,9 @@ function buildDocPrompt(ctx, docType, register, lang) {
     : 'Write in English using standard NHS clinical register.';
   const regMap = {
     curso:'Curso clinico: internal clinical evolution note, full technical detail',
-    referral:'Referral letter to pulmonology: requesting specific evaluation, concise and complete',
+    referral: ctx.disease === 'PAH'
+      ? 'Referral letter to a specialist PAH centre: requesting MDT review and consideration of add-on therapy, concise and complete'
+      : 'Referral letter to pulmonology: requesting specific evaluation, concise and complete',
     gp:'GP summary letter: accessible but clinically accurate, clear follow-up plan',
     patient:'Patient letter: plain language, no jargon, practical and empathetic'
   };
@@ -7853,6 +8255,8 @@ ${computedBlock}
 VISIT HISTORY: ${ctx.visitHistory}
 
 ENGINE: ${ctx.moduleOutputs}
+
+TREATMENT PATHWAY STATUS: ${ctx.pathwayFindings}
 
 Rules: Use only actual patient numbers above. No em-dashes. Section headings in ALL CAPS. Mark as ${pidPrefix(ctx.id)}${ctx.id}. 300-400 words. Clear plan section at end. This is a DRAFT for clinician review.`;
 }
