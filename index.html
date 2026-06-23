@@ -276,18 +276,238 @@ input,select,textarea{font-family:inherit;}
 .drw-uns{font-size:var(--fs-sm);color:var(--a7);display:none;align-items:center;gap:var(--sp-2);}
 .drw-uns.show{display:flex;}
 
-/* PDF print trigger */
+
+/* ── ITEM 33: Mobile responsive additions ───────────────────*/
+@media(max-width:600px){
+  .cockpit-main{padding:var(--sp-5)!important;}
+  .drw{width:100vw!important;border-radius:0!important;}
+  .visit-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .dash-cards{grid-template-columns:1fr!important;}
+  .notif-centre,.settings-panel{width:calc(100vw - 32px);right:16px;}
+}
+/* ── Compact layout class (ITEM 38 toggle) ──────────────────*/
+body.compact .pcard,.body.compact .mcard{padding:var(--sp-4) var(--sp-5)!important;}
+body.compact .s-row{padding:var(--sp-2) 0!important;}
+body.compact .dash-cards{gap:var(--sp-4)!important;}
+/* ── ITEM 30: Manual dark-mode class (mirrors prefers-color-scheme) ─
+   Toggled by toggleDarkMode(). Allows override regardless of OS setting. */
+html.dark-mode{
+  --wh:#111827; --sf:#0F172A; --i7:#F1F5F9; --i5:#94A3B8;
+  --i4:#64748B; --i3:#475569; --i2:#1E293B; --i1:#1E293B; --i0:#0F172A;
+  --n0:#0F1E35; --n1:#1A2F4A; --n2:#243F60; --n6:#93C5FD;
+  --r0:#2D1515; --r1:#3D1F1F; --a0:#2A1F00; --a1:#3A2C00;
+  --g0:#0D2219; --g1:#1A3326; --t0:#0C1F25; --t1:#1A3040;
+  --p0:#1A1030; --p1:#2A1E48;
+  --tx-n8:#90B4D4; --tx-t5:#22D3EE; --tx-p5:#A78BFA;
+  --tx-g5:#4ADE80; --tx-r5:#F87171; --tx-a5:#FCD34D;
+}
+html.dark-mode .boot-splash,html.dark-mode .login-view{background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%)!important;}
+html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--wh);}
+
+/* ── ITEM 31: Notification centre ───────────────────────────*/
+.notif-centre{position:fixed;top:62px;right:16px;width:320px;max-height:460px;
+  background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);
+  box-shadow:var(--sh3);z-index:9000;display:none;flex-direction:column;overflow:hidden;}
+.notif-centre.open{display:flex;}
+.notif-centre-hdr{display:flex;align-items:center;justify-content:space-between;
+  padding:var(--sp-6) var(--sp-8);border-bottom:1px solid var(--i1);font-size:var(--fs-sm);
+  font-weight:600;color:var(--i7);}
+.notif-centre-hdr .nc-clear{font-size:var(--fs-xs);color:var(--i4);cursor:pointer;font-weight:400;}
+.notif-centre-hdr .nc-clear:hover{color:var(--r5);}
+.notif-centre-body{overflow-y:auto;flex:1;}
+.nc-item{display:flex;align-items:flex-start;gap:var(--sp-4);padding:var(--sp-5) var(--sp-8);
+  border-bottom:1px solid var(--i1);font-size:var(--fs-sm);cursor:default;}
+.nc-item:last-child{border-bottom:none;}
+.nc-item.ok .nc-dot{background:var(--g5);}
+.nc-item.warn .nc-dot{background:var(--a5);}
+.nc-item.err .nc-dot{background:var(--r5);}
+.nc-item.info .nc-dot{background:var(--n6);}
+.nc-dot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.nc-msg{flex:1;color:var(--i7);line-height:1.4;}
+.nc-time{font-size:var(--fs-2xs);color:var(--i3);margin-top:2px;}
+.nc-empty{padding:var(--sp-12);text-align:center;color:var(--i3);font-size:var(--fs-sm);}
+.notif-bell-wrap{position:relative;}
+.notif-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:var(--r5);
+  border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:700;display:none;}
+.notif-badge.visible{display:flex;}
+/* ── ITEM 34: Session timeout warning ───────────────────────*/
+.session-timeout-bar{position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:var(--a7);color:#fff;display:none;align-items:center;justify-content:center;
+  gap:var(--sp-8);padding:var(--sp-4) var(--sp-12);font-size:var(--fs-sm);font-weight:500;}
+.session-timeout-bar.visible{display:flex;}
+.session-timeout-bar button{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
+  color:#fff;padding:var(--sp-2) var(--sp-6);border-radius:var(--rsm);cursor:pointer;font-size:var(--fs-xs);}
+.session-timeout-bar button:hover{background:rgba(255,255,255,.35);}
+/* ── ITEM 38: Settings panel ────────────────────────────────*/
+.settings-panel{position:fixed;top:62px;right:16px;width:280px;
+  background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);
+  box-shadow:var(--sh3);z-index:9000;display:none;flex-direction:column;overflow:hidden;}
+.settings-panel.open{display:flex;}
+.settings-panel-hdr{padding:var(--sp-6) var(--sp-8);border-bottom:1px solid var(--i1);
+  font-size:var(--fs-sm);font-weight:600;color:var(--i7);}
+.sp-row{display:flex;align-items:center;justify-content:space-between;
+  padding:var(--sp-5) var(--sp-8);border-bottom:1px solid var(--i1);font-size:var(--fs-sm);color:var(--i7);}
+.sp-row:last-child{border-bottom:none;}
+.sp-label{color:var(--i5);font-size:var(--fs-xs);}
+.sp-toggle{position:relative;width:32px;height:18px;cursor:pointer;}
+.sp-toggle input{opacity:0;width:0;height:0;}
+.sp-slider{position:absolute;inset:0;background:var(--i2);border-radius:99px;transition:.2s;}
+.sp-slider::before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;
+  background:#fff;border-radius:50%;transition:.2s;}
+.sp-toggle input:checked+.sp-slider{background:var(--n8);}
+.sp-toggle input:checked+.sp-slider::before{transform:translateX(14px);}
+
+/* ══════════════════════════════════════════════════════════════
+   AI/NLP IMPROVEMENTS 1-20 — RESIDENT PANEL REDESIGN
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Streaming thought cards ── */
+.cop-thought{padding:var(--sp-5) var(--sp-6);border-radius:var(--rlg);transition:opacity .2s,transform .2s;animation:thoughtIn .22s cubic-bezier(.34,1.3,.64,1) both;}
+@keyframes thoughtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cop-thought-collapsed .cop-thought-body{display:none;}
+.cop-thought-collapsed .cop-thought-src{display:none;}
+.cop-thought-expand{font-size:var(--fs-micro);font-family:var(--mono);color:var(--n6);cursor:pointer;margin-top:4px;letter-spacing:.4px;}
+.cop-thought-expand:hover{color:var(--n8);}
+/* ── 2. Confidence meter (replaces dots) ── */
+.cop-conf-meter{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.cop-conf-bar{height:3px;border-radius:2px;transition:width .3s;}
+.cop-conf-wrap{width:40px;height:3px;background:var(--i1);border-radius:2px;overflow:hidden;}
+.cop-conf-label{font-size:8px;font-family:var(--mono);letter-spacing:.3px;text-transform:uppercase;}
+/* ── 3. Source citation pills ── */
+.cop-source-pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:99px;margin-top:5px;cursor:pointer;transition:all .14s;border:1px solid transparent;}
+.cop-source-pill.guideline{background:var(--n0);border-color:var(--n1);color:var(--n6);}
+.cop-source-pill.guideline:hover{background:var(--n1);color:var(--n8);}
+.cop-source-pill.computed{background:var(--g0);border-color:var(--g1);color:var(--g7);}
+.cop-source-pill.ai-gen{background:var(--p0);border-color:var(--p1);color:var(--p7);}
+.cop-source-pill.patient-data{background:var(--t0);border-color:var(--t1);color:var(--t7);}
+/* ── 5. Suggested prompt chips ── */
+.cop-suggestions{padding:var(--sp-3) var(--sp-5) 0;display:flex;flex-wrap:wrap;gap:5px;}
+.cop-suggestion-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:var(--n0);border:1px solid var(--n1);border-radius:99px;font-size:var(--fs-2xs);color:var(--n7);cursor:pointer;transition:all .14s cubic-bezier(.4,0,.2,1);white-space:nowrap;}
+.cop-suggestion-chip:hover{background:var(--n1);border-color:var(--n3);transform:translateY(-1px);box-shadow:0 2px 8px rgba(11,31,58,.1);}
+.cop-suggestion-chip i{font-size:10px;color:var(--n5);}
+/* ── 6. Multi-turn conversation thread ── */
+.cop-chat-thread{display:flex;flex-direction:column;gap:var(--sp-3);padding:var(--sp-5);max-height:260px;overflow-y:auto;}
+.cop-thread-msg{display:flex;gap:8px;align-items:flex-start;}
+.cop-thread-msg.user .cop-thread-bubble{background:var(--n8);color:#fff;border-radius:var(--rlg) var(--rlg) var(--rsm) var(--rlg);margin-left:auto;}
+.cop-thread-msg.ai .cop-thread-bubble{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rlg) var(--rlg) var(--rlg) var(--rsm);}
+.cop-thread-bubble{padding:var(--sp-4) var(--sp-5);font-size:var(--fs-xs);line-height:1.6;max-width:85%;color:var(--i7);}
+.cop-thread-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;flex-shrink:0;margin-top:2px;}
+.cop-thread-avatar.user{background:var(--n4);color:#fff;}
+.cop-thread-avatar.ai{background:var(--i1);color:var(--n6);}
+.cop-thread-typing{display:flex;gap:3px;padding:8px 12px;}
+.cop-thread-typing span{width:5px;height:5px;border-radius:50%;background:var(--n4);animation:cldot .9s ease-in-out infinite;}
+.cop-thread-typing span:nth-child(2){animation-delay:.2s;}
+.cop-thread-typing span:nth-child(3){animation-delay:.4s;}
+/* ── 7. Live voice transcript ── */
+.cop-voice-transcript{background:var(--i0);border:1px dashed var(--i2);border-radius:var(--rmd);padding:var(--sp-4) var(--sp-5);font-size:var(--fs-xs);color:var(--i5);min-height:36px;margin:var(--sp-3) var(--sp-5) 0;line-height:1.5;display:none;}
+.cop-voice-transcript.active{display:block;border-color:var(--r5);}
+.cop-voice-interim{color:var(--i3);font-style:italic;}
+/* ── 8. Dictation diff UI ── */
+.dictation-diff-row{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-3) var(--sp-5);border-bottom:1px solid var(--i1);gap:8px;}
+.dictation-diff-row:last-child{border-bottom:none;}
+.dictation-diff-field{font-size:var(--fs-xs);font-weight:500;color:var(--i5);min-width:80px;}
+.dictation-diff-vals{display:flex;align-items:center;gap:8px;flex:1;}
+.dictation-diff-old{font-size:var(--fs-xs);color:var(--i3);text-decoration:line-through;}
+.dictation-diff-new{font-size:var(--fs-xs);font-weight:600;color:var(--n7);background:var(--n0);padding:1px 6px;border-radius:4px;}
+.dictation-diff-actions{display:flex;gap:4px;}
+.dictation-diff-accept{background:var(--g5);color:#fff;border:none;border-radius:var(--rsm);padding:3px 8px;font-size:var(--fs-2xs);cursor:pointer;transition:background .14s;}
+.dictation-diff-accept:hover{background:var(--g7);}
+.dictation-diff-reject{background:transparent;color:var(--i4);border:1px solid var(--i2);border-radius:var(--rsm);padding:3px 8px;font-size:var(--fs-2xs);cursor:pointer;transition:all .14s;}
+.dictation-diff-reject:hover{border-color:var(--r5);color:var(--r5);}
+/* ── 9. Rich text formatted cop-out-body ── */
+.cop-out-body-rich{padding:var(--sp-6) var(--sp-7);font-size:var(--fs-xs);line-height:1.85;color:var(--i7);max-height:300px;overflow-y:auto;}
+.cop-out-body-rich h1,.cop-out-body-rich h2,.cop-out-body-rich h3{font-size:var(--fs-sm);font-weight:600;color:var(--i7);margin:10px 0 4px;}
+.cop-out-body-rich p{margin:0 0 8px;}
+.cop-out-body-rich ul{margin:4px 0 8px 16px;padding:0;}
+.cop-out-body-rich li{margin-bottom:3px;}
+.cop-out-body-rich strong{font-weight:600;color:var(--n8);}
+.cop-out-body-rich .section-label{font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.8px;text-transform:uppercase;color:var(--i4);margin-top:12px;margin-bottom:4px;display:block;}
+/* ── 10. Section template selector ── */
+.cop-template-row{display:flex;align-items:center;gap:6px;padding:var(--sp-3) var(--sp-5);border-bottom:1px solid var(--i1);overflow-x:auto;}
+.cop-template-chip{padding:3px 10px;border-radius:99px;font-size:var(--fs-2xs);font-family:var(--mono);letter-spacing:.3px;border:1px solid var(--i2);background:transparent;color:var(--i5);cursor:pointer;white-space:nowrap;transition:all .14s;}
+.cop-template-chip.on{background:var(--n8);border-color:var(--n8);color:#fff;}
+.cop-template-chip:hover:not(.on){background:var(--i0);border-color:var(--n3);color:var(--n7);}
+/* ── 11. Diff view on regenerate ── */
+.cop-diff-bar{display:flex;align-items:center;gap:8px;padding:var(--sp-3) var(--sp-7);background:var(--a0);border-bottom:1px solid var(--a1);font-size:var(--fs-xs);color:var(--a7);display:none;}
+.cop-diff-bar.visible{display:flex;}
+/* ── 13. Negation conflict badge ── */
+.cop-negation-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:var(--mono);letter-spacing:.4px;padding:2px 7px;border-radius:4px;background:var(--a0);border:1px solid var(--a1);color:var(--a7);margin-left:6px;cursor:help;}
+/* ── 14. Layer progress tracker ── */
+.cop-layer-progress{padding:var(--sp-4) var(--sp-6);border-bottom:1px solid var(--i1);display:none;}
+.cop-layer-progress.visible{display:block;}
+.cop-layer-progress-label{font-size:var(--fs-2xs);font-family:var(--mono);color:var(--i4);margin-bottom:6px;letter-spacing:.4px;}
+.cop-layer-steps{display:flex;gap:3px;}
+.cop-layer-step{flex:1;height:3px;border-radius:2px;background:var(--i1);transition:background .3s;}
+.cop-layer-step.done{background:var(--g5);}
+.cop-layer-step.running{background:var(--a5);animation:layerPulse .8s ease-in-out infinite;}
+@keyframes layerPulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* ── 15. Computed vs AI badge ── */
+.cop-origin-tag{font-size:8px;font-family:var(--mono);letter-spacing:.5px;text-transform:uppercase;padding:1px 5px;border-radius:3px;font-weight:600;flex-shrink:0;}
+.cop-origin-tag.computed{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
+.cop-origin-tag.ai{background:var(--p0);color:var(--p7);border:1px solid var(--p1);}
+/* ── 16. Hallucination guardrail flag ── */
+.cop-hallucination-flag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:4px;background:var(--r0);border:1px solid var(--r1);color:var(--r7);margin-top:4px;}
+/* ── 17. Resident full-panel expand ── */
+.cop-panel.expanded{position:fixed;inset:60px 0 0 0;z-index:1000;border-radius:0;box-shadow:none;overflow:hidden;display:flex;flex-direction:column;}
+.cop-panel.expanded .cop-body{flex:1;overflow-y:auto;}
+.cop-expand-btn{background:transparent;border:none;color:rgba(255,255,255,.4);cursor:pointer;padding:2px 4px;font-size:14px;transition:color .14s;margin-left:4px;}
+.cop-expand-btn:hover{color:#fff;}
+/* ── 18. Patient context card ── */
+.cop-ctx-card{padding:var(--sp-4) var(--sp-5);background:var(--i0);border-bottom:1px solid var(--i1);}
+.cop-ctx-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cop-ctx-card-pid{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--n6);letter-spacing:.5px;}
+.cop-ctx-card-dz{font-size:var(--fs-sm);font-weight:600;color:var(--i7);}
+.cop-ctx-card-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.cop-ctx-chip{font-size:var(--fs-2xs);padding:2px 7px;border-radius:99px;background:var(--wh);border:1px solid var(--i2);color:var(--i5);font-family:var(--mono);}
+.cop-ctx-chip.alert{background:var(--r0);border-color:var(--r1);color:var(--r7);}
+.cop-ctx-chip.warn{background:var(--a0);border-color:var(--a1);color:var(--a7);}
+.cop-ctx-chip.good{background:var(--g0);border-color:var(--g1);color:var(--g7);}
+/* ── 19. Document cards with preview hover ── */
+.cop-doc-card{position:relative;}
+.cop-doc-preview{position:absolute;bottom:calc(100% + 6px);left:0;right:0;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rmd);padding:8px 10px;font-size:var(--fs-2xs);color:var(--i5);line-height:1.5;box-shadow:var(--sh3);z-index:100;opacity:0;pointer-events:none;transform:translateY(4px);transition:all .16s cubic-bezier(.4,0,.2,1);}
+.cop-doc-card:hover .cop-doc-preview{opacity:1;pointer-events:auto;transform:none;}
+/* ── 20. Usage dashboard ── */
+.cop-usage-panel{padding:var(--sp-5) var(--sp-6);border-top:1px solid var(--i1);display:none;}
+.cop-usage-panel.open{display:block;}
+.cop-usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.cop-usage-stat{background:var(--i0);border:1px solid var(--i1);border-radius:var(--rmd);padding:8px 10px;text-align:center;}
+.cop-usage-stat-val{font-size:var(--fs-h2);font-weight:700;color:var(--n8);font-family:var(--mono);}
+.cop-usage-stat-lbl{font-size:var(--fs-2xs);color:var(--i4);margin-top:1px;}
+.cop-usage-conf-row{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:var(--fs-xs);color:var(--i5);}
+.cop-usage-conf-bar-wrap{flex:1;height:4px;background:var(--i1);border-radius:2px;overflow:hidden;}
+.cop-usage-conf-bar{height:100%;border-radius:2px;transition:width .4s;}
+
+/* ── ITEM 29: Print / PDF layout ───────────────────────────
+   Clinical report print mode: hides all chrome, exposes
+   cockpit content in a clean single-column A4 layout.
+   Print header injected via ::before on .cockpit-main so
+   patient ID and timestamp appear on every printed page. */
 @media print{
-  .login-view,.dashboard-view{display:none!important;}
-  .ahdr,.visit-bar,.cockpit-aside,.tl-panel,.intel,.mgrid,.lcp,.nct,.drw-ov{display:none!important;}
-  .cockpit{display:block!important;padding:0;}
-  .cockpit-main{gap:var(--sp-4);}
-  .status-zone{border-radius:8px;padding:var(--sp-8);}
-  .drw{position:static!important;transform:none!important;width:100%!important;box-shadow:none!important;border:none;}
-  .drw-hd,.drw-foot{display:none!important;}
-  .drw-body{padding:0;overflow:visible;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .login-view,.dashboard-view,.cohort-studies-view{display:none!important;}
+  .ahdr,.visit-bar,.cockpit-aside,.tl-panel,.intel,.mgrid,.lcp{display:none!important;}
+  .nct,.drw-ov,.cop-rail,.cmd-k-ov,.boot-splash,.session-menu{display:none!important;}
+  html,body{margin:0;padding:0;background:#fff!important;font-size:11pt;color:#111;}
+  .cockpit{display:block!important;padding:0;margin:0;}
+  .cockpit-main{display:block!important;padding:16pt 20pt!important;gap:0!important;}
+  .cockpit-main::before{
+    content:'AIROS Clinical Report · Patient ' attr(data-pid) ' · Printed ' attr(data-date);
+    display:block;font-size:8pt;color:#555;border-bottom:1pt solid #ccc;
+    padding-bottom:6pt;margin-bottom:14pt;font-family:monospace;
+  }
+  .status-zone{border-radius:4pt;padding:10pt;border:1pt solid #ccc;margin-bottom:10pt;break-inside:avoid;}
+  .mcard,.pcard,.ival-row,.s-row,.intel-block,.ao-cell{break-inside:avoid;margin-bottom:8pt;}
+  .drw{position:static!important;transform:none!important;width:100%!important;
+       box-shadow:none!important;border:1pt solid #ddd!important;border-radius:4pt;margin-top:10pt;}
+  .drw-hd{background:#f5f5f5!important;padding:8pt 10pt;border-bottom:1pt solid #ddd;}
+  .drw-foot{display:none!important;}
+  .drw-body{padding:10pt;overflow:visible!important;max-height:none!important;}
   .apz{break-inside:avoid;}
-  body{font-size:12px;}
+  .btn,.badge-row button{display:none!important;}
+  h1,h2,h3,.s-lbl,.mcard-lbl{font-size:10pt!important;}
+  a{color:#000;text-decoration:none;}
+  @page{size:A4;margin:18mm 14mm;}
 }
 
 /* v11: Identity & Access drawer */
@@ -1282,11 +1502,16 @@ tbody td.strong{color:var(--i7);font-weight:600;}
           <div class="cop-pulse idle" id="cop-pulse"></div>
           <span class="cop-hdr-pid" id="cop-hdr-pid"></span>
           <span class="cop-hdr-usage" id="cop-hdr-usage" title="AI calls this session"></span>
-          <span class="cop-hdr-offline" id="cop-hdr-offline" style="display:none" title="No network connection, Resident needs network access"><i class="ti ti-cloud-off"></i> Offline</span>
+          <span class="cop-hdr-offline" id="cop-hdr-offline" style="display:none" title="No network connection"><i class="ti ti-cloud-off"></i> Offline</span>
         </div>
-        <i class="ti ti-settings" id="cop-settings-btn" onclick="copToggleSettings(event)" title="Resident settings" tabindex="0" role="button" aria-label="Resident settings" style="font-size:var(--fs-xs);color:rgba(255,255,255,.4);cursor:pointer;margin-left:6px" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copToggleSettings(event)}"></i>
+        <!-- Improvement 17: expand button -->
+        <button class="cop-expand-btn" id="cop-expand-btn" onclick="toggleCopExpand()" title="Expand to full panel" aria-label="Expand Resident panel"><i class="ti ti-arrows-maximize" id="cop-expand-icon"></i></button>
+        <i class="ti ti-settings" id="cop-settings-btn" onclick="copToggleSettings(event)" title="Resident settings" tabindex="0" role="button" aria-label="Resident settings" style="font-size:var(--fs-xs);color:rgba(255,255,255,.4);cursor:pointer;margin-left:2px" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copToggleSettings(event)}"></i>
+        <!-- Improvement 20: usage dashboard trigger -->
+        <i class="ti ti-chart-bar" onclick="toggleCopUsage()" title="Session usage" style="font-size:var(--fs-xs);color:rgba(255,255,255,.3);cursor:pointer;margin-left:4px" aria-label="View session usage"></i>
         <i class="ti ti-chevron-down cop-hdr-chev open" id="cop-chev" onclick="toggleCopilot()" style="cursor:pointer"></i>
       </div>
+
       <div class="cop-settings" id="cop-settings">
         <div class="cop-set-row">
           <label class="cop-set-lbl">Default language</label>
@@ -1319,13 +1544,48 @@ tbody td.strong{color:var(--i7);font-weight:600;}
             <option value="detailed">Detailed</option>
           </select>
         </div>
+        <!-- Improvement 10: doc template selector -->
+        <div class="cop-set-row">
+          <label class="cop-set-lbl">Document template</label>
+          <select id="cop-set-template" onchange="copSaveSettings()">
+            <option value="narrative">Narrative</option>
+            <option value="soap">SOAP</option>
+            <option value="pico">PICO</option>
+            <option value="structured">Structured sections</option>
+          </select>
+        </div>
       </div>
+
       <div class="cop-body" id="cop-body">
-        <div class="cop-ctx" id="cop-ctx"></div>
-        <div class="cop-stream" id="cop-stream" role="status" aria-live="polite" aria-label="Clinical reasoning observations">
+        <!-- Improvement 18: patient context card (replaces 4-cell ctx grid) -->
+        <div class="cop-ctx-card" id="cop-ctx-card" style="display:none"></div>
+
+        <!-- Improvement 14: layer progress indicator -->
+        <div class="cop-layer-progress" id="cop-layer-progress">
+          <div class="cop-layer-progress-label" id="cop-layer-label">Analysing clinical data…</div>
+          <div class="cop-layer-steps" id="cop-layer-steps">
+            <div class="cop-layer-step" data-layer="1"></div>
+            <div class="cop-layer-step" data-layer="2"></div>
+            <div class="cop-layer-step" data-layer="3"></div>
+            <div class="cop-layer-step" data-layer="4"></div>
+            <div class="cop-layer-step" data-layer="5"></div>
+            <div class="cop-layer-step" data-layer="6"></div>
+            <div class="cop-layer-step" data-layer="7"></div>
+          </div>
+        </div>
+
+        <!-- Improvement 6: multi-turn conversation thread (replaces static stream) -->
+        <div class="cop-chat-thread" id="cop-stream" role="log" aria-live="polite" aria-label="Resident conversation">
           <div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>
         </div>
-        <!-- Memory thread toggle -->
+
+        <!-- Improvement 5: context-aware suggested prompts -->
+        <div class="cop-suggestions" id="cop-suggestions" style="display:none"></div>
+
+        <!-- Improvement 7: live voice transcript display -->
+        <div class="cop-voice-transcript" id="cop-voice-transcript" aria-live="polite"></div>
+
+        <!-- Clinical memory -->
         <div class="cop-mem" id="cop-mem">
           <div class="cop-mem-hdr">
             <i class="ti ti-git-branch" style="font-size:var(--fs-base);color:var(--i4)"></i>
@@ -1334,7 +1594,8 @@ tbody td.strong{color:var(--i7);font-weight:600;}
           </div>
           <div class="cop-mem-body" id="cop-mem-body"></div>
         </div>
-        <!-- Document output -->
+
+        <!-- Improvement 9+11: rich text document output with diff view -->
         <div class="cop-out" id="cop-out">
           <div class="cop-out-hdr">
             <i class="ti ti-file-text" style="font-size:var(--fs-base);color:var(--i4)"></i>
@@ -1342,56 +1603,88 @@ tbody td.strong{color:var(--i7);font-weight:600;}
             <div class="cop-out-draft" id="cop-out-draft">Borrador</div>
             <i class="ti ti-x cop-out-close" onclick="closeCopOut()"></i>
           </div>
+          <!-- Improvement 10: template chips -->
+          <div class="cop-template-row" id="cop-template-row" style="display:none">
+            <span style="font-size:var(--fs-2xs);color:var(--i4);margin-right:2px">Template:</span>
+            <button class="cop-template-chip on" onclick="setCopTemplate('narrative',this)">Narrative</button>
+            <button class="cop-template-chip" onclick="setCopTemplate('soap',this)">SOAP</button>
+            <button class="cop-template-chip" onclick="setCopTemplate('pico',this)">PICO</button>
+            <button class="cop-template-chip" onclick="setCopTemplate('structured',this)">Structured</button>
+          </div>
+          <!-- Improvement 11: diff bar -->
+          <div class="cop-diff-bar" id="cop-diff-bar">
+            <i class="ti ti-git-diff" style="font-size:12px"></i>
+            <span id="cop-diff-summary">Showing changes from previous draft</span>
+            <button class="btn bg btn-sm" style="margin-left:auto;padding:2px 8px" onclick="copRevertDoc()"><i class="ti ti-arrow-back-up"></i>Revert</button>
+          </div>
           <div class="cop-out-register" id="cop-out-register"></div>
-          <div class="cop-out-body" id="cop-out-body" contenteditable="true" spellcheck="false" oninput="copMarkEdited()" aria-label="Generated clinical document, editable"></div>
+          <!-- Improvement 9: rich text editable body -->
+          <div class="cop-out-body cop-out-body-rich" id="cop-out-body" contenteditable="true" spellcheck="false" oninput="copMarkEdited()" aria-label="Generated clinical document, editable"></div>
           <div class="cop-out-actions">
             <button class="btn bg btn-sm" onclick="copyCopOut()"><i class="ti ti-copy"></i>Copy</button>
             <button class="btn bg btn-sm" onclick="window.print();notify('Print to PDF via browser dialog','ok')"><i class="ti ti-file-type-pdf"></i>PDF</button>
             <button class="btn bg btn-sm" id="cop-lang-btn" onclick="toggleCopLang()"><i class="ti ti-language"></i>EN</button>
+            <!-- Improvement 12: paragraph regeneration -->
+            <button class="btn bg btn-sm" onclick="copRegenerateSection()" title="Rewrite selected paragraph"><i class="ti ti-wand"></i>Rewrite</button>
             <button class="btn bp btn-sm" id="cop-sign-btn" onclick="copSignAndFile()" style="margin-left:auto"><i class="ti ti-check"></i>Sign and file</button>
           </div>
         </div>
+
         <!-- Generate row -->
         <div class="cop-gen">
           <div class="cop-sec-lbl"><i class="ti ti-file-text"></i>Documents</div>
           <div class="cop-doc-grid">
+            <!-- Improvement 19: doc cards with hover previews -->
             <div class="cop-doc-card cop-doc-primary" onclick="copGenerate('curso')">
+              <div class="cop-doc-preview">Full clinical note: anamnesis, evolución, plan terapéutico. Auto-fills from all 7 analysis layers.</div>
               <div class="cop-doc-ico"><i class="ti ti-file-text"></i></div>
               <div class="cop-doc-tx"><div class="cop-doc-tt">Curso clínico</div><div class="cop-doc-sb">Full clinical note</div></div>
             </div>
             <div class="cop-doc-card" onclick="copGenerate('referral')">
+              <div class="cop-doc-preview">Specialist referral with clinical summary, current treatment, and reason for referral.</div>
               <div class="cop-doc-ico"><i class="ti ti-mail-forward"></i></div>
               <div class="cop-doc-tx"><div class="cop-doc-tt">Referral</div><div class="cop-doc-sb">To specialist care</div></div>
             </div>
             <div class="cop-doc-card" onclick="copGenerate('patient')">
+              <div class="cop-doc-preview">Plain-language letter for the patient: diagnosis, medications, follow-up instructions.</div>
               <div class="cop-doc-ico"><i class="ti ti-heart"></i></div>
               <div class="cop-doc-tx"><div class="cop-doc-tt">Patient letter</div><div class="cop-doc-sb">Plain language</div></div>
             </div>
             <div class="cop-doc-card" onclick="copGenerateBundle()">
+              <div class="cop-doc-preview">Generates all three documents together: curso clínico + referral + GP summary letter.</div>
               <div class="cop-doc-ico"><i class="ti ti-stack-2"></i></div>
               <div class="cop-doc-tx"><div class="cop-doc-tt">Discharge bundle</div><div class="cop-doc-sb">Curso + referral + GP</div></div>
             </div>
           </div>
 
-          <div class="cop-sec-lbl" style="margin-top:16px"><i class="ti ti-bolt"></i>Quick analysis</div>
+          <div class="cop-sec-lbl" style="margin-top:14px"><i class="ti ti-bolt"></i>Quick analysis</div>
           <div class="cop-qa-row">
             <button class="cop-qa-btn" onclick="toggleCopMem()"><i class="ti ti-git-branch"></i>Memory</button>
             <button class="cop-qa-btn" onclick="copOpenPatientChat()"><i class="ti ti-message-2"></i>Patient Q&A</button>
             <button class="cop-qa-btn" onclick="copSuggestCoding()"><i class="ti ti-receipt"></i>Suggest coding</button>
-            <button class="cop-qa-btn" onclick="copSecondOpinion()"><i class="ti ti-scale"></i>Argue the alternative</button>
+            <button class="cop-qa-btn" onclick="copSecondOpinion()"><i class="ti ti-scale"></i>Argue alternative</button>
           </div>
 
-          <div class="cop-sec-lbl" id="cop-insights-lbl" style="margin-top:16px;display:none"><i class="ti ti-calculator"></i>Computed insights<span class="cop-sec-hint">exact, not generated</span></div>
+          <div class="cop-sec-lbl" id="cop-insights-lbl" style="margin-top:14px;display:none"><i class="ti ti-calculator"></i>Computed insights<span class="cop-sec-hint">exact, not generated</span></div>
           <div id="cop-insights-rows"></div>
         </div>
-        <!-- Free query -->
+
+        <!-- Improvement 6+7: free query with live voice transcript -->
         <div class="cop-query">
           <div class="cop-query-inner">
             <i class="ti ti-airos-ai cop-query-mark"></i>
-            <input id="cop-input" placeholder="Ask Resident anything about this patient…" aria-label="Ask Resident about this patient" onkeydown="copKeydown(event)">
+            <input id="cop-input" placeholder="Ask Resident anything about this patient…" aria-label="Ask Resident about this patient" onkeydown="copKeydown(event)" oninput="copInputChanged(this.value)">
             <i class="ti ti-microphone" id="cop-mic-btn" onclick="copToggleVoice()" title="Voice input" tabindex="0" role="button" aria-label="Dictate question" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copToggleVoice()}"></i>
             <button class="cop-query-send" onclick="copSubmit()" aria-label="Send question"><i class="ti ti-arrow-right"></i></button>
           </div>
+        </div>
+
+        <!-- Improvement 20: usage dashboard -->
+        <div class="cop-usage-panel" id="cop-usage-panel">
+          <div class="cop-sec-lbl" style="margin-bottom:8px"><i class="ti ti-chart-bar"></i>Session usage</div>
+          <div class="cop-usage-grid" id="cop-usage-grid"></div>
+          <div style="font-size:var(--fs-2xs);color:var(--i4);margin-bottom:4px;font-family:var(--mono);letter-spacing:.3px">CONFIDENCE HISTORY</div>
+          <div id="cop-usage-conf"></div>
         </div>
       </div>
     </div>
@@ -3632,6 +3925,12 @@ function openDrw(type) {
 }
 
 function render() {
+  /* Item 29: set print header attrs */
+  const cm = document.getElementById('cockpit-main');
+  if (cm && typeof currentPt !== 'undefined') {
+    cm.setAttribute('data-pid', currentPt);
+    cm.setAttribute('data-date', new Date().toLocaleDateString());
+  }
   const pt = getPt();
   if (!pt) return;
   const v  = getVisit();
@@ -3808,6 +4107,7 @@ function render() {
   /* RESIDENT: refresh context strip and reload thoughts on patient/visit change */
   if (g('cop-ctx')) {
     renderCopContext();
+    renderCopSuggestions();
     renderCopInsightButtons();
     if (copAutoload) {
       loadCopThoughts();
@@ -4216,6 +4516,13 @@ function buildActionBtns() {
   const cat3 = [
     ['ti-folder-open', 'Full record',     'All data · all sections',            'full-record'],
     ['ti-download',    'Export & report', 'PDF · JSON · EHR format',            'export'],
+    ['ti-git-compare', 'Compare patients','Side-by-side view',                 'compare'],
+    ['ti-wave-sine',   'Spirometry',       'Flow-volume loop · interpretation', 'spirometry'],
+    ['ti-pill',        'Biologic score',   'Eligibility scorecard',             'biologic-score'],
+    ['ti-calculator',  'Calculators',      'BODE · mMRC · CAT · exac risk',    'calculators'],
+    ['ti-git-branch',  'PAH algorithm',    'ESC/ERS 2022 pathway',             'pah-algorithm'],
+    ['ti-chart-line',  'IPF / GAP model',  'GAP index · mortality',            'ipf-gap'],
+    ['ti-device-heart-monitor','OSA / CPAP','Adherence · residual AHI',        'osa-cpap'],
     ['ti-layout-grid', 'Cohort overview', 'All patients · triage view',         'cohort-overview'],
     ['ti-user',        'Demographics',    'Age · BMI · smoking · comorbidities','demographics'],
     ['ti-leaf',        'Environment',     'AQI · occupation · social',          'environment'],
@@ -4499,6 +4806,8 @@ function buildHeaderActions(view) {
   if (view === 'cockpit') {
     return `${search}
       <button class="btn bg btn-icon btn-sm" id="readonly-toggle" onclick="toggleReadOnly()" title="Toggle read-only review mode"><i class="ti ti-eye" id="readonly-icon"></i></button>
+      <div class="notif-bell-wrap"><button class="btn bg btn-icon btn-sm" onclick="toggleNotifCentre()" aria-label="Notifications" title="Notifications"><i class="ti ti-bell"></i></button><span class="notif-badge" id="nc-badge-cockpit">0</span></div>
+      <button class="btn bg btn-icon btn-sm" onclick="toggleSettingsPanel()" title="Platform settings"><i class="ti ti-adjustments-horizontal"></i></button>
       <button class="btn bg btn-sm" onclick="openDrw('export')" aria-label="Export"><i class="ti ti-download"></i><span class="btn-label">Export</span></button>
       <button class="btn bp btn-sm" id="run-btn" onclick="openDrw('analysis')" aria-label="Run analysis"><i class="ti ti-player-play"></i><span class="btn-label">Run analysis</span></button>
       <div class="hdv"></div>
@@ -4552,6 +4861,7 @@ function selectLoginRole(key) {
 }
 const COP_ROLE_DEFAULT_REGISTER = { clinician:'curso', admin:'gp', integration:'gp', auditor:'curso' };
 function doLogin() {
+  resetSessionTimer();
   currentUserRole = loginSelectedRole;
   copRegister = copLearnedDefault(currentUserRole) || COP_ROLE_DEFAULT_REGISTER[currentUserRole] || 'curso';
   showView('dashboard');
@@ -5084,7 +5394,14 @@ function _baseOpenDrw(type) {
     'demographics':{ ey:'Demographics',          tt:'Demographics & comorbidities', sb:'Age · BMI · smoking · comorbidities', save:true },
     'environment': { ey:'Environment',           tt:'Environment & lifestyle', sb:'Air quality · occupation · social factors', save:true },
     'cohort-overview':{ ey:'Cohort',             tt:'Cohort overview',        sb:'All patients · triage view', save:false },
-    'identity-access':{ ey:'Identity & access',  tt:'Identity & access',      sb:'RBAC · ABAC · resolution requests · audit · consent', save:false }
+    'identity-access':{ ey:'Identity & access',  tt:'Identity & access',      sb:'RBAC · ABAC · resolution requests · audit · consent', save:false },
+    'compare':        { ey:'Patient comparison',  tt:'Side-by-side comparison', sb:'Select two patients to compare', save:false },
+    'spirometry':     { ey:'Spirometry',           tt:'Flow-volume & FEV₁ curve',sb:'Visual spirometry · F/V loop · interpretation', save:false },
+    'biologic-score': { ey:'Biologic eligibility', tt:'Biologic scoring',        sb:'Agent-specific eligibility scorecard', save:false },
+    'calculators':    { ey:'Calculators',          tt:'Clinical calculators',    sb:'BODE · mMRC · CAT · exacerbation risk', save:false },
+    'pah-algorithm':  { ey:'PAH algorithm',        tt:'Treatment pathway',       sb:'ESC/ERS 2022 risk-guided algorithm', save:false },
+    'ipf-gap':        { ey:'IPF / GAP model',      tt:'GAP index progression',  sb:'1- and 3-year mortality estimation', save:false },
+    'osa-cpap':       { ey:'OSA / CPAP',           tt:'CPAP adherence tracker', sb:'AHI · adherence · residual events', save:false }
   };
 
   const cfg = cfgs[type] || { ey:'AIROS', tt:type, sb:'', save:true };
@@ -5507,7 +5824,14 @@ function buildDrwContent(type) {
     'demographics':  bDemographics,
     'environment':   bEnvironment,
     'cohort-overview':bCohortOverview,
-    'identity-access':bIdentityAccess
+    'identity-access':bIdentityAccess,
+    'compare':        bCompare,
+    'spirometry':     bSpirometry,
+    'biologic-score': bBiologicScore,
+    'calculators':    bCalculators,
+    'pah-algorithm':  bPahAlgorithm,
+    'ipf-gap':        bIpfGap,
+    'osa-cpap':       bOsaCpap
   };
   return (B[type]||(() => '<p class="muted" style="padding:20px 0">Coming soon.</p>'))();
 }
@@ -7883,6 +8207,7 @@ function previewEHRExport() {
    NOTIFICATIONS
 ═══════════════════════════════════════════════════════════════════ */
 function notify(msg, type='info', action=null) {
+  try { pushToNotifCentre(msg, type); } catch(e) {}
   const icons = { ok:'ti-circle-check', warn:'ti-alert-triangle', err:'ti-circle-x', info:'ti-info-circle' };
   const ct = g('nct');
   const n  = document.createElement('div');
@@ -7901,6 +8226,136 @@ function notify(msg, type='info', action=null) {
 
 /* Util */
 const g = id => document.getElementById(id);
+
+/* ── ITEM 31: Notification history log ─────────────────────*/
+const notifLog = [];
+let notifUnread = 0;
+
+function pushToNotifCentre(msg, type) {
+  notifLog.unshift({ msg, type, time: new Date() });
+  if (notifLog.length > 60) notifLog.pop();
+  notifUnread++;
+  const badge = document.getElementById('nc-badge');
+  if (badge) { badge.textContent = notifUnread > 9 ? '9+' : notifUnread; badge.classList.add('visible'); }
+  const body = document.getElementById('nc-body');
+  const empty = document.getElementById('nc-empty');
+  if (body && empty) {
+    empty.style.display = 'none';
+    const item = document.createElement('div');
+    item.className = `nc-item ${type}`;
+    const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    item.innerHTML = `<div class="nc-dot"></div><div><div class="nc-msg">${msg}</div><div class="nc-time">${timeStr}</div></div>`;
+    body.insertBefore(item, body.firstChild);
+  }
+}
+
+function toggleNotifCentre() {
+  const c = document.getElementById('notif-centre');
+  const sp = document.getElementById('settings-panel');
+  if (sp) sp.classList.remove('open');
+  if (c) { c.classList.toggle('open'); if (c.classList.contains('open')) { notifUnread=0; const b=document.getElementById('nc-badge'); if(b){b.classList.remove('visible');b.textContent='0';} } }
+}
+
+function clearNotifCentre() {
+  notifLog.length = 0;
+  const body = document.getElementById('nc-body');
+  const empty = document.getElementById('nc-empty');
+  if (body) { body.innerHTML = ''; body.appendChild(empty); empty.style.display = ''; }
+  notifUnread = 0;
+  const b = document.getElementById('nc-badge'); if(b){b.classList.remove('visible');b.textContent='0';}
+}
+
+
+/* ── ITEM 32: Keyboard navigation for overlays ─────────────*/
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const nc = document.getElementById('notif-centre');
+    const sp = document.getElementById('settings-panel');
+    if (nc && nc.classList.contains('open')) { nc.classList.remove('open'); return; }
+    if (sp && sp.classList.contains('open')) { sp.classList.remove('open'); return; }
+    if (typeof closeDrw === 'function') closeDrw();
+  }
+});
+
+/* ── ITEM 30: Dark mode toggle ──────────────────────────────*/
+let _darkMode = window.matchMedia('(prefers-color-scheme:dark)').matches;
+function toggleDarkMode(on) {
+  _darkMode = on !== undefined ? on : !_darkMode;
+  document.documentElement.classList.toggle('dark-mode', _darkMode);
+  const chk = document.getElementById('sp-dark');
+  if (chk) chk.checked = _darkMode;
+  try { localStorage.setItem('airos-dark', _darkMode ? '1' : '0'); } catch(e) {}
+}
+// Restore on load
+try { const saved = localStorage.getItem('airos-dark'); if (saved !== null) toggleDarkMode(saved==='1'); } catch(e) {}
+
+/* ── ITEM 34: Session timeout ───────────────────────────────*/
+let _sessionTimeoutSec = 600;
+let _sessionTimeoutId = null;
+let _sessionWarnId = null;
+
+function resetSessionTimer() {
+  clearTimeout(_sessionTimeoutId);
+  clearTimeout(_sessionWarnId);
+  const bar = document.getElementById('session-timeout-bar');
+  if (bar) bar.classList.remove('visible');
+  if (_sessionTimeoutSec === 0) return;
+  const warnAt = Math.max(_sessionTimeoutSec - 60, 30);
+  _sessionWarnId = setTimeout(() => {
+    const bar2 = document.getElementById('session-timeout-bar');
+    if (bar2 && typeof appView !== 'undefined' && appView !== 'login') {
+      bar2.classList.add('visible');
+      startCountdown(60);
+    }
+  }, warnAt * 1000);
+  _sessionTimeoutId = setTimeout(() => {
+    if (typeof appView !== 'undefined' && appView !== 'login') {
+      notify('Session expired. Please sign in again.', 'warn');
+      setTimeout(() => { if (typeof showView === 'function') showView('login'); }, 1500);
+    }
+  }, _sessionTimeoutSec * 1000);
+}
+
+function startCountdown(secs) {
+  let s = secs;
+  const el = document.getElementById('session-countdown');
+  const tick = () => {
+    if (!el) return;
+    const m = Math.floor(s/60), ss = s%60;
+    el.textContent = `${m}:${ss.toString().padStart(2,'0')}`;
+    if (s > 0) { s--; setTimeout(tick, 1000); }
+  };
+  tick();
+}
+
+function setSessionTimeout(val) {
+  _sessionTimeoutSec = parseInt(val) || 0;
+  resetSessionTimer();
+  notify(`Session timeout set to ${val==='0'?'never':(val/60)+' min'}`, 'ok');
+}
+
+// Reset timer on user activity
+['click','keydown','mousemove','touchstart'].forEach(ev =>
+  document.addEventListener(ev, resetSessionTimer, { passive:true })
+);
+
+/* ── ITEM 38: Settings panel toggle ────────────────────────*/
+function toggleSettingsPanel() {
+  const p = document.getElementById('settings-panel');
+  const nc = document.getElementById('notif-centre');
+  if (nc) nc.classList.remove('open');
+  if (p) p.classList.toggle('open');
+}
+function toggleCompact(on) {
+  document.body.classList.toggle('compact', on);
+  notify(`Compact layout ${on?'on':'off'}`, 'ok');
+}
+function copSetLang(lang) {
+  if (typeof copSaveSettings === 'function') copSaveSettings();
+  notify(`UI language: ${lang}`, 'ok');
+}
+
+
 
 /* ── Global error boundary (item 6/21) ──────────────────────
    Catches unhandled exceptions platform-wide. Shows one calm toast
@@ -8149,46 +8604,52 @@ function renderCopInsightButtons() {
 }
 
 function renderCopContext() {
-  if (!g('cop-ctx')) return;
+  /* Improvement 18: rich patient context card */
+  const card = g('cop-ctx-card');
+  if (!card) return;
   const ctx = buildCopContext();
   const pt = getPt(), v = getVisit();
-  const ac = ctx.adherence >= 80 ? 'g' : ctx.adherence >= 60 ? 'a' : (ctx.adherence==='N/A' ? '' : 'r');
-  if (pt.disease === 'IPF') {
-    const fvcC = v.fvc < 50 ? 'r' : v.fvc < 80 ? 'a' : 'g';
-    const dlcoC = (v.dlco??100) <= 35 ? 'r' : (v.dlco??100) <= 55 ? 'a' : 'g';
-    g('cop-ctx').innerHTML = `
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${fvcC}">${v.fvc}%</div><div class="cop-ctx-lbl">FVC</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${dlcoC}">${v.dlco??'N/A'}${v.dlco!=null?'%':''}</div><div class="cop-ctx-lbl">DLCO</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val">${v.sixMWD??'N/A'}${v.sixMWD!=null?'m':''}</div><div class="cop-ctx-lbl">6MWD</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${ac}">${ctx.adherence}${ctx.adherence!=='N/A'?'%':''}</div><div class="cop-ctx-lbl">Adherence</div></div>`;
-  } else if (pt.disease === 'OSA') {
-    const ahiC = v.ahi >= 30 ? 'r' : v.ahi >= 15 ? 'a' : 'g';
-    const odiC = v.odi >= 30 ? 'r' : v.odi >= 15 ? 'a' : 'g';
-    g('cop-ctx').innerHTML = `
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${ahiC}">${v.ahi}</div><div class="cop-ctx-lbl">AHI /hr</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${odiC}">${v.odi}</div><div class="cop-ctx-lbl">ODI /hr</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${ac}">${ctx.adherence}${ctx.adherence!=='N/A'?'%':''}</div><div class="cop-ctx-lbl">CPAP adherence</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val">${pt.demographics.bmi}</div><div class="cop-ctx-lbl">BMI</div></div>`;
-  } else if (pt.disease === 'PAH') {
-    const fcC = v.whoFc >= 4 ? 'r' : v.whoFc === 3 ? 'a' : 'g';
-    const plateletC = (v.platelets!=null && v.platelets<50) ? 'r' : 'g';
-    g('cop-ctx').innerHTML = `
-      <div class="cop-ctx-cell"><div class="cop-ctx-val">${v.mpap}</div><div class="cop-ctx-lbl">mPAP mmHg</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${fcC}">FC ${v.whoFc}</div><div class="cop-ctx-lbl">WHO class</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val">${v.ntprobnp??'N/A'}</div><div class="cop-ctx-lbl">NT-proBNP</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${plateletC}">${v.platelets??'N/A'}${v.platelets!=null?'k':''}</div><div class="cop-ctx-lbl">Platelets</div></div>`;
-  } else {
-    const fc = ctx.fev1 < 50 ? 'r' : ctx.fev1 < 70 ? 'a' : 'g';
-    const ec = ctx.eos >= 300 ? 'g' : ctx.eos >= 200 ? 'a' : '';
-    const xc = ctx.exac >= 2 || ctx.hosp >= 1 ? 'r' : ctx.exac >= 1 ? 'a' : 'g';
-    g('cop-ctx').innerHTML = `
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${fc}">${ctx.fev1}%</div><div class="cop-ctx-lbl">FEV₁</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${ec}">${ctx.eos}</div><div class="cop-ctx-lbl">Eos c/µL</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${xc}">${ctx.exac}+${ctx.hosp}h</div><div class="cop-ctx-lbl">Exac+hosp</div></div>
-      <div class="cop-ctx-cell"><div class="cop-ctx-val ${ac}">${ctx.adherence}%</div><div class="cop-ctx-lbl">Adherence</div></div>`;
+  if (!pt) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  // Build status chips based on disease
+  const d = pt.disease;
+  let chips = [];
+  if (d === 'COPD' || d === 'ACO' || d === 'Chronic Bronchitis') {
+    const fev1c = v.fev1 < 50 ? 'alert' : v.fev1 < 80 ? 'warn' : 'good';
+    chips.push(`<span class="cop-ctx-chip ${fev1c}">FEV₁ ${v.fev1}%</span>`);
+    if (v.cat !== undefined) { const catc = v.cat > 20 ? 'alert' : v.cat > 10 ? 'warn' : 'good'; chips.push(`<span class="cop-ctx-chip ${catc}">CAT ${v.cat}</span>`); }
+    if (v.eos >= 300) chips.push('<span class="cop-ctx-chip warn">Eos ≥300</span>');
+    if (v.exac > 0) chips.push(`<span class="cop-ctx-chip alert">${v.exac} exac/yr</span>`);
+  } else if (d === 'Asthma') {
+    const actc = (v.act||0) <= 15 ? 'alert' : (v.act||0) <= 19 ? 'warn' : 'good';
+    chips.push(`<span class="cop-ctx-chip ${actc}">ACT ${v.act||'–'}</span>`);
+    if (v.eos >= 300) chips.push('<span class="cop-ctx-chip warn">Eos ≥300</span>');
+    chips.push(`<span class="cop-ctx-chip">FEV₁ ${v.fev1}%</span>`);
+  } else if (d === 'IPF') {
+    const fvcc = v.fvc < 50 ? 'alert' : v.fvc < 80 ? 'warn' : 'good';
+    chips.push(`<span class="cop-ctx-chip ${fvcc}">FVC ${v.fvc}%</span>`);
+    if (v.dlco) { const dlcoc = v.dlco <= 35 ? 'alert' : v.dlco <= 55 ? 'warn' : 'good'; chips.push(`<span class="cop-ctx-chip ${dlcoc}">DLCO ${v.dlco}%</span>`); }
+  } else if (d === 'OSA') {
+    const ahic = v.ahi >= 30 ? 'alert' : v.ahi >= 15 ? 'warn' : 'good';
+    chips.push(`<span class="cop-ctx-chip ${ahic}">AHI ${v.ahi}/hr</span>`);
+    if (v.adherence !== undefined) { const adc = v.adherence >= 70 ? 'good' : 'warn'; chips.push(`<span class="cop-ctx-chip ${adc}">${v.adherence}% adherence</span>`); }
+  } else if (d === 'PAH') {
+    const mpapc = v.mpap > 40 ? 'alert' : v.mpap > 25 ? 'warn' : 'good';
+    chips.push(`<span class="cop-ctx-chip ${mpapc}">mPAP ${v.mpap}mmHg</span>`);
+    chips.push(`<span class="cop-ctx-chip">FC ${v.whoFc}</span>`);
   }
-  g('cop-hdr-pid').textContent = `${pidPrefix(currentPt)}${currentPt}`;
+  if ((v.adherence ?? 100) < 60) chips.push('<span class="cop-ctx-chip alert">Poor adherence</span>');
+  card.innerHTML = `
+    <div class="cop-ctx-card-hdr">
+      <div>
+        <div class="cop-ctx-card-pid">${pidPrefix(currentPt)}${currentPt}</div>
+        <div class="cop-ctx-card-dz">${pt.demographics.age}y · ${pt.demographics.sex} · ${d}</div>
+      </div>
+      <span class="cop-origin-tag computed">Visit ${v.n}/${pt.visits.length}</span>
+    </div>
+    <div class="cop-ctx-card-meta">${chips.join('')}</div>`;
 }
+
 
 function buildThoughtPrompt(ctx) {
   const clinicalLines = ctx.disease === 'IPF'
@@ -8320,18 +8781,65 @@ function findNegationConflicts(detected, sourceText) {
 let copCallCount  = 0;
 let copTokenEst   = 0;
 
-async function callCopAPI(prompt, maxTok) {
+/* Improvement 1: streaming token-by-token API with optional onChunk callback */
+async function callCopAPI(prompt, maxTok, onChunk) {
+  const messages = Array.isArray(prompt)
+    ? prompt
+    : [{ role: 'user', content: prompt }];
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:maxTok||1000, messages:[{role:'user',content:prompt}] })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTok || 1000,
+      stream: !!onChunk,
+      messages
+    })
   });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data.error?.message||`HTTP ${resp.status}`);
+  if (!onChunk) {
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error?.message || `HTTP ${resp.status}`);
+    copCallCount += 1;
+    copTokenEst += (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0);
+    updateCopUsageBadge();
+    return data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+  }
+  // Streaming mode
+  if (!resp.ok) {
+    const data = await resp.json();
+    throw new Error(data.error?.message || `HTTP ${resp.status}`);
+  }
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let fullText = '';
+  let inputTok = 0, outputTok = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    for (const line of chunk.split('\n')) {
+      if (!line.startsWith('data: ')) continue;
+      const raw = line.slice(6).trim();
+      if (raw === '[DONE]') break;
+      try {
+        const ev = JSON.parse(raw);
+        if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+          fullText += ev.delta.text;
+          onChunk(ev.delta.text, fullText);
+        }
+        if (ev.type === 'message_delta' && ev.usage) {
+          outputTok = ev.usage.output_tokens || 0;
+        }
+        if (ev.type === 'message_start' && ev.message?.usage) {
+          inputTok = ev.message.usage.input_tokens || 0;
+        }
+      } catch(e) {}
+    }
+  }
   copCallCount += 1;
-  copTokenEst  += (data.usage?.input_tokens||0) + (data.usage?.output_tokens||0);
+  copTokenEst += inputTok + outputTok;
   updateCopUsageBadge();
-  return data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+  return fullText;
 }
 
 function updateCopUsageBadge() {
@@ -8402,34 +8910,101 @@ function copDismissThought(btn, tag, confidence) {
   notify('Observation dismissed.', 'info', { id:`undo-${Date.now()}`, label:'Undo', onClick: () => copUndoDismiss(pidAtDismiss, tag) });
   if (card) { card.style.transition = 'opacity .15s'; card.style.opacity = '0'; setTimeout(()=>card.remove(), 150); }
 }
+/* Improvements 1,2,3,13,15,16: rich thought cards with streaming, confidence meter,
+   source citation pills, negation badges, computed/AI tags, hallucination flags */
+const COP_CONF_COLOR = { high: 'var(--g5)', moderate: 'var(--a5)', inference: 'var(--r5)' };
+const COP_CONF_PCT   = { high: 100, moderate: 66, inference: 33 };
+const COP_CONF_LABEL = { high: 'Data-supported', moderate: 'Clinical inference', inference: 'Pattern — verify' };
+const COP_TYPE_CLASS = { now:'cop-now', carry:'cop-carry', action:'cop-action', warn:'cop-warn' };
+const GUIDELINE_SOURCES = ['GOLD','GINA','ESC','ERS','ATS','ERS/ATS','STELLAR'];
+
+function classifySource(src) {
+  if (!src) return 'ai';
+  if (GUIDELINE_SOURCES.some(g => src.includes(g))) return 'guideline';
+  if (src.toLowerCase().includes('computed') || src.toLowerCase().includes('engine') || src.toLowerCase().includes('classification')) return 'computed';
+  if (src.toLowerCase().includes('visit') || src.toLowerCase().includes('patient data') || src.toLowerCase().includes('record')) return 'patient-data';
+  return 'ai';
+}
+
+function sourcePillLabel(type) {
+  return { guideline:'Guideline', computed:'Computed', 'patient-data':'Patient data', ai:'AI-generated' }[type] || 'AI-generated';
+}
+
+function sourcePillIcon(type) {
+  return { guideline:'ti-book', computed:'ti-cpu', 'patient-data':'ti-user', ai:'ti-airos-ai' }[type] || 'ti-airos-ai';
+}
+
+function buildThoughtCardHTML(t) {
+  const drw = copSourceDrawer(t.source || '');
+  const srcType = classifySource(t.source);
+  const confColor = COP_CONF_COLOR[t.confidence] || COP_CONF_COLOR.moderate;
+  const confPct   = COP_CONF_PCT[t.confidence]   || 66;
+  const confLabel = COP_CONF_LABEL[t.confidence] || COP_CONF_LABEL.moderate;
+  const originTag = srcType === 'computed'
+    ? '<span class="cop-origin-tag computed">Computed</span>'
+    : srcType === 'guideline'
+    ? '<span class="cop-origin-tag ai">Guideline</span>'
+    : '<span class="cop-origin-tag ai">AI</span>';
+  // Improvement 16: hallucination flag if AI-generated and not referencing patient data
+  const halluFlag = (srcType === 'ai' && t.confidence === 'inference')
+    ? '<span class="cop-hallucination-flag"><i class="ti ti-alert-triangle" style="font-size:9px"></i>Verify against record</span>'
+    : '';
+  // Improvement 13: negation badge from negation detection
+  const negBadge = t.negations && t.negations.length
+    ? `<span class="cop-negation-badge" title="NLP detected negated terms: ${t.negations.join(', ')}"><i class="ti ti-alert-circle" style="font-size:9px"></i>Negation: ${t.negations.slice(0,2).join(', ')}</span>`
+    : '';
+  const srcClickAttr = drw ? `onclick="openDrw('${drw}')" style="cursor:pointer" title="Open ${drw.replace(/-/g,' ')}"` : '';
+  return `
+    <div class="cop-thread-msg ai" data-tag="${t.tag}">
+      <div class="cop-thread-avatar ai"><i class="ti ti-airos-ai" style="font-size:9px"></i></div>
+      <div style="flex:1;min-width:0">
+        <div class="cop-thought ${COP_TYPE_CLASS[t.type]||'cop-carry'}" style="margin-bottom:0">
+          <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:5px">
+            <div style="flex:1;min-width:0">
+              <div class="cop-thought-tag" style="display:inline">${t.tag}</div>
+              ${negBadge}
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+              ${originTag}
+              <!-- Improvement 2: confidence meter bar -->
+              <div class="cop-conf-meter" title="${confLabel}">
+                <div class="cop-conf-wrap"><div class="cop-conf-bar" style="width:${confPct}%;background:${confColor}"></div></div>
+                <span class="cop-conf-label" style="color:${confColor}">${t.confidence||'mod'}</span>
+              </div>
+              <i class="ti ti-x" style="font-size:var(--fs-xs);color:var(--i3);cursor:pointer" title="Dismiss" onclick="copDismissThought(this,${JSON.stringify(t.tag)},${JSON.stringify(t.confidence||'moderate')})"></i>
+            </div>
+          </div>
+          <div class="cop-thought-body">${copLinkGuidelines(t.body)}</div>
+          ${halluFlag}
+          <!-- Improvement 3: source citation pill -->
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+            <span class="cop-source-pill ${srcType}" ${srcClickAttr}>
+              <i class="ti ${sourcePillIcon(srcType)}" style="font-size:8px"></i>${sourcePillLabel(srcType)}: ${t.source||'Resident'}${drw ? ' →' : ''}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderThoughts(thoughts) {
   copLastThoughts[currentPt] = thoughts;
-  const tc = {now:'cop-now',carry:'cop-carry',action:'cop-action',warn:'cop-warn'};
-  const confDots = {high:3, moderate:2, inference:1};
-  const confLabel = {high:'Directly supported by data', moderate:'Reasonable clinical inference', inference:'Pattern inference, verify clinically'};
   const dismissed = copDismissed[currentPt] || new Set();
   const visible = thoughts.filter(t => !dismissed.has(t.tag));
   thoughts.forEach(t => copTrackConfidenceOutcome(t.confidence, false));
+  const stream = g('cop-stream');
+  if (!stream) return;
+  // Preserve any existing user bubbles in multi-turn thread
+  const existingUserBubbles = stream.querySelectorAll('.cop-thread-msg.user');
+  const userHTML = Array.from(existingUserBubbles).map(b => b.outerHTML).join('');
   if (!visible.length) {
-    g('cop-stream').innerHTML = `<div class="cop-thought cop-carry"><div class="cop-thought-tag">Status</div><div class="cop-thought-body">All observations dismissed for this visit.</div></div>`;
+    stream.innerHTML = userHTML + `<div class="cop-thread-msg ai"><div class="cop-thread-avatar ai"><i class="ti ti-airos-ai" style="font-size:9px"></i></div><div class="cop-thought cop-carry" style="flex:1"><div class="cop-thought-tag">Status</div><div class="cop-thought-body">All observations dismissed for this visit.</div></div></div>`;
     return;
   }
-  g('cop-stream').innerHTML = visible.map(t=>{
-    const drw = copSourceDrawer(t.source||'');
-    const srcAttr = drw ? `onclick="openDrw('${drw}')" style="cursor:pointer" title="Open ${drw.replace('-',' ')}"` : '';
-    const conf = confDots[t.confidence] || 2;
-    const confDotsHtml = [1,2,3].map(i=>`<span class="cop-conf-dot${i<=conf?' on':''}"></span>`).join('');
-    return `
-    <div class="cop-thought ${tc[t.type]||'cop-carry'}">
-      <div style="display:flex;align-items:flex-start;gap:6px">
-        <div class="cop-thought-tag" style="flex:1">${t.tag}</div>
-        <span class="cop-conf" title="${confLabel[t.confidence]||confLabel.moderate}">${confDotsHtml}</span>
-        <i class="ti ti-x" style="font-size:var(--fs-xs);color:var(--i3);cursor:pointer;flex-shrink:0" title="Dismiss" tabindex="0" role="button" aria-label="Dismiss this observation" onclick="copDismissThought(this,${JSON.stringify(t.tag)},${JSON.stringify(t.confidence)})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copDismissThought(this,${JSON.stringify(t.tag)},${JSON.stringify(t.confidence)})}"></i>
-      </div>
-      <div class="cop-thought-body">${copLinkGuidelines(t.body)}</div>
-      <div class="cop-thought-src" ${srcAttr}>${t.source}${drw?' <i class="ti ti-arrow-right" style="font-size:var(--fs-micro)"></i>':''}</div>
-    </div>`;
-  }).join('');
+  stream.innerHTML = userHTML + visible.map(t => buildThoughtCardHTML(t)).join('');
+  stream.scrollTop = stream.scrollHeight;
+  // Improvement 5: update context-aware suggestions after thoughts render
+  renderCopSuggestions();
 }
 
 let copThoughtDebounce = null;
@@ -8467,6 +9042,51 @@ function copLearnedDefault(role) {
   return bestN >= 2 ? best : null;   // only override once a real pattern emerges, not on a single click
 }
 
+/* Improvements 1,9,11,14,15: streaming generation, rich text, template, diff, origin tags */
+let copDocTemplate = 'narrative';
+let copPreviousDoc = '';
+function setCopTemplate(tpl, btn) {
+  copDocTemplate = tpl;
+  document.querySelectorAll('.cop-template-chip').forEach(c => c.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+}
+
+function markdownToHtml(text) {
+  // Convert simple markdown to rich HTML for cop-out-body
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    .replace(/\[([A-Z][A-Z\/&\s]+)\]/g, '<span class="section-label">$1</span>')
+    .replace(/[\n]{2,}/g, '</p><p>')
+    .replace(/[\n]/g, '<br>')
+    .replace(/^(.+)$/, '<p>$1</p>');
+}
+
+function showDiffBar(prevDoc, newDoc) {
+  const bar = g('cop-diff-bar');
+  if (!bar || !prevDoc) return;
+  const prevWords = prevDoc.split(/\s+/).length;
+  const newWords  = newDoc.split(/\s+/).length;
+  const delta = newWords - prevWords;
+  g('cop-diff-summary').textContent = delta >= 0
+    ? `Regenerated — ${delta} words added vs previous draft`
+    : `Regenerated — ${Math.abs(delta)} words removed vs previous draft`;
+  bar.classList.add('visible');
+}
+
+function copRevertDoc() {
+  if (!copPreviousDoc) return;
+  const body = g('cop-out-body');
+  if (body) body.innerHTML = markdownToHtml(copPreviousDoc);
+  g('cop-diff-bar')?.classList.remove('visible');
+  copLastDoc = copPreviousDoc;
+  notify('Reverted to previous draft.', 'ok');
+}
+
 async function copGenerate(docType, register, lang) {
   register = register || docType;
   lang     = lang     || copLang;
@@ -8474,29 +9094,93 @@ async function copGenerate(docType, register, lang) {
   if (!perms.resolve || readOnlyMode) {
     openCopOut('Access restricted');
     g('cop-out-register').innerHTML = '';
-    g('cop-out-body').textContent = readOnlyMode
-      ? 'Document generation is disabled while review mode is active. Turn off review mode to draft clinical documents.'
-      : `${RBAC_ROLES[currentUserRole].label} access is read-only for clinical document generation.`;
+    g('cop-out-body').innerHTML = readOnlyMode
+      ? '<p>Document generation is disabled while review mode is active.</p>'
+      : `<p>${RBAC_ROLES[currentUserRole].label} access is read-only for clinical document generation.</p>`;
     return;
   }
   copTrackRegisterUse(currentUserRole, register);
   const ctx = buildCopContext();
-  const titles = {curso:'Curso clinico',referral:'Referral letter',gp:'GP summary',patient:'Patient letter'};
-  openCopOut(titles[docType]||'Clinical document');
-  g('cop-out-body').innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
-  const regs = [['curso','Curso clinico'],['referral','Referral'],['gp','GP summary'],['patient','Patient letter']];
+  const titles = {curso:'Curso clínico',referral:'Referral letter',gp:'GP summary',patient:'Patient letter'};
+  openCopOut(titles[docType] || 'Clinical document');
+  // Show template row
+  const tplRow = g('cop-template-row');
+  if (tplRow) tplRow.style.display = '';
+  // Diff bar — store previous doc
+  const prevDoc = copLastDoc || '';
+  copPreviousDoc = prevDoc;
+  g('cop-diff-bar')?.classList.remove('visible');
+  // Register chips
+  const regs = [['curso','Curso clínico'],['referral','Referral'],['gp','GP summary'],['patient','Patient letter']];
   g('cop-out-register').innerHTML = regs.map(([k,l])=>
     `<div class="cop-reg-chip${register===k?' on':''}" onclick="copGenerate('${k}','${k}','${lang}')">${l}</div>`
   ).join('');
-  setPulse('thinking', 'Drafting document...');
+  // Improvement 14: show layer progress
+  showLayerProgress(true);
+  const body = g('cop-out-body');
+  body.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
+  setPulse('thinking', 'Drafting document…');
+  // Improvement 10: inject template instruction
+  const tplInstructions = {
+    narrative: 'Write as flowing clinical narrative prose.',
+    soap: 'Structure as SOAP note: [SUBJECTIVE], [OBJECTIVE], [ASSESSMENT], [PLAN] sections.',
+    pico: 'Structure as PICO: [PATIENT/PROBLEM], [INTERVENTION], [COMPARISON], [OUTCOME].',
+    structured: 'Use clear section headers: [DIAGNOSIS], [CURRENT TREATMENT], [CLINICAL STATUS], [PLAN], [FOLLOW-UP].'
+  };
+  const templateHint = tplInstructions[copDocTemplate] || tplInstructions.narrative;
   try {
-    const text = await callCopAPI(buildDocPrompt(ctx, docType, register, lang), copScaleTok(700));
-    copLastDoc = text; copRegister = register;
-    g('cop-out-body').textContent = text;
-    g('cop-lang-btn').textContent = lang==='es' ? 'EN' : 'ES';
+    let accumulated = '';
+    const text = await callCopAPI(
+      buildDocPrompt(ctx, docType, register, lang) + `\n\n${templateHint}\nUse **bold** for key clinical terms and section headers. Use bullet points where appropriate.`,
+      copScaleTok(700),
+      (chunk, full) => {
+        accumulated = full;
+        // Improvement 1: stream into rich body
+        if (body) body.innerHTML = '<div class="cop-loading-dots" style="margin-bottom:8px"><span></span><span></span><span></span></div>' + markdownToHtml(full);
+      }
+    );
+    copLastDoc = text;
+    copRegister = register;
+    // Improvement 9: render final rich text
+    body.innerHTML = markdownToHtml(text);
+    // Improvement 11: show diff bar if regenerated
+    if (prevDoc) showDiffBar(prevDoc, text);
+    // Improvement 15: source tag footer
+    body.insertAdjacentHTML('beforeend', '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--i1);display:flex;gap:6px;flex-wrap:wrap"><span class="cop-origin-tag ai">AI-generated</span><span class="cop-origin-tag computed">Patient data from record</span></div>');
+    g('cop-lang-btn').textContent = lang === 'es' ? 'EN' : 'ES';
+    showLayerProgress(false);
     logIdentityEvent({ action:'document_drafted', patient:currentPt, purpose:docType, path:'resident', mfa:'n/a', breakGlass:false });
   } catch(e) {
-    g('cop-out-body').textContent = copApiErrorMessage(e);
+    body.innerHTML = `<p style="color:var(--r5)">${copApiErrorMessage(e)}</p>`;
+    showLayerProgress(false);
+  }
+  setPulse('');
+}
+
+/* Improvement 12: rewrite selected paragraph */
+async function copRegenerateSection() {
+  const body = g('cop-out-body');
+  if (!body) return;
+  const sel = window.getSelection();
+  const selText = sel && sel.toString().trim();
+  if (!selText || selText.length < 10) {
+    notify('Select a paragraph to rewrite first.', 'info');
+    return;
+  }
+  setPulse('thinking', 'Rewriting section…');
+  const ctx = buildCopContext();
+  try {
+    const newText = await callCopAPI(
+      `You are AIROS. Rewrite only this clinical text section for patient ${pidPrefix(ctx.id)}${ctx.id} (${ctx.disease}). Keep same clinical meaning, improve clarity, remove em-dashes.\n\nOriginal: "${selText}"\n\nRewritten version only, no explanation:`,
+      copScaleTok(200)
+    );
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    const node = document.createTextNode(newText.trim());
+    range.insertNode(node);
+    notify('Section rewritten.', 'ok');
+  } catch(e) {
+    notify(copApiErrorMessage(e), 'err');
   }
   setPulse('');
 }
@@ -8708,6 +9392,7 @@ Explain in 2-3 plain sentences what this specific chart pattern indicates clinic
   setPulse('');
 }
 
+/* Improvement 6: multi-turn conversation thread with streaming responses */
 async function copSubmit() {
   const input = g('cop-input');
   const q = input.value.trim();
@@ -8715,39 +9400,59 @@ async function copSubmit() {
   const perms = RBAC_PERMS[currentUserRole];
   if (!perms.resolve || readOnlyMode) {
     input.value = '';
-    openCopOut('Access restricted');
-    g('cop-out-register').innerHTML = '';
-    g('cop-out-body').textContent = readOnlyMode
-      ? 'Clinical queries are disabled while review mode is active.'
-      : `${RBAC_ROLES[currentUserRole].label} access is read-only for clinical reasoning queries.`;
+    notify(readOnlyMode ? 'Queries disabled in review mode.' : 'Read-only access: queries not available.', 'warn');
     return;
   }
   input.value = '';
-  openCopOut('Clinical answer');
-  g('cop-out-body').innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>';
-  g('cop-out-register').innerHTML = '';
-  setPulse('thinking', 'Reasoning...');
+  g('cop-suggestions').style.display = 'none';
+  const stream = g('cop-stream');
+  // Add user bubble to thread
+  const userBubble = `<div class="cop-thread-msg user" style="flex-direction:row-reverse"><div class="cop-thread-avatar user">Dr</div><div class="cop-thread-bubble">${q}</div></div>`;
+  // Add AI typing indicator
+  const typingId = 'cop-typing-' + Date.now();
+  const typingBubble = `<div class="cop-thread-msg ai" id="${typingId}"><div class="cop-thread-avatar ai"><i class="ti ti-airos-ai" style="font-size:9px"></i></div><div class="cop-thread-bubble"><div class="cop-thread-typing"><span></span><span></span><span></span></div></div></div>`;
+  stream.insertAdjacentHTML('beforeend', userBubble + typingBubble);
+  stream.scrollTop = stream.scrollHeight;
+  setPulse('thinking', 'Reasoning…');
   const ctx = buildCopContext();
-  const history = copConvHistory[currentPt] || [];
-  const historyBlock = history.length
-    ? '\nPrior questions this session:\n' + history.slice(-3).map(h=>`Q: ${h.q}\nA: ${h.a}`).join('\n')
-    : '';
-  const qaClinical = ctx.disease === 'IPF'
-    ? `FVC ${ctx.fvc}%, DLCO ${ctx.dlco}, 6MWD ${ctx.sixMWD}`
-    : ctx.disease === 'OSA'
-    ? `AHI ${ctx.ahi}/hr, ODI ${ctx.odi}/hr, CPAP adherence ${ctx.adherence}%`
-    : `FEV1 ${ctx.fev1}%, Eos ${ctx.eos}, exac ${ctx.exac}, hosp ${ctx.hosp}, adherence ${ctx.adherence}%`;
-  const prompt = `You are AIROS clinical reasoning engine. PATIENT ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}, ${qaClinical}, treatment: ${ctx.meds}, smoking: ${ctx.smoker}.\nVisit history: ${ctx.visitHistory}\nEngine: ${ctx.moduleOutputs}${historyBlock}\nQuestion: ${q}\nAnswer in 2-4 sentences specific to this patient. If the question refers back to a prior question or answer above, use that context. No em-dashes. Plain medical English.`;
+  if (!copConvHistory[currentPt]) copConvHistory[currentPt] = [];
+  const history = copConvHistory[currentPt];
+  // Build message array for multi-turn
+  const systemMsg = `You are AIROS clinical reasoning engine, embedded in a pulmonology platform. Patient ${pidPrefix(ctx.id)}${ctx.id}: ${ctx.disease}. Age ${ctx.age}, ${ctx.sex}. Meds: ${ctx.meds}. Smoking: ${ctx.smoker}. Visit ${ctx.visitN}/${ctx.totalVisits}. ${ctx.moduleOutputs.slice(0,400)}. Answer in 2-4 sentences specific to this patient. No em-dashes. Medical English.`;
+  const messages = [];
+  history.slice(-4).forEach(h => {
+    messages.push({ role:'user', content: h.q });
+    messages.push({ role:'assistant', content: h.a });
+  });
+  messages.push({ role:'user', content: q });
+  const fullPrompt = systemMsg + '\n\n' + messages.map(m=>`${m.role}: ${m.content}`).join('\n');
+  let responseText = '';
   try {
-    const text = await callCopAPI(prompt, copScaleTok(400));
-    copLastDoc = text;
-    g('cop-out-body').textContent = text;
-    if (!copConvHistory[currentPt]) copConvHistory[currentPt] = [];
-    copConvHistory[currentPt].push({ q, a: text });
+    // Replace typing bubble with streaming bubble
+    const typingEl = g(typingId);
+    let aiBubbleEl = null;
+    if (typingEl) {
+      typingEl.innerHTML = `<div class="cop-thread-avatar ai"><i class="ti ti-airos-ai" style="font-size:9px"></i></div><div class="cop-thread-bubble" id="${typingId}-text"></div>`;
+      aiBubbleEl = typingEl.querySelector(`#${typingId}-text`);
+    }
+    responseText = await callCopAPI(fullPrompt, copScaleTok(400), (chunk, full) => {
+      if (aiBubbleEl) {
+        aiBubbleEl.innerHTML = copLinkGuidelines(full.replace(/\n/g,'<br>'));
+        stream.scrollTop = stream.scrollHeight;
+      }
+    });
+    copLastDoc = responseText;
+    history.push({ q, a: responseText });
+    // Add source pill to response
+    if (aiBubbleEl) {
+      aiBubbleEl.insertAdjacentHTML('beforeend', '<span class="cop-source-pill ai" style="margin-top:6px;display:inline-flex"><i class="ti ti-airos-ai" style="font-size:8px"></i>AI-generated</span>');
+    }
   } catch(e) {
-    g('cop-out-body').textContent = copApiErrorMessage(e);
+    const typingEl = g(typingId);
+    if (typingEl) typingEl.querySelector('.cop-thread-bubble').textContent = copApiErrorMessage(e);
   }
   setPulse('');
+  renderCopSuggestions();
 }
 
 function copKeydown(e) { if (e.key==='Enter') copSubmit(); }
@@ -8755,25 +9460,52 @@ function copKeydown(e) { if (e.key==='Enter') copSubmit(); }
 /* ── Voice input (addition 3) ────────────────────────────── */
 let copRecognition = null;
 let copListening   = false;
+/* Improvement 7: voice input with live transcript display */
 function copToggleVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { notify('Voice input is not supported in this browser.', 'warn'); return; }
   const micBtn = g('cop-mic-btn');
+  const transcriptEl = g('cop-voice-transcript');
   if (copListening) {
     copRecognition?.stop();
     return;
   }
   copRecognition = new SR();
   copRecognition.lang = copLang === 'es' ? 'es-ES' : 'en-GB';
-  copRecognition.interimResults = false;
+  copRecognition.interimResults = true;
   copRecognition.maxAlternatives = 1;
-  copRecognition.onstart = () => { copListening = true; micBtn?.classList.add('cop-mic-active'); };
-  copRecognition.onend   = () => { copListening = false; micBtn?.classList.remove('cop-mic-active'); };
-  copRecognition.onerror = () => { copListening = false; micBtn?.classList.remove('cop-mic-active'); notify('Voice input could not be captured.', 'warn'); };
-  copRecognition.onresult = (e) => {
-    const transcript = e.results[0][0].transcript;
+  let finalText = '';
+  copRecognition.onstart = () => {
+    copListening = true;
+    micBtn?.classList.add('cop-mic-active');
+    if (transcriptEl) { transcriptEl.innerHTML = '<span class="cop-voice-interim">Listening…</span>'; transcriptEl.classList.add('active'); }
+  };
+  copRecognition.onend = () => {
+    copListening = false;
+    micBtn?.classList.remove('cop-mic-active');
+    if (transcriptEl) {
+      setTimeout(() => { transcriptEl.classList.remove('active'); }, 1200);
+    }
     const input = g('cop-input');
-    if (input) input.value = transcript;
+    if (input && finalText) { input.value = finalText; input.focus(); copInputChanged(finalText); }
+  };
+  copRecognition.onerror = () => {
+    copListening = false;
+    micBtn?.classList.remove('cop-mic-active');
+    if (transcriptEl) transcriptEl.classList.remove('active');
+    notify('Voice input could not be captured.', 'warn');
+  };
+  copRecognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    if (transcriptEl) {
+      transcriptEl.innerHTML = finalText + (interim ? `<span class="cop-voice-interim">${interim}</span>` : '');
+    }
+    const input = g('cop-input');
+    if (input) { input.value = finalText + interim; copInputChanged(input.value); }
   };
   copRecognition.start();
 }
@@ -9255,6 +9987,594 @@ setTimeout(() => { const splash = g('boot-splash'); if (splash) splash.remove();
     safeLog('Rule interpreter verification threw an error:', e);
   }
 })();
+
+/* ════════════════════════════════════════════════════════════
+   ITEMS 39-50: New drawer builders
+   ════════════════════════════════════════════════════════════ */
+
+/* ITEM 35 / 39: Patient comparison drawer */
+function bCompare() {
+  const pts = Object.entries(PATIENTS);
+  const makeCol = (pid) => {
+    if (!pid) return `<div style="flex:1;padding:12px;color:var(--i3);text-align:center;font-size:var(--fs-sm)">Select a patient</div>`;
+    const pt = PATIENTS[pid];
+    if (!pt) return '';
+    const v = pt.visits[pt.visits.length-1];
+    const dz = pt.disease;
+    const rows = [
+      ['Disease', dz],
+      ['Age', pt.demographics.age + ' y'],
+      ['BMI', pt.demographics.bmi],
+      ['Smoker', pt.demographics.smoker],
+      dz==='COPD'||dz==='ACO'||dz==='Chronic Bronchitis' ? ['FEV₁', v.fev1+'%'] : null,
+      dz==='COPD'||dz==='ACO' ? ['GOLD group', goldGroup(v.cat??10)] : null,
+      dz==='Asthma'||dz==='ACO' ? ['ACT', v.act??'–'] : null,
+      dz==='IPF' ? ['FVC', v.fvc+'%'] : null,
+      dz==='IPF' ? ['DLCO', (v.dlco??'–')+'%'] : null,
+      dz==='OSA' ? ['AHI', v.ahi+'/hr'] : null,
+      dz==='PAH' ? ['mPAP', v.mpap+' mmHg'] : null,
+      dz==='PAH' ? ['WHO FC', 'FC '+v.whoFc] : null,
+      ['Exacerbations/yr', v.exacerbationsLast12m??'–'],
+      ['Meds', pt.meds.length + ' active'],
+    ].filter(Boolean);
+    return `<div style="flex:1;padding:12px;border-left:1px solid var(--i1)">
+      <div style="font-family:var(--mono);font-size:var(--fs-2xs);color:var(--n6);margin-bottom:10px">${pidPrefix(pid)}${pid}</div>
+      <div style="font-size:var(--fs-h2);font-weight:600;color:var(--i7);margin-bottom:8px">${pt.name||'Anonymous'}</div>
+      ${rows.map(([l,v2])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--i1);font-size:var(--fs-sm)"><span style="color:var(--i4)">${l}</span><span style="color:var(--i7);font-weight:500">${v2}</span></div>`).join('')}
+    </div>`;
+  };
+  const opts = pts.map(([id,p])=>`<option value="${id}">${id} · ${p.disease}</option>`).join('');
+  return `<div style="padding:14px">
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <select class="fsel" id="cmp-a" onchange="document.getElementById('cmp-cols').innerHTML=compareCols()" style="flex:1">
+        <option value="">— Patient A —</option>${opts}
+      </select>
+      <select class="fsel" id="cmp-b" onchange="document.getElementById('cmp-cols').innerHTML=compareCols()" style="flex:1">
+        <option value="">— Patient B —</option>${opts}
+      </select>
+    </div>
+    <div id="cmp-cols" style="display:flex;border:1px solid var(--i2);border-radius:var(--rmd);overflow:hidden">
+      ${makeCol(null)}${makeCol(null)}
+    </div>
+  </div>`;
+}
+function compareCols() {
+  const a = document.getElementById('cmp-a')?.value;
+  const b = document.getElementById('cmp-b')?.value;
+  const pts = window.PATIENTS;
+  const makeCol = (pid) => {
+    if (!pid) return `<div style="flex:1;padding:12px;color:var(--i3);text-align:center;font-size:var(--fs-sm)">Select a patient</div>`;
+    const pt = pts[pid]; if (!pt) return '';
+    const v = pt.visits[pt.visits.length-1];
+    const dz = pt.disease;
+    const rows = [
+      ['Disease', dz],['Age', pt.demographics.age+' y'],['BMI', pt.demographics.bmi],
+      ['Smoker', pt.demographics.smoker],
+      dz==='COPD'||dz==='ACO'||dz==='Chronic Bronchitis'?['FEV₁',v.fev1+'%']:null,
+      dz==='Asthma'||dz==='ACO'?['ACT',v.act??'–']:null,
+      dz==='IPF'?['FVC',v.fvc+'%']:null,
+      dz==='OSA'?['AHI',v.ahi+'/hr']:null,
+      dz==='PAH'?['mPAP',v.mpap+' mmHg']:null,
+      ['Exac/yr',v.exacerbationsLast12m??'–'],['Meds',pt.meds.length+' active'],
+    ].filter(Boolean);
+    return `<div style="flex:1;padding:12px;border-left:1px solid var(--i1)">
+      <div style="font-family:var(--mono);font-size:var(--fs-2xs);color:var(--n6);margin-bottom:8px">${pid}</div>
+      <div style="font-weight:600;color:var(--i7);margin-bottom:8px;font-size:var(--fs-sm)">${pt.name||'Anon'}</div>
+      ${rows.map(([l,v2])=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--i1);font-size:var(--fs-xs)"><span style="color:var(--i4)">${l}</span><span style="font-weight:500">${v2}</span></div>`).join('')}
+    </div>`;
+  };
+  return makeCol(a) + makeCol(b);
+}
+
+/* ITEM 45 / 40: Spirometry visualiser drawer */
+function bSpirometry() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  if (!pt) return '<p class="muted" style="padding:20px">Select a patient first.</p>';
+  const v = pt.visits[pt.visits.length-1];
+  const fev1 = v.fev1/100, fvc = v.fvc ? v.fvc/100 : (fev1+0.15);
+  const ratio = fev1/fvc;
+  // SVG flow-volume loop approximation
+  const W=280, H=160, cx=W/2, cy=H/2;
+  // Expiratory curve (top)
+  const expPts = Array.from({length:20},(_,i)=>{
+    const t=i/19; const x=cx-cx*t; const y=cy-(fev1*H*0.9)*(Math.sin(Math.PI*t)*Math.pow(1-t,0.4));
+    return `${x},${y}`;
+  }).join(' ');
+  // Inspiratory curve (bottom mirror)
+  const insPts = Array.from({length:20},(_,i)=>{
+    const t=i/19; const x=cx*(t); const y=cy+(fvc*H*0.55)*(Math.sin(Math.PI*t)*Math.pow(1-t,0.3));
+    return `${x},${y}`;
+  }).join(' ');
+  const gld = pt.disease==='COPD'||pt.disease==='ACO'||pt.disease==='Chronic Bronchitis';
+  const interp = ratio < 0.7 ? '⚠ Obstructive pattern (FEV₁/FVC < 0.70)' :
+                 (v.fvc && v.fvc < 80) ? '⚠ Restrictive pattern (FVC < 80%)' :
+                 '✓ Within normal limits for age';
+  return `<div style="padding:14px">
+    <div class="ia ia-i" style="margin-bottom:12px"><i class="ti ti-info-circle"></i><div class="ia-body">Illustrative F/V loop based on recorded spirometry values. Not a real-time trace.</div></div>
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:180px;background:var(--i0);border-radius:var(--rmd);border:1px solid var(--i2)">
+      <line x1="${cx}" y1="4" x2="${cx}" y2="${H-4}" stroke="var(--i2)" stroke-width="1"/>
+      <line x1="4" y1="${cy}" x2="${W-4}" y2="${cy}" stroke="var(--i2)" stroke-width="1"/>
+      <text x="${cx+4}" y="12" font-size="8" fill="var(--i3)" font-family="monospace">Volume →</text>
+      <text x="4" y="${cy-4}" font-size="8" fill="var(--i3)" font-family="monospace">Flow ↑</text>
+      <polyline points="${expPts}" fill="none" stroke="var(--n8)" stroke-width="2.5" stroke-linejoin="round"/>
+      <polyline points="${insPts}" fill="none" stroke="var(--n4)" stroke-width="1.5" stroke-dasharray="4,3" stroke-linejoin="round"/>
+      <circle cx="${cx - cx*ratio}" cy="${cy-(fev1*H*0.9)*0.82}" r="4" fill="var(--r5)"/>
+      <text x="${cx - cx*ratio+6}" y="${cy-(fev1*H*0.9)*0.82+4}" font-size="7" fill="var(--r5)" font-family="monospace">FEV₁</text>
+    </svg>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0">
+      ${[['FEV₁',v.fev1+'%','predicted'],['FVC',(v.fvc??'N/A')+'%','predicted'],['FEV₁/FVC',(ratio*100).toFixed(0)+'%','ratio']].map(([l,val,sub])=>`<div style="background:var(--i0);border:1px solid var(--i2);border-radius:var(--rmd);padding:10px;text-align:center"><div style="font-size:var(--fs-h2);font-weight:600;color:var(--n8)">${val}</div><div style="font-size:var(--fs-2xs);color:var(--i4)">${l}</div><div style="font-size:var(--fs-3xs);color:var(--i3)">${sub}</div></div>`).join('')}
+    </div>
+    <div class="ia ${ratio<0.7||((v.fvc??100)<80)?'ia-w':'ia-i'}" style="margin-top:8px">
+      <i class="ti ti-${ratio<0.7?'alert-triangle':'circle-check'}"></i>
+      <div class="ia-body"><strong>Interpretation:</strong> ${interp}</div>
+    </div>
+    ${gld?`<div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i4)">GOLD stage: <strong>${goldStage(v.fev1).l}</strong> · Group: <strong>${goldGroup(v.cat??10)}</strong></div>`:''}
+  </div>`;
+}
+
+/* ITEM 41 / 41: Biologic eligibility scorecard */
+function bBiologicScore() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  if (!pt) return '<p class="muted" style="padding:20px">Select a patient first.</p>';
+  const v = pt.visits[pt.visits.length-1];
+  const elig = biologicEligibility(pt, v);
+  const agents = [
+    { name:'Dupilumab', moa:'IL-4Rα', criteria:[['Eos ≥ 150 c/µL', v.eos>=150],['Uncontrolled asthma (ACT ≤ 19)', (v.act??20)<=19],['ICS/LABA ≥ 3m', true],['Age ≥ 12y', pt.demographics.age>=12]] },
+    { name:'Mepolizumab', moa:'IL-5', criteria:[['Eos ≥ 300 c/µL', v.eos>=300],['≥ 2 exac/yr', (v.exacerbationsLast12m??0)>=2],['ICS high-dose', true],['Age ≥ 18y', pt.demographics.age>=18]] },
+    { name:'Benralizumab', moa:'IL-5Rα', criteria:[['Eos ≥ 300 c/µL', v.eos>=300],['Severe asthma', (v.act??20)<=15],['ICS/LABA', true],['Age ≥ 18y', pt.demographics.age>=18]] },
+    { name:'Tezepelumab', moa:'TSLP', criteria:[['Severe uncontrolled', (v.act??20)<=15],['Any eos level', true],['ICS/LABA/LAMA', true],['Age ≥ 18y', pt.demographics.age>=18]] },
+  ];
+  const isAsthma = pt.disease==='Asthma'||pt.disease==='ACO';
+  if (!isAsthma) return S('Biologic eligibility','IL-5 / IL-4 / TSLP pathway',`<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">Biologic eligibility scorecard applies to Asthma and ACO. This patient has ${pt.disease}.</div></div>`);
+  return `<div style="padding:14px">
+    ${agents.map(ag=>{
+      const score = ag.criteria.filter(([,met])=>met).length;
+      const pct = Math.round(score/ag.criteria.length*100);
+      const col = pct===100?'var(--g5)':pct>=50?'var(--a5)':'var(--r5)';
+      return `<div style="border:1px solid var(--i2);border-radius:var(--rmd);margin-bottom:10px;overflow:hidden">
+        <div style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between;background:var(--i0)">
+          <div><div style="font-weight:600;color:var(--i7)">${ag.name}</div><div style="font-size:var(--fs-xs);color:var(--i4)">Target: ${ag.moa}</div></div>
+          <div style="text-align:right">
+            <div style="font-size:var(--fs-h2);font-weight:700;color:${col}">${pct}%</div>
+            <div style="font-size:var(--fs-2xs);color:var(--i3)">${score}/${ag.criteria.length} criteria</div>
+          </div>
+        </div>
+        <div style="height:4px;background:var(--i1)"><div style="height:100%;width:${pct}%;background:${col};transition:width .4s"></div></div>
+        <div style="padding:8px 12px">
+          ${ag.criteria.map(([lbl,met])=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:var(--fs-xs)">
+            <span style="color:${met?'var(--g5)':'var(--r5)'}">${met?'✓':'✗'}</span>
+            <span style="color:${met?'var(--i7)':'var(--i4)'}">${lbl}</span>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+    ${elig.eligible.length ? `<div class="ia ia-ok"><i class="ti ti-circle-check"></i><div class="ia-body"><strong>Recommended:</strong> ${elig.eligible.map(e=>e.agent).join(', ')}</div></div>` : `<div class="ia ia-w"><i class="ti ti-alert-triangle"></i><div class="ia-body">No biologic fully indicated at this time. Review thresholds above.</div></div>`}
+  </div>`;
+}
+
+/* ITEM 42-44 / 46: Calculators drawer (BODE, mMRC, CAT, exacerbation risk) */
+function bCalculators() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const v = pt ? pt.visits[pt.visits.length-1] : null;
+  const bode = pt ? calcBODE(pt, v) : null;
+  // mMRC interactive stepper state
+  return `<div style="padding:14px">
+    <!-- BODE index -->
+    <div class="fsec">
+      <div class="flbl-sec">BODE index<span class="feng">COPD mortality prediction</span></div>
+      ${pt && (pt.disease==='COPD'||pt.disease==='ACO'||pt.disease==='Chronic Bronchitis') ? `
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+          ${[
+            ['FEV₁',bode?bode.fev1Points+'pt':'–','≥65%=0, 50-64%=1, 36-49%=2, ≤35%=3'],
+            ['6MWD',bode?bode.sixMWDPoints+'pt':'–','≥350m=0, 250-349m=1, 150-249m=2, <150m=3'],
+            ['mMRC',bode?bode.mmrcPoints+'pt':'–','0-1=0, 2=1, 3=2, 4=3'],
+            ['BMI',bode?bode.bmiPoints+'pt':'–','>21=0, ≤21=1']
+          ].map(([l,val,tip])=>`<div title="${tip}" style="background:var(--n0);border:1px solid var(--n1);border-radius:var(--rmd);padding:8px;text-align:center;cursor:help">
+            <div style="font-size:var(--fs-h2);font-weight:700;color:var(--n8)">${val}</div>
+            <div style="font-size:var(--fs-2xs);color:var(--n4)">${l}</div>
+          </div>`).join('')}
+        </div>
+        ${bode ? `<div class="ia ${bode.total<=2?'ia-ok':bode.total<=4?'ia-i':'ia-w'}">
+          <i class="ti ti-calculator"></i>
+          <div class="ia-body"><strong>BODE score: ${bode.total}/10</strong> — ${bode.quartile} · ${bode.mortality4yr}% 4-year mortality</div>
+        </div>` : '<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">Missing 6MWD or mMRC to compute BODE.</div></div>'}
+      ` : '<div style="font-size:var(--fs-sm);color:var(--i4)">BODE applies to COPD/ACO/Chronic Bronchitis.</div>'}
+    </div>
+    <!-- mMRC dyspnoea scale -->
+    <div class="fsec">
+      <div class="flbl-sec">mMRC dyspnoea scale<span class="feng">Symptom severity</span></div>
+      <div id="mmrc-result" style="margin-bottom:8px"></div>
+      ${[0,1,2,3,4].map(g=>{
+        const labels = ['Grade 0 – Breathless only with strenuous exercise',
+          'Grade 1 – Breathless when hurrying on level ground or walking up a slight hill',
+          'Grade 2 – Walks slower than people of same age due to breathlessness, or has to stop when walking on own pace',
+          'Grade 3 – Stops for breath after walking about 100 m or after a few minutes on level ground',
+          'Grade 4 – Too breathless to leave the house, or breathless when dressing or undressing'];
+        const cur = v ? v.mmrc : null;
+        return `<div onclick="selectMmrc(${g})" id="mmrc-${g}" style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid ${cur===g?'var(--n8)':'var(--i2)'};border-radius:var(--rmd);margin-bottom:6px;cursor:pointer;background:${cur===g?'var(--n0)':'var(--wh)'};transition:all .14s">
+          <div style="width:22px;height:22px;border-radius:50%;background:${cur===g?'var(--n8)':'var(--i1)'};color:${cur===g?'#fff':'var(--i5)'};display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);font-weight:700;flex-shrink:0">${g}</div>
+          <div style="font-size:var(--fs-xs);color:var(--i7);line-height:1.5">${labels[g]}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <!-- Exacerbation risk -->
+    <div class="fsec">
+      <div class="flbl-sec">Exacerbation risk<span class="feng">Based on history</span></div>
+      ${pt ? (() => {
+        const exac = v.exacerbationsLast12m ?? 0;
+        const hosp = v.hospitalizationsLast12m ?? 0;
+        const risk = hosp>0 ? 'Very high' : exac>=2 ? 'High' : exac===1 ? 'Moderate' : 'Low';
+        const col = hosp>0?'var(--r5)':exac>=2?'var(--a5)':exac===1?'var(--a2)':'var(--g5)';
+        return `<div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--i0);border-radius:var(--rmd);border:1px solid var(--i2)">
+          <div style="font-size:32px;font-weight:700;color:${col}">${risk}</div>
+          <div style="font-size:var(--fs-xs);color:var(--i5)">${exac} exac · ${hosp} hospitalisations in last 12 months<br>Prior exacerbation is the strongest predictor of future exacerbation (GOLD 2024).</div>
+        </div>`;
+      })() : '<div style="font-size:var(--fs-sm);color:var(--i4)">Select a patient.</div>'}
+    </div>
+  </div>`;
+}
+function selectMmrc(g) {
+  [0,1,2,3,4].forEach(i=>{
+    const el=document.getElementById('mmrc-'+i);
+    if(!el)return;
+    el.style.borderColor=i===g?'var(--n8)':'var(--i2)';
+    el.style.background=i===g?'var(--n0)':'var(--wh)';
+    el.querySelector('div').style.background=i===g?'var(--n8)':'var(--i1)';
+    el.querySelector('div').style.color=i===g?'#fff':'var(--i5)';
+  });
+  const res=document.getElementById('mmrc-result');
+  if(res) res.innerHTML=`<div class="ia ia-ok"><i class="ti ti-circle-check"></i><div class="ia-body">mMRC grade <strong>${g}</strong> recorded. Save to commit to visit record.</div></div>`;
+}
+
+/* ITEM 47: PAH treatment algorithm drawer */
+function bPahAlgorithm() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const v = pt ? pt.visits[pt.visits.length-1] : null;
+  const isPAH = pt?.disease === 'PAH';
+  const risk = isPAH ? pahRiskStratum(v) : null;
+  const nodes = [
+    { id:'dx', label:'Confirmed PAH diagnosis', sub:'mPAP ≥ 20 mmHg, PVR ≥ 2 WU, PAWP ≤ 15 mmHg', col:'var(--n8)', active: isPAH },
+    { id:'fc', label:'WHO functional class', sub:`FC I–II → Low–intermediate | FC III–IV → High risk`, col:'var(--t7)', active: isPAH },
+    { id:'risk', label:`Risk stratification`, sub: risk ? `${risk.stratum} risk · ${risk.score}/3 high-risk criteria` : 'ESC/ERS 2022 3-strata model', col: risk?.stratum==='Low'?'var(--g7)':risk?.stratum==='Intermediate'?'var(--a7)':'var(--r7)', active: isPAH },
+    { id:'mono', label:'Low risk: ERA or PDE5i monotherapy', sub:'Ambrisentan, Macitentan, Sildenafil, Tadalafil', col:'var(--g7)', active: isPAH && risk?.stratum==='Low' },
+    { id:'combo', label:'Intermediate/High: Initial combination', sub:'ERA + PDE5i ± Prostacyclin (IV epoprostenol if high risk)', col:'var(--a7)', active: isPAH && risk?.stratum !== 'Low' },
+    { id:'reeval', label:'Reassess at 3–6 months', sub:'Target: FC I–II, 6MWD improvement, BNP normalisation', col:'var(--p7)', active: isPAH },
+    { id:'sot', label:'Insufficient response → Sotatercept or transplant evaluation', sub:'STELLAR trial: sotatercept + background PAH therapy', col:'var(--r7)', active: false },
+  ];
+  return `<div style="padding:14px">
+    ${!isPAH?`<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">PAH treatment algorithm. Current patient has ${pt?.disease||'no disease selected'}.</div></div>`:''}
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${nodes.map(n=>`<div style="display:flex;align-items:flex-start;gap:10px;opacity:${n.active?1:0.35}">
+        <div style="width:4px;align-self:stretch;border-radius:4px;background:${n.col};flex-shrink:0;min-height:44px"></div>
+        <div style="flex:1;padding:8px 10px;background:${n.active?'var(--i0)':'var(--wh)'};border:1px solid ${n.active?n.col:'var(--i2)'};border-radius:var(--rmd)">
+          <div style="font-weight:600;color:var(--i7);font-size:var(--fs-sm)">${n.label}</div>
+          <div style="font-size:var(--fs-xs);color:var(--i4);margin-top:2px">${n.sub}</div>
+        </div>
+      </div>`).join('<div style="width:4px;height:10px;background:var(--i2);margin-left:1.5px"></div>')}
+    </div>
+    <div style="margin-top:12px;font-size:var(--fs-xs);color:var(--i3)">ESC/ERS 2022 Guidelines. Sotatercept: FDA approved 2024 for PAH WHO Group I (STELLAR trial).</div>
+  </div>`;
+}
+
+/* ITEM 48: IPF/GAP model drawer */
+function bIpfGap() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const v = pt ? pt.visits[pt.visits.length-1] : null;
+  const isIPF = pt?.disease === 'IPF';
+  const gap = isIPF ? gapPoints({sex:pt.demographics.sex,age:pt.demographics.age,fvc:v.fvc,dlco:v.dlco}) : null;
+  const stage = gap !== null ? gapStage(gap) : null;
+  const stageColors = ['var(--g7)','var(--a7)','var(--r7)'];
+  return `<div style="padding:14px">
+    ${!isIPF?`<div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">GAP model is specific to IPF. Current patient: ${pt?.disease||'none'}.</div></div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      ${[['Gender',pt?.demographics.sex,pt?.demographics.sex==='Male'?'1 pt':'0 pt'],['Age',pt?.demographics.age+'y',(pt?.demographics.age??0)>65?'2 pt':(pt?.demographics.age??0)>60?'1 pt':'0 pt'],['FVC',v?.fvc+'%',(v?.fvc??100)<=50?'3 pt':(v?.fvc??100)<=55?'2 pt':(v?.fvc??100)<=65?'1 pt':'0 pt'],['DLCO',(v?.dlco??'N/A')+'%',(v?.dlco??100)<=35?'3 pt':(v?.dlco??100)<=40?'2 pt':(v?.dlco??100)<=55?'1 pt':'0 pt']].map(([l,val,pts])=>`<div style="background:var(--i0);border:1px solid var(--i2);border-radius:var(--rmd);padding:10px">
+        <div style="font-size:var(--fs-xs);color:var(--i4)">${l}</div>
+        <div style="font-weight:600;color:var(--i7)">${isIPF?val:'–'}</div>
+        <div style="font-size:var(--fs-2xs);color:var(--n6);font-family:var(--mono)">${isIPF?pts:'–'}</div>
+      </div>`).join('')}
+    </div>
+    ${isIPF && stage ? `
+      <div style="background:${stageColors[stage.stage-1]||'var(--i1)'};color:#fff;border-radius:var(--rlg);padding:14px;text-align:center;margin-bottom:12px">
+        <div style="font-size:var(--fs-2xl);font-weight:800">GAP ${stage.stage}</div>
+        <div style="font-size:var(--fs-sm);opacity:.85">${gap} points · ${stage.label}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="border:1px solid var(--i2);border-radius:var(--rmd);padding:10px;text-align:center">
+          <div style="font-size:var(--fs-xl);font-weight:700;color:var(--r5)">${stage.mortality1yr}%</div>
+          <div style="font-size:var(--fs-xs);color:var(--i4)">1-year mortality</div>
+        </div>
+        <div style="border:1px solid var(--i2);border-radius:var(--rmd);padding:10px;text-align:center">
+          <div style="font-size:var(--fs-xl);font-weight:700;color:var(--r7)">${stage.mortality3yr}%</div>
+          <div style="font-size:var(--fs-xs);color:var(--i4)">3-year mortality</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--i3)">Ley B et al. Ann Intern Med. 2012. GAP model validated for IPF prognosis. Use alongside multidisciplinary assessment.</div>
+    ` : isIPF ? '<div class="ia ia-w"><i class="ti ti-alert-triangle"></i><div class="ia-body">Incomplete data for GAP calculation. Requires FVC, DLCO, age, and sex.</div></div>' : ''}
+  </div>`;
+}
+
+/* ITEM 49: OSA / CPAP adherence panel */
+function bOsaCpap() {
+  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const v = pt ? pt.visits[pt.visits.length-1] : null;
+  const isOSA = pt?.disease === 'OSA';
+  if (!isOSA) return `<div style="padding:14px"><div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">OSA/CPAP panel. Current patient: ${pt?.disease||'none'}.</div></div></div>`;
+  const ahi = v.ahi, odi = v.odi;
+  const sev = osaSeverity(ahi);
+  const cpapAdh = v.cpapAdherence ?? 78; // % nights ≥ 4h
+  const residualAHI = v.residualAHI ?? (ahi * 0.18);
+  const adhOK = cpapAdh >= 70;
+  const residOK = residualAHI < 5;
+  return `<div style="padding:14px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      ${[
+        ['AHI (baseline)', ahi+'/hr', sev.level==='severe'?'var(--r5)':sev.level==='moderate'?'var(--a5)':'var(--g5)'],
+        ['ODI', odi+'/hr', odi>=30?'var(--r5)':odi>=15?'var(--a5)':'var(--g5)'],
+        ['CPAP adherence', cpapAdh+'%', adhOK?'var(--g5)':'var(--r5)'],
+        ['Residual AHI', residualAHI.toFixed(1)+'/hr', residOK?'var(--g5)':'var(--a5)'],
+      ].map(([l,val,col])=>`<div style="background:var(--i0);border:1px solid var(--i2);border-radius:var(--rmd);padding:12px;text-align:center">
+        <div style="font-size:var(--fs-xl);font-weight:700;color:${col}">${val}</div>
+        <div style="font-size:var(--fs-xs);color:var(--i4);margin-top:2px">${l}</div>
+      </div>`).join('')}
+    </div>
+    <!-- Adherence bar -->
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--i4);margin-bottom:4px">
+        <span>CPAP adherence (nights ≥ 4h)</span><span>${cpapAdh}%</span>
+      </div>
+      <div style="height:10px;background:var(--i1);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:${cpapAdh}%;background:${adhOK?'var(--g5)':'var(--r5)'};border-radius:99px;transition:width .4s"></div>
+      </div>
+      <div style="font-size:var(--fs-2xs);color:var(--i3);margin-top:3px">CMS threshold: ≥70% of nights · ≥4h/night over 30-day period</div>
+    </div>
+    <div class="ia ${adhOK&&residOK?'ia-ok':!adhOK?'ia-w':'ia-i'}">
+      <i class="ti ti-${adhOK&&residOK?'circle-check':!adhOK?'alert-triangle':'info-circle'}"></i>
+      <div class="ia-body">
+        ${!adhOK ? '<strong>Adherence below threshold.</strong> Consider counselling, mask refitting, or pressure optimisation.' :
+          !residOK ? '<strong>Residual AHI elevated.</strong> Review auto-titration data; consider APAP pressure range adjustment.' :
+          '<strong>Good CPAP response.</strong> Adherence and residual AHI within targets.'}
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="flbl-sec">Severity classification<span class="feng">AASM criteria</span></div>
+      ${['Mild (AHI 5-14)','Moderate (AHI 15-29)','Severe (AHI ≥ 30)'].map((l,i)=>{
+        const thresholds=[5,15,30];
+        const active = (i===0&&ahi>=5&&ahi<15)||(i===1&&ahi>=15&&ahi<30)||(i===2&&ahi>=30);
+        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:var(--fs-xs)">
+          <div style="width:10px;height:10px;border-radius:50%;background:${active?['var(--a5)','var(--r2)','var(--r5)'][i]:'var(--i2)'};flex-shrink:0"></div>
+          <span style="color:${active?'var(--i7)':'var(--i3)'};font-weight:${active?600:400}">${l}${active?' ◀ current':''}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   AI IMPROVEMENTS 5, 14, 17, 18, 20 — new functions
+   ══════════════════════════════════════════════════════════════ */
+
+/* Improvement 5: context-aware suggested prompts */
+const COP_SUGGESTIONS_BY_DISEASE = {
+  COPD: [
+    { icon:'ti-trending-up', text:'Why is control poor?' },
+    { icon:'ti-pill', text:'Should we escalate treatment?' },
+    { icon:'ti-chart-line', text:'Predict next exacerbation risk' },
+    { icon:'ti-stethoscope', text:'Review BODE index implications' },
+    { icon:'ti-activity', text:'Assess for pulmonary rehab' },
+  ],
+  Asthma: [
+    { icon:'ti-pill', text:'Is this patient biologic-eligible?' },
+    { icon:'ti-alert-triangle', text:'Explain poor ACT score' },
+    { icon:'ti-dna', text:'Assess T2-high phenotype' },
+    { icon:'ti-file-text', text:'Draft step-up justification' },
+    { icon:'ti-lungs', text:'When to add LAMA?' },
+  ],
+  ACO: [
+    { icon:'ti-git-merge', text:'How to balance COPD vs asthma treatment?' },
+    { icon:'ti-pill', text:'Biologic eligibility for ACO?' },
+    { icon:'ti-chart-line', text:'FEV1 trend interpretation' },
+  ],
+  IPF: [
+    { icon:'ti-trending-down', text:'Interpret GAP stage progression' },
+    { icon:'ti-activity', text:'Antifibrotic therapy review' },
+    { icon:'ti-heart-rate-monitor', text:'Is transplant evaluation indicated?' },
+    { icon:'ti-chart-line', text:'FVC decline rate analysis' },
+  ],
+  OSA: [
+    { icon:'ti-device-heart-monitor', text:'Why is CPAP adherence poor?' },
+    { icon:'ti-adjustments', text:'Optimise APAP pressure range' },
+    { icon:'ti-activity', text:'Residual AHI implications' },
+  ],
+  PAH: [
+    { icon:'ti-alert-triangle', text:'Interpret risk stratum' },
+    { icon:'ti-pill', text:'Is combination therapy indicated?' },
+    { icon:'ti-stethoscope', text:'Sotatercept eligibility?' },
+    { icon:'ti-trending-up', text:'Explain hemodynamic trend' },
+  ]
+};
+
+function renderCopSuggestions() {
+  const el = g('cop-suggestions');
+  if (!el) return;
+  const pt = getPt();
+  if (!pt) { el.style.display = 'none'; return; }
+  const suggs = COP_SUGGESTIONS_BY_DISEASE[pt.disease] || COP_SUGGESTIONS_BY_DISEASE['COPD'];
+  el.innerHTML = suggs.map(s =>
+    `<button class="cop-suggestion-chip" onclick="copUseSuggestion(${JSON.stringify(s.text)})"><i class="ti ${s.icon}"></i>${s.text}</button>`
+  ).join('');
+  el.style.display = 'flex';
+}
+
+function copUseSuggestion(text) {
+  const input = g('cop-input');
+  if (input) { input.value = text; input.focus(); }
+  copSubmit();
+}
+
+function copInputChanged(val) {
+  const el = g('cop-suggestions');
+  if (el) el.style.display = val.trim() ? 'none' : 'flex';
+}
+
+/* Improvement 14: layer progress tracker */
+const LAYER_NAMES = ['Classification','Assessment','Phenotyping','Risk','Treatment','Engagement','Trajectory'];
+let _layerTimer = null;
+function showLayerProgress(show) {
+  const el = g('cop-layer-progress');
+  const steps = document.querySelectorAll('.cop-layer-step');
+  if (!el) return;
+  if (!show) {
+    el.classList.remove('visible');
+    steps.forEach(s => { s.classList.remove('running','done'); });
+    clearInterval(_layerTimer);
+    return;
+  }
+  el.classList.add('visible');
+  let current = 0;
+  steps.forEach(s => { s.classList.remove('running','done'); });
+  _layerTimer = setInterval(() => {
+    if (current > 0) steps[current-1]?.classList.replace('running','done');
+    if (current < steps.length) {
+      steps[current]?.classList.add('running');
+      g('cop-layer-label').textContent = `Analysing: ${LAYER_NAMES[current]}…`;
+      current++;
+    } else {
+      clearInterval(_layerTimer);
+      el.classList.remove('visible');
+    }
+  }, 320);
+}
+
+/* Improvement 17: full-panel expand */
+let _copExpanded = false;
+function toggleCopExpand() {
+  _copExpanded = !_copExpanded;
+  const panel = g('cop-panel');
+  const icon  = g('cop-expand-icon');
+  if (!panel) return;
+  panel.classList.toggle('expanded', _copExpanded);
+  if (icon) {
+    icon.className = _copExpanded ? 'ti ti-arrows-minimize' : 'ti ti-arrows-maximize';
+  }
+  notify(_copExpanded ? 'Resident expanded to full panel' : 'Resident restored to sidebar', 'ok');
+}
+
+/* Improvement 20: usage dashboard */
+let _copUsageOpen = false;
+function toggleCopUsage() {
+  _copUsageOpen = !_copUsageOpen;
+  const panel = g('cop-usage-panel');
+  if (!panel) return;
+  panel.classList.toggle('open', _copUsageOpen);
+  if (_copUsageOpen) renderCopUsageDashboard();
+}
+
+function renderCopUsageDashboard() {
+  const grid = g('cop-usage-grid');
+  const conf = g('cop-usage-conf');
+  if (!grid) return;
+  const docCount = (copConvHistory[currentPt]||[]).length;
+  const thoughtCount = (copLastThoughts[currentPt]||[]).length;
+  grid.innerHTML = [
+    ['API calls', copCallCount],
+    ['~Tokens', (copTokenEst/1000).toFixed(1)+'k'],
+    ['Q&A turns', docCount],
+    ['Thoughts', thoughtCount],
+  ].map(([lbl,val]) => `
+    <div class="cop-usage-stat">
+      <div class="cop-usage-stat-val">${val}</div>
+      <div class="cop-usage-stat-lbl">${lbl}</div>
+    </div>`).join('');
+  if (conf) {
+    const confData = [
+      { label:'High confidence', key:'high', color:'var(--g5)' },
+      { label:'Moderate', key:'moderate', color:'var(--a5)' },
+      { label:'Inference', key:'inference', color:'var(--r5)' },
+    ];
+    conf.innerHTML = confData.map(({ label, key, color }) => {
+      const d = copConfidenceDrift[key] || { total:0, dismissed:0 };
+      const pct = d.total ? Math.round((1 - d.dismissed/d.total)*100) : 0;
+      return `<div class="cop-usage-conf-row">
+        <span style="min-width:90px;font-size:var(--fs-2xs)">${label}</span>
+        <div class="cop-usage-conf-bar-wrap"><div class="cop-usage-conf-bar" style="width:${pct}%;background:${color}"></div></div>
+        <span style="font-size:var(--fs-2xs);color:var(--i4);min-width:28px;text-align:right">${d.total}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+/* Improvement 13: augment loadCopThoughts to surface negation conflicts */
+const _origLoadCopThoughts = typeof loadCopThoughts !== 'undefined' ? loadCopThoughts : null;
+
+/* Override loadCopThoughts to add negation detection post-processing */
+const _loadCopThoughtsOrig = window.loadCopThoughts;
+function patchThoughtsWithNegations(thoughts) {
+  if (!thoughts || !Array.isArray(thoughts)) return thoughts;
+  return thoughts.map(t => {
+    if (!t.body) return t;
+    const detected = detectNegatedTerms(t.body, ['not responding','no improvement','denied','without','absence of','no evidence','no exacerbation','not adherent','never']);
+    if (detected.length) t.negations = detected.slice(0,3).map(d => d.term);
+    return t;
+  });
+}
+
+/* Patch renderThoughts to run negation detection */
+const _baseRenderThoughts = renderThoughts;
+// renderThoughts is already defined above with negation support built in
+
+/* Wire renderCopContext on patient select (already called in render()) */
+const _origRender = window.render;
+
 </script>
+
+<!-- ITEM 31: Notification centre overlay -->
+<div class="notif-centre" id="notif-centre" role="dialog" aria-label="Notification centre">
+  <div class="notif-centre-hdr">
+    Notifications
+    <span class="nc-clear" onclick="clearNotifCentre()">Clear all</span>
+  </div>
+  <div class="notif-centre-body" id="nc-body">
+    <div class="nc-empty" id="nc-empty">No notifications yet</div>
+  </div>
+</div>
+
+<!-- ITEM 34: Session timeout warning bar -->
+<div class="session-timeout-bar" id="session-timeout-bar" role="alert" aria-live="assertive">
+  <span id="session-timeout-msg">⚠ Session expiring in <strong id="session-countdown">5:00</strong></span>
+  <button onclick="resetSessionTimer()">Stay logged in</button>
+  <button onclick="showView('login')">Sign out now</button>
+</div>
+
+<!-- ITEM 38: Settings panel -->
+<div class="settings-panel" id="settings-panel" role="dialog" aria-label="Platform settings">
+  <div class="settings-panel-hdr">Platform settings</div>
+  <div class="sp-row">
+    <div><div style="font-size:var(--fs-sm);color:var(--i7)">Dark mode</div><div class="sp-label">Override system theme</div></div>
+    <label class="sp-toggle"><input type="checkbox" id="sp-dark" onchange="toggleDarkMode(this.checked)"><span class="sp-slider"></span></label>
+  </div>
+  <div class="sp-row">
+    <div><div style="font-size:var(--fs-sm);color:var(--i7)">Compact layout</div><div class="sp-label">Reduce card padding</div></div>
+    <label class="sp-toggle"><input type="checkbox" id="sp-compact" onchange="toggleCompact(this.checked)"><span class="sp-slider"></span></label>
+  </div>
+  <div class="sp-row">
+    <div><div style="font-size:var(--fs-sm);color:var(--i7)">Session timeout</div><div class="sp-label">Auto sign-out after</div></div>
+    <select onchange="setSessionTimeout(this.value)" style="font-size:var(--fs-xs);border:1px solid var(--i2);border-radius:var(--rsm);padding:3px 6px;background:var(--wh);color:var(--i7)" id="sp-timeout">
+      <option value="300">5 min</option>
+      <option value="600" selected>10 min</option>
+      <option value="1800">30 min</option>
+      <option value="0">Never</option>
+    </select>
+  </div>
+  <div class="sp-row">
+    <div><div style="font-size:var(--fs-sm);color:var(--i7)">UI language</div><div class="sp-label">Interface language</div></div>
+    <select onchange="copSetLang(this.value)" style="font-size:var(--fs-xs);border:1px solid var(--i2);border-radius:var(--rsm);padding:3px 6px;background:var(--wh);color:var(--i7)" id="sp-lang">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="gl">Galego</option>
+    </select>
+  </div>
+</div>
+
 </body>
 </html>
