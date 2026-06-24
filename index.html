@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<div class="login-mark-icon" style="width:52px;height:52px;background:rgba(255,255,255,.12);border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="ti ti-lungs" style="font-size:28px;color:rgba(255,255,255,.85)"></i></div><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -91,7 +91,7 @@
 .skip-link{position:absolute;left:-9999px;top:0;z-index:999;padding:var(--sp-5) var(--sp-9);background:var(--n8);color:white;font-size:var(--fs-sm);font-weight:600;border-radius:0 0 var(--rmd) 0;text-decoration:none;}
 .skip-link:focus{left:0;}
 html{font-size:var(--fs-body);}
-body{font-family:var(--sans);background:var(--sf);color:var(--i7);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--sans);background:#EEF2F7;color:var(--i7);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;}
 button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
@@ -190,9 +190,18 @@ input,select,textarea{font-family:inherit;}
 .pcard-hdr{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
 .pcard-id{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);}
 .pcard-dis{font-family:var(--mono);font-size:var(--fs-3xs);text-transform:uppercase;letter-spacing:.8px;margin-left:auto;}
-.pcard-name{font-family:var(--serif);font-size:var(--fs-h3);font-weight:600;color:var(--tx-n8,var(--n8));margin-bottom:3px;}
-.pcard-zone{font-size:var(--fs-sm);font-weight:500;color:var(--i6);margin-bottom:10px;}
+.pcard-name{font-family:var(--sans);font-size:var(--fs-h3);font-weight:600;color:var(--tx-n8,var(--n8));margin-bottom:3px;letter-spacing:-.01em;}
+.pcard-zone{font-size:var(--fs-sm);font-weight:500;color:var(--i6);margin-bottom:8px;}
 .pcard-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:var(--fs-xs);color:var(--i3);}
+/* #6: severity badge on card */
+.pcard-severity{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;padding:2px 7px;border-radius:3px;float:right;margin-top:1px;}
+.pcard-r .pcard-severity{background:var(--r5);color:#fff;}
+.pcard-a .pcard-severity{background:var(--a5);color:#fff;}
+.pcard-g .pcard-severity{background:var(--g5);color:#fff;}
+/* #8: relative date highlight */
+.pcard-days{font-family:var(--mono);font-size:var(--fs-2xs);font-weight:500;}
+.pcard-days.overdue{color:var(--a7);background:var(--a0);padding:1px 5px;border-radius:3px;}
+.pcard-days.stale{color:var(--r7);background:var(--r0);padding:1px 5px;border-radius:3px;}
 .pcard-adh{font-weight:600;padding:1px 7px;border-radius:99px;}
 .pcard-adh-g{color:var(--g7);background:var(--g0);}
 .pcard-adh-a{color:var(--a7);background:var(--a0);}
@@ -200,7 +209,7 @@ input,select,textarea{font-family:inherit;}
 .pcard-adh-na{color:var(--i3);font-weight:400;}
 
 /* v11: navigation shell: login / dashboard / cockpit views */
-.boot-splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%);animation:bootFadeOut .6s ease-in .9s forwards;}
+.boot-splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%);animation:bootFadeOut .5s ease-in .4s forwards;}
 .boot-splash-mark{color:#4FC3DE;animation:bootPulse 1.4s ease-in-out infinite;}
 .boot-splash-name{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:1px;color:white;}
 .boot-splash-full{font-family:var(--mono);font-size:var(--fs-2xs);font-weight:400;color:rgba(165,243,252,.65);letter-spacing:1.6px;text-transform:uppercase;}
@@ -302,7 +311,7 @@ html.dark-mode{
   --tx-g5:#4ADE80; --tx-r5:#F87171; --tx-a5:#FCD34D;
 }
 html.dark-mode .boot-splash,html.dark-mode .login-view{background:radial-gradient(circle at 50% 20%,#0D1B2E 0%,#040A14 70%)!important;}
-html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--wh);}
+html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--wh);}html.dark-mode body{background:#0A0F1C;}
 
 /* ── ITEM 31: Notification centre ───────────────────────────*/
 .notif-centre{position:fixed;top:62px;right:16px;width:320px;max-height:460px;
@@ -478,6 +487,201 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .cop-usage-conf-bar-wrap{flex:1;height:4px;background:var(--i1);border-radius:2px;overflow:hidden;}
 .cop-usage-conf-bar{height:100%;border-radius:2px;transition:width .4s;}
 
+
+/* ═══ COCKPIT 20 IMPROVEMENTS ═══════════════════════════════ */
+
+/* #1: Clinical summary ribbon above metric cards */
+.clinical-ribbon{display:flex;align-items:center;gap:12px;padding:var(--sp-5) var(--sp-8);background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);box-shadow:0 1px 3px rgba(10,14,23,.05);font-size:var(--fs-xs);flex-wrap:wrap;}
+.clinical-ribbon-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-2xs);font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
+.cr-badge-r{background:var(--r5);color:#fff;}
+.cr-badge-a{background:var(--a5);color:#fff;}
+.cr-badge-g{background:var(--g5);color:#fff;}
+.cr-sep{color:var(--i2);}
+.cr-item{color:var(--i5);font-family:var(--mono);font-size:var(--fs-2xs);}
+.cr-item strong{color:var(--i7);font-weight:600;}
+
+/* #2: Timeline hierarchy */
+.tl-dt{font-family:var(--mono);font-size:8px;color:var(--i3);margin-bottom:3px;letter-spacing:.4px;}
+.tl-ev{font-size:var(--fs-sm);font-weight:600;color:var(--i7);display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;}
+.tl-bd{font-size:var(--fs-xs);color:var(--i4);margin-top:3px;line-height:1.5;}
+
+/* #3: Action panel compact buttons */
+.abt{padding:var(--sp-4) var(--sp-6);gap:var(--sp-4);}
+.abt-ico{width:28px;height:28px;}
+.abt-ico i{font-size:var(--fs-base);}
+.abt-lbl{font-size:var(--fs-sm);}
+.abt-desc{font-size:var(--fs-2xs);}
+.abt-arr{display:none;}
+
+/* #9: Aside collapse toggle */
+.aside-collapse-btn{position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:24px;height:24px;background:var(--wh);border:1px solid var(--i2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(10,14,23,.1);transition:all .2s;}
+.aside-collapse-btn:hover{background:var(--n0);border-color:var(--n3);}
+.aside-collapse-btn i{font-size:10px;color:var(--i4);transition:transform .2s;}
+.cockpit-aside{position:relative;transition:width .25s cubic-bezier(.4,0,.2,1);}
+.cockpit-aside.collapsed{width:44px!important;overflow:hidden;}
+.cockpit-aside.collapsed .cop-panel,.cockpit-aside.collapsed .act-panel,.cockpit-aside.collapsed .comp-panel{opacity:0;pointer-events:none;}
+.cockpit-aside.collapsed .aside-collapse-btn i{transform:rotate(180deg);}
+
+/* #10: Breadcrumb upgrade */
+.bcrumb-pid{font-family:var(--mono);font-size:var(--fs-xs);color:var(--n6);letter-spacing:.5px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:var(--n0);border:1px solid var(--n1);border-radius:99px;}
+.bcrumb-pid .bcrumb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+
+/* #11: Read-only banner */
+.readonly-banner{position:sticky;top:58px;z-index:200;background:var(--a7);color:#fff;display:none;align-items:center;justify-content:center;gap:12px;padding:8px 20px;font-size:var(--fs-xs);font-weight:500;}
+.readonly-banner.visible{display:flex;}
+.readonly-banner a{color:rgba(255,255,255,.85);text-decoration:underline;cursor:pointer;}
+
+/* #12: 2-column form layout */
+.fg-2col{display:grid;grid-template-columns:120px 1fr;gap:var(--sp-3) var(--sp-6);align-items:center;}
+.fg-2col .fl{font-size:var(--fs-xs);color:var(--i4);text-align:right;padding-right:var(--sp-3);}
+.fg-2col .fgrp{display:contents;}
+
+/* #13: Inline field validation */
+.fi-wrap{position:relative;display:flex;align-items:center;gap:6px;}
+.fi-range{font-size:8px;font-family:var(--mono);letter-spacing:.3px;padding:1px 6px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.fi-range.ok{background:var(--g0);color:var(--g7);}
+.fi-range.warn{background:var(--a0);color:var(--a7);}
+.fi-range.danger{background:var(--r0);color:var(--r7);}
+
+/* #14: Drawer speed variants */
+.drw{transition:transform .22s cubic-bezier(.4,0,.2,1);}
+
+/* #15: View transition crossfade */
+.view-fade{animation:viewFadeIn .18s ease-out both;}
+@keyframes viewFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* #16: Status zone hover */
+.sz{cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.sz:hover{border-color:var(--n3);box-shadow:0 4px 16px rgba(10,14,23,.1);transform:translateY(-1px);}
+
+/* #17: Commit to sans throughout cockpit panels */
+.intel-tt,.tl-tt,.act-pt{font-family:var(--sans)!important;}
+.intel-tt{font-size:var(--fs-sm);font-weight:600;}
+.tl-tt{font-size:var(--fs-sm);font-weight:600;}
+
+/* #18: Alert icon size fix */
+.ia i{font-size:var(--fs-sm)!important;}
+
+/* #19: Resident header — slightly differentiated from nav blue */
+.cop-hdr{background:linear-gradient(135deg,#0F2444 0%,#0A1A32 100%)!important;}
+
+/* #20: Favicon (SVG data URI injected via JS on load) */
+
+
+/* ═══ DASHBOARD 20 IMPROVEMENTS ═════════════════════════════ */
+
+/* #1: Sort controls */
+.dash-sort-row{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.dash-sort-lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.8px;text-transform:uppercase;color:var(--i4);}
+.dash-sort-pill{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.3px;text-transform:uppercase;padding:3px 10px;border:1px solid var(--i2);border-radius:99px;cursor:pointer;color:var(--i4);transition:all .14s;}
+.dash-sort-pill:hover{border-color:var(--n3);color:var(--n7);}
+.dash-sort-pill.on{background:var(--n8);color:#fff;border-color:var(--n8);}
+
+/* #2: Stat strip delta badges */
+.kstat-delta{font-family:var(--mono);font-size:8px;font-weight:600;padding:1px 5px;border-radius:99px;margin-top:3px;display:inline-block;}
+.kstat-delta.up{background:var(--r0);color:var(--r7);}
+.kstat-delta.down{background:var(--g0);color:var(--g7);}
+.kstat-delta.flat{color:var(--i3);background:transparent;}
+
+/* #3: Overdue kstat */
+.kstat-overdue{background:var(--a0);border-color:var(--a1);}
+.kstat-overdue .kstat-lbl{color:var(--a7);}
+.kstat-overdue .kstat-val{color:var(--a7);}
+
+/* #4: Filter count badges */
+.dash-filter-count{font-size:9px;font-weight:600;padding:0 4px;background:rgba(255,255,255,.2);border-radius:3px;margin-left:3px;}
+.dash-filter.on .dash-filter-count{background:rgba(255,255,255,.25);}
+.dash-filter:not(.on) .dash-filter-count{background:var(--i1);color:var(--i4);}
+
+/* #5: Unified 6-cell stat strip */
+.dash-stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--sp-4);margin-bottom:14px;}
+@media(max-width:900px){.dash-stat-strip{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.dash-stat-strip{grid-template-columns:repeat(2,1fr);}}
+
+/* #6: Filter rows with labels */
+.dash-filter-section{margin-bottom:16px;}
+.dash-filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.dash-filter-row-lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.8px;text-transform:uppercase;color:var(--i3);min-width:56px;}
+
+/* #7: Resident cohort scan — collapsible idle state */
+.cop-cohort.collapsed .cop-cohort-body{display:none;}
+.cop-cohort-compact{display:flex;align-items:center;gap:8px;padding:var(--sp-4) var(--sp-7);font-size:var(--fs-xs);color:var(--i5);}
+.cop-cohort-toggle{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:12px;margin-left:auto;padding:2px 6px;border-radius:4px;transition:all .14s;}
+.cop-cohort-toggle:hover{color:#fff;background:rgba(255,255,255,.1);}
+
+/* #8: Search / shortcut hint */
+.dash-search-hint{font-family:var(--mono);font-size:9px;color:var(--i3);border:1px solid var(--i2);border-radius:4px;padding:1px 5px;margin-left:auto;flex-shrink:0;}
+
+/* #9: Active filter chip row */
+.dash-active-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;min-height:0;}
+.dash-active-filter-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.3px;padding:3px 8px;border-radius:99px;background:var(--n0);border:1px solid var(--n2);color:var(--n7);}
+.dash-active-filter-chip button{background:none;border:none;cursor:pointer;color:var(--n5);font-size:10px;padding:0 0 0 2px;line-height:1;}
+.dash-clear-all{font-family:var(--mono);font-size:var(--fs-3xs);letter-spacing:.3px;color:var(--i4);cursor:pointer;text-decoration:underline;margin-left:4px;}
+
+/* #10: Search clear button */
+.dash-search-clear{background:none;border:none;cursor:pointer;color:var(--i3);font-size:13px;padding:0;display:none;line-height:1;}
+.dash-search-clear.visible{display:block;}
+.dash-search-clear:hover{color:var(--r5);}
+
+/* #11: Filter bar two labelled rows */
+.dash-filter-group-lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.8px;text-transform:uppercase;color:var(--i3);margin-right:4px;}
+
+/* #12: View toggle grid/list */
+.dash-view-toggle{display:flex;gap:3px;}
+.dvt-btn{background:none;border:1px solid var(--i2);border-radius:var(--rsm);padding:4px 8px;cursor:pointer;color:var(--i4);font-size:12px;transition:all .14s;}
+.dvt-btn.on{background:var(--n8);border-color:var(--n8);color:#fff;}
+.dvt-btn:hover:not(.on){border-color:var(--n3);color:var(--n7);}
+
+/* #12: List view */
+.pcard-list-view{display:flex;flex-direction:column;gap:4px;}
+.pcard-list-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--wh);border:1px solid var(--i2);border-radius:var(--rmd);cursor:pointer;transition:all .14s;}
+.pcard-list-item:hover{border-color:var(--n3);background:var(--n0);}
+.pcard-list-sev{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pcard-list-sev.r{background:var(--r5);}
+.pcard-list-sev.a{background:var(--a5);}
+.pcard-list-sev.g{background:var(--g5);}
+.pcard-list-pid{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--n6);min-width:80px;}
+.pcard-list-name{font-size:var(--fs-sm);font-weight:500;color:var(--i7);flex:1;}
+.pcard-list-dis{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i4);min-width:60px;}
+.pcard-list-metric{font-family:var(--mono);font-size:var(--fs-xs);font-weight:600;min-width:50px;}
+.pcard-list-date{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i3);min-width:60px;text-align:right;}
+.pcard-list-badge{margin-left:auto;}
+
+/* #14: Resident flag banner on card */
+.pcard-flag{font-size:var(--fs-2xs);color:var(--n7);background:var(--n0);border-top:1px solid var(--n1);padding:5px 14px;display:flex;align-items:center;gap:6px;border-radius:0 0 var(--rlg) 0;}
+.pcard-flag i{font-size:10px;color:var(--n5);}
+
+/* #15: Biologic eligible badge */
+.pcard-bio-badge{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--p0);border:1px solid var(--p1);color:var(--p7);}
+
+/* #16: Recent chip timestamps */
+.dash-recent-chip-time{font-size:8px;color:var(--i3);font-family:var(--mono);}
+.dash-recent-chip.stale .dash-recent-chip-time{color:var(--a7);}
+
+/* #18: Dashboard date title */
+.dash-date{font-size:var(--fs-sm);color:var(--i4);margin-top:2px;}
+
+/* #19: Dashboard subtitle split */
+.dash-sub-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px;}
+.dash-sub-count{font-size:var(--fs-h2);font-weight:700;color:var(--tx-n8,var(--n8));font-family:var(--sans);}
+.dash-sub-label{font-size:var(--fs-xs);color:var(--i4);}
+.dash-sub-role{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--n6);background:var(--n0);border:1px solid var(--n1);padding:1px 7px;border-radius:99px;}
+
+/* #20: Print morning list */
+@media print {
+  .pcard-grid,.pcard-list-view{display:block!important;}
+  .pcard{display:flex!important;page-break-inside:avoid;}
+}
+
+/* Empty state */
+.dash-empty-state{text-align:center;padding:60px 20px;color:var(--i4);}
+.dash-empty-state i{font-size:40px;color:var(--i2);margin-bottom:16px;display:block;}
+.dash-empty-state-title{font-size:var(--fs-body);font-weight:500;color:var(--i5);margin-bottom:8px;}
+.dash-empty-state-sub{font-size:var(--fs-sm);color:var(--i3);margin-bottom:16px;}
+
+/* Overdue card ring */
+.pcard.overdue{box-shadow:0 0 0 2px var(--a3);}
+
 /* ── ITEM 29: Print / PDF layout ───────────────────────────
    Clinical report print mode: hides all chrome, exposes
    cockpit content in a clean single-column A4 layout.
@@ -583,7 +787,8 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .cz-g{background:var(--g0);color:var(--g7);border:1px solid var(--g1);}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-7);border:none;border-radius:99px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);white-space:nowrap;line-height:1;}
+.btn{display:inline-flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-7);border:none;border-radius:99px;font-family:var(--sans);font-size:var(--fs-sm);font-weight:500;letter-spacing:0;text-transform:none;cursor:pointer;transition:all .16s cubic-bezier(.4,0,.2,1);white-space:nowrap;line-height:1;}
+.btn.mono-label{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.4px;text-transform:uppercase;}
 .btn i{font-size:var(--fs-base);flex-shrink:0;}
 .bp{background:var(--n8);color:white;}
 .bp:hover{background:var(--n6);transform:translateY(-1px);box-shadow:var(--sh1);}
@@ -620,6 +825,15 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .vtl-note{font-size:var(--fs-3xs);color:var(--i4);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .vtl-cur{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:8px;background:var(--n1);color:var(--n6);margin-left:2px;}
 .vdate{font-size:var(--fs-xs);color:var(--i4);margin-left:auto;flex-shrink:0;}
+/* #9: visit button date + delta */
+.vbtn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:4px 6px;border-radius:var(--rsm);transition:background .12s;}
+.vbtn:hover{background:var(--n0);}
+.vtl-n{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i5);white-space:nowrap;}
+.vtl-date{font-family:var(--mono);font-size:8px;color:var(--i3);display:block;margin-top:1px;}
+.vtl-delta{font-size:8px;font-weight:700;font-family:var(--mono);}
+.vtl-delta.up{color:var(--g7);} .vtl-delta.down{color:var(--r7);}
+.vtl-item.on .vtl-n{color:var(--n7);font-weight:600;}
+.vtl-item.on .vbtn{background:var(--n0);}
 .vdelta{display:flex;align-items:center;gap:var(--sp-3);}
 .vdp{font-family:var(--mono);font-size:var(--fs-3xs);padding:var(--sp-1) var(--sp-3);border-radius:3px;border:1px solid;}
 .vdp.w{background:var(--r0);color:var(--r7);border-color:var(--r1);}
@@ -638,16 +852,31 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .sz-a{background:var(--a0);border-color:var(--a1);color:var(--a5);}
 .sz-g{background:var(--g0);border-color:var(--g1);color:var(--g5);}
 .sz-t{background:var(--t0);border-color:var(--t1);color:var(--t5);}
-.sz-ico{width:52px;height:52px;border-radius:var(--rlg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sz-r .sz-ico{background:var(--r5);}
-.sz-a .sz-ico{background:var(--a5);}
-.sz-g .sz-ico{background:var(--g5);}
-.sz-t .sz-ico{background:var(--t5);}
+/* ── #4–5: Status zone redesign — disease icon + zone tracker ── */
+.sz-ico{width:48px;height:48px;border-radius:var(--rlg);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.sz-r .sz-ico{background:linear-gradient(135deg,var(--r5),var(--r7));}
+.sz-a .sz-ico{background:linear-gradient(135deg,var(--a5),var(--a7));}
+.sz-g .sz-ico{background:linear-gradient(135deg,var(--g5),var(--g7));}
+.sz-t .sz-ico{background:linear-gradient(135deg,var(--t5),var(--t7));}
 .sz-ico i{font-size:var(--fs-xl);color:white;}
-.sz-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.75;}
-.sz-tt{font-family:var(--serif);font-size:var(--fs-lg);font-weight:600;color:var(--i7);margin-bottom:6px;line-height:1.3;}
-.sz-ins{font-size:var(--fs-base);color:var(--i5);line-height:1.65;}
+.sz-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;opacity:.75;}
+.sz-tt{font-family:var(--sans);font-size:var(--fs-h2);font-weight:700;color:var(--i7);margin-bottom:5px;line-height:1.25;}
+.sz-ins{font-size:var(--fs-sm);color:var(--i5);line-height:1.65;}
 .sz-ins strong{color:var(--i7);font-weight:600;}
+/* Zone progression tracker */
+.sz-tracker{display:flex;align-items:center;gap:4px;margin-top:12px;}
+.sz-track-seg{flex:1;height:5px;border-radius:2px;transition:all .3s;}
+.sz-track-seg.active{opacity:1;}
+.sz-track-seg.inactive{opacity:.22;}
+.sz-track-r{background:var(--r5);}
+.sz-track-a{background:var(--a5);}
+.sz-track-g{background:var(--g5);}
+.sz-track-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.4px;text-transform:uppercase;padding-top:3px;display:flex;justify-content:space-between;}
+.sz-zone-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:var(--fs-2xs);font-weight:600;letter-spacing:.6px;text-transform:uppercase;padding:3px 10px;border-radius:99px;margin-bottom:6px;}
+.sz-r .sz-zone-badge{background:var(--r5);color:#fff;}
+.sz-a .sz-zone-badge{background:var(--a5);color:#fff;}
+.sz-g .sz-zone-badge{background:var(--g5);color:#fff;}
+.sz-t .sz-zone-badge{background:var(--t5);color:#fff;}
 .lcp{display:inline-flex;align-items:center;gap:var(--sp-3);padding:var(--sp-2) var(--sp-5);border-radius:999px;font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;border:1.5px solid;margin-top:10px;transition:all .25s;}
 .lcp-e{background:var(--r0);color:var(--r7);border-color:var(--r2);}
 .lcp-b{background:var(--a0);color:var(--a7);border-color:var(--a2);}
@@ -659,21 +888,39 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 
 /* ── METRICS ── */
 .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);}
-.mc{background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:var(--sp-9);cursor:pointer;transition:all .17s;position:relative;overflow:hidden;}
-.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--i2);}
-.mc.sd::before{background:var(--r5);} .mc.sw::before{background:var(--a5);} .mc.sg::before{background:var(--g5);} .mc.sn::before{background:var(--n4);}
-.mc.sd{background:linear-gradient(180deg,var(--r0) 0%,var(--wh) 56px);}
-.mc.sw{background:linear-gradient(180deg,var(--a0) 0%,var(--wh) 56px);}
-.mc:hover{border-color:var(--n2);box-shadow:var(--sh2);transform:translateY(-2px);}
-.mc-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--i4);margin-bottom:7px;}
+/* ── METRICS redesign: #1 delta arrow, #2 trend line, #3 click affordance ── */
+.mc{background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:var(--sp-8) var(--sp-9) var(--sp-7);cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(10,14,23,.05);}
+.mc::after{content:'→';position:absolute;top:var(--sp-7);right:var(--sp-7);font-size:var(--fs-xs);color:var(--i2);opacity:0;transition:all .18s;transform:translateX(-4px);}
+.mc:hover::after{opacity:1;transform:translateX(0);color:var(--n4);}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--rlg) var(--rlg) 0 0;background:var(--i2);}
+.mc.sd::before{background:linear-gradient(90deg,var(--r7),var(--r5));} .mc.sw::before{background:linear-gradient(90deg,var(--a7),var(--a5));} .mc.sg::before{background:linear-gradient(90deg,var(--g7),var(--g5));} .mc.sn::before{background:linear-gradient(90deg,var(--n6),var(--n4));}
+.mc.sd{background:linear-gradient(160deg,var(--r0) 0%,var(--wh) 80px);}
+.mc.sw{background:linear-gradient(160deg,var(--a0) 0%,var(--wh) 80px);}
+.mc:hover{border-color:var(--n2);box-shadow:0 6px 20px rgba(10,14,23,.1);transform:translateY(-3px);}
+.mc:focus-visible{outline:2px solid var(--n6);outline-offset:2px;}
+.mc-lbl{font-family:var(--mono);font-size:var(--fs-3xs);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--i4);margin-bottom:var(--sp-5);}
 .field-code-tag{display:inline-block;margin-left:var(--sp-2);padding:1px 5px;font-size:9px;font-weight:500;letter-spacing:.3px;text-transform:none;color:var(--i3);background:var(--n1);border:1px solid var(--i1);border-radius:4px;vertical-align:middle;cursor:help;}
-.mc-val{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:600;line-height:1;margin-bottom:4px;color:var(--tx-n8,var(--n8));}
+.mc-val-row{display:flex;align-items:baseline;gap:var(--sp-4);margin-bottom:3px;}
+.mc-val{font-family:var(--sans);font-size:var(--fs-2xl);font-weight:700;line-height:1;color:var(--tx-n8,var(--n8));}
 .mc-val.warn{color:var(--a7);} .mc-val.danger{color:var(--r7);} .mc-val.good{color:var(--g7);} .mc-val.teal{color:var(--t7);}
-.mc-int{font-size:var(--fs-sm);color:var(--i5);line-height:1.4;}
-.mc-prev{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i3);margin-top:3px;}
+.mc-delta{display:inline-flex;align-items:center;gap:2px;font-size:var(--fs-xs);font-weight:600;font-family:var(--mono);padding:2px 6px;border-radius:99px;}
+.mc-delta.up{background:var(--g0);color:var(--g7);}
+.mc-delta.down{background:var(--r0);color:var(--r7);}
+.mc-delta.flat{background:var(--i0);color:var(--i4);}
+.mc-delta.down-good{background:var(--g0);color:var(--g7);}
+.mc-delta.up-bad{background:var(--r0);color:var(--r7);}
+.mc-int{font-size:var(--fs-xs);color:var(--i5);line-height:1.4;margin-bottom:2px;}
+.mc-prev{font-family:var(--mono);font-size:var(--fs-3xs);color:var(--i3);margin-top:1px;}
 
 /* ── TREND SPARK ── */
-.spark{display:flex;align-items:flex-end;gap:var(--sp-0b);height:28px;margin-top:8px;}
+/* ── #2: Trend sparkline redesign ── */
+.spark{margin-top:var(--sp-5);overflow:hidden;border-radius:var(--rsm);}
+.spark-svg{display:block;width:100%;height:36px;}
+.spark-trend-row{display:flex;align-items:center;justify-content:space-between;margin-top:3px;}
+.spark-trend-lbl{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i3);}
+.spark-rate{font-family:var(--mono);font-size:var(--fs-micro);font-weight:600;}
+.spark-rate.up{color:var(--g7);} .spark-rate.down{color:var(--r7);} .spark-rate.flat{color:var(--i4);}
+/* legacy bar support */
 .spark-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px;transition:height .3s;}
 .spark-bar.good{background:var(--g5);opacity:.7;}
 .spark-bar.warn{background:var(--a5);opacity:.7;}
@@ -681,8 +928,12 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .spark-lbl{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i4);margin-top:3px;display:flex;justify-content:space-between;}
 
 /* ── INLINE ALERTS ── */
-.ia{display:flex;align-items:flex-start;gap:var(--sp-5);padding:var(--sp-5) var(--sp-7);border-radius:var(--rmd);font-size:var(--fs-sm);border:1px solid;margin-bottom:8px;}
-.ia i{font-size:var(--fs-body);flex-shrink:0;margin-top:1px;}
+.ia{display:flex;align-items:flex-start;gap:var(--sp-5);padding:var(--sp-4) var(--sp-6);border-radius:var(--rmd);font-size:var(--fs-sm);border:1px solid;margin-bottom:8px;position:relative;}
+.ia i{font-size:var(--fs-base);flex-shrink:0;margin-top:1px;}
+/* #16: dismissable alerts */
+.ia-dismiss{position:absolute;top:6px;right:8px;background:transparent;border:none;cursor:pointer;color:currentColor;opacity:.4;font-size:11px;line-height:1;padding:2px;}
+.ia-dismiss:hover{opacity:.8;}
+.ia.dismissed{display:none;}
 .ia-w{background:var(--a0);border-color:var(--a1);color:var(--a8);}
 .ia-d{background:var(--r0);border-color:var(--r1);color:var(--r8);}
 .ia-i{background:var(--n0);border-color:var(--n1);color:var(--n7);}
@@ -697,13 +948,21 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .intel-ico i{font-size:var(--fs-base);color:white;}
 .intel-tt{font-family:var(--serif);font-size:var(--fs-body);font-weight:600;color:var(--tx-n8,var(--n8));}
 .intel-sb{font-size:var(--fs-xs);color:var(--i4);margin-top:1px;}
-.ir{display:flex;align-items:flex-start;padding:var(--sp-5) var(--sp-9);border-bottom:1px solid var(--i1);transition:background .12s;}
+/* ── #13–14: Intel rows — left accent colour + readable output font ── */
+.ir{display:flex;align-items:flex-start;padding:var(--sp-5) var(--sp-9) var(--sp-5) var(--sp-7);border-bottom:1px solid var(--i1);border-left:3px solid transparent;transition:all .14s;}
 .ir:last-child{border-bottom:none;}
-.ir:hover{background:var(--n0);}
-.ik{font-size:var(--fs-sm);font-weight:600;color:var(--i4);width:160px;flex-shrink:0;padding-top:1px;}
-.iv{font-size:var(--fs-base);color:var(--i7);flex:1;display:flex;align-items:flex-start;gap:var(--sp-3);flex-wrap:wrap;line-height:1.5;}
+.ir:hover{background:var(--n0);border-left-color:var(--n3);}
+.ir.ir-crit{border-left-color:var(--r5);background:var(--r0);}
+.ir.ir-warn{border-left-color:var(--a5);background:var(--a0);}
+.ir.ir-ok{border-left-color:var(--g5);}
+.ik{font-size:var(--fs-sm);font-weight:600;color:var(--i4);width:152px;flex-shrink:0;padding-top:1px;}
+.iv{font-size:var(--fs-sm);color:var(--i7);flex:1;display:flex;align-items:flex-start;gap:var(--sp-3);flex-wrap:wrap;line-height:1.5;}
 .iv.it{font-style:italic;color:var(--i5);}
 .iv.fw{font-weight:600;}
+/* #14: analysis output — sans not mono */
+.ao-out{font-family:var(--sans);font-size:var(--fs-xs);color:var(--i7);line-height:1.7;min-height:40px;margin-top:7px;}
+.ao-out.idle{display:flex;align-items:center;gap:8px;color:var(--i3);background:var(--i0);border:1px dashed var(--i2);border-radius:var(--rmd);padding:10px 12px;font-family:var(--sans);}
+.ao-out.idle i{font-size:15px;color:var(--i3);flex-shrink:0;}
 
 /* ── STEP LADDER (Asthma) ── */
 .step-ladder{display:flex;gap:var(--sp-0b);margin-top:6px;align-items:flex-end;}
@@ -927,9 +1186,7 @@ html.dark-mode .ahdr,html.dark-mode .drw,html.dark-mode .pcard{background:var(--
 .ao-ct{font-size:var(--fs-sm);font-weight:600;color:var(--tx-n8,var(--n8));}
 .ao-ref{font-family:var(--mono);font-size:var(--fs-micro);color:var(--i3);background:var(--i0);border:1px solid var(--i1);padding:var(--sp-0) var(--sp-2);border-radius:3px;}
 .ao-ico{width:28px;height:28px;border-radius:8px;background:var(--n0);color:var(--n7);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
-.ao-out{font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i5);line-height:1.7;white-space:pre-wrap;min-height:40px;margin-top:7px;}
-.ao-out.idle{display:flex;align-items:center;gap:8px;color:var(--i3);font-style:normal;background:var(--i0);border:1px dashed var(--i2);border-radius:var(--rmd);padding:10px 12px;}
-.ao-out.idle i{font-size:15px;color:var(--i3);flex-shrink:0;}
+/* ao-out moved to intel rows section above */
 .rep{font-family:var(--mono);font-size:var(--fs-xs);line-height:1.8;color:var(--i5);background:var(--n0);border:1px solid var(--i2);border-radius:var(--rmd);padding:var(--sp-7);white-space:pre-wrap;min-height:80px;}
 
 /* ── TABLE ── */
@@ -1326,6 +1583,14 @@ tbody td.strong{color:var(--i7);font-weight:600;}
 .cop-loading-dots span:nth-child(2){animation-delay:.2s;}
 .cop-loading-dots span:nth-child(3){animation-delay:.4s;}
 @keyframes cldot{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+/* ── #17: Skeleton screens ── */
+@keyframes skeletonPulse{0%,100%{opacity:.4}50%{opacity:1}}
+.skel{background:var(--i1);border-radius:4px;animation:skeletonPulse 1.4s ease-in-out infinite;}
+.skel-line{height:11px;margin-bottom:8px;}
+.skel-val{height:32px;width:60%;margin-bottom:10px;}
+.skel-card{background:var(--wh);border:1px solid var(--i2);border-radius:var(--rlg);padding:var(--sp-9);}
+.drw-skeleton{padding:var(--sp-11);display:flex;flex-direction:column;gap:var(--sp-7);}
+.drw-skel-hdr{display:flex;flex-direction:column;gap:8px;padding-bottom:var(--sp-7);border-bottom:1px solid var(--i1);}
 </style>
 </head>
 <body>
@@ -1345,18 +1610,20 @@ tbody td.strong{color:var(--i7);font-weight:600;}
   <button class="btn bg btn-sm" id="ui-lang-btn" onclick="cycleUiLang()" title="Switch interface language" aria-label="Switch interface language" style="margin-right:8px">EN</button>
   <div class="hdr-r" id="hdr-actions"></div>
 </header>
+<div class="readonly-banner" id="readonly-banner" role="alert">
+  <i class="ti ti-eye" style="font-size:14px"></i>
+  Read-only review mode · edits disabled ·
+  <a onclick="toggleReadOnly();updateReadOnlyBanner()">Exit review mode</a>
+</div>
 
 <!-- BOOT SPLASH: brief loading flourish showing the full system name, auto-dismisses into login -->
 <div id="boot-splash" class="boot-splash">
-  <div class="boot-splash-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:40px;height:40px">
-      <path d="M5 16c0 -5 2 -9 5 -10c1.2 -0.4 2 0.6 2 2v13"></path>
-      <path d="M19 16c0 -5 -2 -9 -5 -10c-1.2 -0.4 -2 0.6 -2 2v13"></path>
-      <path d="M7 11c1.5 1 3 1 5 0"></path>
-      <path d="M17 11c-1.5 1 -3 1 -5 0"></path>
-    </svg>
+  <div class="boot-splash-mark" style="display:flex;flex-direction:column;align-items:center;gap:0">
+    <div style="margin-bottom:10px;opacity:.95">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAF" alt="AIROS" style="width:60px;height:60px;object-fit:contain;filter:brightness(0) invert(1)">
+    </div>
+    <div style="font-family:'IBM Plex Serif',Georgia,serif;font-size:48px;font-weight:700;letter-spacing:2px;color:#fff;line-height:1;background:linear-gradient(90deg,#FFFFFF 60%,#A5F3FC 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">AIROS</div>
   </div>
-  <div class="boot-splash-name">AIROS</div>
   <div class="boot-splash-full">Airway Intelligence Operating System</div>
 </div>
 
@@ -1394,7 +1661,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     </div>
     <div class="dash-search">
       <i class="ti ti-search"></i>
-      <input id="dash-search-input" placeholder="Jump to a patient ID, name, or disease" oninput="dashSearch(this.value)" onkeydown="dashSearchKeydown(event)" autocomplete="off">
+      <input id="dash-search-input" placeholder='Jump to a patient ID, name, or disease — press / to focus' oninput="dashSearch(this.value)" onkeydown="dashSearchKeydown(event)" autocomplete="off"><button class="dash-search-clear" id="dash-search-clear" onclick="clearDashSearch()" aria-label="Clear search"><i class="ti ti-x"></i></button><span class="dash-search-hint">/</span>
     </div>
     <div class="cop-cohort" id="cop-cohort">
       <div class="cop-cohort-hdr">
@@ -1468,6 +1735,7 @@ tbody td.strong{color:var(--i7);font-weight:600;}
         <div class="sz-lbl" id="z-lbl"></div>
         <div class="sz-tt" id="z-tt"></div>
         <div class="sz-ins" id="z-ins"></div>
+        <div id="sz-tracker"></div>
         <div class="lcp lcp-e" id="lcp"><span class="lcp-dot"></span><span id="lcp-txt"></span></div>
       </div>
     </div>
@@ -1492,7 +1760,8 @@ tbody td.strong{color:var(--i7);font-weight:600;}
     </div>
   </div>
 
-  <div class="cockpit-aside">
+  <div class="cockpit-aside" style="position:relative">
+    <button class="aside-collapse-btn" id="aside-collapse-btn" onclick="toggleAsideCollapse()" title="Collapse sidebar" aria-label="Collapse sidebar"><i class="ti ti-chevron-right" style="font-size:10px;color:var(--i4)"></i></button>
     <!-- ── AIROS RESIDENT ── -->
     <div class="cop-panel" id="cop-panel">
       <div class="cop-hdr" id="cop-hdr">
@@ -4036,10 +4305,23 @@ function render() {
   const sz = document.getElementById('status-zone');
   if (sz) {
     sz.className = `sz ${zCls} animate-in`;
-    g('z-icon').className = `ti ${zIcon}`;
-    g('z-lbl').textContent = zLbl;
+    const diseaseIcons = {COPD:'ti-lungs',Asthma:'ti-wind',ACO:'ti-git-merge',
+      IPF:'ti-chart-dots',OSA:'ti-device-heart-monitor',PAH:'ti-heart-rate-monitor',
+      'Chronic Bronchitis':'ti-droplet'};
+    const dIco = diseaseIcons[d] || zIcon;
+    g('z-icon').className = `ti ${dIco}`;
+    const zoneWord = zCls==='sz-r'?'Red zone':zCls==='sz-a'?'Amber zone':'Green zone';
+    g('z-lbl').innerHTML = `<span class="sz-zone-badge"><i class="ti ${dIco}" style="font-size:10px"></i>${zoneWord}</span>`;
     g('z-tt').textContent  = zTt;
     g('z-ins').innerHTML   = zIns;
+    const trackerEl = document.getElementById('sz-tracker');
+    if (trackerEl) {
+      const pos = zCls==='sz-r'?0:zCls==='sz-a'?1:2;
+      trackerEl.innerHTML = '<div class="sz-tracker">'
+        +['sz-track-r','sz-track-a','sz-track-g'].map((c,i)=>`<div class="sz-track-seg ${c} ${i===pos?'active':'inactive'}"></div>`).join('')
+        +'</div>'
+        +'<div class="sz-track-lbl"><span style="color:var(--r5)">Red</span><span style="color:var(--a5)">Amber</span><span style="color:var(--g5)">Green</span></div>';
+    }
     g('lcp').className = `lcp ${lcpCls}`;
     g('lcp-txt').textContent = lcpTxt;
   }
@@ -4191,30 +4473,72 @@ function buildMetrics(d, pt, v, grp, stage, ctrl, gap, osaSev) {
   ];
 
   return cards.map(c => {
-    const spark = buildSparkline(c.spark);
+    const spark = buildSparkline(c.spark, c.vc);
+    const delta = buildDeltaBadge(c.spark, c.vc);
     return `<div class="mc ${c.stat}" onclick="openDrw('${c.act}')" role="button" tabindex="0">
       <div class="mc-lbl">${c.lbl}${c.code ? fieldCodeTag(c.code) : ''}</div>
-      <div class="mc-val ${c.vc}">${c.val}</div>
+      <div class="mc-val-row">
+        <div class="mc-val ${c.vc}">${c.val}</div>
+        ${delta}
+      </div>
       <div class="mc-int">${c.int}</div>
-      <div class="mc-prev">${c.prev}</div>
       ${spark}
     </div>`;
   }).join('');
 }
 
-/* Sparkline from visit history */
-function buildSparkline(field) {
+/* ── #1: Delta badge ── */
+function buildDeltaBadge(field, vc) {
   const pt = getPt();
+  if (!pt || currentVisit === 0) return '';
+  const curr = getVisit()?.[field];
+  const prev = pt.visits[currentVisit-1]?.[field];
+  if (curr === null || curr === undefined || prev === null || prev === undefined) return '';
+  if (typeof curr !== 'number') return '';
+  const diff = curr - prev;
+  if (Math.abs(diff) < 0.01) return '<span class="mc-delta flat">no change</span>';
+  const lowerBetter = ['cat','exac','hosp','ahi','odi','rescueWk','mmrc','mpap','pvr','whoFc'];
+  const isLB = lowerBetter.includes(field);
+  const isGood = isLB ? diff < 0 : diff > 0;
+  const cls = diff > 0 ? (isGood ? 'up' : 'up-bad') : (isGood ? 'down-good' : 'down');
+  const arrow = diff > 0 ? '▲' : '▼';
+  const fmt = Math.abs(diff) < 1 ? Math.abs(diff).toFixed(1) : Math.round(Math.abs(diff));
+  return `<span class="mc-delta ${cls}">${arrow} ${fmt}</span>`;
+}
+
+/* ── #2: SVG trend sparkline ── */
+function buildSparkline(field, vc) {
+  const pt = getPt();
+  if (!pt) return '';
   const vals = pt.visits.map(v => v[field]).filter(x => x !== null && x !== undefined);
   if (vals.length < 2) return '';
-  const mx = Math.max(...vals);
-  const mn = Math.min(...vals);
-  const range = mx - mn || 1;
-  return `<div class="spark">${vals.map((v,i) => {
-    const h = Math.max(3, Math.round(((v-mn)/range)*22)+3);
-    const cls = i === currentVisit ? 'danger' : v > mx*0.7 ? 'good' : 'warn';
-    return `<div class="spark-bar ${cls}" style="height:${h}px" title="${v}"></div>`;
-  }).join('')}</div>`;
+  const W=200, H=36, pad=4;
+  const mx=Math.max(...vals), mn=Math.min(...vals), range=mx-mn||1;
+  const xStep=(W-pad*2)/(vals.length-1);
+  const yOf=v=>H-pad-((v-mn)/range)*(H-pad*2);
+  const points=vals.map((v,i)=>`${pad+i*xStep},${yOf(v)}`).join(' ');
+  const trend=vals[vals.length-1]-vals[0];
+  const lowerBetter=['cat','exac','hosp','ahi','odi','rescueWk','mmrc','mpap','pvr','whoFc'];
+  const isLB=lowerBetter.includes(field);
+  const improving=isLB?trend<0:trend>0;
+  const lineColor=Math.abs(trend)<0.5?'var(--i3)':improving?'var(--g5)':'var(--r5)';
+  const ci=Math.min(currentVisit,vals.length-1);
+  const cx=pad+ci*xStep, cy=yOf(vals[ci]);
+  const pctChange=vals[0]?((vals[vals.length-1]-vals[0])/vals[0]*100):0;
+  const rateLabel=Math.abs(pctChange)<0.5?'stable':`${pctChange>0?'+':''}${pctChange.toFixed(0)}%`;
+  const rateCls=Math.abs(pctChange)<0.5?'flat':improving?'up':'down';
+  const fillPts=`${points} ${pad+(vals.length-1)*xStep},${H} ${pad},${H}`;
+  return `<div class="spark">
+    <svg class="spark-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <polygon points="${fillPts}" fill="${lineColor}" opacity=".12"/>
+      <polyline points="${points}" fill="none" stroke="${lineColor}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${cx}" cy="${cy}" r="3" fill="${lineColor}" stroke="var(--wh)" stroke-width="1.5"/>
+    </svg>
+    <div class="spark-trend-row">
+      <span class="spark-trend-lbl">${vals.length} visits</span>
+      <span class="spark-rate ${rateCls}">${trend===0?'':''}${rateLabel}</span>
+    </div>
+  </div>`;
 }
 
 /* Previous visit value */
@@ -4239,7 +4563,11 @@ function prevVisit() {
 /* ── ALERTS BUILDER ── */
 function buildAlerts(d, pt, v, grp, stage, ctrl) {
   const alerts = [];
-  const push = (type, icon, html) => alerts.push(`<div class="ia ia-${type}"><i class="ti ${icon}"></i><div class="ia-body">${html}</div></div>`);
+  let _aId=0;
+  const push = (type, icon, alertHtml) => {
+    const dismiss = type!=='d'?`<button class="ia-dismiss" onclick="this.closest('.ia').classList.add('dismissed')" aria-label="Dismiss"><i class="ti ti-x"></i></button>`:'';
+    alerts.push(`<div class="ia ia-${type}">${dismiss}<i class="ti ${icon}"></i><div class="ia-body">${alertHtml}</div></div>`);
+  };
 
   // Comorbidity-interaction engine: cross-condition findings independent of primary disease.
   getApplicableInteractions(pt, v).forEach(([id, rule]) => {
@@ -4571,9 +4899,13 @@ function renderVisitBar(pt, v) {
     const isLast = i === pt.visits.length - 1;
     return `<div class="vtl-item${i===currentVisit?' on':''}">
       ${i>0?'<div class="vtl-line"></div>':''}
-      <button class="vbtn" onclick="switchVisit(${i})" title="${vv.note||''}">
+      <button class="vbtn" onclick="switchVisit(${i})" title="${vv.note||vv.date||''}">
         <span class="vtl-dot vtl-dot-${dot}"></span>
-        <span class="vtl-tx"><span class="vtl-n">Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}</span>${vv.note ? `<span class="vtl-note">${vv.note}</span>` : ''}</span>
+        <span class="vtl-tx">
+          <span class="vtl-n">Visit ${vv.n}${vv.label ? ' · '+vv.label : ''}</span>
+          ${vv.date ? `<span class="vtl-date">${vv.date}</span>` : ''}
+          ${(()=>{const pv2=i>0?pt.visits[i-1]:null;if(!pv2)return '';const kf=pt.disease==='IPF'?'fvc':pt.disease==='OSA'?'ahi':'fev1';const d2=vv[kf]-pv2[kf];if(!d2)return '';return `<span class="vtl-delta ${d2>0?'up':'down'}">${d2>0?'▲':'▼'}${Math.abs(d2)}</span>`;})()}
+        </span>
         ${isLast?'<span class="vtl-cur">current</span>':''}
       </button>
     </div>`;
@@ -4833,6 +5165,13 @@ function showView(view) {
     g('hdr-actions').innerHTML  = buildHeaderActions(view);
   }
   if (view === 'dashboard') renderDashboard();
+  // #15: crossfade
+  requestAnimationFrame(() => {
+    ['dashboard-view','cockpit','cohort-studies-view'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.style.display !== 'none') { el.classList.remove('view-fade'); void el.offsetWidth; el.classList.add('view-fade'); }
+    });
+  });
   if (view === 'cockpit')   render();
   if (view === 'cohort-studies') { populateCohortDrugFilter(); renderCohortStudy(); }
 }
@@ -5184,7 +5523,7 @@ function buildDrugComparison(matched, drugName) {
   </div>`;
 }
 
-function renderDashboard() {
+function _renderDashboard_legacy() {
   const sub = g('dash-sub');
   const entries = Object.entries(DB);
   const needsReview = entries.filter(([,pt]) => pt.risk === 'r').length;
@@ -5243,7 +5582,7 @@ function populateCohortPulse() {
 }
 
 let dashSearchTerm = '';
-function buildFilteredCohort() {
+function _buildFilteredCohort_legacy() {
   const entries = Object.entries(DB).filter(([id,pt]) => {
     if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
     if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
@@ -5257,7 +5596,7 @@ function buildFilteredCohort() {
   if (!entries.length) return `<div style="text-align:center;padding:40px;font-size:var(--fs-sm);color:var(--i4)">No patients match${dashSearchTerm?` "${dashSearchTerm}"`:''}${dashSearchTerm?' with':''} the current filters.</div>`;
   return bCohortOverviewCards(entries);
 }
-function dashSearch(q) {
+function _dashSearch_legacy(q) {
   dashSearchTerm = (q||'').trim().toLowerCase().replace(/airos-\d{4}-/,'');
   const content = g('dash-content');
   const cohortContainer = content?.querySelector('.cohort-grid, .dash-cards') || content;
@@ -5412,11 +5751,14 @@ function _baseOpenDrw(type) {
   const unsEl=g('drw-uns');if(unsEl){unsEl.classList.remove('show');unsEl.style.display='';}
 
   const body = g('drw-body');
-  body.innerHTML = buildDrwContent(type);
+  // #17: skeleton then content
+  body.innerHTML = '<div class="drw-skeleton"><div class="drw-skel-hdr"><div class="skel skel-line" style="width:42%"></div><div class="skel skel-line" style="width:72%;margin-top:6px"></div></div><div class="skel-card" style="margin-top:14px"><div class="skel skel-val"></div><div class="skel skel-line" style="width:88%;margin-top:8px"></div><div class="skel skel-line" style="width:60%;margin-top:6px"></div></div><div class="skel-card" style="margin-top:10px"><div class="skel skel-val" style="width:48%"></div><div class="skel skel-line" style="width:80%;margin-top:8px"></div></div></div>';
+  setTimeout(() => { body.innerHTML = buildDrwContent(type); 
   body.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('change', markDirty);
     el.addEventListener('input',  markDirty);
   });
+  }, 0);  // end setTimeout skeleton
 
   g('drw-ov').classList.add('open');
   g('drw').classList.add('open');
@@ -6639,6 +6981,7 @@ function bCohortOverviewCards(entries) {
         <div class="pcard-hdr">
           <span class="pcard-id">${pidPrefix(id)}${id}</span>
           <span class="pcard-dis" style="color:${disColor}">${disLabel}</span>
+          <span class="pcard-severity">${alertSev==='r'?'Red zone':alertSev==='a'?'Amber zone':'Green zone'}</span>
         </div>
         ${flagBadge}
         ${pendingAIBadge}
@@ -6646,7 +6989,7 @@ function bCohortOverviewCards(entries) {
         <div class="pcard-zone">${zoneStr}${trendBadge}</div>
         <div class="sind ${alertSev}"><span class="sind-dot"></span>${topAlert}</div>
         <div class="pcard-foot">
-          <span>Visit ${lastV.n} · ${lastV.date}</span>
+          <span>Visit ${lastV.n} · <span class="${(()=>{const d=new Date(lastV.date),now=new Date(),days=Math.round((now-d)/86400000);return isNaN(days)?'':days>180?'pcard-days stale':days>90?'pcard-days overdue':'';})()}">${(()=>{const d=new Date(lastV.date),now=new Date(),days=Math.round((now-d)/86400000);return isNaN(days)||days<0?lastV.date:days===0?'Today':days===1?'1d ago':days<90?days+'d ago':Math.round(days/30)+'mo ago';})()}</span></span>
           <span class="pcard-adh pcard-adh-${lastV.adherence==null?'na':lastV.adherence>=80?'g':lastV.adherence>=60?'a':'r'}">${lastV.adherence!=null?lastV.adherence+'% adherence':'no adherence data'}</span>
         </div>
       </div>
@@ -8014,7 +8357,17 @@ function runLayer(n) {
   out.innerHTML = '<div class="cop-loading"><div class="cop-loading-dots"><span></span><span></span><span></span></div></div>'; out.classList.remove('idle');
   if (badge) { badge.classList.add('run'); badge.textContent = `L${n} ↻`; }
   setTimeout(() => {
-    out.textContent = ENG_OUTPUT(n, getPt(), getVisit());
+    const text = ENG_OUTPUT(n, getPt(), getVisit());
+    out.textContent = text;
+    // #13: severity colour on the ao-cell
+    const cell = out.closest ? out.closest('.ao-cell') : null;
+    if (cell) {
+      cell.classList.remove('ir-crit','ir-warn','ir-ok');
+      const lc = text.toLowerCase();
+      if (lc.includes('urgent')||lc.includes('critical')||lc.includes('immediately')||lc.includes('uncontrolled')||lc.includes('mandatory')) cell.classList.add('ir-crit');
+      else if (lc.includes('review')||lc.includes('monitor')||lc.includes('consider')||lc.includes('overdue')||lc.includes('suboptimal')||lc.includes('adherence')) cell.classList.add('ir-warn');
+      else cell.classList.add('ir-ok');
+    }
     if (badge) { badge.classList.remove('run'); badge.classList.add('done'); badge.textContent = `L${n} ✓`; }
     notify(`${LNAME[n]} complete`, 'ok');
   }, 780);
@@ -9994,10 +10347,10 @@ setTimeout(() => { const splash = g('boot-splash'); if (splash) splash.remove();
 
 /* ITEM 35 / 39: Patient comparison drawer */
 function bCompare() {
-  const pts = Object.entries(PATIENTS);
+  const pts = Object.entries(DB);
   const makeCol = (pid) => {
     if (!pid) return `<div style="flex:1;padding:12px;color:var(--i3);text-align:center;font-size:var(--fs-sm)">Select a patient</div>`;
-    const pt = PATIENTS[pid];
+    const pt = DB[pid];
     if (!pt) return '';
     const v = pt.visits[pt.visits.length-1];
     const dz = pt.disease;
@@ -10014,7 +10367,7 @@ function bCompare() {
       dz==='OSA' ? ['AHI', v.ahi+'/hr'] : null,
       dz==='PAH' ? ['mPAP', v.mpap+' mmHg'] : null,
       dz==='PAH' ? ['WHO FC', 'FC '+v.whoFc] : null,
-      ['Exacerbations/yr', v.exacerbationsLast12m??'–'],
+      ['Exacerbations/yr', v.exac??'–'],
       ['Meds', pt.meds.length + ' active'],
     ].filter(Boolean);
     return `<div style="flex:1;padding:12px;border-left:1px solid var(--i1)">
@@ -10041,7 +10394,7 @@ function bCompare() {
 function compareCols() {
   const a = document.getElementById('cmp-a')?.value;
   const b = document.getElementById('cmp-b')?.value;
-  const pts = window.PATIENTS;
+  const pts = DB;
   const makeCol = (pid) => {
     if (!pid) return `<div style="flex:1;padding:12px;color:var(--i3);text-align:center;font-size:var(--fs-sm)">Select a patient</div>`;
     const pt = pts[pid]; if (!pt) return '';
@@ -10055,7 +10408,7 @@ function compareCols() {
       dz==='IPF'?['FVC',v.fvc+'%']:null,
       dz==='OSA'?['AHI',v.ahi+'/hr']:null,
       dz==='PAH'?['mPAP',v.mpap+' mmHg']:null,
-      ['Exac/yr',v.exacerbationsLast12m??'–'],['Meds',pt.meds.length+' active'],
+      ['Exac/yr',v.exac??'–'],['Meds',pt.meds.length+' active'],
     ].filter(Boolean);
     return `<div style="flex:1;padding:12px;border-left:1px solid var(--i1)">
       <div style="font-family:var(--mono);font-size:var(--fs-2xs);color:var(--n6);margin-bottom:8px">${pid}</div>
@@ -10068,7 +10421,7 @@ function compareCols() {
 
 /* ITEM 45 / 40: Spirometry visualiser drawer */
 function bSpirometry() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   if (!pt) return '<p class="muted" style="padding:20px">Select a patient first.</p>';
   const v = pt.visits[pt.visits.length-1];
   const fev1 = v.fev1/100, fvc = v.fvc ? v.fvc/100 : (fev1+0.15);
@@ -10114,13 +10467,13 @@ function bSpirometry() {
 
 /* ITEM 41 / 41: Biologic eligibility scorecard */
 function bBiologicScore() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   if (!pt) return '<p class="muted" style="padding:20px">Select a patient first.</p>';
   const v = pt.visits[pt.visits.length-1];
   const elig = biologicEligibility(pt, v);
   const agents = [
     { name:'Dupilumab', moa:'IL-4Rα', criteria:[['Eos ≥ 150 c/µL', v.eos>=150],['Uncontrolled asthma (ACT ≤ 19)', (v.act??20)<=19],['ICS/LABA ≥ 3m', true],['Age ≥ 12y', pt.demographics.age>=12]] },
-    { name:'Mepolizumab', moa:'IL-5', criteria:[['Eos ≥ 300 c/µL', v.eos>=300],['≥ 2 exac/yr', (v.exacerbationsLast12m??0)>=2],['ICS high-dose', true],['Age ≥ 18y', pt.demographics.age>=18]] },
+    { name:'Mepolizumab', moa:'IL-5', criteria:[['Eos ≥ 300 c/µL', v.eos>=300],['≥ 2 exac/yr', (v.exac??0)>=2],['ICS high-dose', true],['Age ≥ 18y', pt.demographics.age>=18]] },
     { name:'Benralizumab', moa:'IL-5Rα', criteria:[['Eos ≥ 300 c/µL', v.eos>=300],['Severe asthma', (v.act??20)<=15],['ICS/LABA', true],['Age ≥ 18y', pt.demographics.age>=18]] },
     { name:'Tezepelumab', moa:'TSLP', criteria:[['Severe uncontrolled', (v.act??20)<=15],['Any eos level', true],['ICS/LABA/LAMA', true],['Age ≥ 18y', pt.demographics.age>=18]] },
   ];
@@ -10154,7 +10507,7 @@ function bBiologicScore() {
 
 /* ITEM 42-44 / 46: Calculators drawer (BODE, mMRC, CAT, exacerbation risk) */
 function bCalculators() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   const v = pt ? pt.visits[pt.visits.length-1] : null;
   const bode = pt ? calcBODE(pt, v) : null;
   // mMRC interactive stepper state
@@ -10201,8 +10554,8 @@ function bCalculators() {
     <div class="fsec">
       <div class="flbl-sec">Exacerbation risk<span class="feng">Based on history</span></div>
       ${pt ? (() => {
-        const exac = v.exacerbationsLast12m ?? 0;
-        const hosp = v.hospitalizationsLast12m ?? 0;
+        const exac = v.exac ?? 0;
+        const hosp = v.hosp ?? 0;
         const risk = hosp>0 ? 'Very high' : exac>=2 ? 'High' : exac===1 ? 'Moderate' : 'Low';
         const col = hosp>0?'var(--r5)':exac>=2?'var(--a5)':exac===1?'var(--a2)':'var(--g5)';
         return `<div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--i0);border-radius:var(--rmd);border:1px solid var(--i2)">
@@ -10228,7 +10581,7 @@ function selectMmrc(g) {
 
 /* ITEM 47: PAH treatment algorithm drawer */
 function bPahAlgorithm() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   const v = pt ? pt.visits[pt.visits.length-1] : null;
   const isPAH = pt?.disease === 'PAH';
   const risk = isPAH ? pahRiskStratum(v) : null;
@@ -10258,7 +10611,7 @@ function bPahAlgorithm() {
 
 /* ITEM 48: IPF/GAP model drawer */
 function bIpfGap() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   const v = pt ? pt.visits[pt.visits.length-1] : null;
   const isIPF = pt?.disease === 'IPF';
   const gap = isIPF ? gapPoints({sex:pt.demographics.sex,age:pt.demographics.age,fvc:v.fvc,dlco:v.dlco}) : null;
@@ -10295,7 +10648,7 @@ function bIpfGap() {
 
 /* ITEM 49: OSA / CPAP adherence panel */
 function bOsaCpap() {
-  const pt = currentPt ? PATIENTS[currentPt] : null;
+  const pt = currentPt ? DB[currentPt] : null;
   const v = pt ? pt.visits[pt.visits.length-1] : null;
   const isOSA = pt?.disease === 'OSA';
   if (!isOSA) return `<div style="padding:14px"><div class="ia ia-i"><i class="ti ti-info-circle"></i><div class="ia-body">OSA/CPAP panel. Current patient: ${pt?.disease||'none'}.</div></div></div>`;
@@ -10525,6 +10878,451 @@ const _baseRenderThoughts = renderThoughts;
 
 /* Wire renderCopContext on patient select (already called in render()) */
 const _origRender = window.render;
+
+
+/* ═══ 40 UI IMPROVEMENTS — JS ════════════════════════════════ */
+
+/* ─── COCKPIT IMPROVEMENTS ───────────────────────────────── */
+
+/* #1: Clinical summary ribbon */
+function buildClinicalRibbon(d, pt, v, zCls, grp, ctrl, stage, gap, osaSev) {
+  const zone = zCls==='sz-r'?'r':zCls==='sz-a'?'a':'g';
+  const zoneWord = zone==='r'?'Red zone':zone==='a'?'Amber zone':'Green zone';
+  const badgeCls = `cr-badge-${zone}`;
+  let items = [];
+  if (d==='COPD'||d==='ACO'||d==='Chronic Bronchitis') {
+    items.push(`FEV₁ <strong>${v.fev1}%</strong>`);
+    if (v.cat!==undefined) items.push(`CAT <strong>${v.cat}</strong>`);
+    if (v.exac!==undefined) items.push(`Exac <strong>${v.exac}/yr</strong>`);
+    if (grp) items.push(`GOLD <strong>${grp}</strong>`);
+  } else if (d==='Asthma') {
+    items.push(`ACT <strong>${v.act||'–'}</strong>`);
+    items.push(`Eos <strong>${v.eos} c/µL</strong>`);
+    if (ctrl) items.push(`<strong>${ctrl.label}</strong>`);
+  } else if (d==='IPF') {
+    items.push(`FVC <strong>${v.fvc}%</strong>`);
+    if (v.dlco) items.push(`DLCO <strong>${v.dlco}%</strong>`);
+    if (gap) items.push(`GAP Stage <strong>${gap.stage}</strong>`);
+  } else if (d==='OSA') {
+    items.push(`AHI <strong>${v.ahi}/hr</strong>`);
+    if (v.adherence!=null) items.push(`Adherence <strong>${v.adherence}%</strong>`);
+    if (osaSev) items.push(`<strong>${osaSev.label}</strong>`);
+  } else if (d==='PAH') {
+    items.push(`mPAP <strong>${v.mpap}mmHg</strong>`);
+    items.push(`WHO FC <strong>${v.whoFc}</strong>`);
+    items.push(`PVR <strong>${v.pvr} WU</strong>`);
+  }
+  const adh = v.adherence != null && v.adherence < 80 ? `<span class="cr-sep">·</span><span class="cr-item" style="color:var(--a7)">Adherence ⚠ ${v.adherence}%</span>` : '';
+  return `<div class="clinical-ribbon">
+    <span class="clinical-ribbon-badge ${badgeCls}">${zoneWord}</span>
+    ${items.map(i=>`<span class="cr-sep">·</span><span class="cr-item">${i}</span>`).join('')}
+    ${adh}
+    <span style="margin-left:auto;font-family:var(--mono);font-size:var(--fs-2xs);color:var(--i3)">Visit ${v.n}/${pt.visits.length}</span>
+  </div>`;
+}
+
+/* #9: Aside collapse toggle */
+function toggleAsideCollapse() {
+  const aside = document.querySelector('.cockpit-aside');
+  const btn = document.getElementById('aside-collapse-btn');
+  if (!aside) return;
+  aside.classList.toggle('collapsed');
+  const isCollapsed = aside.classList.contains('collapsed');
+  if (btn) btn.title = isCollapsed ? 'Expand sidebar' : 'Collapse sidebar';
+  notify(isCollapsed ? 'Sidebar collapsed' : 'Sidebar expanded', 'ok');
+}
+
+/* #10: Enhanced breadcrumb with disease dot */
+function buildEnhancedBreadcrumb(pt, id) {
+  if (!pt) return '';
+  const disColors = {COPD:'var(--n5)',ASTHMA:'var(--t5)',ACO:'var(--p5)',CHRONIC_BRONCHITIS:'var(--a5)',IPF:'var(--g5)',OSA:'var(--r5)',PAH:'var(--r7)'};
+  const col = disColors[pt.disease] || 'var(--i3)';
+  const zone = pt.risk === 'r' ? 'var(--r5)' : pt.risk === 'a' ? 'var(--a5)' : 'var(--g5)';
+  return `<div class="bcrumb-pid"><span class="bcrumb-dot" style="background:${zone}"></span>${pidPrefix(id)}${id}</div>`;
+}
+
+/* #11: Read-only banner */
+function updateReadOnlyBanner() {
+  const banner = document.getElementById('readonly-banner');
+  if (banner) banner.classList.toggle('visible', !!readOnlyMode);
+}
+
+/* #15: View crossfade — patched into existing showView post-declaration */
+/* (override deferred to after showView is defined, see bottom of script) */
+
+/* #16: Status zone click → open analysis */
+function szClick() {
+  openDrw('analysis');
+}
+
+/* #20: Inject favicon */
+(function injectFavicon() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0B1F3A"/><text x="4" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" fill="white">A</text><circle cx="25" cy="8" r="4" fill="#4FC3DE"/></svg>`;
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/svg+xml';
+  link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+  document.head.appendChild(link);
+})();
+
+/* ─── DASHBOARD IMPROVEMENTS ─────────────────────────────── */
+
+/* Sort state */
+let dashSortMode = 'urgency'; // urgency | lastvisit | name | adherence
+let dashViewMode = 'grid'; // grid | list
+let recentPtsTimestamped = []; // [{id, ts}]
+
+function setDashSort(mode) {
+  dashSortMode = mode;
+  document.querySelectorAll('.dash-sort-pill').forEach(p => p.classList.toggle('on', p.dataset.sort === mode));
+  const existing = g('dash-cohort-region');
+  if (existing) existing.innerHTML = buildFilteredCohort();
+}
+
+function setDashView(mode) {
+  dashViewMode = mode;
+  document.querySelectorAll('.dvt-btn').forEach(b => b.classList.toggle('on', b.dataset.view === mode));
+  const existing = g('dash-cohort-region');
+  if (existing) existing.innerHTML = buildFilteredCohort();
+}
+
+/* #1: Sort entries before rendering */
+function sortEntries(entries) {
+  const now = new Date();
+  return [...entries].sort((a, b) => {
+    if (dashSortMode === 'urgency') {
+      const zOrder = {r:0,a:1,g:2};
+      const zDiff = (zOrder[a[1].risk]||1) - (zOrder[b[1].risk]||1);
+      if (zDiff !== 0) return zDiff;
+      // Within same zone: sort by days since last visit desc
+      const daysA = Math.round((now - new Date(a[1].visits[a[1].visits.length-1].date)) / 86400000);
+      const daysB = Math.round((now - new Date(b[1].visits[b[1].visits.length-1].date)) / 86400000);
+      return (isNaN(daysB)?0:daysB) - (isNaN(daysA)?0:daysA);
+    }
+    if (dashSortMode === 'lastvisit') {
+      const dA = new Date(a[1].visits[a[1].visits.length-1].date);
+      const dB = new Date(b[1].visits[b[1].visits.length-1].date);
+      return dA - dB; // oldest first
+    }
+    if (dashSortMode === 'name') {
+      return a[0].localeCompare(b[0]);
+    }
+    if (dashSortMode === 'adherence') {
+      const adhA = a[1].visits[a[1].visits.length-1].adherence ?? 100;
+      const adhB = b[1].visits[b[1].visits.length-1].adherence ?? 100;
+      return adhA - adhB;
+    }
+    return 0;
+  });
+}
+
+/* #12: List view renderer */
+function buildListView(entries) {
+  if (!entries.length) return buildEmptyState();
+  const now = new Date();
+  const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr.Bronch',IPF:'IPF',OSA:'OSA',PAH:'PAH'};
+  return `<div class="pcard-list-view">${entries.map(([id,pt]) => {
+    const v = pt.visits[pt.visits.length-1];
+    const days = Math.round((now - new Date(v.date)) / 86400000);
+    const dStr = isNaN(days)||days<0?v.date:days===0?'Today':days<90?days+'d ago':Math.round(days/30)+'mo ago';
+    const kf = pt.disease==='IPF'?'fvc':pt.disease==='OSA'?'ahi':pt.disease==='PAH'?'mpap':'fev1';
+    const kv = v[kf] != null ? `${v[kf]}${kf==='ahi'||kf==='mpap'?'':kf==='fev1'||kf==='fvc'?'%':''}` : '–';
+    const flagged = (window.copCohortFlags||{})[id];
+    const zone = pt.risk||'g';
+    return `<div class="pcard-list-item" onclick="selectPt('${id}')" tabindex="0" role="button" onkeydown="if(event.key==='Enter'){selectPt('${id}')}">
+      <div class="pcard-list-sev ${zone}"></div>
+      <span class="pcard-list-pid">${pidPrefix(id)}${id}</span>
+      <span class="pcard-list-name">${pt.demographics.age}yr ${pt.demographics.sex}</span>
+      <span class="pcard-list-dis">${disLabel[pt.disease]||pt.disease}</span>
+      <span class="pcard-list-metric" style="color:${zone==='r'?'var(--r7)':zone==='a'?'var(--a7)':'var(--g7)'}">${kv}</span>
+      <span class="pcard-list-date">${dStr}</span>
+      ${flagged?`<span style="font-size:10px;color:var(--n6)"><i class="ti ti-airos-ai"></i></span>`:''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* #7: Empty state */
+function buildEmptyState() {
+  const term = window.dashSearchTerm || '';
+  return `<div class="dash-empty-state">
+    <i class="ti ti-user-search" aria-hidden="true"></i>
+    <div class="dash-empty-state-title">No patients match${term?' "'+term+'"':' the current filters'}</div>
+    <div class="dash-empty-state-sub">Try clearing your search or adjusting the disease and zone filters</div>
+    <button class="btn bg btn-sm" onclick="dashSearch('');g('dash-search-input').value='';dashFilters={disease:'all',zone:'all'};renderDashboard()"><i class="ti ti-x"></i>Clear all filters</button>
+  </div>`;
+}
+
+/* #14+15: Enhanced pcard with flag + biologic badge */
+function buildPcardEnhanced(entries) {
+  const now = new Date();
+  return `<div class="pcard-grid">${entries.map(([id,pt]) => {
+    const v = pt.visits[pt.visits.length-1];
+    const days = Math.round((now - new Date(v.date)) / 86400000);
+    const dStr = isNaN(days)||days<0?v.date:days===0?'Today':days===1?'1d ago':days<90?days+'d ago':Math.round(days/30)+'mo ago';
+    const daysCls = isNaN(days)?'':days>180?'stale':days>90?'overdue':'';
+    const flagged = (window.copCohortFlags||{})[id];
+    const zone = pt.risk||'g';
+    const overdue = !isNaN(days) && days > 90;
+    // Biologic eligibility check (fast)
+    const eos = v.eos || 0;
+    const act = v.act || 20;
+    const isBioElig = (pt.disease==='ASTHMA'||pt.disease==='ACO') && eos >= 300 && act <= 19;
+    const bioBadge = isBioElig ? '<span class="pcard-bio-badge"><i class="ti ti-pill" style="font-size:8px"></i>Biologic eligible</span>' : '';
+    const sevLabel = zone==='r'?'Red zone':zone==='a'?'Amber zone':'Green zone';
+    const disColor = {COPD:'var(--n6)',ASTHMA:'var(--t7)',ACO:'var(--p7)',CHRONIC_BRONCHITIS:'var(--a7)',IPF:'var(--g7)',OSA:'var(--p5)',PAH:'var(--r7)'}[pt.disease]||'var(--i4)';
+    const disLabel2 = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease]||pt.disease;
+    const adh = v.adherence;
+    const adhCls = adh==null?'na':adh>=80?'g':adh>=60?'a':'r';
+    const adhTxt = adh!=null?adh+'% adherence':'no adherence data';
+    const clickFn = window.appView === 'cockpit' ? `closeDrw();selectPt('${id}')` : `selectPt('${id}')`;
+    return `<div class="pcard pcard-${zone}${overdue?' overdue':''}" onclick="${clickFn}" tabindex="0" role="button" aria-label="Open patient ${pidPrefix(id)}${id}">
+      <div class="pcard-edge"></div>
+      <div class="pcard-body">
+        <div class="pcard-hdr">
+          <span class="pcard-id">${pidPrefix(id)}${id}</span>
+          <span class="pcard-dis" style="color:${disColor}">${disLabel2}</span>
+          <span class="pcard-severity">${sevLabel}</span>
+        </div>
+        ${bioBadge}
+        <div class="pcard-name">${pt.demographics.age}yr ${pt.demographics.sex}</div>
+        <div class="pcard-zone">${zone==='r'?'Red zone':zone==='a'?'Amber zone':'Stable'}</div>
+        <div class="pcard-foot">
+          <span>Visit ${v.n} · <span class="pcard-days ${daysCls}">${dStr}</span></span>
+          <span class="pcard-adh pcard-adh-${adhCls}">${adhTxt}</span>
+        </div>
+        ${flagged?`<div class="pcard-flag"><i class="ti ti-airos-ai"></i><span>${flagged.slice(0,80)}${flagged.length>80?'…':''}</span></div>`:''}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* Override buildFilteredCohort to use sort + new renderers */
+function buildFilteredCohort() {
+  let entries = Object.entries(DB).filter(([id,pt]) => {
+    if (dashFilters.disease !== 'all' && pt.disease !== dashFilters.disease) return false;
+    if (dashFilters.zone !== 'all' && pt.risk !== dashFilters.zone) return false;
+    if (dashSearchTerm) {
+      const disLabel = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chronic Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease]||'';
+      const haystack = `${id} ${getDisplayAlias?getDisplayAlias(id):''} ${pt.demographics.age} ${pt.demographics.sex} ${disLabel}`.toLowerCase();
+      if (!haystack.includes(dashSearchTerm)) return false;
+    }
+    return true;
+  });
+  if (!entries.length) return buildEmptyState();
+  entries = sortEntries(entries);
+  return dashViewMode === 'list' ? buildListView(entries) : buildPcardEnhanced(entries);
+}
+
+/* #4+8: Enhanced filter count computation */
+function getDashCounts() {
+  const entries = Object.entries(DB);
+  const counts = {disease:{},zone:{r:0,a:0,g:0},overdue:0};
+  const now = new Date();
+  entries.forEach(([,pt]) => {
+    counts.disease[pt.disease] = (counts.disease[pt.disease]||0)+1;
+    counts.zone[pt.risk] = (counts.zone[pt.risk]||0)+1;
+    const v = pt.visits[pt.visits.length-1];
+    const days = Math.round((now - new Date(v.date))/86400000);
+    if (!isNaN(days) && days > 90) counts.overdue++;
+  });
+  return counts;
+}
+
+/* #18+19: Enhanced renderDashboard */
+function renderDashboard() {
+  // Dashboard date
+  const titleEl = document.querySelector('.dash-title');
+  if (titleEl) {
+    const now = new Date();
+    const dayName = now.toLocaleDateString('en-GB',{weekday:'long'});
+    const dateStr = now.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    titleEl.innerHTML = `${dayName}'s clinic`;
+    let dateDiv = titleEl.nextElementSibling;
+    if (!dateDiv || !dateDiv.classList.contains('dash-date')) {
+      dateDiv = document.createElement('div');
+      dateDiv.className = 'dash-date';
+      titleEl.insertAdjacentElement('afterend', dateDiv);
+    }
+    dateDiv.textContent = dateStr;
+  }
+
+  const sub = g('dash-sub');
+  const entries = Object.entries(DB);
+  const needsReview = entries.filter(([,pt]) => pt.risk === 'r').length;
+  if (sub) sub.innerHTML = `<div class="dash-sub-row">
+    <span class="dash-sub-count">${entries.length}</span>
+    <span class="dash-sub-label">patients</span>
+    ${needsReview?`<span class="dash-sub-count" style="color:var(--r7)">${needsReview}</span><span class="dash-sub-label" style="color:var(--r7)">need review</span>`:''}
+    <span class="dash-sub-role">${RBAC_ROLES[currentUserRole]?.label||'Clinician'}</span>
+  </div>`;
+
+  const counts = getDashCounts();
+  const disLabels = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'};
+  const disColors = {COPD:'var(--n5)',ASTHMA:'var(--t5)',ACO:'var(--p5)',CHRONIC_BRONCHITIS:'var(--a5)',IPF:'var(--g5)',OSA:'var(--r5)',PAH:'var(--r7)'};
+
+  // #11: Filter bar with two labelled rows
+  const diseaseFilters = ['COPD','ASTHMA','ACO','CHRONIC_BRONCHITIS','IPF','OSA','PAH'].map(d => {
+    const n = counts.disease[d]||0;
+    if (!n) return '';
+    return `<span class="dash-filter${dashFilters.disease===d?' on':''}" onclick="setDashFilter('disease','${d}')">
+      <span class="sind-dot" style="background:${disColors[d]||'var(--i4)'}"></span>
+      ${disLabels[d]||d}<span class="dash-filter-count">${n}</span>
+    </span>`;
+  }).filter(Boolean).join('');
+
+  const zoneFilters = [
+    ['r','Red zone','var(--r5)'],
+    ['a','Amber','var(--a5)'],
+    ['g','Green','var(--g5)']
+  ].map(([z,lbl,col]) => {
+    const n = counts.zone[z]||0;
+    return `<span class="dash-filter${dashFilters.zone===z?' on':''}" onclick="setDashFilter('zone','${z}')">
+      <span class="sind-dot" style="background:${col}"></span>
+      ${lbl}<span class="dash-filter-count">${n}</span>
+    </span>`;
+  }).join('');
+
+  const filterBar = `<div class="dash-filter-section">
+    <div class="dash-filter-row"><span class="dash-filter-group-lbl">Disease</span>${diseaseFilters}
+      <span class="dash-filter${dashFilters.disease==='all'?' on':''}" onclick="setDashFilter('disease','all')" style="margin-left:auto">All</span>
+    </div>
+    <div class="dash-filter-row"><span class="dash-filter-group-lbl">Zone</span>${zoneFilters}</div>
+  </div>`;
+
+  // #1: Sort + view controls
+  const ctrlBar = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <div class="dash-sort-row" style="margin-bottom:0">
+      <span class="dash-sort-lbl">Sort:</span>
+      <span class="dash-sort-pill on" data-sort="urgency" onclick="setDashSort('urgency')">Urgency</span>
+      <span class="dash-sort-pill" data-sort="lastvisit" onclick="setDashSort('lastvisit')">Last visit</span>
+      <span class="dash-sort-pill" data-sort="name" onclick="setDashSort('name')">A–Z</span>
+      <span class="dash-sort-pill" data-sort="adherence" onclick="setDashSort('adherence')">Adherence ↑</span>
+    </div>
+    <div class="dash-view-toggle" style="margin-left:auto">
+      <button class="dvt-btn on" data-view="grid" onclick="setDashView('grid')" title="Grid view" aria-label="Grid view"><i class="ti ti-layout-grid"></i></button>
+      <button class="dvt-btn" data-view="list" onclick="setDashView('list')" title="List view" aria-label="List view"><i class="ti ti-list"></i></button>
+    </div>
+    <button class="btn bg btn-sm" onclick="window.print()" title="Print morning list"><i class="ti ti-printer"></i></button>
+  </div>`;
+
+  // Recent HTML with timestamps
+  const recentHTML = recentPts.length ? `<div class="dash-recent">
+    <div class="dash-recent-lbl">Recently viewed</div>
+    <div class="dash-recent-row">${recentPts.slice(0,6).map(id => {
+      const pt = DB[id];
+      if (!pt) return '';
+      const disLabel2 = {COPD:'COPD',ASTHMA:'Asthma',ACO:'ACO',CHRONIC_BRONCHITIS:'Chr. Bronchitis',IPF:'IPF',OSA:'OSA',PAH:'PAH'}[pt.disease]||'';
+      const flagged = copCohortFlags[id];
+      const ts = recentPtsTimestamped.find(r=>r.id===id);
+      const timeStr = ts ? relativeTime(ts.ts) : '';
+      return `<div class="dash-recent-chip" onclick="selectPt('${id}')">
+        ${flagged?'<i class="ti ti-airos-ai" style="font-size:10px;color:var(--n6)"></i>':''}
+        <div class="crisk cr-${pt.risk}" style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:${pt.risk==='r'?'var(--r5)':pt.risk==='a'?'var(--a5)':'var(--g5)'}"></div>
+        <span class="pid-sm">${pidPrefix(id)}${id}</span>
+        <span class="dis-sm">${disLabel2}</span>
+        ${timeStr?`<span class="dash-recent-chip-time">${timeStr}</span>`:''}
+      </div>`;
+    }).join('')}</div>
+  </div>` : '';
+
+  // #5: Unified stat strip (6 cells)
+  const anomalyCount = Object.keys(copCohortFlags||{}).length;
+  const adherenceRisk = Object.values(DB).filter(pt => {
+    const v = pt.visits[pt.visits.length-1];
+    return v.adherence != null && v.adherence < 80;
+  }).length;
+  const statStrip = `<div class="dash-stat-strip">
+    <div class="kstat"><div class="kstat-lbl">Total</div><div class="kstat-val">${entries.length}</div></div>
+    <div class="kstat kstat-r" style="cursor:pointer" onclick="setDashFilter('zone','r')"><div class="kstat-lbl">Red zone</div><div class="kstat-val">${counts.zone.r||0}</div></div>
+    <div class="kstat kstat-a" style="cursor:pointer" onclick="setDashFilter('zone','a')"><div class="kstat-lbl">Amber zone</div><div class="kstat-val">${counts.zone.a||0}</div></div>
+    <div class="kstat kstat-g" style="cursor:pointer" onclick="setDashFilter('zone','g')"><div class="kstat-lbl">Green zone</div><div class="kstat-val">${counts.zone.g||0}</div></div>
+    <div class="kstat${counts.overdue?' kstat-overdue':''}" style="cursor:pointer" onclick="setDashSort('lastvisit');setDashFilter('zone','all')"><div class="kstat-lbl">Overdue (>90d)</div><div class="kstat-val">${counts.overdue}</div></div>
+    <div class="kstat${adherenceRisk?' kstat-a':''}"><div class="kstat-lbl">Adherence &lt;80%</div><div class="kstat-val">${adherenceRisk}</div></div>
+  </div>`;
+
+  const content = g('dash-content');
+  if (content) content.innerHTML = statStrip + recentHTML + filterBar + ctrlBar +
+    `<div id="dash-cohort-region">${buildFilteredCohort()}</div>`;
+  if(typeof populateCohortPulse==='function')populateCohortPulse();
+  if(typeof applyUiLang==='function')applyUiLang();
+}
+
+function relativeTime(ts) {
+  if (!ts) return '';
+  const diff = Date.now() - ts;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return Math.round(diff/60000)+'m ago';
+  if (diff < 86400000) return Math.round(diff/3600000)+'h ago';
+  return Math.round(diff/86400000)+'d ago';
+}
+
+/* Wire timestamp tracking into selectPt */
+/* Wire timestamp tracking into selectPt - call original by name, no capture needed */
+const _selectPtOrig = selectPt;
+window.selectPt = function(id) {
+  recentPtsTimestamped = recentPtsTimestamped.filter(r=>r.id!==id);
+  recentPtsTimestamped.unshift({id, ts: Date.now()});
+  if (recentPtsTimestamped.length > 10) recentPtsTimestamped.pop();
+  _selectPtOrig(id);
+};
+
+/* #8: Keyboard shortcut for search focus */
+document.addEventListener('keydown', function(e) {
+  const active = document.activeElement;
+  const inInput = active && (active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.contentEditable==='true');
+  if (e.key === '/' && !inInput && window.appView === 'dashboard') {
+    e.preventDefault();
+    const inp = g('dash-search-input');
+    if (inp) inp.focus();
+  }
+});
+
+/* #10: Add search clear button behaviour */
+function dashSearch(q) {
+  // Update search term via legacy logic
+  dashSearchTerm = (q||'').trim().toLowerCase().replace(/airos-\d{4}-/,'');
+  // #10: update clear button visibility
+  const clearBtn = g('dash-search-clear');
+  if (clearBtn) clearBtn.classList.toggle('visible', !!(q&&q.trim()));
+}
+function clearDashSearch() {
+  const inp = g('dash-search-input');
+  if (inp) { inp.value = ''; dashSearch(''); inp.focus(); }
+}
+
+/* #3: Wire status zone click */
+document.addEventListener('click', function(e) {
+  const sz = e.target.closest('.sz');
+  if (sz && window.appView === 'cockpit') szClick();
+}, true);
+
+/* Wire #1 clinical ribbon into render() */
+/* Ribbon injector — safe reference to original render */
+const _renderOrig = render;
+(function() {
+  window.render = function() {
+    _renderOrig();
+    // Inject clinical ribbon after metric grid
+    const mg = g('metrics-grid');
+    if (mg && currentPt && DB[currentPt]) {
+      // Ribbon is injected before the mgrid in the cockpit-main
+      let ribbonEl = document.getElementById('clinical-ribbon');
+      if (!ribbonEl) {
+        ribbonEl = document.createElement('div');
+        ribbonEl.id = 'clinical-ribbon';
+        mg.parentNode.insertBefore(ribbonEl, mg);
+      }
+      // We need to rebuild zone vars — get from status zone classes
+      const sz = document.getElementById('status-zone');
+      const zCls = sz ? (sz.className.match(/sz-[rag]/)||['sz-g'])[0] : 'sz-g';
+      const pt = DB[currentPt];
+      const v = pt.visits[currentVisit];
+      ribbonEl.innerHTML = buildClinicalRibbon(pt.disease, pt, v, zCls, null, null, null, null, null);
+    }
+    // Update read-only banner
+    updateReadOnlyBanner();
+  };
+})();
 
 </script>
 
